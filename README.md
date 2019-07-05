@@ -4,19 +4,6 @@ Fundamental concepts in probability. Describing data generated from a probabilit
 
 
 
-## Teaching team
-
-| Position | Name  | Slack handle | GHE handle |
-| :------: | :---: | :----------: | :--------: |
-| Lecture instructor | Mike Gelbart  | `@mgelbart` | `@mgelbart` |
-| Lab instructor     | Mike Gelbart  | `@mgelbart` | `@mgelbart` |
-| Teaching assistant (L01) | Julian Ho	   | `@Julian`   | `@hyhoaa` |
-| Teaching assistant (L02) | Sasha Maslova | `@Sasha Maslova ` | `@sasha113` |
-| Teaching assistant (L03) | Sunny Tseng	 | `@Sunny`  | `@sunny541` |
-
-## DSCI 551 Slack channel
-https://ubc-mds.slack.com/messages/551_stat-prob-dsci/details/
-
 ## Schedule
 
 |   Lecture |  Topic |
