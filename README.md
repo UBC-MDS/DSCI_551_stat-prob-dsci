@@ -17,15 +17,6 @@ Fundamental concepts in probability. Describing data generated from a probabilit
 |  7  | Mixtures of (univariate/multivariate) Gaussians. View of data as coming from a probability distribution. Setting the stage for supervised learning: response variables, predictors, conditioning on predictors, and more.
 |  8  | Various topics related to what we've done in the course; an intro to maximum likelihood estimation.
 
-## Labs
-
-|     | Lab topic          |      Due Date    |
-|-----|--------------------|------------------|
-| 1   | Lecture 1          | **2018-09-15** 18:00 |
-| 2   | Lectures 2 and 3   | 2018-09-15 18:00 |
-| 3   | Lectures 4 and 5   | 2018-09-22 18:00 |
-| 4   | Lectures 6 and 7   | 2018-09-29 18:00 |
-
 
 ## Resources
 
