@@ -2,20 +2,20 @@
 
 Fundamental concepts in probability. Describing data generated from a probability distribution. Statistical view of data coming from a probability distribution.
 
-
+[Click here](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/lectures/) for the rendered lecture notes.
 
 ## Schedule
 
 | Lecture | Topic | Variable | Dimension |
 |---------|-------|----------|-----------|
-| [Lecture 1](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/depicting-uncertainty.html) | Depicting Uncertainty | discrete | univariate |
-| [Lecture 2](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/parametric-families.html) | Parametric families | discrete | univariate |
-| [Lecture 3](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/simulation.html); [basic simulation](https://github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/blob/master/supplementary/lec3-basic.R) | Simulation | discrete | univariate |
-| [Lecture 4](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/joint-probability-part-i.html) | Joint probability, Part I | discrete | bivariate |
-| [Lecture 5](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/continuous-distributions.html) | Continuous distributions | continuous | univariate |
-| [Lecture 6](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/joint-probability-part-ii.html) | Joint probability, Part II | continuous | bivariate |
-| [Lecture 7](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/multivariate-gaussian.html) | ~~Multivariate Gaussian~~ Dependence | continuous | bivariate/multivariate |
-| [Lecture 8](https://pages.github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/lectures/mixture-distributions-1.html) | ~~Mixture distributions~~ Noteworthy Distribution Families | continuous | bivariate/multivariate |
+| Lecture 1 | discrete | univariate |
+| Lecture 2 | Parametric families | discrete | univariate |
+| Lecture 3 | Simulation | discrete | univariate |
+| Lecture 4 | Joint probability, Part I | discrete | bivariate |
+| Lecture 5 | Continuous distributions | continuous | univariate |
+| Lecture 6 | Joint probability, Part II | continuous | bivariate |
+| Lecture 7 | Dependence | continuous | bivariate/multivariate |
+| Lecture 8 | Noteworthy Distribution Families | continuous | bivariate/multivariate |
 
 ## Deliverables
 
