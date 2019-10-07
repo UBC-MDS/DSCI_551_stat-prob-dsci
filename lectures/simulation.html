@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lecture 3 Simulation | DSCI 551: Descriptive Statistics and Probability for Data Science</title>
+  <meta name="description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lecture 3 Simulation | DSCI 551: Descriptive Statistics and Probability for Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lecture 3 Simulation | DSCI 551: Descriptive Statistics and Probability for Data Science" />
+  
+  <meta name="twitter:description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  
+
+<meta name="author" content="Vincenzo Coia and Michael Gelbart" />
+
+
+<meta name="date" content="2019-10-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="parametric-families.html">
+<link rel="next" href="joint-probability-part-i.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.9/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSCI 551 @ UBC 2019-20</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Lecture Notes</a></li>
+<li class="chapter" data-level="1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Depicting Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#lecture-learning-objectives"><i class="fa fa-check"></i><b>1.1</b> Lecture Learning Objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#thinking-about-probability"><i class="fa fa-check"></i><b>1.2</b> Thinking about Probability</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#defining-probability-5-min"><i class="fa fa-check"></i><b>1.2.1</b> Defining Probability (5 min)</a></li>
+<li class="chapter" data-level="1.2.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#calculating-probabilities-using-logic"><i class="fa fa-check"></i><b>1.2.2</b> Calculating Probabilities using Logic</a></li>
+<li class="chapter" data-level="1.2.3" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#comparing-probabilities-8-min"><i class="fa fa-check"></i><b>1.2.3</b> Comparing Probabilities (8 min)</a></li>
+<li class="chapter" data-level="1.2.4" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#interpreting-probability-5-min"><i class="fa fa-check"></i><b>1.2.4</b> Interpreting Probability (5 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#probability-distributions"><i class="fa fa-check"></i><b>1.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#examples-of-probability-distributions-3-min"><i class="fa fa-check"></i><b>1.3.1</b> Examples of Probability Distributions (3 min)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#measures-of-central-tendency-and-uncertainty"><i class="fa fa-check"></i><b>1.3.2</b> Measures of central tendency and uncertainty</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="parametric-families.html"><a href="parametric-families.html"><i class="fa fa-check"></i><b>2</b> Parametric families</a><ul>
+<li class="chapter" data-level="2.1" data-path="parametric-families.html"><a href="parametric-families.html#learning-objectives"><i class="fa fa-check"></i><b>2.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.2" data-path="parametric-families.html"><a href="parametric-families.html#properties-of-distributions-practice"><i class="fa fa-check"></i><b>2.2</b> Properties of Distributions: Practice</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="parametric-families.html"><a href="parametric-families.html#demonstration-example-computation-8-min"><i class="fa fa-check"></i><b>2.2.1</b> Demonstration: Example computation (8 min)</a></li>
+<li class="chapter" data-level="2.2.2" data-path="parametric-families.html"><a href="parametric-families.html#activity-comparing-variance-to-entropy-12-min"><i class="fa fa-check"></i><b>2.2.2</b> Activity: Comparing Variance to Entropy (12 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="parametric-families.html"><a href="parametric-families.html#expectations-of-transformations"><i class="fa fa-check"></i><b>2.3</b> Expectations of Transformations</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="parametric-families.html"><a href="parametric-families.html#linearity-of-expectations-5-min"><i class="fa fa-check"></i><b>2.3.1</b> Linearity of Expectations (5 min)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="parametric-families.html"><a href="parametric-families.html#probability-as-an-expectation-3-min"><i class="fa fa-check"></i><b>2.3.2</b> Probability as an Expectation (3 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="parametric-families.html"><a href="parametric-families.html#distribution-families"><i class="fa fa-check"></i><b>2.4</b> Distribution Families</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="parametric-families.html"><a href="parametric-families.html#binomial-distribution-8-min"><i class="fa fa-check"></i><b>2.4.1</b> <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Binomial</a> Distribution (8 min)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="parametric-families.html"><a href="parametric-families.html#families-vs.distributions-3-min"><i class="fa fa-check"></i><b>2.4.2</b> Families vs. distributions (3 min)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="parametric-families.html"><a href="parametric-families.html#parameters-5-min"><i class="fa fa-check"></i><b>2.4.3</b> Parameters (5 min)</a></li>
+<li class="chapter" data-level="2.4.4" data-path="parametric-families.html"><a href="parametric-families.html#parameterization-8-min"><i class="fa fa-check"></i><b>2.4.4</b> Parameterization (8 min)</a></li>
+<li class="chapter" data-level="2.4.5" data-path="parametric-families.html"><a href="parametric-families.html#distribution-families-in-practice"><i class="fa fa-check"></i><b>2.4.5</b> Distribution Families in Practice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="parametric-families.html"><a href="parametric-families.html#common-distribution-families-12-min"><i class="fa fa-check"></i><b>2.5</b> Common Distribution Families (12 min)</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="parametric-families.html"><a href="parametric-families.html#geometric"><i class="fa fa-check"></i><b>2.5.1</b> <a href="https://en.wikipedia.org/wiki/Geometric_distribution">Geometric</a></a></li>
+<li class="chapter" data-level="2.5.2" data-path="parametric-families.html"><a href="parametric-families.html#negative-binomial"><i class="fa fa-check"></i><b>2.5.2</b> <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial</a></a></li>
+<li class="chapter" data-level="2.5.3" data-path="parametric-families.html"><a href="parametric-families.html#poisson"><i class="fa fa-check"></i><b>2.5.3</b> <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Poisson</a></a></li>
+<li class="chapter" data-level="2.5.4" data-path="parametric-families.html"><a href="parametric-families.html#bernoulli"><i class="fa fa-check"></i><b>2.5.4</b> <a href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Bernoulli</a></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>3</b> Simulation</a><ul>
+<li class="chapter" data-level="3.1" data-path="simulation.html"><a href="simulation.html#learning-objectives-1"><i class="fa fa-check"></i><b>3.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.2" data-path="simulation.html"><a href="simulation.html#review-activity-15-min"><i class="fa fa-check"></i><b>3.2</b> Review Activity (15 min)</a></li>
+<li class="chapter" data-level="3.3" data-path="simulation.html"><a href="simulation.html#random-samples-terminology-5-min"><i class="fa fa-check"></i><b>3.3</b> Random Samples: Terminology (5 min)</a></li>
+<li class="chapter" data-level="3.4" data-path="simulation.html"><a href="simulation.html#seeds-5-min"><i class="fa fa-check"></i><b>3.4</b> Seeds (5 min)</a></li>
+<li class="chapter" data-level="3.5" data-path="simulation.html"><a href="simulation.html#generating-random-samples-code"><i class="fa fa-check"></i><b>3.5</b> Generating Random Samples: Code</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="simulation.html"><a href="simulation.html#from-finite-number-of-categories-5-min"><i class="fa fa-check"></i><b>3.5.1</b> From Finite Number of Categories (5 min)</a></li>
+<li class="chapter" data-level="3.5.2" data-path="simulation.html"><a href="simulation.html#from-distribution-families-5-min"><i class="fa fa-check"></i><b>3.5.2</b> From Distribution Families (5 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="simulation.html"><a href="simulation.html#running-simulations"><i class="fa fa-check"></i><b>3.6</b> Running Simulations</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="simulation.html"><a href="simulation.html#code-for-empirical-quantities-0-min"><i class="fa fa-check"></i><b>3.6.1</b> Code for empirical quantities (0 min)</a></li>
+<li class="chapter" data-level="3.6.2" data-path="simulation.html"><a href="simulation.html#basic-simulation-10-min"><i class="fa fa-check"></i><b>3.6.2</b> Basic Simulation (10 min)</a></li>
+<li class="chapter" data-level="3.6.3" data-path="simulation.html"><a href="simulation.html#multi-step-simulations-10-min"><i class="fa fa-check"></i><b>3.6.3</b> Multi-Step Simulations (10 min)</a></li>
+<li class="chapter" data-level="3.6.4" data-path="simulation.html"><a href="simulation.html#mixture-distributions"><i class="fa fa-check"></i><b>3.6.4</b> Mixture distributions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html"><i class="fa fa-check"></i><b>4</b> Joint Probability, Part I</a><ul>
+<li class="chapter" data-level="4.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#learning-objectives-2"><i class="fa fa-check"></i><b>4.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="4.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#conditional-distributions-15-min"><i class="fa fa-check"></i><b>4.2</b> Conditional Distributions (15 min)</a></li>
+<li class="chapter" data-level="4.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#joint-distributions-25-min"><i class="fa fa-check"></i><b>4.3</b> Joint Distributions (25 min)</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#example-length-of-stay-vs.gang-demand"><i class="fa fa-check"></i><b>4.3.1</b> Example: Length of Stay vs. Gang Demand</a></li>
+<li class="chapter" data-level="4.3.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#marginal-distributions"><i class="fa fa-check"></i><b>4.3.2</b> Marginal Distributions</a></li>
+<li class="chapter" data-level="4.3.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#calculating-marginals-from-the-joint"><i class="fa fa-check"></i><b>4.3.3</b> Calculating Marginals from the Joint</a></li>
+<li class="chapter" data-level="4.3.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#conditioning-on-one-variable"><i class="fa fa-check"></i><b>4.3.4</b> Conditioning on one Variable</a></li>
+<li class="chapter" data-level="4.3.5" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#law-of-total-probabilityexpectation"><i class="fa fa-check"></i><b>4.3.5</b> Law of Total Probability/Expectation</a></li>
+<li class="chapter" data-level="4.3.6" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#exercises-10-min"><i class="fa fa-check"></i><b>4.3.6</b> Exercises (10 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-concepts"><i class="fa fa-check"></i><b>4.4</b> Dependence concepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#independence-5-min"><i class="fa fa-check"></i><b>4.4.1</b> Independence (5 min)</a></li>
+<li class="chapter" data-level="4.4.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#measures-of-dependence-15-min"><i class="fa fa-check"></i><b>4.4.2</b> Measures of dependence (15 min)</a></li>
+<li class="chapter" data-level="4.4.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#variance-of-a-sum-2-min"><i class="fa fa-check"></i><b>4.4.3</b> Variance of a sum (2 min)</a></li>
+<li class="chapter" data-level="4.4.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-as-separate-from-the-marginals-5-min-optional"><i class="fa fa-check"></i><b>4.4.4</b> Dependence as separate from the marginals (5 min) (Optional)</a></li>
+<li class="chapter" data-level="4.4.5" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-as-giving-us-more-information-5-min-optional"><i class="fa fa-check"></i><b>4.4.5</b> Dependence as giving us more information (5 min) (Optional)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#roadmap"><i class="fa fa-check"></i><b>5.1</b> Roadmap</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#learning-objectives-3"><i class="fa fa-check"></i><b>5.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#continuous-random-variables-10-min"><i class="fa fa-check"></i><b>5.3</b> Continuous random variables (10 min)</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#density-functions-20-min"><i class="fa fa-check"></i><b>5.4</b> Density Functions (20 min)</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#example-low-purity-octane"><i class="fa fa-check"></i><b>5.4.1</b> Example: “Low Purity Octane”</a></li>
+<li class="chapter" data-level="5.4.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#example-monthly-expenses"><i class="fa fa-check"></i><b>5.4.2</b> Example: Monthly Expenses</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="continuous-distributions.html"><a href="continuous-distributions.html#distribution-properties-25-min"><i class="fa fa-check"></i><b>5.5</b> Distribution Properties (25 min)</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#mean-variance-mode-and-entropy-again-5-min"><i class="fa fa-check"></i><b>5.5.1</b> Mean, Variance, Mode, and Entropy (again) (5 min)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#median-5-min"><i class="fa fa-check"></i><b>5.5.2</b> Median (5 min)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#quantiles-5-min"><i class="fa fa-check"></i><b>5.5.3</b> Quantiles (5 min)</a></li>
+<li class="chapter" data-level="5.5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#prediction-intervals-5-min"><i class="fa fa-check"></i><b>5.5.4</b> Prediction Intervals (5 min)</a></li>
+<li class="chapter" data-level="5.5.5" data-path="continuous-distributions.html"><a href="continuous-distributions.html#skewness-5-min"><i class="fa fa-check"></i><b>5.5.5</b> Skewness (5 min)</a></li>
+<li class="chapter" data-level="5.5.6" data-path="continuous-distributions.html"><a href="continuous-distributions.html#examples"><i class="fa fa-check"></i><b>5.5.6</b> Examples</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html"><i class="fa fa-check"></i><b>6</b> Joint Probability, Part II</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#learning-objectives-4"><i class="fa fa-check"></i><b>6.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#depicting-distributions-25-min"><i class="fa fa-check"></i><b>6.2</b> Depicting Distributions (25 min)</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#cumulative-density-functions-cdfs-distribution-functions"><i class="fa fa-check"></i><b>6.2.1</b> Cumulative Density Functions (cdf’s) / Distribution Functions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#survival-function-2-min"><i class="fa fa-check"></i><b>6.2.2</b> Survival Function (2 min)</a></li>
+<li class="chapter" data-level="6.2.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#quantile-function-5-min"><i class="fa fa-check"></i><b>6.2.3</b> Quantile Function (5 min)</a></li>
+<li class="chapter" data-level="6.2.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#other-ways-of-depicting-a-distribution-optional-1-min"><i class="fa fa-check"></i><b>6.2.4</b> Other ways of depicting a distribution (Optional) (1 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#common-distribution-families-continuous-part-i-15-min"><i class="fa fa-check"></i><b>6.3</b> Common Distribution Families: Continuous, Part I (15 min)</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#uniform-3-min"><i class="fa fa-check"></i><b>6.3.1</b> <a href="https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)">Uniform</a> (3 min)</a></li>
+<li class="chapter" data-level="6.3.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#gaussian-normal-4-min"><i class="fa fa-check"></i><b>6.3.2</b> <a href="https://en.wikipedia.org/wiki/Normal_distribution">Gaussian / Normal</a> (4 min)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#log-normal-family"><i class="fa fa-check"></i><b>6.3.3</b> <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">Log-Normal</a> Family</a></li>
+<li class="chapter" data-level="6.3.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#exponential-family"><i class="fa fa-check"></i><b>6.3.4</b> <a href="https://en.wikipedia.org/wiki/Exponential_distribution">Exponential</a> Family</a></li>
+<li class="chapter" data-level="6.3.5" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#weibull-family"><i class="fa fa-check"></i><b>6.3.5</b> <a href="https://en.wikipedia.org/wiki/Weibull_distribution">Weibull</a> Family</a></li>
+<li class="chapter" data-level="6.3.6" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#beta-family"><i class="fa fa-check"></i><b>6.3.6</b> <a href="https://en.wikipedia.org/wiki/Beta_distribution">Beta</a> Family</a></li>
+<li class="chapter" data-level="6.3.7" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#relevant-r-functions-8-min"><i class="fa fa-check"></i><b>6.3.7</b> Relevant R functions (8 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#multivariate-distributions-continuous-20-min"><i class="fa fa-check"></i><b>6.4</b> Multivariate Distributions: Continuous (20 min)</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#multivariate-densitiespdfs"><i class="fa fa-check"></i><b>6.4.1</b> Multivariate Densities/pdf’s</a></li>
+<li class="chapter" data-level="6.4.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#calculating-probabilities"><i class="fa fa-check"></i><b>6.4.2</b> Calculating Probabilities</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#conditional-distributions-revisited-15-min"><i class="fa fa-check"></i><b>6.5</b> Conditional Distributions, revisited (15 min)</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#when-pa-0"><i class="fa fa-check"></i><b>6.5.1</b> When <span class="math inline">\(P(A) = 0\)</span></a></li>
+<li class="chapter" data-level="6.5.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#when-pb-0"><i class="fa fa-check"></i><b>6.5.2</b> When <span class="math inline">\(P(B) = 0\)</span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="dependence.html"><a href="dependence.html"><i class="fa fa-check"></i><b>7</b> Dependence</a><ul>
+<li class="chapter" data-level="7.1" data-path="dependence.html"><a href="dependence.html#learning-objectives-5"><i class="fa fa-check"></i><b>7.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="7.2" data-path="dependence.html"><a href="dependence.html#drawing-multidimensional-functions-5-min"><i class="fa fa-check"></i><b>7.2</b> Drawing multidimensional functions (5 min)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="dependence.html"><a href="dependence.html#a-possible-point-of-confusion-empirical-contour-plots"><i class="fa fa-check"></i><b>7.2.1</b> A possible point of confusion: empirical contour plots</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="dependence.html"><a href="dependence.html#independence-revisited-10-min"><i class="fa fa-check"></i><b>7.3</b> Independence Revisited (10 min)</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="dependence.html"><a href="dependence.html#definition-in-the-continuous-case"><i class="fa fa-check"></i><b>7.3.1</b> Definition in the Continuous Case</a></li>
+<li class="chapter" data-level="7.3.2" data-path="dependence.html"><a href="dependence.html#independence-visualized"><i class="fa fa-check"></i><b>7.3.2</b> Independence Visualized</a></li>
+<li class="chapter" data-level="7.3.3" data-path="dependence.html"><a href="dependence.html#activity"><i class="fa fa-check"></i><b>7.3.3</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="dependence.html"><a href="dependence.html#harvesting-dependence-20-min"><i class="fa fa-check"></i><b>7.4</b> Harvesting Dependence (20 min)</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="dependence.html"><a href="dependence.html#example-river-flow"><i class="fa fa-check"></i><b>7.4.1</b> Example: River Flow</a></li>
+<li class="chapter" data-level="7.4.2" data-path="dependence.html"><a href="dependence.html#direction-of-dependence"><i class="fa fa-check"></i><b>7.4.2</b> Direction of Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="dependence.html"><a href="dependence.html#marginal-distributions-20-min"><i class="fa fa-check"></i><b>7.5</b> Marginal Distributions (20 min)</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="dependence.html"><a href="dependence.html#marginal-distribution-from-conditional"><i class="fa fa-check"></i><b>7.5.1</b> Marginal Distribution from Conditional</a></li>
+<li class="chapter" data-level="7.5.2" data-path="dependence.html"><a href="dependence.html#marginal-mean-from-conditional"><i class="fa fa-check"></i><b>7.5.2</b> Marginal Mean from Conditional</a></li>
+<li class="chapter" data-level="7.5.3" data-path="dependence.html"><a href="dependence.html#marginal-quantiles-from-conditional"><i class="fa fa-check"></i><b>7.5.3</b> Marginal Quantiles from Conditional</a></li>
+<li class="chapter" data-level="7.5.4" data-path="dependence.html"><a href="dependence.html#activity-1"><i class="fa fa-check"></i><b>7.5.4</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="dependence.html"><a href="dependence.html#multivariate-gaussiannormal-family-20-min"><i class="fa fa-check"></i><b>7.6</b> Multivariate Gaussian/Normal Family (20 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html"><i class="fa fa-check"></i><b>8</b> Noteworthy Distribution Families</a><ul>
+<li class="chapter" data-level="8.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#learning-objectives-6"><i class="fa fa-check"></i><b>8.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="8.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#more-univariate-distribution-families-5-min"><i class="fa fa-check"></i><b>8.2</b> More Univariate Distribution Families (5 min)</a></li>
+<li class="chapter" data-level="8.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#multivariate-gaussiannormal-family-20-min-1"><i class="fa fa-check"></i><b>8.3</b> Multivariate Gaussian/Normal Family (20 min)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#parameters"><i class="fa fa-check"></i><b>8.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.3.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#visualizing-bivariate-gaussian-density"><i class="fa fa-check"></i><b>8.3.2</b> Visualizing Bivariate Gaussian Density</a></li>
+<li class="chapter" data-level="8.3.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#properties"><i class="fa fa-check"></i><b>8.3.3</b> Properties</a></li>
+<li class="chapter" data-level="8.3.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#activity-2"><i class="fa fa-check"></i><b>8.3.4</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#break-and-evaluations-8-min"><i class="fa fa-check"></i><b>8.4</b> Break and Evaluations (8 min)</a></li>
+<li class="chapter" data-level="8.5" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#mixture-distributions-20-min"><i class="fa fa-check"></i><b>8.5</b> Mixture distributions (20 min)</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#example-mixture-of-gaussians"><i class="fa fa-check"></i><b>8.5.1</b> Example: Mixture of Gaussians</a></li>
+<li class="chapter" data-level="8.5.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-clustering"><i class="fa fa-check"></i><b>8.5.2</b> Application: Clustering</a></li>
+<li class="chapter" data-level="8.5.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-zero-inflated-models"><i class="fa fa-check"></i><b>8.5.3</b> Application: Zero-Inflated Models</a></li>
+<li class="chapter" data-level="8.5.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-bayesian-statistics"><i class="fa fa-check"></i><b>8.5.4</b> Application: Bayesian Statistics</a></li>
+<li class="chapter" data-level="8.5.5" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#activity-3"><i class="fa fa-check"></i><b>8.5.5</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#topics-in-the-appendix"><i class="fa fa-check"></i><b>8.6</b> Topics in the Appendix</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix (Optional)</b></span></li>
+<li class="chapter" data-level="A" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html"><i class="fa fa-check"></i><b>A</b> Linear Algebra Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#review-of-vectors-and-linear-algebra"><i class="fa fa-check"></i><b>A.1</b> Review of vectors and linear algebra</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#vectors"><i class="fa fa-check"></i><b>A.1.1</b> Vectors</a></li>
+<li class="chapter" data-level="A.1.2" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#matrices"><i class="fa fa-check"></i><b>A.1.2</b> Matrices</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#random-vectors"><i class="fa fa-check"></i><b>A.2</b> Random vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="bayes-theorem.html"><a href="bayes-theorem.html"><i class="fa fa-check"></i><b>B</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="C" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html"><i class="fa fa-check"></i><b>C</b> Heavy-Tailed Distributions</a><ul>
+<li class="chapter" data-level="C.1" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#sensitivity-of-the-mean-to-extremes"><i class="fa fa-check"></i><b>C.1</b> Sensitivity of the mean to extremes</a></li>
+<li class="chapter" data-level="C.2" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#heavy-tailed-distributions-1"><i class="fa fa-check"></i><b>C.2</b> Heavy-tailed Distributions</a></li>
+<li class="chapter" data-level="C.3" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#heavy-tailed-distribution-families"><i class="fa fa-check"></i><b>C.3</b> Heavy-tailed distribution families</a></li>
+<li class="chapter" data-level="C.4" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#extreme-value-analysis"><i class="fa fa-check"></i><b>C.4</b> Extreme Value Analysis</a></li>
+<li class="chapter" data-level="C.5" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#multivariate-students-t-distributions"><i class="fa fa-check"></i><b>C.5</b> Multivariate Student’s <em>t</em> distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="generating-continuous-data.html"><a href="generating-continuous-data.html"><i class="fa fa-check"></i><b>D</b> Generating Continuous Data</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSCI 551: Descriptive Statistics and Probability for Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simulation" class="section level1">
+<h1><span class="header-section-number">Lecture 3</span> Simulation</h1>
+<p>So far, we’ve seen many quantities that help us communicating an uncertain outcome:</p>
+<ul>
+<li>probability</li>
+<li>probability mass function</li>
+<li>odds</li>
+<li>mode</li>
+<li>entropy</li>
+<li>mean</li>
+<li>variance / standard deviation</li>
+</ul>
+<p>Sometimes, it’s not easy to compute these things. In these situations, we can use <strong>simulation</strong> to approximate these and other quantities. This is today’s topic.</p>
+<p>Let’s set up the workspace for this lecture:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(tidyverse))
+<span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(reticulate))
+<span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(testthat))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">## Python:</span>
+<span class="im">import</span> numpy <span class="im">as</span> np
+<span class="im">import</span> scipy.stats</code></pre></div>
+<div id="learning-objectives-1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Learning Objectives</h2>
+<p>From this lecture, students are expected to be able to:</p>
+<ul>
+<li>Generate a random sample from a discrete distribution in both R and python.</li>
+<li>Reproduce the same random sample each time you re-run your code in both R and python by setting the seed or random state.</li>
+<li>Evaluate whether or not a set of observations are iid.</li>
+<li>Use simulation to approximate distribution properties (like mean and variance) using empirical quantities, especially for random variables involving multiple other random variables.</li>
+</ul>
+</div>
+<div id="review-activity-15-min" class="section level2">
+<h2><span class="header-section-number">3.2</span> Review Activity (15 min)</h2>
+<p>True or False?</p>
+<ol style="list-style-type: decimal">
+<li>In general, 9 parameters must be specified in order to fully describe a distribution with 9 outcomes.</li>
+<li>A Binomial distribution only has one mean, but there are many Binomial distributions that have the same mean.</li>
+<li>A Poisson distribution only has one mean, but there are many Poisson distributions that have the same mean.</li>
+<li>A Binomial distribution is also a Bernoulli distribution, but a Bernoulli distribution is not a Binomial distribution.</li>
+</ol>
+</div>
+<div id="random-samples-terminology-5-min" class="section level2">
+<h2><span class="header-section-number">3.3</span> Random Samples: Terminology (5 min)</h2>
+<p>A <strong>random sample</strong> is a collection of random outcomes/variables. Using symbols, a random sample of size <span class="math inline">\(n\)</span> is usually depicted as <span class="math inline">\(X_1, \ldots, X_n\)</span>. We think of data as being a random sample.</p>
+<p>Some examples of random samples:</p>
+<ul>
+<li>the first five items you get in a game of Mario Kart</li>
+<li>the outcomes of ten dice rolls</li>
+<li>the daily high temperature in Vancouver for each day in a year.</li>
+</ul>
+<p>A random sample is said to be <strong>independent and identically distributed</strong> (or <strong>iid</strong>) if</p>
+<ol style="list-style-type: decimal">
+<li>each pair of observations are independent, and</li>
+<li>each observation comes from the same distribution.</li>
+</ol>
+<p>We’ll define “independent” next class, but for now, you can think of this as meaning “not influencing each other”.</p>
+<p>Sometimes, when an outcome is said to be <strong>random</strong>, this can either mean the outcome has some distribution (with non-zero entropy), or that is has the distribution with maximum entropy. To avoid confusion, the word <strong>stochastic</strong> refers to the former (as having some uncertain outcome). For example, if a die is weighted so that “1” appears very often, would you call this die “random”? Whether or not you do, it’s always <em>stochastic</em>.</p>
+<p>The opposite of stochastic is <strong>deterministic</strong>: an outcome that will be known with 100% certainty.</p>
+</div>
+<div id="seeds-5-min" class="section level2">
+<h2><span class="header-section-number">3.4</span> Seeds (5 min)</h2>
+<p>Computers can’t actually generate truly random outcomes. Instead, they use something called <a href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator">pseudorandom numbers</a>.</p>
+<p>As an example of a basic algorithm that produces pseudo-random numbers between 0 and 1, consider starting with your choice of number <span class="math inline">\(x_0\)</span> between 0 and 1, and iterating the following equation: <span class="math display">\[x_{i+1} = 4 x_i (1 - x_i).\]</span> The result will appear to be random numbers between 0 and 1. Here is the resulting sequence when we start with <span class="math inline">\(x_0 = 0.3\)</span> and iterate 1000 times:</p>
+<p><img src="lecture03_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Although this sequence is deterministic, it behaves like a random sample. But not entirely! All pseudorandom number generators have some pitfalls. In the case above, one pitfall is that neighbouring pairs are not independent from each other (by definition of the way the sequence was set up!). There are some sophisticated algorithms that produce outcomes that more closely resemble a random sample, so most of the time, we don’t have to worry about the sample not being truly random.</p>
+<p>The <strong>seed</strong> (or <strong>random state</strong>) in a pseudo-random number generator is some pre-specified initial value that determines the generated sequence. As long as the seed remains the same, the resulting sample will also be the same. In the case above, this is <span class="math inline">\(x_0 = 0.3\)</span>. In R and python, if we don’t explicitly set the seed, then the seed will be chosen for us.</p>
+<p>In R, we can set the seed using the <code>set.seed()</code> function, and in python, using the <code>numpy.random.seed()</code> function from <code>numpy</code>.</p>
+<p>The seed gives us an added advantage over truly random numbers: it allows our analysis to be reproducible! If we explicitly set a seed, then someone who re-runs the analysis will get the same results.</p>
+</div>
+<div id="generating-random-samples-code" class="section level2">
+<h2><span class="header-section-number">3.5</span> Generating Random Samples: Code</h2>
+<p>Here, we’ll look at some R and python functions that help us generate a random sample. We’re still focussing on discrete distributions, here.</p>
+<div id="from-finite-number-of-categories-5-min" class="section level3">
+<h3><span class="header-section-number">3.5.1</span> From Finite Number of Categories (5 min)</h3>
+<p>In R, we can generate a random sample from a distribution with a finite number of outcomes using the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/sample"><code>sample()</code> function</a>:</p>
+<ul>
+<li>Put the outcomes as a vector in the first argument, <code>x</code>.</li>
+<li>Put the desired sample size in the argument <code>size</code>.</li>
+<li>Put <code>replace = TRUE</code> so that sampling can happen with replacement.</li>
+<li>Put the probabilities of the outcomes as a vector respective to <code>x</code> in the argument <code>prob</code>.
+<ul>
+<li>Just a warning: if these probabilities do not add up to 1, R will not throw an error. Instead, R automatically adjusts the probabilities so that they add up to 1.</li>
+</ul></li>
+</ul>
+<p>Here’s an example of generating 10 items using the Mario Kart item distribution from Lecture 1. Notice that the seed is set, so that every time these lecture notes are rendered, the same results are obtained.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+outcomes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;banana&quot;</span>, <span class="st">&quot;bob-omb&quot;</span>, <span class="st">&quot;coin&quot;</span>, <span class="st">&quot;horn&quot;</span>, <span class="st">&quot;shell&quot;</span>)
+probs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.05</span>, <span class="fl">0.75</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>)
+n &lt;-<span class="st"> </span><span class="dv">10</span>
+<span class="kw">sample</span>(outcomes, <span class="dt">size =</span> n, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> probs)</code></pre></div>
+<pre><code>##  [1] &quot;coin&quot;    &quot;coin&quot;    &quot;coin&quot;    &quot;bob-omb&quot; &quot;coin&quot;    &quot;bob-omb&quot; &quot;shell&quot;  
+##  [8] &quot;coin&quot;    &quot;coin&quot;    &quot;coin&quot;</code></pre>
+<p>In python, we can generate a random sample from a discrete distribution using the <a href="https://docs.scipy.org/doc/numpy-1.14.0/reference/generated/numpy.random.choice.html"><code>numpy.random.choice()</code> function</a>:</p>
+<ul>
+<li>Put the outcomes in the first argument, <code>a</code>.</li>
+<li>Put the desired sample size in the argument <code>size</code>.</li>
+<li>Put the probabilities of the outcomes respective to <code>x</code> in the argument <code>p</code>.</li>
+</ul>
+<p>Using the Mario Kart example again:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">## Python:</span>
+np.random.seed(<span class="dv">1</span>)
+outcomes <span class="op">=</span> [<span class="st">&quot;banana&quot;</span>, <span class="st">&quot;bob-omb&quot;</span>, <span class="st">&quot;coin&quot;</span>, <span class="st">&quot;horn&quot;</span>, <span class="st">&quot;shell&quot;</span>]
+probs <span class="op">=</span> [<span class="fl">0.12</span>, <span class="fl">0.05</span>, <span class="fl">0.75</span>, <span class="fl">0.03</span>, <span class="fl">0.05</span>]
+n <span class="op">=</span> <span class="dv">10</span>
+np.random.choice(outcomes, size <span class="op">=</span> n, p <span class="op">=</span> probs)</code></pre></div>
+<pre><code>## array([&#39;coin&#39;, &#39;coin&#39;, &#39;banana&#39;, &#39;coin&#39;, &#39;bob-omb&#39;, &#39;banana&#39;, &#39;coin&#39;,
+##        &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;],
+##       dtype=&#39;&lt;U7&#39;)</code></pre>
+</div>
+<div id="from-distribution-families-5-min" class="section level3">
+<h3><span class="header-section-number">3.5.2</span> From Distribution Families (5 min)</h3>
+<p>In R, we can generate data from a distribution belonging to some parametric family using the <code>rdist()</code> function, where “<code>dist</code>” is replaced with a short-form of the distribution family’s name. We can access the corresponding pmf with <code>ddist()</code>.</p>
+<p>In python, we can use the <code>stats</code> module from the <code>scipy</code> library.</p>
+<p>The following table summarizes the functions related to the distribution famlies we’ve seen so far:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Family</th>
+<th>R function</th>
+<th>python function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Binomial</td>
+<td><code>rbinom()</code></td>
+<td><code>scipy.stats.binom.rvs()</code></td>
+</tr>
+<tr class="even">
+<td>Geometric</td>
+<td><code>rgeom()</code></td>
+<td><code>scipy.stats.geom.rvs()</code></td>
+</tr>
+<tr class="odd">
+<td>Negative Binomial</td>
+<td><code>rnbinom()</code></td>
+<td><code>scipy.stats.nbinom.rvs()</code></td>
+</tr>
+<tr class="even">
+<td>Poisson</td>
+<td><code>rpois()</code></td>
+<td><code>scipy.stats.poisson.rvs()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Here’s how to use these functions:</p>
+<ul>
+<li>Sample size:
+<ul>
+<li>For R, put this in the argument <code>n</code>, which comes first.</li>
+<li>For python, put this in the argument <code>size</code>, which comes last.</li>
+</ul></li>
+<li>In both languages, each parameter has its own argument. Sometimes, like in R’s <code>rnbinom()</code>, there are more parameters than needed, giving the option of different parameterizations. Be sure to only specify the exact number of parameters required to isolate a member of the distribution family!</li>
+</ul>
+<p><strong>Example</strong>: Generate 10 observations from a binomial distribution with probability of success 0.6 and 5 trials.</p>
+<p>Using R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.6</span>)</code></pre></div>
+<pre><code>##  [1] 4 4 2 3 2 3 2 0 3 2</code></pre>
+<p>Using python:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">## Python:</span>
+scipy.stats.binom.rvs(n <span class="op">=</span> <span class="dv">5</span>, p <span class="op">=</span> <span class="fl">0.6</span>, size <span class="op">=</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>## array([3, 2, 4, 2, 5, 3, 3, 3, 4, 4])</code></pre>
+<p>The Negative Binomial family is an example of a function in R that allows for a different parameterization. Notice that specifying too many or too few parameters results in an error (remember, we need to specify two parameters):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">5</span>)</code></pre></div>
+<pre><code>## Error in rnbinom(10, size = 5): argument &quot;prob&quot; is missing, with no default</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.6</span>, <span class="dt">mu =</span> <span class="dv">4</span>)</code></pre></div>
+<pre><code>## Error in rnbinom(10, size = 5, prob = 0.6, mu = 4): &#39;prob&#39; and &#39;mu&#39; both specified</code></pre>
+</div>
+</div>
+<div id="running-simulations" class="section level2">
+<h2><span class="header-section-number">3.6</span> Running Simulations</h2>
+<p>So far, we’ve seen two ways to calculate quantities that help us communicate uncertainty (like means and probabilities):</p>
+<ol style="list-style-type: decimal">
+<li>The <strong>distribution-based approach</strong> (using the distribution), resulting in <em>true values</em>.</li>
+<li>The <strong>empirical approach</strong> (using data), resulting in <em>approximate values</em> that improve as the sample size increases.</li>
+</ol>
+<p>For example, the true mean of a random variable <span class="math inline">\(X\)</span> can be calculated as <span class="math inline">\(E(X) = \sum_x x P(X = x)\)</span> using each pair of outcome and outcome’s probability, or can be approximated using the empirical approach from a random sample <span class="math inline">\(X_1, \ldots, X_n\)</span> by <span class="math inline">\(E(X) \approx (1/n) \sum_{i=1}^n X_i\)</span>.</p>
+<p>This means that we can approximate these quantities by generating a sample! An analysis that uses a randomly generated data set is called a <strong>simulation</strong>.</p>
+<div id="code-for-empirical-quantities-0-min" class="section level3">
+<h3><span class="header-section-number">3.6.1</span> Code for empirical quantities (0 min)</h3>
+<p>For your reference, here are some hints for calculating empirical quantities using R. We’ll be going over these below in the “Basic Simulation” section.</p>
+<ul>
+<li><code>mean()</code> calculates the sample average.</li>
+<li><code>var()</code> calculates the sample variance (the <span class="math inline">\(n-1\)</span> version, not <span class="math inline">\(n\)</span>), and <code>sd()</code> its square root for the standard deviation.</li>
+<li>For a single probability, remember that a mean is just an average. Just calculate the mean of a condition.</li>
+<li>For an entire pmf, use the <code>table()</code> function, or more conveniently, the <code>janitor::tabyl()</code> function.</li>
+<li>For the mode, either get it manually using the <code>table()</code> or <code>janitor::tabyl()</code> function, or you can use <code>DescTools::Mode()</code>.</li>
+</ul>
+</div>
+<div id="basic-simulation-10-min" class="section level3">
+<h3><span class="header-section-number">3.6.2</span> Basic Simulation (10 min)</h3>
+<p>Consider playing games with probability of success <span class="math inline">\(p=0.7\)</span> until you experience <span class="math inline">\(k=5\)</span> successes, and counting the number of failures. This random variable (say <span class="math inline">\(X\)</span>) has a Negative Binomial distribution.</p>
+<p>You can find an R script containing the code for the basic simulation <a href="https://github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/blob/master/supplementary/lec3-basic.R">in the students’ repo</a>.</p>
+<p>Let’s demonstrate both a distribution-based and empirical approach to computing the variance and pmf. First, let’s obtain our random sample (of, say, 10000 observations).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">88</span>)
+k &lt;-<span class="st"> </span><span class="dv">5</span>
+p &lt;-<span class="st"> </span><span class="fl">0.7</span>
+n &lt;-<span class="st"> </span><span class="dv">10000</span>
+rand_sample &lt;-<span class="st"> </span><span class="kw">rnbinom</span>(n, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.7</span>)
+<span class="kw">head</span>(rand_sample, <span class="dv">100</span>)</code></pre></div>
+<pre><code>##   [1] 1 1 6 2 0 3 3 3 2 1 2 5 1 1 1 3 1 1 1 2 2 1 1 7 1 1 3 5 0 4 0 5 1 1 4
+##  [36] 1 1 1 2 6 3 2 5 3 1 2 0 2 2 1 1 4 0 0 5 5 2 7 0 0 1 0 3 1 3 2 0 2 2 0
+##  [71] 3 1 0 5 4 0 1 3 2 1 2 1 1 2 2 1 0 1 4 4 2 2 4 1 2 4 3 4 1 1</code></pre>
+<div id="mean" class="section level4">
+<h4><span class="header-section-number">3.6.2.1</span> Mean</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">*</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>p   <span class="co"># True, distribution-based</span></code></pre></div>
+<pre><code>## [1] 2.142857</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(rand_sample) <span class="co"># Approximate, empirical</span></code></pre></div>
+<pre><code>## [1] 2.1654</code></pre>
+</div>
+<div id="variance" class="section level4">
+<h4><span class="header-section-number">3.6.2.2</span> Variance</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">*</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>p<span class="op">^</span><span class="dv">2</span> <span class="co"># True, distribution-based</span></code></pre></div>
+<pre><code>## [1] 3.061224</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(rand_sample)  <span class="co"># Approximate, empirical</span></code></pre></div>
+<pre><code>## [1] 3.060549</code></pre>
+</div>
+<div id="standard-deviation" class="section level4">
+<h4><span class="header-section-number">3.6.2.3</span> Standard deviation</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sqrt</span>((<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">*</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>p<span class="op">^</span><span class="dv">2</span>) <span class="co"># True, distribution-based</span></code></pre></div>
+<pre><code>## [1] 1.749636</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(rand_sample)         <span class="co"># Approximate, empirical</span></code></pre></div>
+<pre><code>## [1] 1.749442</code></pre>
+</div>
+<div id="probability-of-seeing-0" class="section level4">
+<h4><span class="header-section-number">3.6.2.4</span> Probability of seeing 0</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(rand_sample <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)         <span class="co"># Approximate, empirical</span></code></pre></div>
+<pre><code>## [1] 0.163</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dnbinom</span>(<span class="dv">0</span>, <span class="dt">size =</span> k, <span class="dt">prob =</span> p) <span class="co"># True, distribution-based</span></code></pre></div>
+<pre><code>## [1] 0.16807</code></pre>
+</div>
+<div id="pmf" class="section level4">
+<h4><span class="header-section-number">3.6.2.5</span> pmf</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Code without using the tidyverse:
+pmf &lt;-<span class="st"> </span>janitor<span class="op">::</span><span class="kw">tabyl</span>(rand_sample)               <span class="co"># Empirical</span>
+pmf<span class="op">$</span>n &lt;-<span class="st"> </span><span class="ot">NULL</span>
+pmf &lt;-<span class="st"> </span><span class="kw">setNames</span>(pmf, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;empirical&quot;</span>))
+pmf<span class="op">$</span>actual &lt;-<span class="st"> </span><span class="kw">dnbinom</span>(pmf<span class="op">$</span>x, <span class="dt">size =</span> k, <span class="dt">prob =</span> p) <span class="co"># True</span>
+
+## Code using the tidyverse:
+pmf &lt;-<span class="st"> </span>janitor<span class="op">::</span><span class="kw">tabyl</span>(rand_sample) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(<span class="dt">x =</span> rand_sample, <span class="dt">empirical =</span> percent) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">actual =</span> <span class="kw">dnbinom</span>(x, <span class="dt">size =</span> k, <span class="dt">prob =</span> p))
+pmf <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">actual    =</span> <span class="kw">round</span>(actual, <span class="dv">4</span>),         <span class="co"># Empirical</span>
+           <span class="dt">empirical =</span> <span class="kw">round</span>(empirical, <span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># True</span>
+<span class="st">    </span>DT<span class="op">::</span><span class="kw">datatable</span>(<span class="dt">rownames =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div id="htmlwidget-faad8b20026647f5c8cc" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-faad8b20026647f5c8cc">{"x":{"filter":"none","data":[[0,1,2,3,4,5,6,7,8,9,10,11,12,13],[0.163,0.2506,0.2291,0.1601,0.0946,0.0544,0.0274,0.0118,0.005,0.0024,0.0008,0.0005,0.0001,0.0002],[0.1681,0.2521,0.2269,0.1588,0.0953,0.0515,0.0257,0.0121,0.0055,0.0024,0.001,0.0004,0.0002,0.0001]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>x<\/th>\n      <th>empirical<\/th>\n      <th>actual<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Here’s a plot of the pmf:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pmf <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;method&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;Probability&quot;</span>, empirical, actual) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(x, Probability)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>method) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_col</span>(<span class="dt">fill =</span> <span class="st">&quot;maroon&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="lecture03_files/figure-html/unnamed-chunk-15-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="entropy" class="section level4">
+<h4><span class="header-section-number">3.6.2.6</span> Entropy</h4>
+<p>It turns out to be hard to calculate the actual entropy, so we will only compute the empirical:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(pmf<span class="op">$</span>empirical <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(pmf<span class="op">$</span>empirical))</code></pre></div>
+<pre><code>## [1] 1.858891</code></pre>
+</div>
+<div id="mode" class="section level4">
+<h4><span class="header-section-number">3.6.2.7</span> Mode</h4>
+<p>feel free to just read from the table/plot if you aren’t familiar with the R tidyverse.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Actual
+pmf <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(actual <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(actual)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(x)</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Empirical
+pmf <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(empirical <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(empirical)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">pull</span>(x)</code></pre></div>
+<pre><code>## [1] 1</code></pre>
+</div>
+<div id="distribution-based-calculations-on-empirical-pmf" class="section level4">
+<h4><span class="header-section-number">3.6.2.8</span> Distribution-based calculations on empirical pmf</h4>
+<p>What do you think you’ll get if you use the definition of mean, variance, etc. <em>on the empirical distribution</em>? You get the empirical values! Here’s an example with the mean – notice that they are identical.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(pmf<span class="op">$</span>x <span class="op">*</span><span class="st"> </span>pmf<span class="op">$</span>empirical)</code></pre></div>
+<pre><code>## [1] 2.1654</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(rand_sample)</code></pre></div>
+<pre><code>## [1] 2.1654</code></pre>
+</div>
+<div id="law-of-large-numbers" class="section level4">
+<h4><span class="header-section-number">3.6.2.9</span> Law of Large Numbers</h4>
+<p>To demonstrate that the a larger sample size improves the approximation of the empirical quantities, let’s see how the sample average changes as we collect more and more data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tibble</span>(<span class="dt">i    =</span> <span class="dv">1</span><span class="op">:</span>n, 
+       <span class="dt">mean =</span> <span class="kw">cumsum</span>(rand_sample) <span class="op">/</span><span class="st"> </span>i) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(i, mean)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> (<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>p) <span class="op">*</span><span class="st"> </span>k <span class="op">/</span><span class="st"> </span>p,
+               <span class="dt">colour =</span> <span class="st">&quot;maroon&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Sample size&quot;</span>,
+         <span class="dt">y =</span> <span class="st">&quot;Empirical mean&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="lecture03_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>You can try this for yourself with <a href="https://seeing-theory.brown.edu/basic-probability/index.html">Chapter 1 -“expectation” in Seeing Theory</a>.</p>
+</div>
+</div>
+<div id="multi-step-simulations-10-min" class="section level3">
+<h3><span class="header-section-number">3.6.3</span> Multi-Step Simulations (10 min)</h3>
+<p>The simulation above was not all that useful, since we could calculate basically anything. Where it gets more interesting is when we want to calculate things for a random variable that transforms and/or combines multiple random variables.</p>
+<p>The idea is that some random variables will have a distribution that depends on other random variables, but in a way that’s explicit. For example, consider a random variable <span class="math inline">\(T\)</span> that we can obtain as follows. Take <span class="math inline">\(X \sim \text{Poisson}(5)\)</span>, and then <span class="math inline">\(T = \sum_{i = 1}^{X} D_i\)</span>, where each <span class="math inline">\(D_i\)</span> are iid with some specified distribution. In this case, to generate <span class="math inline">\(T\)</span>, you would first need to generate <span class="math inline">\(X\)</span>, then generate <span class="math inline">\(X\)</span> values of <span class="math inline">\(D_i\)</span>, then sum those up to get <span class="math inline">\(T\)</span>. This is the example we’ll see here, but in general, you can have any number of dependencies, each component of which you would have to generate.</p>
+<p>Consider an example that a Vancouver port faces with “gang demand”. Whenever a ship arrives to the port of Vancouver, they request a certain number of “gangs” (groups of people) to help unload the ship. Let’s suppose the number of gangs requested by a ship has the following distribution:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gang &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span>
+p &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>)
+<span class="kw">tibble</span>(
+    <span class="dt">gangs =</span> gang,
+    <span class="dt">p     =</span> p
+) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(gangs, p)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_col</span>(<span class="dt">fill =</span> <span class="st">&quot;maroon&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Number of Gangs&quot;</span>,
+         <span class="dt">y =</span> <span class="st">&quot;Probability&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="lecture03_files/figure-html/unnamed-chunk-20-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p>The following function sums up simulated gangs requested by a certain number of ships, with the above probability distribution as a default. As an example, check out the simulated gang request from 10 ships:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#&#39; Generate gang demand</span>
+<span class="co">#&#39;</span>
+<span class="co">#&#39; Simulates the number of gangs requested, if each ship</span>
+<span class="co">#&#39; requests a random number of gangs.</span>
+<span class="co">#&#39; </span>
+<span class="co">#&#39; @param n_ships Number of ships that are making demands</span>
+<span class="co">#&#39; @param gangs Possible gang demands made by a ship.</span>
+<span class="co">#&#39; @param prob Probabilities of gang demand corresponding to &quot;gangs&quot;</span>
+<span class="co">#&#39; </span>
+<span class="co">#&#39; @return Number representing the total gang demand </span>
+demand_gangs &lt;-<span class="st"> </span><span class="cf">function</span>(n_ships, <span class="dt">gangs =</span> gang, <span class="dt">prob =</span> p) {
+    <span class="cf">if</span> (<span class="kw">length</span>(gangs) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {
+        gangs &lt;-<span class="st"> </span><span class="kw">c</span>(gangs, gangs)
+        prob &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)
+    }
+    requests &lt;-<span class="st"> </span><span class="kw">sample</span>(
+        gangs, 
+        <span class="dt">size    =</span> n_ships, 
+        <span class="dt">replace =</span> <span class="ot">TRUE</span>, 
+        <span class="dt">prob    =</span> prob
+    )
+    <span class="kw">sum</span>(requests)
+}
+
+<span class="kw">test_that</span>(<span class="st">&quot;demand_gangs output is as expected&quot;</span>, {
+    <span class="kw">expect_identical</span>(<span class="kw">demand_gangs</span>(<span class="dv">0</span>), 0L)
+    <span class="kw">expect_gte</span>(<span class="kw">demand_gangs</span>(<span class="dv">1</span>), <span class="kw">min</span>(gang))
+    <span class="kw">expect_lte</span>(<span class="kw">demand_gangs</span>(<span class="dv">1</span>), <span class="kw">max</span>(gang))
+    <span class="kw">expect_gte</span>(<span class="kw">demand_gangs</span>(<span class="dv">10</span>), <span class="dv">10</span><span class="op">*</span><span class="kw">min</span>(gang))
+    <span class="kw">expect_lte</span>(<span class="kw">demand_gangs</span>(<span class="dv">10</span>), <span class="dv">10</span><span class="op">*</span><span class="kw">max</span>(gang))
+    <span class="kw">expect_identical</span>(<span class="kw">length</span>(<span class="kw">demand_gangs</span>(<span class="dv">10</span>)), 1L)
+    <span class="kw">expect_identical</span>(<span class="kw">demand_gangs</span>(<span class="dv">10</span>, <span class="dt">gangs =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="dv">1</span>), <span class="dv">20</span>)
+})
+
+<span class="kw">demand_gangs</span>(<span class="dv">10</span>)</code></pre></div>
+<pre><code>## [1] 22</code></pre>
+<p>Now suppose that the number of ships that arrive on a given day follows the Poisson distribution with a mean of 5. What’s the distribution of total gang request on a given day? Let’s simulate the process to find out:</p>
+<ol style="list-style-type: decimal">
+<li>Generate arrival quantities for many days from the Poisson(5) distribution.</li>
+<li>For each day, simulate total gang request for the simulated number of ships.</li>
+<li>You now have your random sample – compute things as you normally would.</li>
+</ol>
+<p>Let’s try this, obtaining a sample of 10000 days:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_days &lt;-<span class="st"> </span><span class="dv">10000</span>
+## Step 1: generate a bunch of ships arriving each day
+arrivals &lt;-<span class="st"> </span><span class="kw">rpois</span>(n_days, <span class="dt">lambda =</span> <span class="dv">5</span>)
+## Step 2: Simulate total gang request on each day.
+total_requests &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map_int</span>(arrivals, demand_gangs)
+## Step 3: Compute things like pmf, mean, variance:
+<span class="kw">tibble</span>(<span class="dt">x =</span> total_requests) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(x, <span class="dt">y =</span> ..prop..)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Total Gang Request&quot;</span>,
+         <span class="dt">y =</span> <span class="st">&quot;Probability&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="lecture03_files/figure-html/unnamed-chunk-22-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tibble</span>(
+    <span class="dt">mean     =</span> <span class="kw">mean</span>(total_requests),
+    <span class="dt">variance =</span> <span class="kw">var</span>(total_requests)
+) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>()</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">mean</th>
+<th align="right">variance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">11.5162</td>
+<td align="right">30.47739</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="mixture-distributions" class="section level3">
+<h3><span class="header-section-number">3.6.4</span> Mixture distributions</h3>
+<p><strong>Moved to a future lecture</strong>.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="parametric-families.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="joint-probability-part-i.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/edit/master/lecture03.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

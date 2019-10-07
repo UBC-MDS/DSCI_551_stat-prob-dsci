@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Lecture 4 Joint Probability, Part I | DSCI 551: Descriptive Statistics and Probability for Data Science</title>
+  <meta name="description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Lecture 4 Joint Probability, Part I | DSCI 551: Descriptive Statistics and Probability for Data Science" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Lecture 4 Joint Probability, Part I | DSCI 551: Descriptive Statistics and Probability for Data Science" />
+  
+  <meta name="twitter:description" content="Lecture notes for DSCI 551 for the 2019/20 academic year." />
+  
+
+<meta name="author" content="Vincenzo Coia and Michael Gelbart" />
+
+
+<meta name="date" content="2019-10-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simulation.html">
+<link rel="next" href="continuous-distributions.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.9/datatables.js"></script>
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.19/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.19/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSCI 551 @ UBC 2019-20</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Lecture Notes</a></li>
+<li class="chapter" data-level="1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Depicting Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#lecture-learning-objectives"><i class="fa fa-check"></i><b>1.1</b> Lecture Learning Objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#thinking-about-probability"><i class="fa fa-check"></i><b>1.2</b> Thinking about Probability</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#defining-probability-5-min"><i class="fa fa-check"></i><b>1.2.1</b> Defining Probability (5 min)</a></li>
+<li class="chapter" data-level="1.2.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#calculating-probabilities-using-logic"><i class="fa fa-check"></i><b>1.2.2</b> Calculating Probabilities using Logic</a></li>
+<li class="chapter" data-level="1.2.3" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#comparing-probabilities-8-min"><i class="fa fa-check"></i><b>1.2.3</b> Comparing Probabilities (8 min)</a></li>
+<li class="chapter" data-level="1.2.4" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#interpreting-probability-5-min"><i class="fa fa-check"></i><b>1.2.4</b> Interpreting Probability (5 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#probability-distributions"><i class="fa fa-check"></i><b>1.3</b> Probability Distributions</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#examples-of-probability-distributions-3-min"><i class="fa fa-check"></i><b>1.3.1</b> Examples of Probability Distributions (3 min)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="depicting-uncertainty.html"><a href="depicting-uncertainty.html#measures-of-central-tendency-and-uncertainty"><i class="fa fa-check"></i><b>1.3.2</b> Measures of central tendency and uncertainty</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="parametric-families.html"><a href="parametric-families.html"><i class="fa fa-check"></i><b>2</b> Parametric families</a><ul>
+<li class="chapter" data-level="2.1" data-path="parametric-families.html"><a href="parametric-families.html#learning-objectives"><i class="fa fa-check"></i><b>2.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="2.2" data-path="parametric-families.html"><a href="parametric-families.html#properties-of-distributions-practice"><i class="fa fa-check"></i><b>2.2</b> Properties of Distributions: Practice</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="parametric-families.html"><a href="parametric-families.html#demonstration-example-computation-8-min"><i class="fa fa-check"></i><b>2.2.1</b> Demonstration: Example computation (8 min)</a></li>
+<li class="chapter" data-level="2.2.2" data-path="parametric-families.html"><a href="parametric-families.html#activity-comparing-variance-to-entropy-12-min"><i class="fa fa-check"></i><b>2.2.2</b> Activity: Comparing Variance to Entropy (12 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="parametric-families.html"><a href="parametric-families.html#expectations-of-transformations"><i class="fa fa-check"></i><b>2.3</b> Expectations of Transformations</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="parametric-families.html"><a href="parametric-families.html#linearity-of-expectations-5-min"><i class="fa fa-check"></i><b>2.3.1</b> Linearity of Expectations (5 min)</a></li>
+<li class="chapter" data-level="2.3.2" data-path="parametric-families.html"><a href="parametric-families.html#probability-as-an-expectation-3-min"><i class="fa fa-check"></i><b>2.3.2</b> Probability as an Expectation (3 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="parametric-families.html"><a href="parametric-families.html#distribution-families"><i class="fa fa-check"></i><b>2.4</b> Distribution Families</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="parametric-families.html"><a href="parametric-families.html#binomial-distribution-8-min"><i class="fa fa-check"></i><b>2.4.1</b> <a href="https://en.wikipedia.org/wiki/Binomial_distribution">Binomial</a> Distribution (8 min)</a></li>
+<li class="chapter" data-level="2.4.2" data-path="parametric-families.html"><a href="parametric-families.html#families-vs.distributions-3-min"><i class="fa fa-check"></i><b>2.4.2</b> Families vs. distributions (3 min)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="parametric-families.html"><a href="parametric-families.html#parameters-5-min"><i class="fa fa-check"></i><b>2.4.3</b> Parameters (5 min)</a></li>
+<li class="chapter" data-level="2.4.4" data-path="parametric-families.html"><a href="parametric-families.html#parameterization-8-min"><i class="fa fa-check"></i><b>2.4.4</b> Parameterization (8 min)</a></li>
+<li class="chapter" data-level="2.4.5" data-path="parametric-families.html"><a href="parametric-families.html#distribution-families-in-practice"><i class="fa fa-check"></i><b>2.4.5</b> Distribution Families in Practice</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="parametric-families.html"><a href="parametric-families.html#common-distribution-families-12-min"><i class="fa fa-check"></i><b>2.5</b> Common Distribution Families (12 min)</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="parametric-families.html"><a href="parametric-families.html#geometric"><i class="fa fa-check"></i><b>2.5.1</b> <a href="https://en.wikipedia.org/wiki/Geometric_distribution">Geometric</a></a></li>
+<li class="chapter" data-level="2.5.2" data-path="parametric-families.html"><a href="parametric-families.html#negative-binomial"><i class="fa fa-check"></i><b>2.5.2</b> <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution">Negative Binomial</a></a></li>
+<li class="chapter" data-level="2.5.3" data-path="parametric-families.html"><a href="parametric-families.html#poisson"><i class="fa fa-check"></i><b>2.5.3</b> <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Poisson</a></a></li>
+<li class="chapter" data-level="2.5.4" data-path="parametric-families.html"><a href="parametric-families.html#bernoulli"><i class="fa fa-check"></i><b>2.5.4</b> <a href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Bernoulli</a></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="simulation.html"><a href="simulation.html"><i class="fa fa-check"></i><b>3</b> Simulation</a><ul>
+<li class="chapter" data-level="3.1" data-path="simulation.html"><a href="simulation.html#learning-objectives-1"><i class="fa fa-check"></i><b>3.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="3.2" data-path="simulation.html"><a href="simulation.html#review-activity-15-min"><i class="fa fa-check"></i><b>3.2</b> Review Activity (15 min)</a></li>
+<li class="chapter" data-level="3.3" data-path="simulation.html"><a href="simulation.html#random-samples-terminology-5-min"><i class="fa fa-check"></i><b>3.3</b> Random Samples: Terminology (5 min)</a></li>
+<li class="chapter" data-level="3.4" data-path="simulation.html"><a href="simulation.html#seeds-5-min"><i class="fa fa-check"></i><b>3.4</b> Seeds (5 min)</a></li>
+<li class="chapter" data-level="3.5" data-path="simulation.html"><a href="simulation.html#generating-random-samples-code"><i class="fa fa-check"></i><b>3.5</b> Generating Random Samples: Code</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="simulation.html"><a href="simulation.html#from-finite-number-of-categories-5-min"><i class="fa fa-check"></i><b>3.5.1</b> From Finite Number of Categories (5 min)</a></li>
+<li class="chapter" data-level="3.5.2" data-path="simulation.html"><a href="simulation.html#from-distribution-families-5-min"><i class="fa fa-check"></i><b>3.5.2</b> From Distribution Families (5 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="simulation.html"><a href="simulation.html#running-simulations"><i class="fa fa-check"></i><b>3.6</b> Running Simulations</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="simulation.html"><a href="simulation.html#code-for-empirical-quantities-0-min"><i class="fa fa-check"></i><b>3.6.1</b> Code for empirical quantities (0 min)</a></li>
+<li class="chapter" data-level="3.6.2" data-path="simulation.html"><a href="simulation.html#basic-simulation-10-min"><i class="fa fa-check"></i><b>3.6.2</b> Basic Simulation (10 min)</a></li>
+<li class="chapter" data-level="3.6.3" data-path="simulation.html"><a href="simulation.html#multi-step-simulations-10-min"><i class="fa fa-check"></i><b>3.6.3</b> Multi-Step Simulations (10 min)</a></li>
+<li class="chapter" data-level="3.6.4" data-path="simulation.html"><a href="simulation.html#mixture-distributions"><i class="fa fa-check"></i><b>3.6.4</b> Mixture distributions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html"><i class="fa fa-check"></i><b>4</b> Joint Probability, Part I</a><ul>
+<li class="chapter" data-level="4.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#learning-objectives-2"><i class="fa fa-check"></i><b>4.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="4.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#conditional-distributions-15-min"><i class="fa fa-check"></i><b>4.2</b> Conditional Distributions (15 min)</a></li>
+<li class="chapter" data-level="4.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#joint-distributions-25-min"><i class="fa fa-check"></i><b>4.3</b> Joint Distributions (25 min)</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#example-length-of-stay-vs.gang-demand"><i class="fa fa-check"></i><b>4.3.1</b> Example: Length of Stay vs. Gang Demand</a></li>
+<li class="chapter" data-level="4.3.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#marginal-distributions"><i class="fa fa-check"></i><b>4.3.2</b> Marginal Distributions</a></li>
+<li class="chapter" data-level="4.3.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#calculating-marginals-from-the-joint"><i class="fa fa-check"></i><b>4.3.3</b> Calculating Marginals from the Joint</a></li>
+<li class="chapter" data-level="4.3.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#conditioning-on-one-variable"><i class="fa fa-check"></i><b>4.3.4</b> Conditioning on one Variable</a></li>
+<li class="chapter" data-level="4.3.5" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#law-of-total-probabilityexpectation"><i class="fa fa-check"></i><b>4.3.5</b> Law of Total Probability/Expectation</a></li>
+<li class="chapter" data-level="4.3.6" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#exercises-10-min"><i class="fa fa-check"></i><b>4.3.6</b> Exercises (10 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-concepts"><i class="fa fa-check"></i><b>4.4</b> Dependence concepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#independence-5-min"><i class="fa fa-check"></i><b>4.4.1</b> Independence (5 min)</a></li>
+<li class="chapter" data-level="4.4.2" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#measures-of-dependence-15-min"><i class="fa fa-check"></i><b>4.4.2</b> Measures of dependence (15 min)</a></li>
+<li class="chapter" data-level="4.4.3" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#variance-of-a-sum-2-min"><i class="fa fa-check"></i><b>4.4.3</b> Variance of a sum (2 min)</a></li>
+<li class="chapter" data-level="4.4.4" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-as-separate-from-the-marginals-5-min-optional"><i class="fa fa-check"></i><b>4.4.4</b> Dependence as separate from the marginals (5 min) (Optional)</a></li>
+<li class="chapter" data-level="4.4.5" data-path="joint-probability-part-i.html"><a href="joint-probability-part-i.html#dependence-as-giving-us-more-information-5-min-optional"><i class="fa fa-check"></i><b>4.4.5</b> Dependence as giving us more information (5 min) (Optional)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#roadmap"><i class="fa fa-check"></i><b>5.1</b> Roadmap</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#learning-objectives-3"><i class="fa fa-check"></i><b>5.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#continuous-random-variables-10-min"><i class="fa fa-check"></i><b>5.3</b> Continuous random variables (10 min)</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#density-functions-20-min"><i class="fa fa-check"></i><b>5.4</b> Density Functions (20 min)</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#example-low-purity-octane"><i class="fa fa-check"></i><b>5.4.1</b> Example: “Low Purity Octane”</a></li>
+<li class="chapter" data-level="5.4.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#example-monthly-expenses"><i class="fa fa-check"></i><b>5.4.2</b> Example: Monthly Expenses</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="continuous-distributions.html"><a href="continuous-distributions.html#distribution-properties-25-min"><i class="fa fa-check"></i><b>5.5</b> Distribution Properties (25 min)</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#mean-variance-mode-and-entropy-again-5-min"><i class="fa fa-check"></i><b>5.5.1</b> Mean, Variance, Mode, and Entropy (again) (5 min)</a></li>
+<li class="chapter" data-level="5.5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#median-5-min"><i class="fa fa-check"></i><b>5.5.2</b> Median (5 min)</a></li>
+<li class="chapter" data-level="5.5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#quantiles-5-min"><i class="fa fa-check"></i><b>5.5.3</b> Quantiles (5 min)</a></li>
+<li class="chapter" data-level="5.5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#prediction-intervals-5-min"><i class="fa fa-check"></i><b>5.5.4</b> Prediction Intervals (5 min)</a></li>
+<li class="chapter" data-level="5.5.5" data-path="continuous-distributions.html"><a href="continuous-distributions.html#skewness-5-min"><i class="fa fa-check"></i><b>5.5.5</b> Skewness (5 min)</a></li>
+<li class="chapter" data-level="5.5.6" data-path="continuous-distributions.html"><a href="continuous-distributions.html#examples"><i class="fa fa-check"></i><b>5.5.6</b> Examples</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html"><i class="fa fa-check"></i><b>6</b> Joint Probability, Part II</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#learning-objectives-4"><i class="fa fa-check"></i><b>6.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#depicting-distributions-25-min"><i class="fa fa-check"></i><b>6.2</b> Depicting Distributions (25 min)</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#cumulative-density-functions-cdfs-distribution-functions"><i class="fa fa-check"></i><b>6.2.1</b> Cumulative Density Functions (cdf’s) / Distribution Functions</a></li>
+<li class="chapter" data-level="6.2.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#survival-function-2-min"><i class="fa fa-check"></i><b>6.2.2</b> Survival Function (2 min)</a></li>
+<li class="chapter" data-level="6.2.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#quantile-function-5-min"><i class="fa fa-check"></i><b>6.2.3</b> Quantile Function (5 min)</a></li>
+<li class="chapter" data-level="6.2.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#other-ways-of-depicting-a-distribution-optional-1-min"><i class="fa fa-check"></i><b>6.2.4</b> Other ways of depicting a distribution (Optional) (1 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#common-distribution-families-continuous-part-i-15-min"><i class="fa fa-check"></i><b>6.3</b> Common Distribution Families: Continuous, Part I (15 min)</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#uniform-3-min"><i class="fa fa-check"></i><b>6.3.1</b> <a href="https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)">Uniform</a> (3 min)</a></li>
+<li class="chapter" data-level="6.3.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#gaussian-normal-4-min"><i class="fa fa-check"></i><b>6.3.2</b> <a href="https://en.wikipedia.org/wiki/Normal_distribution">Gaussian / Normal</a> (4 min)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#log-normal-family"><i class="fa fa-check"></i><b>6.3.3</b> <a href="https://en.wikipedia.org/wiki/Log-normal_distribution">Log-Normal</a> Family</a></li>
+<li class="chapter" data-level="6.3.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#exponential-family"><i class="fa fa-check"></i><b>6.3.4</b> <a href="https://en.wikipedia.org/wiki/Exponential_distribution">Exponential</a> Family</a></li>
+<li class="chapter" data-level="6.3.5" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#weibull-family"><i class="fa fa-check"></i><b>6.3.5</b> <a href="https://en.wikipedia.org/wiki/Weibull_distribution">Weibull</a> Family</a></li>
+<li class="chapter" data-level="6.3.6" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#beta-family"><i class="fa fa-check"></i><b>6.3.6</b> <a href="https://en.wikipedia.org/wiki/Beta_distribution">Beta</a> Family</a></li>
+<li class="chapter" data-level="6.3.7" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#relevant-r-functions-8-min"><i class="fa fa-check"></i><b>6.3.7</b> Relevant R functions (8 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#multivariate-distributions-continuous-20-min"><i class="fa fa-check"></i><b>6.4</b> Multivariate Distributions: Continuous (20 min)</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#multivariate-densitiespdfs"><i class="fa fa-check"></i><b>6.4.1</b> Multivariate Densities/pdf’s</a></li>
+<li class="chapter" data-level="6.4.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#calculating-probabilities"><i class="fa fa-check"></i><b>6.4.2</b> Calculating Probabilities</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#conditional-distributions-revisited-15-min"><i class="fa fa-check"></i><b>6.5</b> Conditional Distributions, revisited (15 min)</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#when-pa-0"><i class="fa fa-check"></i><b>6.5.1</b> When <span class="math inline">\(P(A) = 0\)</span></a></li>
+<li class="chapter" data-level="6.5.2" data-path="joint-probability-part-ii.html"><a href="joint-probability-part-ii.html#when-pb-0"><i class="fa fa-check"></i><b>6.5.2</b> When <span class="math inline">\(P(B) = 0\)</span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="dependence.html"><a href="dependence.html"><i class="fa fa-check"></i><b>7</b> Dependence</a><ul>
+<li class="chapter" data-level="7.1" data-path="dependence.html"><a href="dependence.html#learning-objectives-5"><i class="fa fa-check"></i><b>7.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="7.2" data-path="dependence.html"><a href="dependence.html#drawing-multidimensional-functions-5-min"><i class="fa fa-check"></i><b>7.2</b> Drawing multidimensional functions (5 min)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="dependence.html"><a href="dependence.html#a-possible-point-of-confusion-empirical-contour-plots"><i class="fa fa-check"></i><b>7.2.1</b> A possible point of confusion: empirical contour plots</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="dependence.html"><a href="dependence.html#independence-revisited-10-min"><i class="fa fa-check"></i><b>7.3</b> Independence Revisited (10 min)</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="dependence.html"><a href="dependence.html#definition-in-the-continuous-case"><i class="fa fa-check"></i><b>7.3.1</b> Definition in the Continuous Case</a></li>
+<li class="chapter" data-level="7.3.2" data-path="dependence.html"><a href="dependence.html#independence-visualized"><i class="fa fa-check"></i><b>7.3.2</b> Independence Visualized</a></li>
+<li class="chapter" data-level="7.3.3" data-path="dependence.html"><a href="dependence.html#activity"><i class="fa fa-check"></i><b>7.3.3</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="dependence.html"><a href="dependence.html#harvesting-dependence-20-min"><i class="fa fa-check"></i><b>7.4</b> Harvesting Dependence (20 min)</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="dependence.html"><a href="dependence.html#example-river-flow"><i class="fa fa-check"></i><b>7.4.1</b> Example: River Flow</a></li>
+<li class="chapter" data-level="7.4.2" data-path="dependence.html"><a href="dependence.html#direction-of-dependence"><i class="fa fa-check"></i><b>7.4.2</b> Direction of Dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="dependence.html"><a href="dependence.html#marginal-distributions-20-min"><i class="fa fa-check"></i><b>7.5</b> Marginal Distributions (20 min)</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="dependence.html"><a href="dependence.html#marginal-distribution-from-conditional"><i class="fa fa-check"></i><b>7.5.1</b> Marginal Distribution from Conditional</a></li>
+<li class="chapter" data-level="7.5.2" data-path="dependence.html"><a href="dependence.html#marginal-mean-from-conditional"><i class="fa fa-check"></i><b>7.5.2</b> Marginal Mean from Conditional</a></li>
+<li class="chapter" data-level="7.5.3" data-path="dependence.html"><a href="dependence.html#marginal-quantiles-from-conditional"><i class="fa fa-check"></i><b>7.5.3</b> Marginal Quantiles from Conditional</a></li>
+<li class="chapter" data-level="7.5.4" data-path="dependence.html"><a href="dependence.html#activity-1"><i class="fa fa-check"></i><b>7.5.4</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="dependence.html"><a href="dependence.html#multivariate-gaussiannormal-family-20-min"><i class="fa fa-check"></i><b>7.6</b> Multivariate Gaussian/Normal Family (20 min)</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html"><i class="fa fa-check"></i><b>8</b> Noteworthy Distribution Families</a><ul>
+<li class="chapter" data-level="8.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#learning-objectives-6"><i class="fa fa-check"></i><b>8.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="8.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#more-univariate-distribution-families-5-min"><i class="fa fa-check"></i><b>8.2</b> More Univariate Distribution Families (5 min)</a></li>
+<li class="chapter" data-level="8.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#multivariate-gaussiannormal-family-20-min-1"><i class="fa fa-check"></i><b>8.3</b> Multivariate Gaussian/Normal Family (20 min)</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#parameters"><i class="fa fa-check"></i><b>8.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.3.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#visualizing-bivariate-gaussian-density"><i class="fa fa-check"></i><b>8.3.2</b> Visualizing Bivariate Gaussian Density</a></li>
+<li class="chapter" data-level="8.3.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#properties"><i class="fa fa-check"></i><b>8.3.3</b> Properties</a></li>
+<li class="chapter" data-level="8.3.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#activity-2"><i class="fa fa-check"></i><b>8.3.4</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#break-and-evaluations-8-min"><i class="fa fa-check"></i><b>8.4</b> Break and Evaluations (8 min)</a></li>
+<li class="chapter" data-level="8.5" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#mixture-distributions-20-min"><i class="fa fa-check"></i><b>8.5</b> Mixture distributions (20 min)</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#example-mixture-of-gaussians"><i class="fa fa-check"></i><b>8.5.1</b> Example: Mixture of Gaussians</a></li>
+<li class="chapter" data-level="8.5.2" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-clustering"><i class="fa fa-check"></i><b>8.5.2</b> Application: Clustering</a></li>
+<li class="chapter" data-level="8.5.3" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-zero-inflated-models"><i class="fa fa-check"></i><b>8.5.3</b> Application: Zero-Inflated Models</a></li>
+<li class="chapter" data-level="8.5.4" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#application-bayesian-statistics"><i class="fa fa-check"></i><b>8.5.4</b> Application: Bayesian Statistics</a></li>
+<li class="chapter" data-level="8.5.5" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#activity-3"><i class="fa fa-check"></i><b>8.5.5</b> Activity</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="noteworthy-distribution-families.html"><a href="noteworthy-distribution-families.html#topics-in-the-appendix"><i class="fa fa-check"></i><b>8.6</b> Topics in the Appendix</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix (Optional)</b></span></li>
+<li class="chapter" data-level="A" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html"><i class="fa fa-check"></i><b>A</b> Linear Algebra Review</a><ul>
+<li class="chapter" data-level="A.1" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#review-of-vectors-and-linear-algebra"><i class="fa fa-check"></i><b>A.1</b> Review of vectors and linear algebra</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#vectors"><i class="fa fa-check"></i><b>A.1.1</b> Vectors</a></li>
+<li class="chapter" data-level="A.1.2" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#matrices"><i class="fa fa-check"></i><b>A.1.2</b> Matrices</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="linear-algebra-review.html"><a href="linear-algebra-review.html#random-vectors"><i class="fa fa-check"></i><b>A.2</b> Random vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="bayes-theorem.html"><a href="bayes-theorem.html"><i class="fa fa-check"></i><b>B</b> Bayes’ Theorem</a></li>
+<li class="chapter" data-level="C" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html"><i class="fa fa-check"></i><b>C</b> Heavy-Tailed Distributions</a><ul>
+<li class="chapter" data-level="C.1" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#sensitivity-of-the-mean-to-extremes"><i class="fa fa-check"></i><b>C.1</b> Sensitivity of the mean to extremes</a></li>
+<li class="chapter" data-level="C.2" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#heavy-tailed-distributions-1"><i class="fa fa-check"></i><b>C.2</b> Heavy-tailed Distributions</a></li>
+<li class="chapter" data-level="C.3" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#heavy-tailed-distribution-families"><i class="fa fa-check"></i><b>C.3</b> Heavy-tailed distribution families</a></li>
+<li class="chapter" data-level="C.4" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#extreme-value-analysis"><i class="fa fa-check"></i><b>C.4</b> Extreme Value Analysis</a></li>
+<li class="chapter" data-level="C.5" data-path="heavy-tailed-distributions.html"><a href="heavy-tailed-distributions.html#multivariate-students-t-distributions"><i class="fa fa-check"></i><b>C.5</b> Multivariate Student’s <em>t</em> distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="generating-continuous-data.html"><a href="generating-continuous-data.html"><i class="fa fa-check"></i><b>D</b> Generating Continuous Data</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSCI 551: Descriptive Statistics and Probability for Data Science</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="joint-probability-part-i" class="section level1">
+<h1><span class="header-section-number">Lecture 4</span> Joint Probability, Part I</h1>
+<p>Today’s topic is on working with multiple variables – for now, just two.</p>
+<p>Set up the workspace:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(tidyverse))
+<span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(pbivnorm))
+<span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(cowplot))
+<span class="kw">suppressPackageStartupMessages</span>(<span class="kw">library</span>(DT))
+knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">fig.width =</span> <span class="dv">5</span>, <span class="dt">fig.height =</span> <span class="dv">2</span>, <span class="dt">fig.align =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
+<div id="learning-objectives-2" class="section level2">
+<h2><span class="header-section-number">4.1</span> Learning Objectives</h2>
+<p>From today’s class, students are expected to be able to:</p>
+<ul>
+<li>Calculate conditional distributions when giving a full distribution.</li>
+<li>Calculate marginal distributions from a joint distribution.</li>
+<li>Obtain the marginal mean from conditional means and marginal probabilities, using the law of total expectation.</li>
+<li>Use the law of total probability to convert between conditional + marginal distributions, and joint distributions.</li>
+<li>Describe the consequences of independent random variables.</li>
+<li>Calculate and describe the pros and cons of dependence measures: covariance, correlation, and kendall’s tau.</li>
+</ul>
+</div>
+<div id="conditional-distributions-15-min" class="section level2">
+<h2><span class="header-section-number">4.2</span> Conditional Distributions (15 min)</h2>
+<p>Probability distributions describe an uncertain outcome, but what if we have partial information?</p>
+<p>Consider the example of ships arriving at the port of Vancouver again. Each ship will stay at port for a random number of days, which we’ll call the <em>length of stay</em> (LOS) or <span class="math inline">\(D\)</span>, according to the following (made up) distribution:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Length of Stay (LOS)</th>
+<th align="right">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.35</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.20</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.10</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">0.10</td>
+</tr>
+</tbody>
+</table>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-3-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Suppose a ship has been at port for 2 days now, and it’ll be staying longer. What’s the distribution of length-of-stay now? Using symbols, this is written as <span class="math inline">\(P(D = d \mid D &gt; 2)\)</span>, where the bar “|” reads as “given” or “conditional on”, and this distribution is called a <strong>conditional distribution</strong>. We can calculate a conditional distribution in two ways: a “table approach” and a “formula approach”.</p>
+<p><strong>Table approach</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Subset the pmf table to only those outcomes that satisfy the <em>condition</em> (<span class="math inline">\(D &gt; 2\)</span> in this case). You’ll end up with a “sub table”.</li>
+<li>Re-normalize the remaining probabilities so that they add up to 1. You’ll end up with the <em>conditional distribution</em> under that condition.</li>
+</ol>
+<p><strong>Formula approach</strong>: In general for events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, the conditional probability formula is <span class="math display">\[P(A \mid B) = \frac{P(A \cap B)}{P(B)}.\]</span></p>
+<p>For the ship example, the event <span class="math inline">\(A\)</span> is <span class="math inline">\(D = d\)</span> (for all possible <span class="math inline">\(d\)</span>’s), and the event <span class="math inline">\(B\)</span> is <span class="math inline">\(D &gt; 2\)</span>. Plugging this in, we get <span class="math display">\[P(D = d \mid D &gt; 2) = \frac{P(D = d \cap D &gt; 2)}{P(D &gt; 2)} = \frac{P(D = d)}{P(D &gt; 2)} \text{ for } d = 3,4,5.\]</span></p>
+<p>The only real “trick” is the numerator. How did we reduce the convoluted event <span class="math inline">\(D = d \cap D &gt; 2\)</span> to the simple event <span class="math inline">\(D = d\)</span> for <span class="math inline">\(d = 3,4,5\)</span>? The trick is to go through all outcomes and check which ones satisfy the requirement <span class="math inline">\(D = d \cap D &gt; 2\)</span>. This reduces to <span class="math inline">\(D = d\)</span>, as long as <span class="math inline">\(d = 3,4,5\)</span>.</p>
+</div>
+<div id="joint-distributions-25-min" class="section level2">
+<h2><span class="header-section-number">4.3</span> Joint Distributions (25 min)</h2>
+<p>So far we’ve only considered one random variable at a time. Its distribution is called <em>univariate</em> because there’s just one variable. But, we very often have more than one random variable.</p>
+<p>Let’s start by considering two independent fair coins. The possibilities are: <code>HH</code>, <code>HT</code>, <code>TH</code>, <code>TT</code>, each with probability <span class="math inline">\(0.25\)</span>. We can visualize this as a <em>joint distribution</em>:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>H</th>
+<th>T</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>H</strong></td>
+<td>0.25</td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td><strong>T</strong></td>
+<td>0.25</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+<p>Note that an outcome consists of a <em>pair</em> of random variables. The sum of all probabilities still add to 1, since this, too, is a probability distribution. We could define the first coin’s outcome as the <span class="math inline">\(X\)</span> and the second as <span class="math inline">\(Y\)</span> and write <span class="math inline">\(P(X=H,Y=H)=0.25\)</span>.</p>
+<p>Don’t be fooled, though! This is not really any different from what we’ve already seen. We can still write this a univariate distribution with four categories. This is useful to remember when we’re calculating probabilities.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>HH</code></td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td><code>HT</code></td>
+<td>0.25</td>
+</tr>
+<tr class="odd">
+<td><code>TH</code></td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td><code>TT</code></td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+<p>Viewing the distribution as a (2-dimensional) matrix instead of a (1-dimensional) vector turns out to be more useful when determining properties of individual random variables.</p>
+<div id="example-length-of-stay-vs.gang-demand" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Example: Length of Stay vs. Gang Demand</h3>
+<p>Throughout today’s class, we’ll be working with the following joint distribution of <em>length of stay</em> of a ship, and its <em>gang demand</em>.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Gangs = 1</th>
+<th align="right">Gangs = 2</th>
+<th align="right">Gangs = 3</th>
+<th align="right">Gangs = 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>LOS = 1</strong></td>
+<td align="right">0.0017</td>
+<td align="right">0.0425</td>
+<td align="right">0.1247</td>
+<td align="right">0.0811</td>
+</tr>
+<tr class="even">
+<td><strong>LOS = 2</strong></td>
+<td align="right">0.0266</td>
+<td align="right">0.1698</td>
+<td align="right">0.1360</td>
+<td align="right">0.0176</td>
+</tr>
+<tr class="odd">
+<td><strong>LOS = 3</strong></td>
+<td align="right">0.0511</td>
+<td align="right">0.1156</td>
+<td align="right">0.0320</td>
+<td align="right">0.0013</td>
+</tr>
+<tr class="even">
+<td><strong>LOS = 4</strong></td>
+<td align="right">0.0465</td>
+<td align="right">0.0474</td>
+<td align="right">0.0059</td>
+<td align="right">0.0001</td>
+</tr>
+<tr class="odd">
+<td><strong>LOS = 5</strong></td>
+<td align="right">0.0740</td>
+<td align="right">0.0246</td>
+<td align="right">0.0014</td>
+<td align="right">0.0000</td>
+</tr>
+</tbody>
+</table>
+<p>The joint distribution is stored in “tidy format” in an R variable named <code>j</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">DT<span class="op">::</span><span class="kw">datatable</span>(j, <span class="dt">rownames =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div id="htmlwidget-bb1a515eea93134e54d4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb1a515eea93134e54d4">{"x":{"filter":"none","data":[[1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],[0.00169521499491428,0.0425290281772713,0.124711273848748,0.0810644829790661,0.0266383589439578,0.169814374583795,0.135975485931834,0.0175717805404135,0.0510939809850838,0.115627245345243,0.0320251247337617,0.0012536489359114,0.0465298193710262,0.047435714079229,0.00593496234303592,9.95042067087892e-05,0.0740426257050178,0.0245936378144616,0.00135315314262041,1.05833379001607e-05]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>los<\/th>\n      <th>gang<\/th>\n      <th>p<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="marginal-distributions" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Marginal Distributions</h3>
+<p>We’ve just specified a joint distribution of <em>length of stay</em> and <em>gang request</em>. But, we’ve previously specified a distribution for these variables individually. These are not things that can be specified separately:</p>
+<ul>
+<li>If you have a joint distribution, then the distribution of each individual variable follows as a consequence.</li>
+<li>If you have the distribution of each individual variable, you still don’t have enough information to form the joint distribution between the variables.</li>
+</ul>
+<p>The distribution of an individual variable is called the <strong>marginal distribution</strong> (sometimes just “marginal” or “margin”). The word “marginal” is not really needed when we’re talking about a random variable – there’s no difference between the “marginal distribution of length of stay” and the “distribution of length of stay”, we just use the word “marginal” if we want to emphasize the distribution is being considered <em>in isolation</em> from other related variables.</p>
+</div>
+<div id="calculating-marginals-from-the-joint" class="section level3">
+<h3><span class="header-section-number">4.3.3</span> Calculating Marginals from the Joint</h3>
+<p>There’s no special way of calculating a marginal distribution from a joint distribution. As usual, it just involves adding up the probabilities corresponding to relevant outcomes.</p>
+<p>For example, to compute the marginal distribution of length of stay (LOS), we’ll first need to calculate <span class="math inline">\(P(\text{LOS} = 1)\)</span>. Using the joint distribution of <em>length of stay</em> and <em>gang request</em>, the outcomes that satisfy this requirement are the entire first row of the probability table. It follows that the marginal distribution of LOS can be obtained by adding up each row. For the marginal of gang requests, just add up the columns.</p>
+<p>Here’s the marginal of LOS (don’t worry about the code, you’ll learn more about this code in DSCI 523 next block). Notice that the distribution of LOS is the same as before!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">j <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(los) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">p =</span> <span class="kw">sum</span>(p)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Length of Stay&quot;</span>, <span class="st">&quot;Probability&quot;</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Length of Stay</th>
+<th align="right">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.35</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.20</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.10</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">0.10</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly, the distribution of gang request is the same as from last lecture:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">j <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(gang) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">p =</span> <span class="kw">sum</span>(p)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Gang request&quot;</span>, <span class="st">&quot;Probability&quot;</span>))</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Gang request</th>
+<th align="right">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0.2</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">0.4</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0.3</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="conditioning-on-one-variable" class="section level3">
+<h3><span class="header-section-number">4.3.4</span> Conditioning on one Variable</h3>
+<p>What’s usually more interesting than a joint distribution are conditional distributions, when other variables are fixed. This is a special type of conditional distribution and an extremely important type of distribution in data science.</p>
+<p>For example, a ship is arriving, and they’ve told you they’ll only be staying for 1 day. What’s the distribution of their gang demand under this information? That is, what is <span class="math inline">\(P(\text{gang} = g \mid \text{LOS} = 1)\)</span> for all possible <span class="math inline">\(g\)</span>?</p>
+<p><strong>Table approach</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>Isolating the outcomes satisfying the condition (<span class="math inline">\(\text{LOS} = 1\)</span>), we obtain the first row:</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Gangs: 1</th>
+<th align="right">Gangs: 2</th>
+<th align="right">Gangs: 3</th>
+<th align="right">Gangs: 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0017</td>
+<td align="right">0.0425</td>
+<td align="right">0.1247</td>
+<td align="right">0.0811</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: decimal">
+<li>Now, re-normalize the probabilities so that they add up to 1, by dividing them by their sum, which is 0.25:</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Gangs: 1</th>
+<th align="right">Gangs: 2</th>
+<th align="right">Gangs: 3</th>
+<th align="right">Gangs: 4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0068</td>
+<td align="right">0.1701</td>
+<td align="right">0.4988</td>
+<td align="right">0.3243</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Formula Approach</strong>: Applying the formula for conditional probabilities, we get <span class="math display">\[P(\text{gang} = g \mid \text{LOS} = 1) = \frac{P(\text{gang} = g, \text{LOS} = 1)}{P(\text{LOS} = 1)},\]</span> which is exactly row 1 divided by 0.25.</p>
+<p>Here’s a plot of this distribution. For comparison, we’ve also reproduced its marginal distribution.</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-10-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Interpretation: given information, about length of stay, we get an updated picture of the distribution of gang requests. Useful for decision making!</p>
+</div>
+<div id="law-of-total-probabilityexpectation" class="section level3">
+<h3><span class="header-section-number">4.3.5</span> Law of Total Probability/Expectation</h3>
+<p>Quite often, we know the conditional distributions, but don’t directly have the marginals. In fact, most of regression and machine learning is about seeking conditional means! (More in DSCI 561/571 +):</p>
+<p>For example, suppose you have the following conditional means of gang request given the length of stay of a ship.</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-11-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>This curve is called a <strong>model function</strong>, and is useful if we want to predict a ship’s daily gang request if we know their length of stay. But what if we don’t know their length of stay, and we want to produce an expected gang request? We can use the marginal mean of gang request!</p>
+<p>In general, a marginal mean can be computed from the <em>conditional means</em> and the <em>probabilities of the conditioning variable</em>. The formula, known as the <strong>law of total expectation</strong>, is <span class="math display">\[E(Y) = \sum_x E(Y \mid X = x) P(X = x).\]</span></p>
+<p>Here’s a table that outlines the relevant values:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Length of Stay (LOS)</th>
+<th align="right">E(Gang | LOS)</th>
+<th align="right">P(LOS)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3.140580</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2.412802</td>
+<td align="right">0.35</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1.917192</td>
+<td align="right">0.20</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.596041</td>
+<td align="right">0.10</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1.273317</td>
+<td align="right">0.10</td>
+</tr>
+</tbody>
+</table>
+<p>Multiplying the last two columns together, and summing, gives us the marginal expectation: 2.3.</p>
+<p>Also, remember that probabilities are just means, so the result extends to probabilities: <span class="math display">\[P(Y = y) = \sum_x P(Y = y \mid X = x) P(X = x)\]</span> This is actually a generalization of the law of total probability we saw before: <span class="math inline">\(P(Y=y)=\sum_x P(Y = y, X = x)\)</span>.</p>
+</div>
+<div id="exercises-10-min" class="section level3">
+<h3><span class="header-section-number">4.3.6</span> Exercises (10 min)</h3>
+<p>In pairs, come to a consensus with the following three questions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Given the conditional means of gang requests, and the marginal probabilities of LOS in the above table, what’s the expected gang requests, given that the ship captain says they won’t be at port any longer than 2 days? In symbols, <span class="math display">\[E(\text{Gang} \mid \text{LOS} \leq 2).\]</span></p></li>
+<li><p>What’s the probability that a new ship’s <em>total</em> gang demand equals 4? In symbols, <span class="math display">\[P(\text{Gang} \times \text{LOS} = 4).\]</span></p></li>
+<li><p>What’s the probability that a new ship’s <em>total</em> gang demand equals 4, given that the ship won’t stay any longer than 2 days? In symbols, <span class="math display">\[P(\text{Gang} \times \text{LOS} = 4 \mid \text{LOS} \leq 2).\]</span></p></li>
+</ol>
+</div>
+</div>
+<div id="dependence-concepts" class="section level2">
+<h2><span class="header-section-number">4.4</span> Dependence concepts</h2>
+<p>A big part of data science is about harvesting the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, often called the <em>dependence</em> between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<div id="independence-5-min" class="section level3">
+<h3><span class="header-section-number">4.4.1</span> Independence (5 min)</h3>
+<p>Informally, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are <strong>independent</strong> if knowing something about one tells us nothing about the other.</p>
+<p>Formally, the definition of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> being independent is: <span class="math display">\[P(X = x \cap Y = y) = P(X = x) P(Y = y).\]</span></p>
+<p>A bunch of things follow as a consequence of independence. Here are some of them:</p>
+<ul>
+<li><span class="math inline">\(P(Y = y \mid X = x) = P(Y = y)\)</span> (and likewise if you switch <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>).</li>
+<li><span class="math inline">\(E(Y \mid X = x) = E(Y)\)</span></li>
+<li><span class="math inline">\(E[XY]=E[X]E[Y]\)</span></li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li>if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, we don’t actually need the whole table! All we need are the marginals of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, and we now have the full joint distribution between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> as just the product of the probabilities.</li>
+<li>independence isn’t some property that you can specify separately from the pmf. The pmf specifes everything about the situation, including whether or not the RVs are independent.</li>
+</ul>
+</div>
+<div id="measures-of-dependence-15-min" class="section level3">
+<h3><span class="header-section-number">4.4.2</span> Measures of dependence (15 min)</h3>
+<p>Next, if two random variables <em>aren’t</em> independent, how can we go about measuring the strength/amount of dependence between two random variables?</p>
+<div id="covariance-and-pearsons-correlation" class="section level4">
+<h4><span class="header-section-number">4.4.2.1</span> Covariance and Pearson’s Correlation</h4>
+<p><strong>Covariance</strong> is one common way of measuring dependence between two random variables. The idea is to take the average “signed area” of rectangles constructed between a sampled point and the mean, with the sign being determined by “concordance” relative to the mean:</p>
+<ul>
+<li>Concordant means <span class="math inline">\(x &lt; \mu_x\)</span> and <span class="math inline">\(y &lt; \mu_y\)</span>, OR <span class="math inline">\(x &gt; \mu_x\)</span> and <span class="math inline">\(y &gt; \mu_y\)</span> – gets positive area.</li>
+<li>Discordant means <span class="math inline">\(x &lt; \mu_x\)</span> and <span class="math inline">\(y &gt; \mu_y\)</span>, OR <span class="math inline">\(x &gt; \mu_x\)</span> and <span class="math inline">\(y &lt; \mu_y\)</span> – gets negative area.</li>
+</ul>
+<p>Here is a random sample of 10 points, with the 10 rectangles constructed with respect to the mean. Sign is indicated by colour. The covariance is the mean signed area.</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-13-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Formally, the definition is <span class="math display">\[\mathrm{Cov(X, Y)} = E[(X-\mu_X)(Y-\mu_Y)],\]</span> where <span class="math inline">\(\mu_Y=E(Y)\)</span> and <span class="math inline">\(\mu_X=E(X)\)</span>. This reduces to a more convenient form, <span class="math display">\[\text{Cov}(X,Y)=E(XY)-E(X)E(Y)\]</span></p>
+<p>In R, you can calculate the empirical covariance using the <code>cov</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cov</span>(j_sample<span class="op">$</span>los, j_sample<span class="op">$</span>gang)</code></pre></div>
+<pre><code>## [1] -0.7111111</code></pre>
+<p>In the above example, the boxes are more often negative, so the covariance (and the “direction of dependence”) is negative. For the above example, the larger the LOS, the smaller the gang demand – this inverse relationship is indicative of negative covariance. Other interpretations of the sign:</p>
+<ul>
+<li>Positive covariance indicates that an increase in one variable is associated with an increase in the other variable.</li>
+<li>Zero covariance indicates that there is no <em>linear</em> trend – but this does not necessarily mean that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent!</li>
+</ul>
+<p>It turns out covariance by itself isn’t very interpretable, because it depends on the scale (actually, spread) of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. For example, multiply <span class="math inline">\(X\)</span> by 10, and suddenly the box sizes increase by a factor of 10, too, influencing the covariance.</p>
+<p><strong>Pearson’s correlation</strong> fixes the scale problem by standardizing the distances according to standard deviations <span class="math inline">\(\sigma_X\)</span> and <span class="math inline">\(\sigma_Y\)</span>, defined as <span class="math display">\[\text{Corr}(X, Y)
+= E\left[ 
+   \left(\frac{X-\mu_X}{\sigma_X}\right) 
+   \left(\frac{Y-\mu_Y}{\sigma_Y}\right)
+ \right] 
+=\frac{\text{Cov}(X, Y)}{\sqrt{\text{Var}(X)\text{Var}(Y)}}.\]</span> As a result, it turns out that <span class="math display">\[-1 \leq \text{Corr}(X, Y) \leq 1.\]</span></p>
+<p>The Pearson’s correlation measures the <em>strength of <strong>linear</strong> dependence</em>:</p>
+<ul>
+<li>-1 means perfect negative linear relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>0 means no linear relationship (Note: this does not mean independent!)</li>
+<li>1 means perfect positive linear relationship.</li>
+</ul>
+<p>In R, you can calculate the empirical Pearson’s correlation using the <code>cor</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(j_sample<span class="op">$</span>los, j_sample<span class="op">$</span>gang)</code></pre></div>
+<pre><code>## [1] -0.6270894</code></pre>
+<p>Pearson’s correlation is ubiquitous, and is often what is meant when “correlation” is referred to.</p>
+</div>
+<div id="kendalls-tau" class="section level4">
+<h4><span class="header-section-number">4.4.2.2</span> Kendall’s tau</h4>
+<p>Although Pearson’s correlation is ubiquitous, its forced adherance to measuring <em>linear</em> dependence is a big downfall, especially because many relationships between real world variables are not linear.</p>
+<p>An improvement is <strong>Kendall’s tau</strong> (<span class="math inline">\(\tau_K\)</span>):</p>
+<ul>
+<li>Instead of measuring concordance between each observation <span class="math inline">\((x, y)\)</span> and the mean <span class="math inline">\((\mu_x, \mu_y)\)</span>, it measures concordance between each <em>pair</em> of observation <span class="math inline">\((x_i, y_i)\)</span> and <span class="math inline">\((x_j, y_j)\)</span>.</li>
+<li>Instead of averaging the area of the boxes, it averages the amount of concordance and discordance by taking the difference between number of concordant and number of discordant pairs.</li>
+</ul>
+<p>Visually plotting the <span class="math inline">\(10 \choose 2\)</span> boxes for the above sample from the previous section:</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-16-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>The formal definition is <span class="math display">\[\frac{\text{Number of concordant pairs} - \text{Number of discordant pairs}}{{n \choose 2}},\]</span> with the “true” Kendall’s tau value obtainined by sending <span class="math inline">\(n \rightarrow \infty\)</span>. Note that several ways have been proposed for dealing with ties, but this doesn’t matter when we’re dealing with continuous variables (Weeks 3 and 4).</p>
+<p>In R, the empirical version can be calculated using the <code>cor()</code> function with <code>method = &quot;kendall&quot;</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(j_sample<span class="op">$</span>los, j_sample<span class="op">$</span>gang, <span class="dt">method =</span> <span class="st">&quot;kendall&quot;</span>)</code></pre></div>
+<pre><code>## [1] -0.579771</code></pre>
+<p>Like Pearson’s correlation, Kendall’s tau is also between -1 and 1, and also measures strength (and direction) of dependence.</p>
+<p>For example, consider the two correlation measures for the following data set. Note that the empirical Pearson’s correlation for the following data is not 1!</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-18-1.png" width="480" style="display: block; margin: auto;" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Pearson</th>
+<th align="right">Kendall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.9013</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>But, Kendall’s tau still only measures the strength of <em>monotonic dependence</em>. This means that patterns like a parabola, which are not monotonically increasing or decreasing, will not be captured by Kendall’s tau either:</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-20-1.png" width="480" style="display: block; margin: auto;" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Pearson</th>
+<th align="right">Kendall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Even though both dependence measures are 0, there’s actually deterministic dependence here (<span class="math inline">\(X\)</span> <em>determines</em> <span class="math inline">\(Y\)</span>). But, luckily, there are many monotonic relationships in practice, making Kendall’s tau a very useful measure of dependence.</p>
+</div>
+</div>
+<div id="variance-of-a-sum-2-min" class="section level3">
+<h3><span class="header-section-number">4.4.3</span> Variance of a sum (2 min)</h3>
+<p>Something you ought to know:<span class="math display">\[\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X, Y).\]</span></p>
+<p>This means that <span class="math inline">\(\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y)\)</span> if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent.</p>
+<p>Another thing: if <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, then <span class="math inline">\(E(XY) = E(X)E(Y)\)</span>.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td><strong>END OF QUIZ 1 MATERIAL</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="dependence-as-separate-from-the-marginals-5-min-optional" class="section level3">
+<h3><span class="header-section-number">4.4.4</span> Dependence as separate from the marginals (5 min) (Optional)</h3>
+<p>The amount of monotonic dependence in a joint distribution, as measured by kendall’s tau, has <em>nothing to do with the marginal distributions</em>. To demonstrate, here are joint distributions between LOS and gang demand having the same marginals, but different amounts of dependence.</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-22-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dependence-as-giving-us-more-information-5-min-optional" class="section level3">
+<h3><span class="header-section-number">4.4.5</span> Dependence as giving us more information (5 min) (Optional)</h3>
+<p>Let’s return to the computation of the conditional distribution of gang requests given that a ship will only stay at port for one day. Let’s compare the marginal distribution (the case where we know nothing) to the conditional distributions <em>for different levels of dependence</em> (like we saw in the previous section). The means for each distribution are indicated as a vertical line:</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-23-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>What’s of particular importance is comparing the <em>uncertainty</em> in these distributions. Let’s look at how the uncertainty measurements compare between marginal and conditional distributions (marginal measurements indicated as horizontal line):</p>
+<p><img src="lecture04_files/figure-html/unnamed-chunk-24-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Moral of the story: more dependence (in either direction) gives us more certainty in the conditional distributions! This makes intuitive sense, because the more related <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are, the more that knowing what <span class="math inline">\(X\)</span> is will inform what <span class="math inline">\(Y\)</span> is.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simulation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="continuous-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/edit/master/lecture04.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection",
+"scroll_highlight": true
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
