@@ -1,0 +1,146 @@
+# Heavy-Tailed Distributions
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+library(tidyverse)
+library(CopulaModel)
+data(asianwklgret)  # object hksikotw
+knitr::opts_chunk$set(echo = FALSE, fig.width = 4, fig.height = 2, 
+					  fig.align = "center", warning = FALSE, message = FALSE)
+```
+
+Consider the weekly returns of the Singapore Straights (STI) market, depicted by the following histogram. You'll notice some extreme values that are far from the "bulk" of the data. 
+
+```{r}
+hksikotw %>% 
+	as_tibble() %>% 
+	ggplot(aes(si)) + 
+	geom_histogram() +
+	theme_bw() +
+	labs(x = "Returns")
+```
+
+Traditional practice was to view these extremes as "outliers" that are a nuisance for analysis, and therefore should be removed. But this can actually be detrimental to the analysis, because these outliers are real occurences that should be anticipated. 
+
+Instead, __Extreme Value Analysis__ is a practice that tries to get a sense of how big and how frequently extremes will happen.
+
+## Sensitivity of the mean to extremes
+
+Indeed, the empirical (arithmetic) mean is sensitive to outliers: consider the sample average of 100 observations coming from a N(0,1) distribution:
+
+```{r, echo = TRUE}
+set.seed(6)
+n <- 50
+x <- rnorm(n)
+mean(x)
+```
+
+Here's that mean depicted on a histogram of the data:
+
+```{r}
+x_df <- tibble(x = x)
+ggplot(x_df, aes(x)) +
+	geom_histogram(bins = 15, alpha = 0.5) +
+	geom_vline(xintercept = mean(x), colour = "maroon", size = 2) +
+	theme_bw()
+```
+
+Now consider calculating the mean by replacing the last observation with 50 (a very large number):
+
+```{r, echo = TRUE}
+x[n] <- 50
+mean(x)
+```
+
+This is a big difference made by a single observation! Let's take a look at the histogram now (outlier not shown). The "old" mean is the thin vertical line:
+
+```{r}
+ggplot(x_df, aes(x)) +
+	geom_histogram(bins = 20, alpha = 0.5) +
+	geom_vline(xintercept = mean(x_df$x), colour = "maroon", alpha = 0.75) +
+	geom_vline(xintercept = mean(x), colour = "maroon", size  = 2) +
+	theme_bw()
+```
+
+There are [robust and/or resistant ways of estimating the mean](https://en.wikipedia.org/wiki/Robust_statistics#Estimation_of_location) that are less sensitive to the outliers. But what's more interesting when you have extreme values in your data is to get a sense of how frequently extremes will happen, and the mean won't give you that sense. 
+
+## Heavy-tailed Distributions
+
+Distributions known as __heavy-tailed distributions__ give rise to extreme values. These are distributions whose tail(s) decay like a power decay. The slower the decay, the heavier the tail is, and the more prone extreme values are.
+
+For example, consider the member of the Pareto Type I family of distributions with survival function $S(x) = 1/x$ for $x \geq 1$. Here is this distribution compared to an Exponential(1) distribution (shifted to start at $x=1$):
+
+```{r}
+tibble(x = seq(1, 15, length.out = 500)) %>% 
+	ggplot(aes(x)) +
+	stat_function(fun = function(x) exp(-(x-1)), aes(colour = "Exponential")) +
+	stat_function(fun = function(x) 1/x, aes(colour = "Pareto")) +
+	ylab("Survival\nFunction") +
+	theme_bw() +
+	scale_colour_discrete("", breaks = c("Pareto", "Exponential"))
+```
+
+Notice that the Exponential survival function becomes essentially zero very quickly, whereas there's still lots of probability well into the tail of the Pareto distribution.  
+
+Also note that if a distribution's tail is "too heavy", then its mean will not exist! For example, the above Pareto distribution has no mean.
+
+## Heavy-tailed distribution families
+
+Here are some main families that include heavy-tailed distributions:
+
+- Family of [Generalized Pareto distributions](https://en.wikipedia.org/wiki/Generalized_Pareto_distribution)
+- Family of [Generalized Extreme Value distributions](https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution)
+- Family of [Student's _t_ distributions](https://en.wikipedia.org/wiki/Student%27s_t-distribution)
+	- The Cauchy distribution is a special case of this.
+
+## Extreme Value Analysis
+
+There are two key approaches in Extreme Value Analysis:
+
+- _Model the tail_ of a distribution using a theoretical model. That is, choose some `x` value, and model the distribution _beyond_ that point. It turns out a [Generalized Pareto distribution](https://en.wikipedia.org/wiki/Generalized_Pareto_distribution) is theoretically justified.
+- The _peaks over thresholds_ method models the extreme observations occurring in a defined window of time. For example, the largest river flows each year. It turns out a [Generalized Extreme Value distribution](https://en.wikipedia.org/wiki/Generalized_extreme_value_distribution) is theoretically justified here. 
+
+## Multivariate Student's _t_ distributions
+
+Just like there's a multivariate Gaussian distribution, there's also a multivariate Student's _t_ distribution. And in fact, its contours are elliptical, too!
+
+Here's a comparison of a bivariate Gaussian and a bivariate Student's _t_ distribution, both of which are elliptical. One major difference is that a sample from a bivariate Gaussian distribution tends to be tightly packed, whereas data from a bivariate Student's _t_ distribution is prone to data deviating far from the main "data cloud". 
+
+```{r, fig.width = 3.5, fig.height = 2}
+crossing(x = seq(-3, 3, length.out = 100),
+				 y = seq(-3, 3, length.out = 100)) %>% 
+	mutate(`Student-t` = dbvtcop(pt(x, df = 1), pt(y, df = 1), c(0.5, 1)) * dt(x, df = 1) * dt(y, df = 1),
+		   Gaussian = dbvn2(x, y, 0.5)) %>% 
+	pivot_longer(cols = c("Student-t", "Gaussian"), names_to = "dist", values_to = "z") %>% 
+	ggplot(aes(x, y)) +
+	facet_wrap(~ dist) +
+	geom_contour(aes(z = z, colour = ..level..)) +
+	theme_bw() +
+	theme(axis.title.y = element_text(angle = 0, vjust = 0.5)) +
+	scale_colour_continuous(guide = FALSE)
+```
+
+And here are samples coming from these two distributions. Notice how tightly bundled the Gaussian distribution is compared to the _t_ distribution!
+
+```{r, fig.width = 3.5, fig.height = 2}
+n <- 500
+set.seed(1)
+bind_rows(
+	tibble(dist = "Gaussian",
+		   x = rnorm(n),
+		   u = pnorm(x),
+		   v = qcondbvncop(runif(n), u, 0.5),
+		   y = qnorm(v)
+	),
+	tibble(dist = "Student-t",
+		   x = rt(n, df = 1),
+		   u = pt(x, df = 1),
+		   v = qcondbvtcop(runif(n), u, c(0.5, 1)),
+		   y = qt(v, df = 1)
+	)
+) %>% 
+	ggplot(aes(x, y)) +
+	facet_wrap(~ dist) +
+	geom_point(alpha = 0.2) +
+	theme_bw() +
+	theme(axis.title.y = element_text(angle = 0, vjust = 0.5)) 
+```

@@ -1,0 +1,9 @@
+site: "bookdown::bookdown_site"
+book_filename: "lecture_notes"
+edit: https://github.ubc.ca/MDS-2019-20/DSCI_551_stat-prob-dsci_students/edit/master/%s
+new_session: yes
+language:
+  ui:
+    chapter_name: "Lecture "
+delete_merged_file: true
+output_dir: "lectures"
