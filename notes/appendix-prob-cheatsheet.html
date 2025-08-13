@@ -1,0 +1,982 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Probability Cheatsheet &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/appendix-prob-cheatsheet';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Distribution Cheatsheet" href="appendix-dist-cheatsheet.html" />
+    <link rel="prev" title="Lecture 8: Simulation" href="08_lecture-simulation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/appendix-prob-cheatsheet.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/appendix-prob-cheatsheet.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Probability Cheatsheet</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complement-of-an-event">Complement of an Event</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-independence">Conditional Independence</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-probability">Conditional Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance">Covariance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-distribution-function">Cumulative Distribution Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entropy">Entropy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-value">Expected Value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-exclusion-principle">Inclusion-Exclusion Principle</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-events">Two Events</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-events">Three Events</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-events">Independent Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-in-probability-distributions-between-two-random-variables">Independence in Probability Distributions between Two Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-random-variables">Independent Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kendall-s-tau-k">Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-expectation">Law of Total Expectation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity-of-expectations">Linearity of Expectations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity-of-variances-with-two-independent-random-variables">Linearity of Variances with Two Independent Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marginal-unconditional-probability">Marginal (Unconditional) Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median">Median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode">Mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mutual-information">Mutual Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mutually-exclusive-or-disjoint-events">Mutually Exclusive (or Disjoint) Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#odds">Odds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pearson-s-correlation">Pearson’s Correlation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-a-continuous-random-varible-x-being-between-a-and-b">Probability of a Continuous Random Varible <span class="math notranslate nohighlight">\(X\)</span> Being between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-the-bivariate-gaussian-or-normal-distribution">Properties of the Bivariate Gaussian or Normal Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile">Quantile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile-function">Quantile Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skewness">Skewness</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-function">Survival Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-of-a-sum-involving-two-non-independent-random-variables">Variance of a Sum Involving Two Non-Independent Random Variables</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="probability-cheatsheet">
+<h1>Probability Cheatsheet<a class="headerlink" href="#probability-cheatsheet" title="Permalink to this heading">#</a></h1>
+<section id="complement-of-an-event">
+<h2>Complement of an Event<a class="headerlink" href="#complement-of-an-event" title="Permalink to this heading">#</a></h2>
+<p>In general, for a given event <span class="math notranslate nohighlight">\(A\)</span>, the complement is the subset of other outcomes that do not belong to event <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[1 = P(A) + P(A^c),\]</div>
+<p>where <span class="math notranslate nohighlight">\(^c\)</span> means the complement (we read it as “not”).</p>
+</section>
+<section id="conditional-independence">
+<h2>Conditional Independence<a class="headerlink" href="#conditional-independence" title="Permalink to this heading">#</a></h2>
+<p>Random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are conditionally independent given random variable <span class="math notranslate nohighlight">\(Z\)</span> if and only if</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \cap Y = y \mid Z = z) = P(X = x \mid Z = z) \cdot P(Y = y \mid Z = z).\]</div>
+</section>
+<section id="conditional-probability">
+<h2>Conditional Probability<a class="headerlink" href="#conditional-probability" title="Permalink to this heading">#</a></h2>
+<p>In general, let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest within the sample <span class="math notranslate nohighlight">\(S\)</span>, and <span class="math notranslate nohighlight">\(P(B) &gt; 0\)</span>, then the conditional probability of <span class="math notranslate nohighlight">\(A\)</span> given <span class="math notranslate nohighlight">\(B\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[P(A \mid B) = \frac{P(A \cap B)}{P(B)}\]</div>
+<p>Note event <span class="math notranslate nohighlight">\(B\)</span> is becoming the new sample space (i.e., <span class="math notranslate nohighlight">\(P(B \mid B) = 1\)</span>). The tweak here is that our original sample space <span class="math notranslate nohighlight">\(S\)</span> has been updated to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</section>
+<section id="covariance">
+<h2>Covariance<a class="headerlink" href="#covariance" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two numeric random variables; their covariance is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation*}
+\operatorname{Cov}(X, Y) = \mathbb{E}[(X-\mu_X)(Y-\mu_Y)],
+\end{equation*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_X = \mathbb{E}(X)\)</span> and <span class="math notranslate nohighlight">\(\mu_Y = \mathbb{E}(Y)\)</span> are the respective means (or expected values) of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>. After some algebraic and expected value manipulations, the above equation reduces to a more practical form to work with:</p>
+<div class="math notranslate nohighlight" id="equation-covariance-appendix">
+<span class="eqno">(42)<a class="headerlink" href="#equation-covariance-appendix" title="Permalink to this equation">#</a></span>\[\begin{equation*}
+\operatorname{Cov}(X,Y) = \mathbb{E}(XY) - \left[ \mathbb{E}(X)\mathbb{E}(Y) \right],
+\end{equation*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{E}(XY)\)</span> is the mean (or expected value) of the multiplication of the random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p>
+</section>
+<section id="cumulative-distribution-function">
+<h2>Cumulative Distribution Function<a class="headerlink" href="#cumulative-distribution-function" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable with probability density function (PDF) <span class="math notranslate nohighlight">\(f_X(x)\)</span>. The cumulative distribution function (CDF) is usually denoted by <span class="math notranslate nohighlight">\(F(\cdot)\)</span> and is defined as</p>
+<div class="math notranslate nohighlight">
+\[F_X(x) = P(X \leq x).\]</div>
+<p>We can calculate the CDF by</p>
+<div class="math notranslate nohighlight" id="equation-cdf-appendix">
+<span class="eqno">(43)<a class="headerlink" href="#equation-cdf-appendix" title="Permalink to this equation">#</a></span>\[F_X(x) = \int_{-\infty}^x f_X(t) \, \text{d}t.\]</div>
+<p>In order for <span class="math notranslate nohighlight">\(F_X(x)\)</span> to be a valid CDF, the function needs to satisfy the following requirements:</p>
+<ol class="arabic simple">
+<li><p>Must never decrease.</p></li>
+<li><p>It must never evalute to be <span class="math notranslate nohighlight">\(&lt; 0\)</span> or <span class="math notranslate nohighlight">\(&gt; 1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_X(x) \rightarrow 0\)</span> as <span class="math notranslate nohighlight">\(x \rightarrow -\infty\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(F_X(x) \rightarrow 1\)</span> as <span class="math notranslate nohighlight">\(x \rightarrow \infty\)</span>.</p></li>
+</ol>
+</section>
+<section id="entropy">
+<h2>Entropy<a class="headerlink" href="#entropy" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a random variable:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a probability mass function (PMF), then the entropy is defined as:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[H(Y) = -\displaystyle \sum_x P(X = x)\log[P(X = x)].\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a probability density function (PDF), then the entropy is defined as:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[H(X) = -\int_x f_X(x) \log [f_X(x)] \text{d}x.\]</div>
+<p>Note that, in Statistics, the <span class="math notranslate nohighlight">\(\log(\cdot)\)</span> notation implicates base <span class="math notranslate nohighlight">\(e\)</span>.</p>
+</section>
+<section id="expected-value">
+<h2>Expected Value<a class="headerlink" href="#expected-value" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. The mean <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> (also known as expected value or expectation) is defined as:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a probability mass function (PMF), then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-discrete-appendix">
+<span class="eqno">(44)<a class="headerlink" href="#equation-mean-discrete-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}(X) = \displaystyle \sum_x x \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a probability density function (PDF), then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-continuous-appendix">
+<span class="eqno">(45)<a class="headerlink" href="#equation-mean-continuous-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}(X) = \displaystyle \int_x x \cdot f_X(x) \text{d}x.\]</div>
+<p>In general for a function of <span class="math notranslate nohighlight">\(X\)</span> such as <span class="math notranslate nohighlight">\(g(X)\)</span>, the expected value is defined as:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a PMF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-gen-mean-discrete-appendix">
+<span class="eqno">(46)<a class="headerlink" href="#equation-gen-mean-discrete-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}\left[ g(X) \right] = \displaystyle \sum_x g(X) \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a PDF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-gen-mean-continuous-appendix">
+<span class="eqno">(47)<a class="headerlink" href="#equation-gen-mean-continuous-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}\left[ g(X) \right] = \displaystyle \int_x g(X) \cdot f_X(x) \text{d}x.\]</div>
+</section>
+<section id="inclusion-exclusion-principle">
+<h2>Inclusion-Exclusion Principle<a class="headerlink" href="#inclusion-exclusion-principle" title="Permalink to this heading">#</a></h2>
+<section id="two-events">
+<h3>Two Events<a class="headerlink" href="#two-events" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. The probability of <span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(B\)</span> occuring is denoted as <span class="math notranslate nohighlight">\(P(A \cup B)\)</span>, where <span class="math notranslate nohighlight">\(\cup\)</span> means <strong>“OR.”</strong> The Inclusion-Exclusion Principle allows us to compute this probability as:</p>
+<div class="math notranslate nohighlight">
+\[P(A \cup B) = P(A) + P(B) - P(A \cap B),\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(A \cap B)\)</span> denotes the probability of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> occuring simultaneously (<span class="math notranslate nohighlight">\(\cap\)</span> means <strong>“AND”</strong>).</p>
+<p><span class="math notranslate nohighlight">\(P(A \cup B)\)</span> can be represented with the overall shaded area in the below Venn diagram.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/5fa4a01d9f38a74e97066845d46620e9b37bbf6f6180c796e690d0a5e7aa7497.png"><img alt="../_images/5fa4a01d9f38a74e97066845d46620e9b37bbf6f6180c796e690d0a5e7aa7497.png" src="../_images/5fa4a01d9f38a74e97066845d46620e9b37bbf6f6180c796e690d0a5e7aa7497.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="three-events">
+<h3>Three Events<a class="headerlink" href="#three-events" title="Permalink to this heading">#</a></h3>
+<p>We can also extend this principle to three events (<span class="math notranslate nohighlight">\(A,\)</span> <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span> in the sample space <span class="math notranslate nohighlight">\(S\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[P(A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(B \cap C) - P(A \cap C) + P(A \cap B \cap C),\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(A \cap B \cap C)\)</span> denotes the probability of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span> occuring simultaneously.</p>
+<p><span class="math notranslate nohighlight">\(P(A \cup B \cup C)\)</span> can be represented with the overall shaded area in the below Venn diagram.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/6779682d6231b65d5b2057a72831972c5f4005d337d4cb80af8d94c194833262.png"><img alt="../_images/6779682d6231b65d5b2057a72831972c5f4005d337d4cb80af8d94c194833262.png" src="../_images/6779682d6231b65d5b2057a72831972c5f4005d337d4cb80af8d94c194833262.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+</section>
+<section id="independent-events">
+<h2>Independent Events<a class="headerlink" href="#independent-events" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. These two events are independent if the occurrence of one of them does not affect the probability of the other. In probability notation, their intersection is defined as:</p>
+<div class="math notranslate nohighlight">
+\[P(A \cap B) = P(A) \cdot P(B).\]</div>
+</section>
+<section id="independence-in-probability-distributions-between-two-random-variables">
+<h2>Independence in Probability Distributions between Two Random Variables<a class="headerlink" href="#independence-in-probability-distributions-between-two-random-variables" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two independent random variables. Using their corresponding marginals, we can obtain their corresponding joint distributions as follows:</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are discrete.</strong> Let <span class="math notranslate nohighlight">\(P(X = x, Y = y)\)</span> be the joint probability mass function (PMF) with <span class="math notranslate nohighlight">\(P(X = x)\)</span> and <span class="math notranslate nohighlight">\(P(Y = y)\)</span> as their marginals. Then, we define the joint PMF as:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[P(X = x, Y = y) = P(X = x) \cdot (Y = y).\]</div>
+<p>The term denoting a discrete joint PMF <span class="math notranslate nohighlight">\(P(X = x, Y = y)\)</span> is equivalent to the intersection of events <span class="math notranslate nohighlight">\(P(X = x \cap Y = y)\)</span>.</p>
+<ul class="simple">
+<li><p><strong><span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are continuous.</strong> Let <span class="math notranslate nohighlight">\(f_{X,Y}(x,y)\)</span> be the joint probability density function (PDF) with <span class="math notranslate nohighlight">\(f_X(x)\)</span> and <span class="math notranslate nohighlight">\(f_Y(y)\)</span> as their marginals. Then, we define the joint PDF as:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[f_{X,Y}(x,y) = f_X(x) \cdot f_Y(y).\]</div>
+</section>
+<section id="independent-random-variables">
+<h2>Independent Random Variables<a class="headerlink" href="#independent-random-variables" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two random variables. We say <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent if knowing something about one of them tells us nothing about the other. A definition of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> being independent is the following:</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \cap Y = y) = P(X = x) \cdot P(Y = y).\]</div>
+</section>
+<section id="kendall-s-tau-k">
+<h2>Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span><a class="headerlink" href="#kendall-s-tau-k" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two numeric random variables. Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> measures concordance between each pair of observations <span class="math notranslate nohighlight">\((x_i, y_i)\)</span> and <span class="math notranslate nohighlight">\((x_j, y_j)\)</span> with <span class="math notranslate nohighlight">\(i \neq j\)</span>:</p>
+<ul class="simple">
+<li><p><strong>Concordant</strong>, which gets a positive sign, means</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+x_i &lt; x_j \quad \text{and} \quad y_i &lt; y_j, \\
+\text{or} \\
+x_i &gt; x_j \quad \text{and} \quad y_i &gt; y_j.
+\end{gather*}\end{split}\]</div>
+<ul class="simple">
+<li><p><strong>Discordant</strong>, which gets a negative sign, means</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+x_i &lt; x_j \quad \text{and} \quad y_i &gt; y_j, \\
+\text{or} \\
+x_i &gt; x_j \quad \text{and} \quad y_i &lt; y_j.
+\end{gather*}\end{split}\]</div>
+<p>Mathematically, we can set it up as:</p>
+<div class="math notranslate nohighlight">
+\[\tau_K = \frac{\text{Number of concordant pairs} - \text{Number of discordant pairs}}{{n \choose 2}},\]</div>
+<p>with the “true” Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> value obtained by sending <span class="math notranslate nohighlight">\(n \rightarrow \infty\)</span>. Here, <span class="math notranslate nohighlight">\(n\)</span> is the sample size (i.e., the number of data points). Note that:</p>
+<div class="math notranslate nohighlight">
+\[-1 \leq \tau_K \leq 1.\]</div>
+</section>
+<section id="law-of-total-expectation">
+<h2>Law of Total Expectation<a class="headerlink" href="#law-of-total-expectation" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two numeric random variables. Generally, a marginal mean <span class="math notranslate nohighlight">\(\mathbb{E}_Y(Y)\)</span> can be computed from the conditional means <span class="math notranslate nohighlight">\(\mathbb{E}_Y(Y \mid X = x)\)</span> and the probabilities of the conditioning variables <span class="math notranslate nohighlight">\(P(X = x)\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-law-total-expectation-appendix">
+<span class="eqno">(48)<a class="headerlink" href="#equation-law-total-expectation-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}_Y(Y) = \sum_x \mathbb{E}_Y(Y \mid X = x) \cdot P(X = x).\]</div>
+<p>Or, it can also be written as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}_Y(Y) = \mathbb{E}_X [\mathbb{E}_Y(Y \mid X)].\]</div>
+<p>Also, the previous result in Equation <a class="reference internal" href="#equation-law-total-expectation-appendix">(48)</a> extends to probabilities:</p>
+<div class="math notranslate nohighlight">
+\[P(Y = y \cap X = x) = P(Y = y \mid X = x) \cdot P(X = x).\]</div>
+</section>
+<section id="linearity-of-expectations">
+<h2>Linearity of Expectations<a class="headerlink" href="#linearity-of-expectations" title="Permalink to this heading">#</a></h2>
+<p>If <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are constants, with <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> as numeric random variables, then we can obtain the expected value of the following expressions as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+\mathbb{E}(a X) = a \mathbb{E}(X) \\
+\mathbb{E}(X + Y) = \mathbb{E}(X) + \mathbb{E}(Y) \\
+\mathbb{E}(aX + bY) = a\mathbb{E}(X) + b\mathbb{E}(Y).
+\end{gather*}\end{split}\]</div>
+</section>
+<section id="linearity-of-variances-with-two-independent-random-variables">
+<h2>Linearity of Variances with Two Independent Random Variables<a class="headerlink" href="#linearity-of-variances-with-two-independent-random-variables" title="Permalink to this heading">#</a></h2>
+<p>If <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are constants, with <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> as independent numeric random variables, then we can obtain the variance of the following expressions as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+\text{Var}(a X) = a^2 \text{Var}(X) \\
+\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) \\
+\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y).
+\end{gather*}\end{split}\]</div>
+</section>
+<section id="marginal-unconditional-probability">
+<h2>Marginal (Unconditional) Probability<a class="headerlink" href="#marginal-unconditional-probability" title="Permalink to this heading">#</a></h2>
+<p>In general, the probability of an event <span class="math notranslate nohighlight">\(A\)</span> occurring is denoted as <span class="math notranslate nohighlight">\(P(A)\)</span> and is defined as</p>
+<div class="math notranslate nohighlight">
+\[P(A) = \frac{\text{Number of times event $A$ is observed}}{\text{Total number of events observed}}.\]</div>
+</section>
+<section id="median">
+<h2>Median<a class="headerlink" href="#median" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. The median <span class="math notranslate nohighlight">\(\text{M}(X)\)</span> is the outcome for which there is a 50-50 chance of seeing a greater or lesser value. So, its distribution-based definition satisfies</p>
+<div class="math notranslate nohighlight">
+\[P[X \leq \text{M}(X)] = 0.5.\]</div>
+</section>
+<section id="mode">
+<h2>Mode<a class="headerlink" href="#mode" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a random variable:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a probability mass function (PMF), then the mode is the outcome having the highest probability.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a probability density function (PDF), then the mode is the outcome having the highest density. That is:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\text{Mode} = {\arg \max}_x f_X(x).\]</div>
+</section>
+<section id="mutual-information">
+<h2>Mutual Information<a class="headerlink" href="#mutual-information" title="Permalink to this heading">#</a></h2>
+<p>The mutual information between two random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[H(X,Y) = \displaystyle \sum_x \displaystyle \sum_y P(X = x \cap Y = y)\log\left[\frac{P(X = x \cap Y = y)}{P(X = x) \cdot P(Y = y)}\right].\]</div>
+</section>
+<section id="mutually-exclusive-or-disjoint-events">
+<h2>Mutually Exclusive (or Disjoint) Events<a class="headerlink" href="#mutually-exclusive-or-disjoint-events" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. These events are mutually exclusive (or disjoint) if they cannot happen at the same time in the sample space <span class="math notranslate nohighlight">\(S\)</span>. Thus, in probability notation, their intersection will be:</p>
+<div class="math notranslate nohighlight">
+\[
+P(A \cap B) = 0.
+\]</div>
+<p>Therefore, by the Inclusion-Exclusion Principle, the union of these two events can be obtained as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(A \cup B) &amp;= P(A) + P(B) - \underbrace{P(A \cap B)}_{0} \\
+&amp;= P(A) + P(B).
+\end{align*}\end{split}\]</div>
+<p>These two events are shown in the below Venn diagram.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/3f416f8384f76e7e6c52458d6169833b440db44cab2f4537db98aeee23b6b0a7.png"><img alt="../_images/3f416f8384f76e7e6c52458d6169833b440db44cab2f4537db98aeee23b6b0a7.png" src="../_images/3f416f8384f76e7e6c52458d6169833b440db44cab2f4537db98aeee23b6b0a7.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="odds">
+<h2>Odds<a class="headerlink" href="#odds" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(p\)</span> be the probability of an event of interest <span class="math notranslate nohighlight">\(A\)</span>. The odds <span class="math notranslate nohighlight">\(o\)</span> is the ratio of the probability of the event <span class="math notranslate nohighlight">\(A\)</span> to the probability of the non-event <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[o = \frac{p}{1 - p}.\]</div>
+<p>In plain words, the odds will tell how many times event <span class="math notranslate nohighlight">\(A\)</span> is more likely compared to how unlikely it is.</p>
+</section>
+<section id="pearson-s-correlation">
+<h2>Pearson’s Correlation<a class="headerlink" href="#pearson-s-correlation" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two numeric random variables, whose respective variances are defined by Equation <a class="reference internal" href="#equation-variance-appendix">(50)</a>, with a covariance defined as in Equation <a class="reference internal" href="#equation-covariance-appendix">(42)</a>. Pearson’s correlation standardizes the distances according to the standard deviations <span class="math notranslate nohighlight">\(\sigma_X\)</span> and <span class="math notranslate nohighlight">\(\sigma_Y\)</span> of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, respectively. It is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-pearson-coefficient-appendix">
+<span class="eqno">(49)<a class="headerlink" href="#equation-pearson-coefficient-appendix" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+\rho_{XY} = \operatorname{Corr}(X, Y) &amp;= \mathbb{E} \left[ 
+   \left(\frac{X-\mu_X}{\sigma_X}\right) 
+   \left(\frac{Y-\mu_Y}{\sigma_Y}\right)
+ \right] \\
+ &amp;= \frac{\operatorname{Cov}(X, Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}.
+\end{align*}\end{split}\]</div>
+<p>As a result of the above equation, it turns out that</p>
+<div class="math notranslate nohighlight">
+\[-1 \leq \rho_{XY} \leq 1.\]</div>
+</section>
+<section id="probability-of-a-continuous-random-varible-x-being-between-a-and-b">
+<h2>Probability of a Continuous Random Varible <span class="math notranslate nohighlight">\(X\)</span> Being between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span><a class="headerlink" href="#probability-of-a-continuous-random-varible-x-being-between-a-and-b" title="Permalink to this heading">#</a></h2>
+<p>For a continuous random variable <span class="math notranslate nohighlight">\(X\)</span> with probability density function (PDF) <span class="math notranslate nohighlight">\(f_X(x)\)</span>, the probability of <span class="math notranslate nohighlight">\(X\)</span> being between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = \int_a^b f_X(x)\text{d}x.\]</div>
+<p>We can connect the dots with our new definition of a cumulative distribution function (CDF) from Equation <a class="reference internal" href="#equation-cdf-appendix">(43)</a>. First,</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = P(X \leq b) - P(X \leq a)\]</div>
+<p>because if <span class="math notranslate nohighlight">\(X \leq b \)</span> but not <span class="math notranslate nohighlight">\(\leq a\)</span> then it must be that <span class="math notranslate nohighlight">\(a \leq X \leq b\)</span>. But now we can write these two terms using the CDF:</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = P(X \leq b) - P(X \leq a) = F_X(b) - F_X(a).\]</div>
+<p>Now, plugging in the definition of the CDF as the integral of the PDF,</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = \int_{-\infty}^b f_X(x) \, \text{d}x - \int_{-\infty}^a f_X(x) \, \text{d}x=\int_{a}^b f_X(x) \, \text{d}x.\]</div>
+</section>
+<section id="properties-of-the-bivariate-gaussian-or-normal-distribution">
+<h2>Properties of the Bivariate Gaussian or Normal Distribution<a class="headerlink" href="#properties-of-the-bivariate-gaussian-or-normal-distribution" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be part of a bivariate Gaussian or Normal distribution with means <span class="math notranslate nohighlight">\(-\infty &lt; \mu_X &lt; \infty\)</span> and <span class="math notranslate nohighlight">\(-\infty &lt; \mu_Y &lt; \infty\)</span>, variances <span class="math notranslate nohighlight">\(\sigma^2_X &gt; 0\)</span> and <span class="math notranslate nohighlight">\(\sigma^2_Y &gt; 0\)</span>, and correlation coefficient <span class="math notranslate nohighlight">\(-1 \leq \rho_{XY} \leq 1\)</span>.</p>
+<p>This bivariate Gaussian or Normal distribution has the following properties:</p>
+<ol class="arabic simple">
+<li><p><strong>Marginal distributions are Gaussian.</strong> The marginal distribution of a subset of variables can be obtained by just taking the relevant subset of means, and the relevant subset of the covariance matrix.</p></li>
+<li><p><strong>Linear combinations are Gaussian.</strong> This is actually by definition. If <span class="math notranslate nohighlight">\((X, Y)\)</span> have a bivariate Gaussian or Normal distribution with marginal means <span class="math notranslate nohighlight">\(\mu_X\)</span> and <span class="math notranslate nohighlight">\(\mu_Y\)</span> along with marginal variances <span class="math notranslate nohighlight">\(\sigma^2_X\)</span> and <span class="math notranslate nohighlight">\(\sigma^2_Y\)</span> and covariance <span class="math notranslate nohighlight">\(\sigma_{XY}\)</span>; then <span class="math notranslate nohighlight">\(Z = aX + bY + c\)</span> with constants <span class="math notranslate nohighlight">\(a, b, c\)</span> is Gaussian. If we want to find the mean and variance of <span class="math notranslate nohighlight">\(Z\)</span>, we apply the linearity of expectations and variance rules:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\mathbb{E}(Z) &amp;= \mathbb{E}(aX + bY + c) \\
+&amp;= \mathbb{E}(aX) + \mathbb{E}(bY) + \mathbb{E}(c) \\
+&amp;= a \mathbb{E}(X) + b \mathbb{E}(Y) + c \\
+&amp;= a \mu_X + b \mu_Y + c.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\text{Var}(Z) &amp;= \text{Var}(aX + bY + c) \\
+&amp;= \text{Var}(aX) + \text{Var}(bY) + \text{Var}(c) + 2 \text{Cov}(aX, bY) \\
+&amp;= a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 0 + 2ab \text{Cov}(X, Y) \\
+&amp;= a^2 \sigma_X^2 + b^2 \sigma_Y^2 + 2ab \sigma_{XY}.
+\end{align*}\end{split}\]</div>
+<ol class="arabic simple" start="3">
+<li><p><strong>Conditional distributions are Gaussian.</strong> If <span class="math notranslate nohighlight">\((X, Y)\)</span> have a bivariate Gaussian or Normal distribution with marginal means <span class="math notranslate nohighlight">\(\mu_X\)</span> and <span class="math notranslate nohighlight">\(\mu_Y\)</span> along with marginal variances <span class="math notranslate nohighlight">\(\sigma^2_X\)</span> and <span class="math notranslate nohighlight">\(\sigma^2_Y\)</span> and covariance <span class="math notranslate nohighlight">\(\sigma_{XY}\)</span>; then the distribution of <span class="math notranslate nohighlight">\(Y\)</span> given that <span class="math notranslate nohighlight">\(X = x\)</span> is also Gaussian. Its distribution is</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[Y \mid X = x \sim \mathcal{N} \left(\mu_{_{Y \mid X = x}} = \mu_Y + \frac{\sigma_Y}{\sigma_X} \rho_{XY} (x - \mu_X), \sigma^2_{_{Y \mid X = x}} = \ (1 - \rho_{XY}^2)\sigma_Y^2 \right).\]</div>
+</section>
+<section id="quantile">
+<h2>Quantile<a class="headerlink" href="#quantile" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. A <span class="math notranslate nohighlight">\(p\)</span>-quantile <span class="math notranslate nohighlight">\(Q(p)\)</span> is the outcome with a probability <span class="math notranslate nohighlight">\(p\)</span> of getting a smaller outcome. So, its distribution-based definition satisfies</p>
+<div class="math notranslate nohighlight">
+\[P[X \leq Q(p)] = p.\]</div>
+</section>
+<section id="quantile-function">
+<h2>Quantile Function<a class="headerlink" href="#quantile-function" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable. The quantile function <span class="math notranslate nohighlight">\(Q(\cdot)\)</span> takes a probability <span class="math notranslate nohighlight">\(p\)</span> and maps it to the <span class="math notranslate nohighlight">\(p\)</span>-quantile. It turns out that this is the inverse of the cumulative distribution function (CDF) <a class="reference internal" href="#equation-cdf-appendix">(43)</a>:</p>
+<div class="math notranslate nohighlight">
+\[Q(p) = F^{-1}(p).\]</div>
+<p>Note that this function does not exist outside of <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>. This is unlike the other functions (density, CDF, and survival function) which exist on all real numbers.</p>
+</section>
+<section id="skewness">
+<h2>Skewness<a class="headerlink" href="#skewness" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a probability mass function (PMF), then skewness can be defined as</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\text{Skewness}(X) = \mathbb{E} \left[ \left( \frac{X - \mu_X}{\sigma_X} \right)^3 \right] = \displaystyle \sum_x \left( \frac{x - \mu_X}{\sigma_X} \right)^3 \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a probability density function (PDF), then</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\text{Skewness}(X) = \mathbb{E} \left[ \left( \frac{X - \mu_X}{\sigma_X} \right)^3 \right] = \displaystyle \int_x \left( \frac{x - \mu_X}{\sigma_X} \right)^3 \cdot f_X(x) \text{d}x.\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_X = \mathbb{E}(X)\)</span> as in Equations <a class="reference internal" href="#equation-mean-discrete-appendix">(44)</a> if <span class="math notranslate nohighlight">\(X\)</span> is discrete and <a class="reference internal" href="#equation-mean-continuous-appendix">(45)</a>  if <span class="math notranslate nohighlight">\(X\)</span> is continuous. On the other hand, <span class="math notranslate nohighlight">\(\sigma_X = \text{SD}(X)\)</span> as in Equation <a class="reference internal" href="#equation-sd-appendix">(51)</a>.</p>
+</section>
+<section id="survival-function">
+<h2>Survival Function<a class="headerlink" href="#survival-function" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable. The survival function <span class="math notranslate nohighlight">\(S(\cdot)\)</span> is the cumulative distribution function (CDF) <a class="reference internal" href="#equation-cdf-appendix">(43)</a> “<em>flipped upside down</em>”. For this random variable <span class="math notranslate nohighlight">\(X\)</span>, the survival function is defined as</p>
+<div class="math notranslate nohighlight">
+\[S_X(x) = P(X &gt; x) = 1 - F_X(x).\]</div>
+</section>
+<section id="variance">
+<h2>Variance<a class="headerlink" href="#variance" title="Permalink to this heading">#</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. The variance, either for a discrete or continuous random variable, is defined as</p>
+<div class="math notranslate nohighlight" id="equation-variance-appendix">
+<span class="eqno">(50)<a class="headerlink" href="#equation-variance-appendix" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+\text{Var}(X) &amp;= \mathbb{E}\{[X - \mathbb{E}(X)]^2\}\\
+&amp;= \mathbb{E}(X^2) - [\mathbb{E}(X)]^2.
+\end{align*}\end{split}\]</div>
+<p>For the continuous case with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a probability density function (PDF), an alternative definition of the variance is</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \mathbb{E}[(X - \mu_X)^2] = \int_x (x - \mu_X) ^ 2 \, f_X(x) \text{d}x.\]</div>
+<p>The term <span class="math notranslate nohighlight">\(\mu_X\)</span> is equal to <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> from Equation <a class="reference internal" href="#equation-mean-continuous-appendix">(45)</a>.</p>
+<p>Finally, either for a discrete or continuous random variable, the standard deviation is the square root of the variance:</p>
+<div class="math notranslate nohighlight" id="equation-sd-appendix">
+<span class="eqno">(51)<a class="headerlink" href="#equation-sd-appendix" title="Permalink to this equation">#</a></span>\[\text{SD}\left[ \text{Var}(X) \right] = \sqrt{\text{Var}(X)}.\]</div>
+<p>The above measure is more practical because it is on the same scale as the outcome, unlike the variance.</p>
+</section>
+<section id="variance-of-a-sum-involving-two-non-independent-random-variables">
+<h2>Variance of a Sum Involving Two Non-Independent Random Variables<a class="headerlink" href="#variance-of-a-sum-involving-two-non-independent-random-variables" title="Permalink to this heading">#</a></h2>
+<p>Suppose <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are not independent numeric random variables. Therefore, the variance of their sum is:</p>
+<div class="math notranslate nohighlight" id="equation-variance-dependent-sum-appendix">
+<span class="eqno">(52)<a class="headerlink" href="#equation-variance-dependent-sum-appendix" title="Permalink to this equation">#</a></span>\[\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X, Y).\]</div>
+<p>Furthermore, if <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent, then</p>
+<div class="math notranslate nohighlight" id="equation-cross-independent-appendix">
+<span class="eqno">(53)<a class="headerlink" href="#equation-cross-independent-appendix" title="Permalink to this equation">#</a></span>\[\mathbb{E}(XY) = \mathbb{E}(X) \mathbb{E}(Y).\]</div>
+<p>Therefore, using Equation <a class="reference internal" href="#equation-cross-independent-appendix">(53)</a>, the sum <a class="reference internal" href="#equation-variance-dependent-sum-appendix">(52)</a> becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation*}
+\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y).
+\end{equation*}\]</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_lecture-simulation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 8: Simulation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="appendix-dist-cheatsheet.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Distribution Cheatsheet</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complement-of-an-event">Complement of an Event</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-independence">Conditional Independence</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-probability">Conditional Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance">Covariance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-distribution-function">Cumulative Distribution Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entropy">Entropy</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-value">Expected Value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-exclusion-principle">Inclusion-Exclusion Principle</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-events">Two Events</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#three-events">Three Events</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-events">Independent Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-in-probability-distributions-between-two-random-variables">Independence in Probability Distributions between Two Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-random-variables">Independent Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kendall-s-tau-k">Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-expectation">Law of Total Expectation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity-of-expectations">Linearity of Expectations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linearity-of-variances-with-two-independent-random-variables">Linearity of Variances with Two Independent Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#marginal-unconditional-probability">Marginal (Unconditional) Probability</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median">Median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode">Mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mutual-information">Mutual Information</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mutually-exclusive-or-disjoint-events">Mutually Exclusive (or Disjoint) Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#odds">Odds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pearson-s-correlation">Pearson’s Correlation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-a-continuous-random-varible-x-being-between-a-and-b">Probability of a Continuous Random Varible <span class="math notranslate nohighlight">\(X\)</span> Being between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-the-bivariate-gaussian-or-normal-distribution">Properties of the Bivariate Gaussian or Normal Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile">Quantile</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile-function">Quantile Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skewness">Skewness</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-function">Survival Function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-of-a-sum-involving-two-non-independent-random-variables">Variance of a Sum Involving Two Non-Independent Random Variables</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

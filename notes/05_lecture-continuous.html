@@ -1,0 +1,1293 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 5: Continuous Distributions &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/05_lecture-continuous';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 6: Common Distribution Families and Conditioning" href="06_lecture-continuous-families.html" />
+    <link rel="prev" title="Lecture 4: Conditional Probabilities" href="04_lecture-conditional.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/05_lecture-continuous.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/05_lecture-continuous.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 5: Continuous Distributions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-random-variables">1. Continuous Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-heavy-is-a-tree">2. How Heavy is a Tree?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density">3. Probability Density</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-units">3.1. A Note on Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-a-particular-value">3.2. Probability of a Particular Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-low-purity-octane">3.3. Example: Low Purity Octane</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-properties">4. Distribution Properties</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-variance-mode-and-entropy">4.1. Mean, Variance, Mode, and Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#median">4.2. Median</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantiles">4.3. Quantiles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-intervals">4.4. Prediction Intervals</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#skewness">4.5. Skewness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#special-quantiles-optional-section">4.6. Special Quantiles (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-distributions">5. Representing Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-distribution-function">5.1. Cumulative Distribution Function</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#digression-on-mathematical-notation">5.1.1. Digression on Mathematical Notation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#back-to-business">5.1.2. Back to Business</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-makes-a-valid-cdf">5.1.3. What Makes a Valid CDF?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-that-x-is-between-a-and-b">5.1.4. Probability that <span class="math notranslate nohighlight">\(X\)</span> is Between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-function">5.2. Survival Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile-function">5.3. Quantile Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-ways-of-representing-a-distribution-optional-section">5.4. Other Ways of Representing a Distribution (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-exercises">6. Additional Exercises</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-5-continuous-distributions">
+<h1>Lecture 5: Continuous Distributions<a class="headerlink" href="#lecture-5-continuous-distributions" title="Permalink to this heading">#</a></h1>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Permalink to this heading">#</a></h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ul class="simple">
+<li><p>Differentiate between continuous and discrete random variables.</p></li>
+<li><p>Interpret probability density functions and calculate probabilities from them.</p></li>
+<li><p>Calculate and interpret probabilistic quantities (mean, quantiles, prediction intervals, etc.) for a continuous random variable.</p></li>
+<li><p>Explain whether a function is a valid probability density function, cumulative distribution function, quantile function, and survival function.</p></li>
+<li><p>Calculate quantiles from a cumulative distribution function, survival function, or quantile function.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Let us make a <strong>note on integrals</strong>. Working with continuous random variables sometimes involves integrating some mathematical functions. However, the most we will ever ask you to integrate are basic mathematical functions.</p>
+<p>This is not because it is “too hard” to compute integrals but because there is not much pedagogical value in it, mainly because we are gearing this course towards using probability in Data Science. That said, <strong>we must understand what an integral does in the context of probability, intuitively speaking</strong>.</p>
+<p>The scope of these upcoming lectures is to understand probability concepts via continuous random variables rather than advanced Calculus.</p>
+</div>
+</section>
+<section id="continuous-random-variables">
+<h2>1. Continuous Random Variables<a class="headerlink" href="#continuous-random-variables" title="Permalink to this heading">#</a></h2>
+<p>Let us set up the following inquiries:</p>
+<blockquote>
+<div><p>What is the current water level of the Bow River at Banff, Alberta?</p>
+</div></blockquote>
+<blockquote>
+<div><p>How tall is a tree?</p>
+</div></blockquote>
+<blockquote>
+<div><p>What about the current atmospheric temperature in Vancouver, BC?</p>
+</div></blockquote>
+<p>These are examples of continuous random variables. It turns out that it is trickier to interpret probabilities for continuous random variables, but it also turns out that they are generally easier to work with.</p>
+<p>Not all random variables with infinitely many outcomes are continuous. Take, for example, a <a class="reference internal" href="appendix-dist-cheatsheet.html#poisson-distribution"><span class="std std-ref">Poisson</span></a> or <a class="reference internal" href="appendix-dist-cheatsheet.html#geometric-distribution"><span class="std std-ref">Geometric</span></a> random variable that can take values <span class="math notranslate nohighlight">\(0, 1, 2, \ldots\)</span> with no upper limit. The difference here is that a smaller range of values <strong>does have a finite amount of variables</strong>. By the way, this type of infinity is called <strong>countably infinite</strong>, and a continuous random variable has <strong>uncountably infinite</strong> amount of outcomes.</p>
+<p>In practice, we can never measure anything on a continuous scale since any measuring instrument must always round to some precision. For example, your kitchen scale might only measure things to the nearest gram. But, these variables are well approximated by a continuous variable. As a rule of thumb, consider the variable continuous if the difference between neighbouring values is not a big deal.</p>
+<p>Let us check an <strong>initial example</strong>. You would like to get a handle on your monthly finances, so you record your total monthly expenses each month.</p>
+<figure class="align-default" id="financial">
+<a class="reference internal image-reference" href="../_images/financial.jpg"><img alt="../_images/financial.jpg" src="../_images/financial.jpg" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Monthly expenses</span><a class="headerlink" href="#financial" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You end up with <strong>20 months worth of data:</strong></p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>'$1903.68'</li><li>'$3269.61'</li><li>'$6594.05'</li><li>'$1693.94'</li><li>'$2863.71'</li><li>'$3185.01'</li><li>'$4247.04'</li><li>'$2644.27'</li><li>'$8040.42'</li><li>'$2781.11'</li><li>'$3673.23'</li><li>'$4870.13'</li><li>'$2449.53'</li><li>'$1772.53'</li><li>'$7267.11'</li><li>'$938.67'</li><li>'$4625.33'</li><li>'$3034.81'</li><li>'$4946.4'</li><li>'$3700.16'</li></ol>
+</div></div>
+</div>
+<p>Since a difference of <span class="math notranslate nohighlight">\(\$0.01\)</span> is not a big deal, we may as well treat this as a continuous random variable:</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Total monthly expenses.}\]</div>
+<p>That means our random variable is allowed to take on values in between <span class="math notranslate nohighlight">\(\$0.01\)</span> and <span class="math notranslate nohighlight">\(\$0.02\)</span>, but this is unlikely to be a problem in practice.</p>
+<p>Let us take a look at a <strong>second example</strong>. Back in the day when Canada had pennies, some people liked to play “<em>penny bingo</em>”, which involves winning and losing pennies.</p>
+<figure class="align-default" id="piggy-bank">
+<a class="reference internal image-reference" href="../_images/piggy-bank.png"><img alt="../_images/piggy-bank.png" src="../_images/piggy-bank.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">A piggy bank</span><a class="headerlink" href="#piggy-bank" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Here are your <strong>10 net winnings</strong>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+.list-inline {list-style: none; margin:0; padding: 0}
+.list-inline>li {display: inline-block}
+.list-inline>li:not(:last-child)::after {content: "\00b7"; padding: 0 .5ex}
+</style>
+<ol class=list-inline><li>0.01</li><li>-0.01</li><li>0.02</li><li>0.01</li><li>0.04</li><li>0.02</li><li>-0.03</li><li>-0.01</li><li>0.05</li><li>0.04</li></ol>
+</div></div>
+</div>
+<p>Since a difference of a penny (e.g., <span class="math notranslate nohighlight">\(\$0.01\)</span>) is a big deal, it is best to treat this as discrete. We do not want a random variable that can produce an outcome of <span class="math notranslate nohighlight">\(\$0.0123\)</span>, because that would not make sense for penny bingo.</p>
+<p>As a <strong>third example</strong>, if one is modeling <strong>the number of flu cases in Canada</strong>, even though this is inherently discrete, it would probably be fine to treat these numbers as continuous because the numbers are large and continuous random variables are often easier to work with.</p>
+<figure class="align-default" id="medical">
+<a class="reference internal image-reference" href="../_images/medical.png"><img alt="../_images/medical.png" src="../_images/medical.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Medical checking</span><a class="headerlink" href="#medical" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>For example, if your model of the disease allows the number of cases to be <span class="math notranslate nohighlight">\(843.423\)</span>, it is fine. But if you were modeling <strong>the number of flu waves</strong>, you would want this to be discrete, because these are small integers like <span class="math notranslate nohighlight">\(1,2,3,4\)</span> and saying there were <span class="math notranslate nohighlight">\(1.423284\)</span> flu waves would not make any sense.</p>
+</section>
+<section id="how-heavy-is-a-tree">
+<h2>2. How Heavy is a Tree?<a class="headerlink" href="#how-heavy-is-a-tree" title="Permalink to this heading">#</a></h2>
+<p>Let us talk about trees:</p>
+<blockquote>
+<div><p>How heavy is a tree?</p>
+</div></blockquote>
+<figure class="align-default" id="trees">
+<a class="reference internal image-reference" href="../_images/trees.png"><img alt="../_images/trees.png" src="../_images/trees.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">A sample of trees</span><a class="headerlink" href="#trees" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Well, it depends on how tall the tree is! Okay, let us say the tree is <span class="math notranslate nohighlight">\(5 \text{ m}\)</span> tall. How heavy is it? Well, not all <span class="math notranslate nohighlight">\(5 \text{ m}\)</span> trees are the same weight – is the tree broad or thin? Actually, trees are not necessarily wide or narrow; they might be a mix. For example, the bottom of the tree might be wide, but the top of the tree might be narrow. So, <strong>we cannot just say something like</strong>:</p>
+<blockquote>
+<div><p>“Every meter of the tree weighs <span class="math notranslate nohighlight">\(500 \text{ kg}\)</span>.”</p>
+</div></blockquote>
+<p>Perhaps the bottom meter of the tree weighs <span class="math notranslate nohighlight">\(500 \text{ kg}\)</span>, and the top meter weighs <span class="math notranslate nohighlight">\(100 \text{ kg}\)</span>. This brings us to the idea of <em>density</em>: the density of the tree, measured in <span class="math notranslate nohighlight">\(\text{kg/m}\)</span>, <strong>is a function that varies as you move up the tree</strong>. You can think of it as the weight of an infinitely thin slice of tree, divided by the thickness of that slice. We could plot such a function:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/1c79fb0fbffb7bb9f4a2cce2400461e214bc5086da7180d420ced41f187219e8.png"><img alt="../_images/1c79fb0fbffb7bb9f4a2cce2400461e214bc5086da7180d420ced41f187219e8.png" src="../_images/1c79fb0fbffb7bb9f4a2cce2400461e214bc5086da7180d420ced41f187219e8.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>The above plot shows how the density might decrease from <span class="math notranslate nohighlight">\(500 \text{ kg/m}\)</span> at the bottom of the tree to <span class="math notranslate nohighlight">\(100 \text{ kg/m}\)</span> at the top. If we wanted the total weight of the tree, we would take the <strong>integral</strong> of this function. If we can integrate this tree density function <span class="math notranslate nohighlight">\(f(x)\)</span>, then the weight of the tree would be:</p>
+<div class="math notranslate nohighlight">
+\[\int_0^{10} f(x) \text{d}x.\]</div>
+<blockquote>
+<div><p>What if I asked you how much the tree weighs at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span>?</p>
+</div></blockquote>
+<p>This is a weird question; the tree does not really have a weight at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span>; it only has a density at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span>, which looks to be <span class="math notranslate nohighlight">\(400 \text{ kg/m}\)</span> from the plot. But (as we will soon see), we do need an answer to this question, so we are going to say that the weight of the tree at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span> <strong>is zero</strong>.</p>
+<p>Why? Let us call the height up the tree <span class="math notranslate nohighlight">\(x\)</span> and the density <span class="math notranslate nohighlight">\(f(x)\)</span>. Then, the weight between heights <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\int_a^b f(x) \text{d}x.\]</div>
+<p>Thus, the weight at <span class="math notranslate nohighlight">\(x = 5 \text{ m}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\int_5^5 f(x) \text{d}x = 0.\]</div>
+<p>In other words, we let the rules of math answer this strange question for us. The weight of the tree at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span> is zero. If we want a nonzero answer, we need to ask for the weight of the tree in an <strong>interval</strong> between two heights. And the weight of the whole tree is the weight between <span class="math notranslate nohighlight">\(x = 0  \text{ m}\)</span> and <span class="math notranslate nohighlight">\(x = 10  \text{ m}\)</span> since that is how tall the tree is. This is the shaded area under the curve:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/d7d95508563ec7de11030ba7e9fbd963a4501aa7f960a2ffcc974bd589f52ecd.png"><img alt="../_images/d7d95508563ec7de11030ba7e9fbd963a4501aa7f960a2ffcc974bd589f52ecd.png" src="../_images/d7d95508563ec7de11030ba7e9fbd963a4501aa7f960a2ffcc974bd589f52ecd.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="probability-density">
+<h2>3. Probability Density<a class="headerlink" href="#probability-density" title="Permalink to this heading">#</a></h2>
+<p>So, hopefully, all that tree stuff had something to do with continuous probability distributions, right? Good news, it does!</p>
+<p>Let us consider a continuous random variable:</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Height of a person in meters.}\]</div>
+<figure class="align-default" id="people">
+<a class="reference internal image-reference" href="../_images/people.png"><img alt="../_images/people.png" src="../_images/people.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">A sample of people</span><a class="headerlink" href="#people" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The notion of density from the tree analogy carries over to continuous probability. Just like we had the density (in <span class="math notranslate nohighlight">\(\text{kg/m}\)</span>) of the tree defined at every value of <span class="math notranslate nohighlight">\(x\)</span> along the tree, we have a probability density <span class="math notranslate nohighlight">\(f_X(x)\)</span> (in “probability per meter”) of heights.</p>
+<p>Not many people are more than <span class="math notranslate nohighlight">\(2 \text{ m}\)</span> tall, so the probability density at a height equal to <span class="math notranslate nohighlight">\(2 \text{ m}\)</span> will be lower than that at a height equal to <span class="math notranslate nohighlight">\(1.5 \text{ m}\)</span>. And, as with the tree analogy, we can compute the probability that a randomly selected person is between <span class="math notranslate nohighlight">\(1.5\)</span> and <span class="math notranslate nohighlight">\(1.6 \text{ m}\)</span> tall by taking the integral of the probability density:</p>
+<div class="math notranslate nohighlight">
+\[P(1.5 \leq X \leq 1.6) = \int^{1.6}_{1.5} f_X(x) \text{d}x.\]</div>
+<section id="a-note-on-units">
+<h3>3.1. A Note on Units<a class="headerlink" href="#a-note-on-units" title="Permalink to this heading">#</a></h3>
+<p>Take a moment to pay close attention to the units in the previous example of a person’s height. The “meters” part carries over perfectly from the tree analogy: the units of the random variable <span class="math notranslate nohighlight">\(X\)</span>. But the “kilograms” part <strong>does not</strong> carry over from the tree analogy. Here, the “stuff” we are measuring is probability, not weight.</p>
+<p>Technically, in this case, the density <span class="math notranslate nohighlight">\(f_X(x)\)</span> has units of <span class="math notranslate nohighlight">\(1/\text{m}\)</span> or, equivalently, <span class="math notranslate nohighlight">\(\text{m}^{-1}\)</span>. This is not the most intuitive unit type, but it is important. Remember, we wanted to ask questions like:</p>
+<blockquote>
+<div><p>What is the probability that a person’s height is between <span class="math notranslate nohighlight">\(x = 1 \text{ m}\)</span> and <span class="math notranslate nohighlight">\(x = 2 \text{ m}\)</span>?</p>
+</div></blockquote>
+<p>When we write this as an integral</p>
+<div class="math notranslate nohighlight">
+\[P(1 \leq X \leq 2) = \int_1^2 f_X(x) \text{d}x,\]</div>
+<p>the units now work out, because <span class="math notranslate nohighlight">\(f_X(x)\)</span> has units of <span class="math notranslate nohighlight">\(\text{m}^{-1}\)</span> and <span class="math notranslate nohighlight">\(\text{d}x\)</span> has units of <span class="math notranslate nohighlight">\(\text{m}\)</span>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Recall, <span class="math notranslate nohighlight">\(\text{d}x\)</span> is an infinitely tiny interval of <span class="math notranslate nohighlight">\(x\)</span>, measured in metres, so when we multiply them, we get a unitless result as expected.</p>
+</div>
+<p>The density as a function over the outcome space is called the <strong>probability density function (PDF)</strong>, usually abbreviated to just the <strong>density</strong>, and denoted as <span class="math notranslate nohighlight">\(f(\cdot)\)</span>. In the case of PDFs, we specify the random variable in the subscript to clarify what random variable this density represents – for example, <span class="math notranslate nohighlight">\(f_X(x)\)</span> is the density of random variable <span class="math notranslate nohighlight">\(X\)</span>. In the case of discrete random variables, you will see that the density is like a “<em>continuous cousin</em>” of the <strong>probability mass function (PMF)</strong>.</p>
+<p>We can use the density to calculate probabilities of a range by integrating the density over that range:</p>
+<div class="math notranslate nohighlight">
+\[P(a &lt; X &lt; b) = \int_a^b f_X(x) \text{d}x.\]</div>
+<p>This means that integrating over the entire range of possibilities for the random variable <span class="math notranslate nohighlight">\(X\)</span> should give us 1:</p>
+<div class="math notranslate nohighlight">
+\[\int_{-\infty}^\infty f_X(x) \text{d}x = 1.\]</div>
+<p>The integral above corresponds to the entire area under the density function.</p>
+<p>Now, what if a random variable only ranges from, say, <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(10\)</span> – is it a problem that we integrate from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(+\infty\)</span>? Should not we say</p>
+<div class="math notranslate nohighlight">
+\[\int_{0}^{10} f_X(x) \text{d}x = 1\]</div>
+<p>in this case? The answer is that these are the same thing.</p>
+<p>If a random variable ranges from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(10\)</span>, then we consider that <span class="math notranslate nohighlight">\(f_X(x) = 0\)</span> outside the interval from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(10\)</span>. So, when we take the integral from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(\infty\)</span>, most of that integral is over zero and reduces to the integral from <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\(10\)</span>.</p>
+<p>In other words, for our tree density, we could have actually made a plot like this whose <span class="math notranslate nohighlight">\(y\)</span>-axis begins at <span class="math notranslate nohighlight">\(0 \text{ kg/m}\)</span>, showing the density from <span class="math notranslate nohighlight">\(-10 \text{ m}\)</span> (underground) to <span class="math notranslate nohighlight">\(20 \text{ m}\)</span> (in the sky above the tree):</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/a9ad4b9dd7915fb4f067b541cdc34584890d011ccfef37fca06d713b1bbc1b6b.png"><img alt="../_images/a9ad4b9dd7915fb4f067b541cdc34584890d011ccfef37fca06d713b1bbc1b6b.png" src="../_images/a9ad4b9dd7915fb4f067b541cdc34584890d011ccfef37fca06d713b1bbc1b6b.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="probability-of-a-particular-value">
+<h3>3.2. Probability of a Particular Value<a class="headerlink" href="#probability-of-a-particular-value" title="Permalink to this heading">#</a></h3>
+<p>Let us answer the following question:</p>
+<blockquote>
+<div><p>What is the probability that a person is 1.5 meters tall?</p>
+</div></blockquote>
+<p>That is <span class="math notranslate nohighlight">\(1.5000000000\ldots \text{ m}\)</span>. Just like the weight of a tree at a height equal to <span class="math notranslate nohighlight">\(5 \text{ m}\)</span>, this is <span class="math notranslate nohighlight">\(0\)</span>. In fact, any height has a probability of <span class="math notranslate nohighlight">\(0\)</span> of occurring. But we can ask for the probability of a <strong>range</strong> of heights, like the probability that a person will be between <span class="math notranslate nohighlight">\(1.5\)</span> and <span class="math notranslate nohighlight">\(1.6 \text{ m}\)</span> tall. And now we can have non-zero probability – just like the weight of the tree between <span class="math notranslate nohighlight">\(4.5\)</span> and <span class="math notranslate nohighlight">\(5 \text{ m}\)</span> off the ground.</p>
+</section>
+<section id="example-low-purity-octane">
+<h3>3.3. Example: Low Purity Octane<a class="headerlink" href="#example-low-purity-octane" title="Permalink to this heading">#</a></h3>
+<p>Suppose you just ran out of gas, but luckily, right in front of a gas station! Or maybe not so lucky, since the gas station is called “<em>Low Purity Octane</em>.”</p>
+<figure class="align-default" id="gas-pump">
+<a class="reference internal image-reference" href="../_images/gas-pump.png"><img alt="../_images/gas-pump.png" src="../_images/gas-pump.png" style="height: 400px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">A gas pump</span><a class="headerlink" href="#gas-pump" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>They tell you that the octane purity (as a proportion between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>) of their gasoline is random, and has the following density:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png"><img alt="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png" src="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Octane purity as a proportion.}\]</div>
+<p>Its PDF is the following:</p>
+<div class="math notranslate nohighlight" id="equation-octane-pdf">
+<span class="eqno">(26)<a class="headerlink" href="#equation-octane-pdf" title="Permalink to this equation">#</a></span>\[\begin{split}f_X(x) =
+\begin{cases}
+2x \quad \text{for} \quad 0 \leq x \leq 1 \\
+0 \quad  \text{elsewhere.}
+\end{cases}\end{split}\]</div>
+<p>Let us answer the following questions together:</p>
+<div class="exercise admonition" id="lecture5-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 21 </span></p>
+<section id="exercise-content">
+<p>Using the PDF, what is the probability of getting 25% purity? That is,</p>
+<div class="math notranslate nohighlight">
+\[P(X = 0.25).\]</div>
+</section>
+</div>
+<div class="exercise admonition" id="lecture5-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 22 </span></p>
+<section id="exercise-content">
+<p>The PDF <a class="reference internal" href="#equation-octane-pdf">(26)</a> evaluates to be <span class="math notranslate nohighlight">\(&gt; 1\)</span> in some places on the vertical axis. Does this mean that this is not a valid density? Why is the density in fact valid?</p>
+</section>
+</div>
+<p>Now, let us proceed with some in-class questions via <a class="reference external" href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="exercise admonition" id="lecture5-q3">
+
+<p class="admonition-title"><span class="caption-number">Exercise 23 </span></p>
+<section id="exercise-content">
+<p>Using the PDF <a class="reference internal" href="#equation-octane-pdf">(26)</a>, what is the probability of getting gas that is <span class="math notranslate nohighlight">\(&lt; 50\%\)</span> pure? That is,</p>
+<div class="math notranslate nohighlight">
+\[P(X &lt; 0.5).\]</div>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> 0.75</p>
+<p><strong>B.</strong> 0.1</p>
+<p><strong>C.</strong> 0.25</p>
+<p><strong>D.</strong> 0.5</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture5-q4">
+
+<p class="admonition-title"><span class="caption-number">Exercise 24 </span></p>
+<section id="exercise-content">
+<p>What is the probability of getting gas that is <span class="math notranslate nohighlight">\(\leq 50\%\)</span> pure? That is,</p>
+<div class="math notranslate nohighlight">
+\[P(X \leq 0.5).\]</div>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> 0.25</p>
+<p><strong>B.</strong> 0.249</p>
+<p><strong>C.</strong> 0.749</p>
+<p><strong>D.</strong> 0.75</p>
+</section>
+</div>
+</section>
+</section>
+<section id="distribution-properties">
+<h2>4. Distribution Properties<a class="headerlink" href="#distribution-properties" title="Permalink to this heading">#</a></h2>
+<p>With continuous random variables, it becomes easier to expand our “toolkit” of how we describe a distribution or random variable using different <strong>central tendency and uncertainty measures</strong>.</p>
+<section id="mean-variance-mode-and-entropy">
+<h3>4.1. Mean, Variance, Mode, and Entropy<a class="headerlink" href="#mean-variance-mode-and-entropy" title="Permalink to this heading">#</a></h3>
+<p>These are the distribution measures we have already seen, and they indeed extend to the continuous case. Note that mode and entropy can also be defined in continuous cases. However, since mode and entropy ignore the numeric property of continuous random variables, they tend not to be heavily used in continuous cases.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Mode in Continuous Random Variables</p>
+<p>The outcome having the highest density. That is, for a continuous random variable <span class="math notranslate nohighlight">\(X\)</span> with PDF <span class="math notranslate nohighlight">\(f_X(x)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\text{Mode}(X) = {\arg \max}_x f_X(x).\]</div>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Entropy in Continuous Random Variables</p>
+<p>The entropy can be defined by replacing the sum in the finite case with an integral:</p>
+<div class="math notranslate nohighlight" id="equation-entropy-continuous">
+<span class="eqno">(27)<a class="headerlink" href="#equation-entropy-continuous" title="Permalink to this equation">#</a></span>\[H(X) = -\int_x f_X(x) \log [f_X(x)] \text{d}x.\]</div>
+<p>Note that, in Statistics, the <span class="math notranslate nohighlight">\(\log(\cdot)\)</span> notation implicates base <span class="math notranslate nohighlight">\(e\)</span>.</p>
+</div>
+<p>Instead, we prefer to describe a continuous random variable using properties that <strong>inform us about distances around the PDF <span class="math notranslate nohighlight">\(f_X(x)\)</span></strong>. The mean and variance are two measures of central tendency and uncertainty. The only difference with a continuous random variable is in the distribution-based definition, where the sum becomes an integral.</p>
+<p>Retaking Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-mean-continuous">(4)</a>, in the case of the <strong>mean</strong> we have</p>
+<div class="math notranslate nohighlight" id="equation-mean-continuous-2">
+<span class="eqno">(28)<a class="headerlink" href="#equation-mean-continuous-2" title="Permalink to this equation">#</a></span>\[\mathbb{E}(X) = \int_x x \, f_X(x) \text{d}x.\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The mean ends up being the “<em>center of mass</em>” of the PDF, meaning that you could “balance” the density function on this single point without it “toppling over due to gravity.” Note the mean may be best interpreted as the long-run <strong>sample mean</strong> <a class="reference internal" href="01_lecture-uncertainty.html#equation-sample-mean">(7)</a>.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Alternative Definition of Variance in Continuous Random Variables</p>
+<p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a PDF, then an alternative definition of the variance is</p>
+<div class="math notranslate nohighlight" id="equation-alt-variance-continuous">
+<span class="eqno">(29)<a class="headerlink" href="#equation-alt-variance-continuous" title="Permalink to this equation">#</a></span>\[\text{Var}(X) = \mathbb{E}[(X - \mu_X)^2] = \int_x (x - \mu_X) ^ 2 \, f_X(x) \text{d}x.\]</div>
+<p>The term <span class="math notranslate nohighlight">\(\mu_X\)</span> is equal to <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> from Equation <a class="reference internal" href="#equation-mean-continuous-2">(28)</a>. The variance is the expected squared distance from the mean <span class="math notranslate nohighlight">\(\mu_X\)</span>.</p>
+<p>Note that the identity</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \mathbb{E}(X^2) - [\mathbb{E}(X)]^2\]</div>
+<p>from Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-variance">(8)</a>, which we used in the discrete case, holds in the continuous case as well.</p>
+</div>
+<p>Let us recheck the PDF of the “<em>Low Purity Octane</em>” gas station:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png"><img alt="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png" src="../_images/ac1d357ae80c59e428a39d097060363d531ffe07dcff041603b5de83c8b23aa4.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>From the above PDF, note we have the following:</p>
+<ul class="simple">
+<li><p>The mode is <span class="math notranslate nohighlight">\(1\)</span> (the highest purity possible on the <span class="math notranslate nohighlight">\(x\)</span>-axis!) which corresponds to <span class="math notranslate nohighlight">\(f_X(x) = 2.0\)</span> on the <span class="math notranslate nohighlight">\(y\)</span>-axis.</p></li>
+<li><p>Omitting the Calculus steps via Equation <a class="reference internal" href="#equation-entropy-continuous">(27)</a>, the entropy works out to be</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+H(X) &amp;= -\int_0^1  f_X(x) \log [f_X(x)] \text{d}x \\
+&amp;= -\int_0^1 2x \log(2x) \text{d}x \\
+&amp; \approx -0.1931.
+\end{align*}\end{split}\]</div>
+<ul class="simple">
+<li><p>The entropy is <strong>negative</strong>. Entropy for discrete distributions can <strong>never</strong> be negative. The continuous setting can be strange, but we will just ignore this. We will not really use entropy for continuous variables throughout the statistical topics of MDS.</p></li>
+<li><p>The mean ends up being not a very good purity (especially as compared to the mode!), and is</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\mathbb{E}(X) &amp;= \int_0^1 x \, f_X(x) \text{d}x = \int_0^1 x (2x) \text{d}x = \int_0^1 2x^2 \text{d}x \\
+&amp;= \frac{2x^3}{3} \Big|_{0}^{1} \\
+&amp;= \frac{2(1)^3}{3} - \frac{2(0)^3}{3} \\
+&amp;= \frac{2}{3} \\
+&amp;= 0.666.
+\end{align*}\end{split}\]</div>
+<ul class="simple">
+<li><p>The variance ends up being</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\text{Var}(X) &amp;= \int_0^1 (x - \mu_X)^2 \, f_X(x) \text{d}x = \int_0^1 \left[ x - \mathbb{E}(X) \right]^2 \, f_X(x) \text{d}x = \int_0^1 \left( x - \frac{2}{3} \right)^2 2x \text{d}x \\
+&amp;= \int_0^1 \left( x^2 - \frac{4}{3} x + \frac{4}{9} \right) 2x \text{d}x \\
+&amp;= \int_0^1 \left( 2x^3 - \frac{8}{3} x^2 + \frac{8}{9} x \right) \text{d}x \\
+&amp;= \left( \frac{2}{4} x^4 - \frac{8}{9} x^3 + \frac{8}{18} x^2 \right) \Big|_{0}^{1} \\
+&amp;= \frac{2}{4} - \frac{8}{9} + \frac{8}{18} \\
+&amp;= \frac{1}{18} \\ 
+&amp;= 0.056.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="median">
+<h3>4.2. Median<a class="headerlink" href="#median" title="Permalink to this heading">#</a></h3>
+<p>Let us check its formal definition.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Median</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. The median <span class="math notranslate nohighlight">\(\text{M}(X)\)</span> is the outcome for which there is a <strong>50-50 chance</strong> of seeing a greater or lesser value. So, its distribution-based definition satisfies</p>
+<div class="math notranslate nohighlight">
+\[P[X \leq \text{M}(X)] = 0.5.\]</div>
+<p>Note its empirically-based definition is the “middle value” after sorting the outcomes from the smallest to the largest value.</p>
+</div>
+<p>The median is perhaps best for making a single decision about a random outcome. Making a decision is most straightforward when the possibilities are reduced to two equally likely outcomes, and this is exactly what the median does. For example, if the median time to complete a hike is 2 hours, then you know there is a 50-50 chance that the hike will take over 2 hours. Suppose you are instead told that the mean is 2 hours. In that case, this only tells us that the total amount of hiking time done by a bunch of people will be as if everyone takes 2 hours to do the hike – this is still useful for deciding whether or not you should do the hike but is more convoluted.</p>
+<p>Using the purity example at “<em>Low Purity Octane</em>,” the median is about <span class="math notranslate nohighlight">\(0.7071\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P[X \leq \text{M}(X)] &amp;= 0.5 \\
+&amp;= \int_0^{\text{M}(X)} f_X(x) \text{d}x = \int_0^{\text{M}(X)} 2x \text{d}x \\
+&amp;= x^2 \Big|_{0}^{\text{M}(X)} \\
+&amp;= [\text{M}(X)]^2.
+\end{align*}\end{split}\]</div>
+<p>Thus, we have:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+[\text{M}(X)]^2 = 0.5 \\
+\text{M}(X) = \sqrt{0.5} = 0.7071.
+\end{gather*}\end{split}\]</div>
+<p>This median is represented as a vertical dashed line in the plot below. Note that on the left-hand side of this dashed line, we have a probability of <span class="math notranslate nohighlight">\(0.5\)</span> (i.e., the area under the PDF). On the right-hand side of this dashed line, we also have a probability of <span class="math notranslate nohighlight">\(0.5\)</span> (i.e., the area under the PDF).</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/02fa39da79ed25287ef259147228f4ef98af4f9a12ce76c8552738fbbba6f604.png"><img alt="../_images/02fa39da79ed25287ef259147228f4ef98af4f9a12ce76c8552738fbbba6f604.png" src="../_images/02fa39da79ed25287ef259147228f4ef98af4f9a12ce76c8552738fbbba6f604.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="quantiles">
+<h3>4.3. Quantiles<a class="headerlink" href="#quantiles" title="Permalink to this heading">#</a></h3>
+<p>More general than a median is a <strong>quantile</strong>. Let us check its formal definition.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Quantile</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. A <span class="math notranslate nohighlight">\(p\)</span>-quantile <span class="math notranslate nohighlight">\(Q(p)\)</span> is the outcome with a probability <span class="math notranslate nohighlight">\(p\)</span> of getting a smaller outcome. So, its distribution-based definition satisfies</p>
+<div class="math notranslate nohighlight">
+\[P[X \leq Q(p)] = p.\]</div>
+<p>The median is a special case, and is the <span class="math notranslate nohighlight">\(0.5\)</span>-quantile.</p>
+</div>
+<p>For example, the <span class="math notranslate nohighlight">\(0.25\)</span>-quantile of octane purity at “<em>Low Purity Octane</em>” is <span class="math notranslate nohighlight">\(0.5\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P[X \leq Q(0.25)] &amp;= 0.25 \\
+&amp;= \int_0^{Q(0.25)} f_X(x) \text{d}x = \int_0^{Q(0.25)} 2x \text{d}x \\
+&amp;= x^2 \Big|_{0}^{Q(0.25)} \\
+&amp;= [Q(0.25)]^2.
+\end{align*}\end{split}\]</div>
+<p>Hence, we have:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+[Q(0.25)]^2 = 0.25 \\
+Q(0.25) = \sqrt{0.25} = 0.5.
+\end{gather*}\end{split}\]</div>
+<p>This <span class="math notranslate nohighlight">\(Q(0.25)\)</span> is represented as a vertical dashed line in the plot below. Note that on the left-hand side of this dashed line, we have a probability of <span class="math notranslate nohighlight">\(0.25\)</span> (i.e., the area under the PDF). On the right-hand side of this dashed line, we also have a probability of <span class="math notranslate nohighlight">\(0.75\)</span> (i.e., the area under the PDF).</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/892f2f6f7fe2277767dffcd0c72f2a6f96de8df2321ed36fc437e69607f9ecba.png"><img alt="../_images/892f2f6f7fe2277767dffcd0c72f2a6f96de8df2321ed36fc437e69607f9ecba.png" src="../_images/892f2f6f7fe2277767dffcd0c72f2a6f96de8df2321ed36fc437e69607f9ecba.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>An empirically-based definition of the <span class="math notranslate nohighlight">\(p\)</span>-quantile is the <span class="math notranslate nohighlight">\(np\)</span>’th largest (rounded up) observation in a sample of size <span class="math notranslate nohighlight">\(n\)</span>.</p>
+</div>
+</section>
+<section id="prediction-intervals">
+<h3>4.4. Prediction Intervals<a class="headerlink" href="#prediction-intervals" title="Permalink to this heading">#</a></h3>
+<p>It is often useful to communicate an interval for which a random outcome will fall in with a pre-specified probability <span class="math notranslate nohighlight">\(p\)</span>. Such an interval is called a <span class="math notranslate nohighlight">\(p \times 100\%\)</span> <strong>prediction interval</strong>.</p>
+<p>Usually, we set this up in such a way that there is a <span class="math notranslate nohighlight">\(p\)</span> chance of landing in the interval, a <span class="math notranslate nohighlight">\(\frac{1-p}{2}\)</span> chance of exceeding the interval, and <span class="math notranslate nohighlight">\(\frac{1-p}{2}\)</span> chance of undershooting the interval. You can calculate the lower limit of this interval as the <span class="math notranslate nohighlight">\(\frac{1 - p}{2}\)</span>-quantile and the upper limit as the <span class="math notranslate nohighlight">\(\frac{1 + p}{2}\)</span>-quantile.</p>
+<p>For instance, a 90% prediction interval for the purity of gasoline at “<em>Low Purity Octane</em>” is <span class="math notranslate nohighlight">\([0.2236, 0.9746]\)</span>, composed of the <span class="math notranslate nohighlight">\(0.05\)</span> and <span class="math notranslate nohighlight">\(0.95\)</span>-quantiles.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/7abbdf6c1ed9b912db049d80e8e112e96fa79c213fd5861ee52793f87425ec34.png"><img alt="../_images/7abbdf6c1ed9b912db049d80e8e112e96fa79c213fd5861ee52793f87425ec34.png" src="../_images/7abbdf6c1ed9b912db049d80e8e112e96fa79c213fd5861ee52793f87425ec34.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="skewness">
+<h3>4.5. Skewness<a class="headerlink" href="#skewness" title="Permalink to this heading">#</a></h3>
+<p>Skewness measures how “<em>lopsided</em>” a distribution is, as well as the direction of the skew.</p>
+<ul class="simple">
+<li><p>If the density is symmetric about a point, then the skewness is <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+<li><p>If the density is more “spread-out” towards the right/positive values, then the distribution is said to be <strong>right-skewed</strong> (<strong>positive skewness</strong>).</p></li>
+<li><p>If the density is more “spread-out” towards the left/negative values, then the distribution is said to be <strong>left-skewed</strong> (<strong>negative skewness</strong>).</p></li>
+</ul>
+<p>Below, we have PDFs of octane purity with these three types of skewness.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/7735c633e76fbb116ccf34eb0b879a9b9f70debed105b748f49d4e93161e6a63.png"><img alt="../_images/7735c633e76fbb116ccf34eb0b879a9b9f70debed105b748f49d4e93161e6a63.png" src="../_images/7735c633e76fbb116ccf34eb0b879a9b9f70debed105b748f49d4e93161e6a63.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="admonition-definition-of-skewness admonition">
+<p class="admonition-title">Definition of Skewness</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a PMF, then skewness can be defined as</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\text{Skewness}(X) = \mathbb{E} \left[ \left( \frac{X - \mu_X}{\sigma_X} \right)^3 \right] = \displaystyle \sum_x \left( \frac{x - \mu_X}{\sigma_X} \right)^3 \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a PDF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\text{Skewness}(X) = \mathbb{E} \left[ \left( \frac{X - \mu_X}{\sigma_X} \right)^3 \right] = \displaystyle \int_x \left( \frac{x - \mu_X}{\sigma_X} \right)^3 \cdot f_X(x) \text{d}x.\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_X = \mathbb{E}(X)\)</span> as in Equations <a class="reference internal" href="01_lecture-uncertainty.html#equation-mean-discrete">(3)</a> if <span class="math notranslate nohighlight">\(X\)</span> is discrete and <a class="reference internal" href="01_lecture-uncertainty.html#equation-mean-continuous">(4)</a>  if <span class="math notranslate nohighlight">\(X\)</span> is continuous. On the other hand, <span class="math notranslate nohighlight">\(\sigma_X = \text{SD}(X)\)</span> as in Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-sd">(9)</a>.</p>
+</div>
+</section>
+<section id="special-quantiles-optional-section">
+<h3>4.6. Special Quantiles (Optional Section)<a class="headerlink" href="#special-quantiles-optional-section" title="Permalink to this heading">#</a></h3>
+<p>Some quantiles have a special name:</p>
+<ul class="simple">
+<li><p>The <span class="math notranslate nohighlight">\(0.25\)</span>, <span class="math notranslate nohighlight">\(0.5\)</span>, and <span class="math notranslate nohighlight">\(0.75\)</span>-quantiles are called <strong>quartiles</strong>. They are sometimes named the first, second, and third quartiles, respectively.</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(0.01\)</span>, <span class="math notranslate nohighlight">\(0.02\)</span>, …, and <span class="math notranslate nohighlight">\(0.99\)</span>-quantiles are called <strong>percentiles</strong>. Sometimes, the <span class="math notranslate nohighlight">\(p\)</span>-quantile will be called the <span class="math notranslate nohighlight">\(100p\)</span>th percentile; for example, the <span class="math notranslate nohighlight">\(40\)</span>th percentile is the <span class="math notranslate nohighlight">\(0.4\)</span>-quantile.</p></li>
+<li><p>Less commonly, there are even <strong>deciles</strong>, as the <span class="math notranslate nohighlight">\(0.1\)</span>, <span class="math notranslate nohighlight">\(0.2\)</span>, …, and <span class="math notranslate nohighlight">\(0.9\)</span>-quantiles.</p></li>
+</ul>
+</section>
+</section>
+<section id="representing-distributions">
+<h2>5. Representing Distributions<a class="headerlink" href="#representing-distributions" title="Permalink to this heading">#</a></h2>
+<p>So far, we have been saying that a PMF or a PDF is a distribution. Actually, there are more ways we can represent a distribution besides the PMF or PDF. This section takes a deeper dive into alternative ways a probability distribution can be represented and their usefulness. Keep in mind that all of these representations capture <strong>everything</strong> about a distribution, meaning that if one of them is given, the other ones can be derived.</p>
+<section id="cumulative-distribution-function">
+<h3>5.1. Cumulative Distribution Function<a class="headerlink" href="#cumulative-distribution-function" title="Permalink to this heading">#</a></h3>
+<p>Let us check its formal definition.</p>
+<div class="admonition-definition-of-cumulative-distribution-function admonition">
+<p class="admonition-title">Definition of Cumulative Distribution Function</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable with PDF <span class="math notranslate nohighlight">\(f_X(x)\)</span>. The cumulative distribution function (CDF) is usually denoted by <span class="math notranslate nohighlight">\(F(\cdot)\)</span> and is defined as</p>
+<div class="math notranslate nohighlight">
+\[F_X(x) = P(X \leq x).\]</div>
+<p>We can calculate the CDF by</p>
+<div class="math notranslate nohighlight" id="equation-cdf">
+<span class="eqno">(30)<a class="headerlink" href="#equation-cdf" title="Permalink to this equation">#</a></span>\[F_X(x) = \int_{-\infty}^x f_X(t) \, \text{d}t.\]</div>
+</div>
+<section id="digression-on-mathematical-notation">
+<h4>5.1.1. Digression on Mathematical Notation<a class="headerlink" href="#digression-on-mathematical-notation" title="Permalink to this heading">#</a></h4>
+<p>Note the use of the variable <span class="math notranslate nohighlight">\(t\)</span> in Equation <a class="reference internal" href="#equation-cdf">(30)</a>. We do not want to do the integral over <span class="math notranslate nohighlight">\(x\)</span> because the variable <span class="math notranslate nohighlight">\(x\)</span> has a meaning <strong>outside the integral</strong>. So we need to pick another letter that exists only for the integral itself; here, we choose <span class="math notranslate nohighlight">\(t\)</span>. One can make an <strong>analogy</strong> to programming: if you have a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop iterating over some variable, you do not want a variable with the same name <em>outside</em> the loop. That would cause problems:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">999</span>
+
+<span class="nf">for </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 5
+</pre></div>
+</div>
+</div>
+</div>
+<p>Oh no! Our friend <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">999</span></code> got <strong>overwritten</strong> by the loop variable. This is solved by using another name for the loop variable:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">999</span>
+
+<span class="nf">for </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1] 999
+</pre></div>
+</div>
+</div>
+</div>
+<p>Great! <code class="docutils literal notranslate"><span class="pre">x</span></code> lives to see another day. Likewise with our math, it would not be good form to say</p>
+<div class="math notranslate nohighlight">
+\[F_X(x) = \int_{-\infty}^x f_X(x) \, \text{d}x,\]</div>
+<p>so we say</p>
+<div class="math notranslate nohighlight">
+\[F_X(x) = \int_{-\infty}^x f_X(t) \, \text{d}t.\]</div>
+<p>The CDF <span class="math notranslate nohighlight">\(F_X(\cdot)\)</span>, evaluated at some <span class="math notranslate nohighlight">\(x\)</span>, is the integral from <span class="math notranslate nohighlight">\(-\infty\)</span> to <span class="math notranslate nohighlight">\(x\)</span> of the PDF. To write down that integral as math, we need to introduce a variable <span class="math notranslate nohighlight">\(t\)</span> that only exists inside the integral, just like our loop variable <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+</section>
+<section id="back-to-business">
+<h4>5.1.2. Back to Business<a class="headerlink" href="#back-to-business" title="Permalink to this heading">#</a></h4>
+<p>Let us get back to it. Since we said the CDF is the integral of the PDF, the PDF is the derivative of the CDF. Notice that while the PDF has units of <span class="math notranslate nohighlight">\(1 / \text{units}\)</span> of <span class="math notranslate nohighlight">\(x\)</span>, for example <span class="math notranslate nohighlight">\(1 / \text{m}\)</span> if <span class="math notranslate nohighlight">\(X\)</span> is a distance or height, <strong>the CDF has no units</strong> because it evaluates to a probability.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When does the CDF exist? Almost all the time, except that the CDF does not exist for categorical variables since there is no such thing as “<em>less than</em>” or “<em>greater than</em>.” The CDF is still defined for discrete random variables but has a jump-discontinuity at the discrete values.</p>
+</div>
+<p>Before moving on, let us introduce another example. Again, you would like to get a handle on your monthly finances. It turns out your monthly expenses have the following PDF:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/80c487b76b0b06b9e86f4c8d985291bf1bc53add807aec61aaec52391a4c38f8.png"><img alt="../_images/80c487b76b0b06b9e86f4c8d985291bf1bc53add807aec61aaec52391a4c38f8.png" src="../_images/80c487b76b0b06b9e86f4c8d985291bf1bc53add807aec61aaec52391a4c38f8.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Now, here are the CDFs of the octane purity, monthly expenses, and length of stay (from previous lectures). We also include the PDF for octane purity and monthly expenses.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c838d6ddaa17d752fd9fbc23c8e7eb4fff11a19bf7460be751232926fb436502.png"><img alt="../_images/c838d6ddaa17d752fd9fbc23c8e7eb4fff11a19bf7460be751232926fb436502.png" src="../_images/c838d6ddaa17d752fd9fbc23c8e7eb4fff11a19bf7460be751232926fb436502.png" style="width: 750px; height: 630px;" /></a>
+</div>
+</div>
+<p>Think about the PDFs as derivatives of the CDFs and the CDFs as integrals of PDFs. Being able to mentally jump back and forth between a PDF and a CDF is a useful skill, but it takes practice. There are specific patterns to look for, like the fact that when the CDF is flat, that means the PDF is zero (because the derivative of a constant is zero; or, put another way, <span class="math notranslate nohighlight">\(P(X \leq x)\)</span> is not increasing as you change <span class="math notranslate nohighlight">\(x\)</span>, so those values of <span class="math notranslate nohighlight">\(X\)</span> must not be possible).</p>
+<p>For the discrete CDF, a hollow point is a limiting point – the CDF does not evaluate to that point. Note that jump discontinuities in a CDF are usually connected with a straight vertical line, which we will do from now on after this plot. I did not plot the PDF for the length of stay because it is a discrete variable, and we will say it has a PMF rather than a PDF.</p>
+</section>
+<section id="what-makes-a-valid-cdf">
+<h4>5.1.3. What Makes a Valid CDF?<a class="headerlink" href="#what-makes-a-valid-cdf" title="Permalink to this heading">#</a></h4>
+<p>In order for a function <span class="math notranslate nohighlight">\(F(\cdot)\)</span> to be a valid CDF, the function needs to satisfy the following requirements:</p>
+<ol class="arabic simple">
+<li><p>Must never decrease.</p></li>
+<li><p>It must never evalute to be <span class="math notranslate nohighlight">\(&lt; 0\)</span> or <span class="math notranslate nohighlight">\(&gt; 1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_X(x) \rightarrow 0\)</span> as <span class="math notranslate nohighlight">\(x \rightarrow -\infty\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(F_X(x) \rightarrow 1\)</span> as <span class="math notranslate nohighlight">\(x \rightarrow \infty\)</span>.</p></li>
+</ol>
+</section>
+<section id="probability-that-x-is-between-a-and-b">
+<h4>5.1.4. Probability that <span class="math notranslate nohighlight">\(X\)</span> is Between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span><a class="headerlink" href="#probability-that-x-is-between-a-and-b" title="Permalink to this heading">#</a></h4>
+<p>For a continuous random variable <span class="math notranslate nohighlight">\(X\)</span> with PDF <span class="math notranslate nohighlight">\(f_X(x)\)</span>, we established that the probability of <span class="math notranslate nohighlight">\(X\)</span> being between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = \int_a^b f_X(x)\text{d}x.\]</div>
+<p>We can connect the dots with our new definition of a CDF from Equation <a class="reference internal" href="#equation-cdf">(30)</a>. First,</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = P(X \leq b) - P(X \leq a)\]</div>
+<p>because if <span class="math notranslate nohighlight">\(X \leq b \)</span> but not <span class="math notranslate nohighlight">\(\leq a\)</span> then it must be that <span class="math notranslate nohighlight">\(a \leq X \leq b\)</span>. But now we can write these two terms using the CDF:</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = P(X \leq b) - P(X \leq a) = F_X(b) - F_X(a).\]</div>
+<p>Now, plugging in the definition of the CDF as the integral of the PDF,</p>
+<div class="math notranslate nohighlight">
+\[P(a \leq X \leq b) = \int_{-\infty}^b f_X(x) \, \text{d}x - \int_{-\infty}^a f_X(x) \, \text{d}x=\int_{a}^b f_X(x) \, \text{d}x.\]</div>
+<p>This is good – everything checks out in an internally consistent way.</p>
+</section>
+</section>
+<section id="survival-function">
+<h3>5.2. Survival Function<a class="headerlink" href="#survival-function" title="Permalink to this heading">#</a></h3>
+<p>Let us check its formal definition.</p>
+<div class="admonition-definition-of-survival-function admonition">
+<p class="admonition-title">Definition of Survival Function</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable. The <strong>survival function</strong> <span class="math notranslate nohighlight">\(S(\cdot)\)</span> is the CDF <a class="reference internal" href="#equation-cdf">(30)</a> “<em>flipped upside down</em>”. For this random variable <span class="math notranslate nohighlight">\(X\)</span>, the survival function is defined as</p>
+<div class="math notranslate nohighlight" id="equation-survival">
+<span class="eqno">(31)<a class="headerlink" href="#equation-survival" title="Permalink to this equation">#</a></span>\[S_X(x) = P(X &gt; x) = 1 - F_X(x).\]</div>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>The name of the survival function <a class="reference internal" href="#equation-survival">(31)</a> comes from <strong>Survival Analysis</strong> (to be covered in <em>DSCI 562</em>), where <span class="math notranslate nohighlight">\(X\)</span> is interpreted as a “<em>time of death</em>”, so that the survival function is the probability of surviving beyond <span class="math notranslate nohighlight">\(x\)</span>. Aside from Survival Analysis, the survival function is also useful for Extreme Value Theory.</p>
+</div>
+<p>Here are the survival functions of our three examples with the CDFs plotted underneath for visual comparison:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c444f31eb2b3b3497924e4322cbc68c79cf4146be39c2d6042b794376611c2e5.png"><img alt="../_images/c444f31eb2b3b3497924e4322cbc68c79cf4146be39c2d6042b794376611c2e5.png" src="../_images/c444f31eb2b3b3497924e4322cbc68c79cf4146be39c2d6042b794376611c2e5.png" style="width: 750px; height: 630px;" /></a>
+</div>
+</div>
+<p>As you can see, the survival function is indeed the cdf “<em>flipped upside down</em>.”</p>
+</section>
+<section id="quantile-function">
+<h3>5.3. Quantile Function<a class="headerlink" href="#quantile-function" title="Permalink to this heading">#</a></h3>
+<p>Let us check its formal definition.</p>
+<div class="admonition-definition-of-quantile-function admonition">
+<p class="admonition-title">Definition of Quantile Function</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable. The <strong>quantile function</strong> <span class="math notranslate nohighlight">\(Q(\cdot)\)</span> takes a probability <span class="math notranslate nohighlight">\(p\)</span> and maps it to the <span class="math notranslate nohighlight">\(p\)</span>-quantile. It turns out that this is the inverse of the CDF <a class="reference internal" href="#equation-cdf">(30)</a>:</p>
+<div class="math notranslate nohighlight">
+\[Q(p) = F^{-1}(p).\]</div>
+<p>Note that this function does not exist outside of <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>! This is unlike the other functions (density, CDF, and survival function) which exist on all real numbers.</p>
+</div>
+<p>Here are the quantile functions of the examples we are working with, again with the CDFs plotted underneath for visual comparison:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/3cc918cccc62cbe2b29eae7eaeec9e6a0d7f8ca4454c9be8aa1441e206cf0bcc.png"><img alt="../_images/3cc918cccc62cbe2b29eae7eaeec9e6a0d7f8ca4454c9be8aa1441e206cf0bcc.png" src="../_images/3cc918cccc62cbe2b29eae7eaeec9e6a0d7f8ca4454c9be8aa1441e206cf0bcc.png" style="width: 750px; height: 630px;" /></a>
+</div>
+</div>
+<p>So, while the survival function was the CDF flipped upside down, the quantile function is the CDF with the axes swapped, or in other words, the CDF reflected diagonally.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Keep in mind that all these representations fully contain all the information about the distribution; they are different “<em>views</em>” of the same underlying random variable.</p>
+</div>
+</section>
+<section id="other-ways-of-representing-a-distribution-optional-section">
+<h3>5.4. Other Ways of Representing a Distribution (Optional Section)<a class="headerlink" href="#other-ways-of-representing-a-distribution-optional-section" title="Permalink to this heading">#</a></h3>
+<p>There are even more ways to represent a distribution that we will not be going into, that you might have heard of.</p>
+<ul class="simple">
+<li><p><strong>Moment generating function</strong> (useful in mathematical statistics):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[M(t) = \mathbb{E}(e^{Xt}).\]</div>
+<ul class="simple">
+<li><p><strong>Hazard function</strong> (useful in Survival Analysis; wait for <em>DSCI 562</em>):</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[h(t) = \frac{f(t)}{S(t)}.\]</div>
+</section>
+</section>
+<section id="additional-exercises">
+<h2>6. Additional Exercises<a class="headerlink" href="#additional-exercises" title="Permalink to this heading">#</a></h2>
+<div class="exercise admonition" id="lecture5-q5">
+
+<p class="admonition-title"><span class="caption-number">Exercise 25 </span></p>
+<section id="exercise-content">
+<p>Let</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Octane purity as a proportion.}\]</div>
+<p>Its CDF is:</p>
+<div class="math notranslate nohighlight" id="equation-cdf-octane">
+<span class="eqno">(32)<a class="headerlink" href="#equation-cdf-octane" title="Permalink to this equation">#</a></span>\[\begin{split}F_X(x) = 
+\begin{cases}
+  0, \: x &lt; 0\\
+  x^2, \: 0 \leq x \leq 1, \\
+  1, \: x &gt; 1.
+\end{cases}\end{split}\]</div>
+<p>Thus, what is <span class="math notranslate nohighlight">\(P(0.5 \leq X \leq 0.75)\)</span>? Select the correct option:</p>
+<p><strong>A.</strong> 0.25</p>
+<p><strong>B.</strong> 0.69</p>
+<p><strong>C.</strong> 0.75</p>
+<p><strong>D.</strong> 0.31</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture5-q6">
+
+<p class="admonition-title"><span class="caption-number">Exercise 26 </span></p>
+<section id="exercise-content">
+<p>Using the CDF <a class="reference internal" href="#equation-cdf-octane">(32)</a>, what is <span class="math notranslate nohighlight">\(P(X &gt; 0.75)\)</span>? Select the correct option:</p>
+<p><strong>A.</strong> 0.56</p>
+<p><strong>B.</strong> 0.85</p>
+<p><strong>C.</strong> 0.44</p>
+<p><strong>D.</strong> 0.15</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture5-q7">
+
+<p class="admonition-title"><span class="caption-number">Exercise 27 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a continuous random variable whose PDF is <span class="math notranslate nohighlight">\(f_X(x)\)</span>. Knowing the PDF of <span class="math notranslate nohighlight">\(X\)</span> means that we also know the CDF <span class="math notranslate nohighlight">\(F_X(x)\)</span>, but knowing the CDF does not imply knowing the density.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="04_lecture-conditional.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 4: Conditional Probabilities</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="06_lecture-continuous-families.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 6: Common Distribution Families and Conditioning</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-random-variables">1. Continuous Random Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-heavy-is-a-tree">2. How Heavy is a Tree?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density">3. Probability Density</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-units">3.1. A Note on Units</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-a-particular-value">3.2. Probability of a Particular Value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-low-purity-octane">3.3. Example: Low Purity Octane</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-properties">4. Distribution Properties</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-variance-mode-and-entropy">4.1. Mean, Variance, Mode, and Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#median">4.2. Median</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantiles">4.3. Quantiles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-intervals">4.4. Prediction Intervals</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#skewness">4.5. Skewness</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#special-quantiles-optional-section">4.6. Special Quantiles (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#representing-distributions">5. Representing Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cumulative-distribution-function">5.1. Cumulative Distribution Function</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#digression-on-mathematical-notation">5.1.1. Digression on Mathematical Notation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#back-to-business">5.1.2. Back to Business</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-makes-a-valid-cdf">5.1.3. What Makes a Valid CDF?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-that-x-is-between-a-and-b">5.1.4. Probability that <span class="math notranslate nohighlight">\(X\)</span> is Between <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-function">5.2. Survival Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#quantile-function">5.3. Quantile Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-ways-of-representing-a-distribution-optional-section">5.4. Other Ways of Representing a Distribution (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-exercises">6. Additional Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

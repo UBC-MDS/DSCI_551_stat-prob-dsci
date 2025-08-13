@@ -1,0 +1,1608 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 8: Simulation &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/08_lecture-simulation';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Probability Cheatsheet" href="appendix-prob-cheatsheet.html" />
+    <link rel="prev" title="Lecture 7: Maximum Likelihood Estimation" href="07_lecture-maximum-likelihood-estimation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/08_lecture-simulation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/08_lecture-simulation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 8: Simulation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#review-on-random-samples">1. Review on Random Samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeds">2. Seeds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-random-samples-code">3. Generating Random Samples: Code</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-finite-number-of-categories">3.1. From Finite Number of Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-distribution-families">3.2. From Distribution Families</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-simulations">4. Running Simulations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-for-empirical-quantities">4.1. Code for Empirical Quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-simulation">4.2. Basic Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">4.2.1. Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">4.2.2. Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-deviation">4.2.3. Standard deviation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-seeing-0-failures-i-e-0-failed-dates">4.2.4. Probability of Seeing <span class="math notranslate nohighlight">\(0\)</span> Failures (i.e., <span class="math notranslate nohighlight">\(0\)</span> failed dates!)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-mass-function">4.2.5. Probability Mass Function</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mode">4.2.6. Mode</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-large-numbers">4.2.7. Law of Large Numbers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-simulations">5. Multi-Step Simulations</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-8-simulation">
+<h1>Lecture 8: Simulation<a class="headerlink" href="#lecture-8-simulation" title="Permalink to this heading">#</a></h1>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Generate a random sample from a discrete distribution in both <code class="docutils literal notranslate"><span class="pre">R</span></code> and <code class="docutils literal notranslate"><span class="pre">Python</span></code>.</p></li>
+<li><p>Reproduce the same random sample each time you re-run your code in either <code class="docutils literal notranslate"><span class="pre">R</span></code> or <code class="docutils literal notranslate"><span class="pre">Python</span></code> by setting the seed or random state.</p></li>
+<li><p>Evaluate whether or not a set of observations are independent and identically distributed (<em>iid</em>).</p></li>
+<li><p>Use simulation to approximate distribution properties (e.g., mean and variance) using empirical quantities, especially for random variables involving multiple other random variables.</p></li>
+<li><p>Argue why simulations can approximate true properties of a stochastic quantity.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>So far, we have seen many quantities that help us communicate an uncertain outcome:</p>
+<ul class="simple">
+<li><p>Probability.</p></li>
+<li><p>Probability mass function.</p></li>
+<li><p>Odds.</p></li>
+<li><p>Mode.</p></li>
+<li><p>Entropy.</p></li>
+<li><p>Mean.</p></li>
+<li><p>Variance/standard deviation.</p></li>
+</ul>
+<p>Sometimes, it is not easy to compute these quantities in a given random process, system, or population of interest. We might have different random variables interacting, which poses challenges in the corresponding process of <strong>estimation</strong>. Therefore, in these situations, we can use <strong>simulation</strong> to approximate these and other quantities. This is today’s topic. The notes will illustrate how to run basic simulations using either <code class="docutils literal notranslate"><span class="pre">R</span></code> or <code class="docutils literal notranslate"><span class="pre">Python</span></code>.</p>
+</div>
+<p>Specifically, we will use the <code class="docutils literal notranslate"><span class="pre">Python</span></code> packages <a class="reference external" href="https://numpy.org/"><code class="docutils literal notranslate"><span class="pre">numpy</span></code></a> and <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/stats.html"><code class="docutils literal notranslate"><span class="pre">scipy.stats</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> rpy2.ipython
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we load the necessary <code class="docutils literal notranslate"><span class="pre">R</span></code> packages:</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> 
+
+library(tidyverse)
+library(lubridate)
+library(testthat)
+library(janitor)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="review-on-random-samples">
+<h2>1. Review on Random Samples<a class="headerlink" href="#review-on-random-samples" title="Permalink to this heading">#</a></h2>
+<p>From <a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html"><span class="doc">Lecture 7: Maximum Likelihood Estimation</span></a>, we know that a <strong>random sample</strong> is a collection of random outcomes/variables. Using mathematical notation, a random sample of size <span class="math notranslate nohighlight">\(n\)</span> is usually depicted as <span class="math notranslate nohighlight">\(X_1, \ldots, X_n\)</span>. We think of data as being part of a random sample.</p>
+<p>Some examples of random samples are listed as follows:</p>
+<ul class="simple">
+<li><p>The first five items you get in a game of Mario Kart (<span class="math notranslate nohighlight">\(n = 5\)</span>).</p></li>
+<li><p>The outcomes of ten dice rolls (<span class="math notranslate nohighlight">\(n = 10\)</span>).</p></li>
+<li><p>The daily high temperature in Vancouver for each day of the year (<span class="math notranslate nohighlight">\(n = 365\)</span>).</p></li>
+</ul>
+<p>Also, recall that <strong>unless we make additional sampling assumptions</strong>, a <strong>default</strong> random sample is said to be <strong>independent and identically distributed</strong> (or <strong>iid</strong>) if:</p>
+<ol class="arabic simple">
+<li><p>Each pair of observations are independent, and</p></li>
+<li><p>each observation comes from the same distribution.</p></li>
+</ol>
+<p>Sometimes, when an outcome is said to be <strong>random</strong>, this can either mean the outcome has some distribution (<strong>with non-zero entropy</strong>) or the distribution with maximum entropy. To avoid confusion, the word <strong>stochastic</strong> refers to the former (as having some uncertain outcome). For example, if a die is weighted so that “1” appears very often, would you call this die “random”? Whether or not you do, it is always <strong>stochastic</strong>.
+The opposite of stochastic is <strong>deterministic</strong>: an outcome that will be known with 100% certainty.</p>
+</section>
+<section id="seeds">
+<h2>2. Seeds<a class="headerlink" href="#seeds" title="Permalink to this heading">#</a></h2>
+<p>Computers cannot actually generate truly random outcomes. Instead, they use something called <a class="reference external" href="https://en.wikipedia.org/wiki/Pseudorandom_number_generator"><strong>pseudorandom numbers</strong></a>. As an example of a basic algorithm that produces pseudo-random numbers between 0 and 1, consider starting with your choice of number <span class="math notranslate nohighlight">\(x_0\)</span> between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>, and iterating the following equation:</p>
+<div class="math notranslate nohighlight">
+\[x_{i+1} = 4 x_i (1 - x_i).\]</div>
+<p>The result will appear to be random numbers between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>. For example, here is the resulting sequence when we start with <span class="math notranslate nohighlight">\(x_0 = 0.3\)</span> and iterate 1000 times:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/3d8f5a4a2bf80c06bcda75fa3ca78f32e98ddf885e9f07999328e825fba832fe.png" src="../_images/3d8f5a4a2bf80c06bcda75fa3ca78f32e98ddf885e9f07999328e825fba832fe.png" />
+</div>
+</div>
+<p>Although this sequence is deterministic, it behaves like a random sample. But not entirely! All pseudorandom number generators have some pitfalls. In the case above, one pitfall is that <strong>neighbouring pairs are not independent of each other</strong> (by definition, of the way the sequence was set up!). However, some sophisticated algorithms produce outcomes that more closely resemble a random sample, so most of the time, we do not have to worry about the sample not being truly random.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Seed</p>
+<p>The <strong>seed</strong> (or <strong>random state</strong>) in a pseudo-random number generator is some pre-specified initial value that determines the generated sequence.</p>
+<p>As long as the seed remains the same, the resulting sample will also be the same. In the case above, this is <span class="math notranslate nohighlight">\(x_0 = 0.3\)</span>. In <code class="docutils literal notranslate"><span class="pre">R</span></code> and <code class="docutils literal notranslate"><span class="pre">Python</span></code>, if we do not explicitly set the seed, then the seed will be chosen for us.</p>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can set the seed using the <a class="reference external" href="https://www.statology.org/set-seed-in-r/"><code class="docutils literal notranslate"><span class="pre">set.seed()</span></code></a> function, and in <code class="docutils literal notranslate"><span class="pre">Python</span></code>, using the <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html"><code class="docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> function from <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The seed gives us an added advantage over truly random numbers: it allows our analysis to be <strong>reproducible</strong>! If we explicitly set a seed, then someone who re-runs the analysis will get the same results.</p>
+</div>
+</section>
+<section id="generating-random-samples-code">
+<h2>3. Generating Random Samples: Code<a class="headerlink" href="#generating-random-samples-code" title="Permalink to this heading">#</a></h2>
+<p>We will look at some <code class="docutils literal notranslate"><span class="pre">R</span></code> and <code class="docutils literal notranslate"><span class="pre">Python</span></code> functions that help us generate a random sample. Note we are still focusing on discrete distributions here.</p>
+<section id="from-finite-number-of-categories">
+<h3>3.1. From Finite Number of Categories<a class="headerlink" href="#from-finite-number-of-categories" title="Permalink to this heading">#</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can generate a random sample from a <strong>discrete distribution</strong> with a finite number of outcomes using the <a class="reference external" href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sample"><strong><code class="docutils literal notranslate"><span class="pre">sample()</span></code> function</strong></a>. It works as follows:</p>
+<ul class="simple">
+<li><p>Put the outcomes as a vector in the first argument, <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+<li><p>Put the desired sample size in the argument <code class="docutils literal notranslate"><span class="pre">size</span></code>.</p></li>
+<li><p>Put <code class="docutils literal notranslate"><span class="pre">replace</span> <span class="pre">=</span> <span class="pre">TRUE</span></code> <strong>so that sampling can happen with replacement</strong>.</p></li>
+<li><p>Put the probabilities of the outcomes as a vector respective to <code class="docutils literal notranslate"><span class="pre">x</span></code> in the argument <code class="docutils literal notranslate"><span class="pre">prob</span></code>.</p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If these probabilities do not add up to 1, <code class="docutils literal notranslate"><span class="pre">R</span></code> will not throw an error. Instead, <code class="docutils literal notranslate"><span class="pre">R</span></code> automatically adjusts the probabilities so that they add up to 1.</p>
+</div>
+<p>Here is an example of generating <span class="math notranslate nohighlight">\(n = 10\)</span> items using the Mario Kart item distribution from <a class="reference internal" href="01_lecture-uncertainty.html"><span class="doc">Lecture 1: Depicting Uncertainty</span></a>. Notice that the seed is set so that every time these lecture notes are rendered, the same results are obtained.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o R_mario_sample
+
+set.seed(551)
+outcomes &lt;- c(&quot;banana&quot;, &quot;bob-omb&quot;, &quot;coin&quot;, &quot;horn&quot;, &quot;shell&quot;)
+probs &lt;- c(0.12, 0.05, 0.75, 0.03, 0.05)
+n &lt;- 10
+R_mario_sample &lt;- sample(outcomes, size = n, replace = TRUE, prob = probs)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Showing R output in Python environment</span>
+<span class="n">R_mario_sample</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;banana&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;,
+       &#39;coin&#39;, &#39;coin&#39;], dtype=&#39;&lt;U6&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">Python</span></code>, we can generate a random sample from a discrete distribution using the <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html"><strong><code class="docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code> function</strong></a>. It works as follows:</p>
+<ul class="simple">
+<li><p>Put the outcomes in the first argument, <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p></li>
+<li><p>Put the desired sample size in the argument <code class="docutils literal notranslate"><span class="pre">size</span></code>.</p></li>
+<li><p>Put the probabilities of the outcomes respective to <code class="docutils literal notranslate"><span class="pre">x</span></code> in the argument <code class="docutils literal notranslate"><span class="pre">p</span></code>.</p></li>
+</ul>
+<p>Using the Mario Kart example again, we have the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">551</span><span class="p">)</span>
+<span class="n">outcomes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;banana&quot;</span><span class="p">,</span> <span class="s2">&quot;bob-omb&quot;</span><span class="p">,</span> <span class="s2">&quot;coin&quot;</span><span class="p">,</span> <span class="s2">&quot;horn&quot;</span><span class="p">,</span> <span class="s2">&quot;shell&quot;</span><span class="p">]</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">a</span> <span class="o">=</span> <span class="n">outcomes</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">probs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;coin&#39;, &#39;banana&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;, &#39;coin&#39;,
+       &#39;coin&#39;, &#39;coin&#39;], dtype=&#39;&lt;U7&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">numpy.random.choice()</span></code>, it is necessary that the probabilities in <code class="docutils literal notranslate"><span class="pre">prob</span></code> add up to 1.</p>
+<p>Moreover, note that both <code class="docutils literal notranslate"><span class="pre">R</span></code> and <code class="docutils literal notranslate"><span class="pre">Python</span></code> have their own algorithms to generate pseudorandom outcomes, <strong>even though we provide the same seed</strong>.</p>
+</div>
+</section>
+<section id="from-distribution-families">
+<h3>3.2. From Distribution Families<a class="headerlink" href="#from-distribution-families" title="Permalink to this heading">#</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, we can generate data from a distribution belonging to some parametric family using the <code class="docutils literal notranslate"><span class="pre">rdist()</span></code> function, where “<code class="docutils literal notranslate"><span class="pre">dist</span></code>” is replaced with a short form of the distribution family’s name. We can access the corresponding probability mass function (PMF) or probability distribution function (PDF) with <code class="docutils literal notranslate"><span class="pre">ddist()</span></code>.
+In <code class="docutils literal notranslate"><span class="pre">Python</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">stats</span></code> module from the <code class="docutils literal notranslate"><span class="pre">scipy</span></code> library.</p>
+<p><a class="reference internal" href="#random-functions"><span class="std std-numref">Table 22</span></a> summarizes the functions related to some of the discrete distribution families we have seen.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="random-functions">
+<caption><span class="caption-number">Table 22 </span><span class="caption-text">Summary of Random Numbers Generators</span><a class="headerlink" href="#random-functions" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Family</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">R</span></code> Function</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Python</span></code> Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Binomial</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rbinom()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.binom.rvs()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Geometric</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rgeom()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.geom.rvs()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Negative Binomial</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.nbinom.rvs()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Poisson</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rpois()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">scipy.stats.poisson.rvs()</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The corresponding functions for continuous random variables can be found in <a class="reference internal" href="06_lecture-continuous-families.html#cont-r-functions"><span class="std std-ref">1.8.  Relevant R Functions</span></a>.
+We can use these functions as follows:</p>
+<ul class="simple">
+<li><p><strong>Sample size <span class="math notranslate nohighlight">\(n\)</span></strong>:</p>
+<ul>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">R</span></code>, put this in the argument <code class="docutils literal notranslate"><span class="pre">n</span></code>, which comes first.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">Python</span></code>, put this in the argument <code class="docutils literal notranslate"><span class="pre">size</span></code>, which comes last.</p></li>
+</ul>
+</li>
+<li><p>In both languages, each parameter has its own argument. Sometimes, like in <code class="docutils literal notranslate"><span class="pre">R</span></code>’s <code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code>, there are more parameters than needed, giving the option of different parameterizations. Be sure only to specify the exact number of parameters required to isolate a member of the distribution family!</p></li>
+</ul>
+<p>Let us start with a <strong>Binomial exercise</strong>. We will obtain <span class="math notranslate nohighlight">\(n = 10\)</span> random numbers from a Binomial distribution with probability of success <span class="math notranslate nohighlight">\(p = 0.6\)</span> and 5 trials.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Let us not confuse the random sample size <span class="math notranslate nohighlight">\(n\)</span> (i.e., the number of Binomial random numbers in our sample, such as <code class="docutils literal notranslate"><span class="pre">n</span></code> in the <code class="docutils literal notranslate"><span class="pre">R</span></code> function) with the number of trials <span class="math notranslate nohighlight">\(n\)</span> as a parameter of the standalone Binomial random variable (i.e., <code class="docutils literal notranslate"><span class="pre">size</span></code> in <code class="docutils literal notranslate"><span class="pre">rbinom()</span></code>).</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">Python</span></code>, the Binomial parameter <span class="math notranslate nohighlight">\(n\)</span> is actually depicted as <code class="docutils literal notranslate"><span class="pre">n</span></code> and <code class="docutils literal notranslate"><span class="pre">size</span></code> is the number of Binomial random numbers in our sample.</p>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">R</span></code> function <code class="docutils literal notranslate"><span class="pre">rbinom()</span></code> generates these random numbers. In this case, the argument <code class="docutils literal notranslate"><span class="pre">prob</span></code> refers to <span class="math notranslate nohighlight">\(p\)</span> and <code class="docutils literal notranslate"><span class="pre">n</span></code> for the desired amount of random numbers. The parameter <span class="math notranslate nohighlight">\(n\)</span> of the Binomial distribution is referred to as <code class="docutils literal notranslate"><span class="pre">size</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o rbinom_output
+
+set.seed(551)
+rbinom_output &lt;- rbinom(n = 10, size = 5, prob = 0.6)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Showing R output in Python environment</span>
+<span class="n">rbinom_output</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([2, 4, 3, 4, 2, 4, 5, 3, 4, 4], dtype=int32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>On the other hand, <code class="docutils literal notranslate"><span class="pre">Python</span></code> uses the argument <code class="docutils literal notranslate"><span class="pre">p</span></code> for <span class="math notranslate nohighlight">\(p\)</span> and <code class="docutils literal notranslate"><span class="pre">size</span></code> for the desired amount of random numbers. The parameter <span class="math notranslate nohighlight">\(n\)</span> of the Binomial distribution is referred to as <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">551</span><span class="p">)</span>
+<span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([3, 5, 3, 2, 2, 3, 4, 2, 2, 3])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that this is a particularly confusing example because <code class="docutils literal notranslate"><span class="pre">size</span></code> in the <code class="docutils literal notranslate"><span class="pre">R</span></code> code means the parameter <span class="math notranslate nohighlight">\(n\)</span> of the Binomial distribution, whereas <code class="docutils literal notranslate"><span class="pre">size</span></code> in the Python code means the number of random samples, also known as the sample size, that you want it to generate.</p>
+<p><strong>Let us proceed with a Negative Binomial example.</strong> The Negative Binomial family is an example of a function in <code class="docutils literal notranslate"><span class="pre">R</span></code> that allows different parameterizations. Suppose the following:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Negative Binomial} (k, p),\]</div>
+<p>where <span class="math notranslate nohighlight">\(X\)</span> refers to the number of failures in independent successive Bernoulli trials before experiencing <span class="math notranslate nohighlight">\(k\)</span> successes with probability <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">R</span></code> function <code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code> generates <code class="docutils literal notranslate"><span class="pre">n</span></code> Negative Binomial-distributed random numbers with arguments <code class="docutils literal notranslate"><span class="pre">size</span></code> as <span class="math notranslate nohighlight">\(k = 5\)</span> and <code class="docutils literal notranslate"><span class="pre">prob</span></code> as <span class="math notranslate nohighlight">\(p = 0.6\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o rnbinom_output
+
+set.seed(551)
+rnbinom_output &lt;- rnbinom(n = 10, size = 5, prob = 0.6)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Showing R output in Python environment</span>
+<span class="n">rnbinom_output</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([5, 0, 2, 2, 2, 5, 4, 0, 4, 8], dtype=int32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now let us check a second case using <code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code>. Recall the expected value is</p>
+<div class="math notranslate nohighlight">
+\[\mu = \mathbb{E}(X) = \frac{k(1 - p)}{p} = \frac{5(1 - 0.6)}{0.6} = 3.33.\]</div>
+<p>From <a class="reference internal" href="02_lecture-parametric-families.html"><span class="doc">Lecture 2: Parametric Families</span></a>, we know that a distribution can also be parameterized with its corresponding mean. For a Negative Binomial-distributed random number, the argument <code class="docutils literal notranslate"><span class="pre">mu</span></code> <code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code> refers to the expected value <span class="math notranslate nohighlight">\(\mu\)</span> from above. Hence, we either use <code class="docutils literal notranslate"><span class="pre">prob</span></code> or <code class="docutils literal notranslate"><span class="pre">mu</span></code> in the <code class="docutils literal notranslate"><span class="pre">rnbinom()</span></code> function. If we want to use <code class="docutils literal notranslate"><span class="pre">mu</span></code>, then we will need to provide the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o rnbinom_output_mu
+
+set.seed(551)
+rnbinom_output_mu &lt;- rnbinom(n = 10, size = 5, mu = 3.33)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Showing R output in Python environment</span>
+<span class="n">rnbinom_output_mu</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([5., 0., 2., 2., 2., 5., 4., 0., 4., 8.])
+</pre></div>
+</div>
+</div>
+</div>
+<p>We get the same random numbers via the same seed!</p>
+<div class="exercise admonition" id="lecture8-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 37 </span></p>
+<section id="exercise-content">
+<p>Suppose you want to simulate hourly bank branch queues of customers. Historically, hourly queues show an average of 10 people.</p>
+<p>What distribution (including parametrization) and <code class="docutils literal notranslate"><span class="pre">R</span></code> random number generator will you use to simulate 20 random numbers?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <span class="math notranslate nohighlight">\(\text{Poisson}(\lambda = 1/10)\)</span> with <code class="docutils literal notranslate"><span class="pre">rpois(n</span> <span class="pre">=</span> <span class="pre">20,</span> <span class="pre">lambda</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">10)</span></code></p>
+<p><strong>B.</strong> <span class="math notranslate nohighlight">\(\text{Binomial}(n = 10, p = 1/10)\)</span> with <code class="docutils literal notranslate"><span class="pre">rbinom(n</span> <span class="pre">=</span> <span class="pre">20,</span> <span class="pre">size</span> <span class="pre">=</span> <span class="pre">10,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">10)</span></code></p>
+<p><strong>C.</strong> <span class="math notranslate nohighlight">\(\text{Poisson}(\lambda = 10)\)</span> with <code class="docutils literal notranslate"><span class="pre">rpois(n</span> <span class="pre">=</span> <span class="pre">20,</span> <span class="pre">lambda</span> <span class="pre">=</span> <span class="pre">10)</span></code></p>
+<p><strong>D.</strong> <span class="math notranslate nohighlight">\(\text{Geometric}(p = 1/10)\)</span> with <code class="docutils literal notranslate"><span class="pre">rgeom(n</span> <span class="pre">=</span> <span class="pre">20,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">10)</span></code></p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture8-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 38 </span></p>
+<section id="exercise-content">
+<p>During a random foodie tour, suppose you want to simulate the number of non-authentic Mexican restaurants you will try before encountering your very first authentic one in Vancouver. Overall, it is known that 70% of Mexican restaurants in Vancouver are considered non-authentic (but you do not have access to this list!).</p>
+<p>What distribution (including parametrization) and <code class="docutils literal notranslate"><span class="pre">R</span></code> random number generator will you use to simulate 15 random numbers?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <span class="math notranslate nohighlight">\(\text{Binomial}(n = 15, p = 0.7)\)</span> with <code class="docutils literal notranslate"><span class="pre">rbinom(n</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">size</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">0.7)</span></code></p>
+<p><strong>B.</strong> <span class="math notranslate nohighlight">\(\text{Geometric}(p = 0.3)\)</span> with <code class="docutils literal notranslate"><span class="pre">rgeom(n</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">0.3)</span></code></p>
+<p><strong>C.</strong> <span class="math notranslate nohighlight">\(\text{Binomial}(n = 15, p = 0.3)\)</span> with <code class="docutils literal notranslate"><span class="pre">rbinom(n</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">size</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">0.3)</span></code></p>
+<p><strong>B.</strong> <span class="math notranslate nohighlight">\(\text{Geometric}(p = 0.7)\)</span> with <code class="docutils literal notranslate"><span class="pre">rgeom(n</span> <span class="pre">=</span> <span class="pre">15,</span> <span class="pre">prob</span> <span class="pre">=</span> <span class="pre">0.7)</span></code></p>
+</section>
+</div>
+</section>
+</section>
+<section id="running-simulations">
+<h2>4. Running Simulations<a class="headerlink" href="#running-simulations" title="Permalink to this heading">#</a></h2>
+<p>So far, we have seen two ways to calculate quantities that help us communicate uncertainty (like means and probabilities):</p>
+<ol class="arabic simple">
+<li><p>The <strong>distribution-based approach</strong> (using the distribution), resulting in <strong>true values</strong>.</p></li>
+<li><p>The <strong>empirical approach</strong> (using data), resulting in <strong>approximate values</strong> that improve as the sample size increases (<strong>i.e., the frequentist paradigm!</strong>).</p></li>
+</ol>
+<p>For example, the <strong>true</strong> mean of a discrete random variable <span class="math notranslate nohighlight">\(X\)</span> can be calculated as</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \sum_x x \cdot P(X = x),\]</div>
+<p>using each pair of outcome and outcome’s probability, or can be approximated using the empirical approach from a random sample <span class="math notranslate nohighlight">\(X_1, \ldots, X_n\)</span> by</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^n X_i.\]</div>
+<p>This means that we can approximate these quantities by generating a sample! An analysis that uses a randomly generated data set is called a <strong>simulation</strong>.</p>
+<section id="code-for-empirical-quantities">
+<h3>4.1. Code for Empirical Quantities<a class="headerlink" href="#code-for-empirical-quantities" title="Permalink to this heading">#</a></h3>
+<p>Here are some hints for calculating empirical quantities using <code class="docutils literal notranslate"><span class="pre">R</span></code> functions for your reference. We will be going over these below in the next section:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mean()</span></code> calculates the sample average</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i.\]</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">var()</span></code> calculates the sample variance (the <span class="math notranslate nohighlight">\(n - 1\)</span> version, not <span class="math notranslate nohighlight">\(n\)</span>)</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2\]</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sd()</span></code> its square root for the sample standard deviation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantile()</span></code> calculates the empirical <span class="math notranslate nohighlight">\(p\)</span>-quantile, which is the <span class="math notranslate nohighlight">\(np\)</span>’th largest (rounded up) observation in a sample of size <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
+<li><p>For a single probability, remember that a mean is just an average. Just calculate the mean of a condition.</p></li>
+<li><p>For an entire PMF, use the <code class="docutils literal notranslate"><span class="pre">table()</span></code> function, or more conveniently, the <code class="docutils literal notranslate"><span class="pre">janitor::tabyl()</span></code> function.</p></li>
+<li><p>For the mode, either get it manually using the <code class="docutils literal notranslate"><span class="pre">table()</span></code> or <code class="docutils literal notranslate"><span class="pre">janitor::tabyl()</span></code> function, or you can use <code class="docutils literal notranslate"><span class="pre">DescTools::Mode()</span></code>.</p></li>
+</ul>
+</section>
+<section id="basic-simulation">
+<h3>4.2. Basic Simulation<a class="headerlink" href="#basic-simulation" title="Permalink to this heading">#</a></h3>
+<p>In Mexico City, consider a <strong>random person</strong> dating via <strong>some given app</strong> with a probability of having a successful date of <span class="math notranslate nohighlight">\(0.7\)</span>. Suppose we want to evaluate the success of this given app via the <strong>number of failed dates</strong> before they experience <span class="math notranslate nohighlight">\(5\)</span> <strong>successful dates</strong>.</p>
+<figure class="align-default" id="angel">
+<a class="reference internal image-reference" href="../_images/angel.jpg"><img alt="../_images/angel.jpg" src="../_images/angel.jpg" style="height: 500px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 17 </span><span class="caption-text"><a class="reference external" href="https://en.wikipedia.org/wiki/Angel_of_Independence">The Angel of Independence</a>, one of the most famous landmarks in Mexico City with a <a class="reference external" href="https://mexiconewsdaily.com/news/purple-spring-5-fun-facts-about-jacarandas/">Jacaranda tree</a> closeup (photo by <a href="https://unsplash.com/@axelgarcia?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Axel García</a> on <a href="https://unsplash.com/photos/yWgIfYgwVfA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>)</span><a class="headerlink" href="#angel" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>We can translate the above inquiry as a random variable denoting failed dates has a Negative Binomial distribution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+X = \text{Number of failed dates before experiencing 5 successful ones} \\
+X \sim \text{Negative Binomial} (k = 5, p = 0.7) \quad \text{for } x = 0, 1, 2, ...
+\end{gather*}\end{split}\]</div>
+<p>Let us demonstrate both a distribution-based and empirical approach to compute the variance and PMF. First, let us obtain our random sample (of, say, <span class="math notranslate nohighlight">\(n = 10000\)</span> observations).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o random_sample
+
+set.seed(551)
+k &lt;- 5
+p &lt;- 0.7
+n &lt;- 10000
+random_sample &lt;- rnbinom(n, size = k, prob = p)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python environment</span>
+<span class="c1"># Showing random numbers in vector random_sample</span>
+<span class="n">random_sample</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([3, 0, 1, ..., 1, 3, 4], dtype=int32)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="mean">
+<h4>4.2.1. Mean<a class="headerlink" href="#mean" title="Permalink to this heading">#</a></h4>
+<p><strong>Theoretically</strong>, the mean of <span class="math notranslate nohighlight">\(X\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{k(1 - p)}{p}.\]</div>
+<p>We compute it as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+(k * (1 - p)) / p
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 2.142857
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Empirically</strong>, we can approximate <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> with the mean of the values in <code class="docutils literal notranslate"><span class="pre">random_sample</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+mean(random_sample)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 2.1696
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note the above empirical value is quite close to the theoretical one!</strong></p>
+</section>
+<section id="variance">
+<h4>4.2.2. Variance<a class="headerlink" href="#variance" title="Permalink to this heading">#</a></h4>
+<p><strong>Theoretically</strong>, the variance of <span class="math notranslate nohighlight">\(X\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{k(1 - p)}{p^2}.\]</div>
+<p>We compute it as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+(k * (1 - p)) / p^2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 3.061224
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Empirically</strong>, we can approximate <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span> with the sample variance of the values in <code class="docutils literal notranslate"><span class="pre">random_sample</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+var(random_sample)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 3.170153
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note the above empirical value is quite close to the theoretical one!</strong></p>
+</section>
+<section id="standard-deviation">
+<h4>4.2.3. Standard deviation<a class="headerlink" href="#standard-deviation" title="Permalink to this heading">#</a></h4>
+<p><strong>Theoretically</strong>, the standard deviation of <span class="math notranslate nohighlight">\(X\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\text{sd}(X) = \sqrt{\frac{k(1 - p)}{p^2}}.\]</div>
+<p>We compute it as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+sqrt((1 - p) * k / p^2)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1.749636
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Empirically</strong>, we can approximate <span class="math notranslate nohighlight">\(\text{sd}(X)\)</span> with the sample standard deviation of the values in <code class="docutils literal notranslate"><span class="pre">random_sample</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+sd(random_sample)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1.780492
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Note the above empirical value is quite close to the theoretical one!</strong></p>
+</section>
+<section id="probability-of-seeing-0-failures-i-e-0-failed-dates">
+<h4>4.2.4. Probability of Seeing <span class="math notranslate nohighlight">\(0\)</span> Failures (i.e., <span class="math notranslate nohighlight">\(0\)</span> failed dates!)<a class="headerlink" href="#probability-of-seeing-0-failures-i-e-0-failed-dates" title="Permalink to this heading">#</a></h4>
+<p><strong>Theoretically</strong>, this probability can be computed as</p>
+<div class="math notranslate nohighlight">
+\[P(X = 0 \mid k, p) = {k - 1 \choose 0} p^k (1 - p)^x.\]</div>
+<p>We can automatically compute this probability via the density function <code class="docutils literal notranslate"><span class="pre">dnbinom()</span></code> as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+dnbinom(x = 0, size = k, prob = p)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 0.16807
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Empirically</strong>, we can approximate <span class="math notranslate nohighlight">\(P(X = 0 \mid k, p)\)</span> by counting the number of random numbers equal to <span class="math notranslate nohighlight">\(0\)</span> in <code class="docutils literal notranslate"><span class="pre">random_sample</span></code> and dividing this count over the sample size <span class="math notranslate nohighlight">\(n = 10000\)</span>. We can quickly do this via logical values as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python environment</span>
+<span class="c1"># Showing random numbers in vector random_sample</span>
+<span class="n">random_sample</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([3, 0, 1, ..., 1, 3, 4], dtype=int32)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python environment</span>
+<span class="c1"># Showing logical values for condition &quot;== 0&quot;</span>
+<span class="n">random_sample</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([False,  True, False, ..., False, False, False])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+# Using function mean() to empirically compute P(X = 0)
+mean(random_sample == 0) 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 0.1655
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="probability-mass-function">
+<h4>4.2.5. Probability Mass Function<a class="headerlink" href="#probability-mass-function" title="Permalink to this heading">#</a></h4>
+<p>Just as we did it with <span class="math notranslate nohighlight">\(P(X = 0 \mid k, p)\)</span>, we can also do it for <span class="math notranslate nohighlight">\(P(X = i \mid k, p)\)</span> with <span class="math notranslate nohighlight">\(i = 1, 2, \dots\)</span> (i.e., <strong>the whole PMF!</strong>). Nonetheless, let us use functions from <code class="docutils literal notranslate"><span class="pre">tidyverse</span></code> and <code class="docutils literal notranslate"><span class="pre">tabyl()</span></code> from <code class="docutils literal notranslate"><span class="pre">janitor</span></code>. We will create a table containing columns for both approaches: <strong>theoretical</strong> (using <code class="docutils literal notranslate"><span class="pre">dnbinom()</span></code>) and <strong>empirical</strong> (using <code class="docutils literal notranslate"><span class="pre">random_sample</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o PMF
+
+PMF &lt;- tabyl(random_sample) %&gt;%
+  select(x = random_sample, Empirical = percent) %&gt;%
+  mutate(Theoretical = dnbinom(x, size = k, prob = p))
+PMF &lt;- PMF %&gt;%
+  mutate(
+    Theoretical = round(Theoretical, 4),
+    Empirical = round(Empirical, 4)
+  )
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python environment</span>
+<span class="c1"># Showing PMF in a more Jupyter book-friendly format</span>
+<span class="n">PMF</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x</th>
+      <th>Empirical</th>
+      <th>Theoretical</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0.1655</td>
+      <td>0.1681</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>0.2541</td>
+      <td>0.2521</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>0.2250</td>
+      <td>0.2269</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>0.1545</td>
+      <td>0.1588</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>4</td>
+      <td>0.0966</td>
+      <td>0.0953</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>5</td>
+      <td>0.0534</td>
+      <td>0.0515</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>6</td>
+      <td>0.0263</td>
+      <td>0.0257</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>7</td>
+      <td>0.0133</td>
+      <td>0.0121</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>8</td>
+      <td>0.0060</td>
+      <td>0.0055</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>9</td>
+      <td>0.0041</td>
+      <td>0.0024</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>10</td>
+      <td>0.0006</td>
+      <td>0.0010</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>11</td>
+      <td>0.0004</td>
+      <td>0.0004</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>12</td>
+      <td>0.0002</td>
+      <td>0.0002</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p><strong>Note that both probability columns are similar!</strong></p>
+<p>Now, we can also plot both PMFs:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/ae0ee146891032133f970daa5dccc0b58a29199d3e5326dc7013f41748fd33e6.png" src="../_images/ae0ee146891032133f970daa5dccc0b58a29199d3e5326dc7013f41748fd33e6.png" />
+</div>
+</div>
+</section>
+<section id="mode">
+<h4>4.2.6. Mode<a class="headerlink" href="#mode" title="Permalink to this heading">#</a></h4>
+<p>Recall the mode is the outcome of the random variable with the largest probability. From our previous plots, we can see that the mode is <span class="math notranslate nohighlight">\(X = 1\)</span>. We can confirm this as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+## Theoretical
+PMF %&gt;%
+  filter(Theoretical == max(Theoretical)) %&gt;%
+  pull(x)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+## Empirical
+PMF %&gt;%
+  filter(Empirical == max(Empirical)) %&gt;%
+  pull(x)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 1
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="law-of-large-numbers">
+<h4>4.2.7. Law of Large Numbers<a class="headerlink" href="#law-of-large-numbers" title="Permalink to this heading">#</a></h4>
+<p>The Law of Large of Numbers states that, as we increase our sample size <span class="math notranslate nohighlight">\(n\)</span>, our empirical mean converges to the <strong>true mean</strong> we want to estimate. That is, as we increase our <span class="math notranslate nohighlight">\(n\)</span>, our <strong>sample average</strong> <span class="math notranslate nohighlight">\(\bar{X}\)</span> converges to the true mean <span class="math notranslate nohighlight">\(\mu\)</span>.</p>
+<p>To demonstrate that a larger sample size improves the approximation of the empirical mean, let us see how this sample average changes as we collect more and more data. Given that</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Negative Binomial} (k = 5, p = 0.7),\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{k(1 - p)}{p} = 2.14.\]</div>
+<p>The plot below shows that, as we increase our sample size <span class="math notranslate nohighlight">\(n\)</span> of simulated random numbers, their corresponding empirical mean (i.e., <strong>sample average</strong>) converges to the <span class="math notranslate nohighlight">\(\mathbb{E}(X) = 2.14\)</span> (horizontal dashed line) depicted as a red line.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/8700ae5cf7bb84c6f8d252dace48e267e8fb6452050c49f6b03ee5ff2c53deed.png" src="../_images/8700ae5cf7bb84c6f8d252dace48e267e8fb6452050c49f6b03ee5ff2c53deed.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="multi-step-simulations">
+<h2>5. Multi-Step Simulations<a class="headerlink" href="#multi-step-simulations" title="Permalink to this heading">#</a></h2>
+<p>The simulation above was not all that useful, since we could calculate basically anything (theoretically speaking!). It gets more interesting when we want to calculate things for a random variable that transforms and/or combines multiple random variables.</p>
+<p>The idea is that some random variables will have a distribution that depends on other random variables but in a way that is explicit. For example, consider a random variable <span class="math notranslate nohighlight">\(T\)</span> that we can obtain as follows:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Poisson}(\lambda = 5), \]</div>
+<p>and then</p>
+<div class="math notranslate nohighlight">
+\[T = \sum_{i = 1}^{X} D_i,\]</div>
+<p>where each <span class="math notranslate nohighlight">\(D_i\)</span> are <em>iid</em> with some <strong>specified distribution</strong>. In this case, to generate <span class="math notranslate nohighlight">\(T\)</span>, you would first need to generate <span class="math notranslate nohighlight">\(X\)</span>, then generate <span class="math notranslate nohighlight">\(X\)</span> values of <span class="math notranslate nohighlight">\(D_i\)</span>, then sum those up to get <span class="math notranslate nohighlight">\(T\)</span>. This is the example we will see here, but in general, you can have any number of dependencies, each component of which you would have to generate.</p>
+<figure class="align-default" id="ship">
+<a class="reference internal image-reference" href="../_images/ship.png"><img alt="../_images/ship.png" src="../_images/ship.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 18 </span><span class="caption-text">A cargo ship</span><a class="headerlink" href="#ship" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Consider an example that a Vancouver port faces with <strong>gang demand</strong>. Whenever a ship arrives to the port of Vancouver, they request a certain number of <strong>gangs</strong> (groups of people) to help unload the ship. Let us suppose the number of gangs requested by a ship has the following <strong>discrete distribution</strong> (i.e., a PMF):</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/e1bd9be442997b3b0d790e1870a1f0e20eed8674fc94159d9d752c9936910e43.png" src="../_images/e1bd9be442997b3b0d790e1870a1f0e20eed8674fc94159d9d752c9936910e43.png" />
+</div>
+</div>
+<p>The following function sums up simulated gangs requested by a certain number of ships with the above probability distribution as a default:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+#&#39; Generate gang demand
+#&#39;
+#&#39; Simulates the GRAND TOTAL number of gangs requested, if each ship
+#&#39; requests a random number of gangs.
+#&#39; 
+#&#39; @param n_ships Number of ships that are making demands.
+#&#39; @param gangs Possible gang demands made by a ship.
+#&#39; @param prob Probabilities of gang demand corresponding to &quot;gangs.&quot;
+#&#39; 
+#&#39; @return Number representing the total gang demand 
+demand_gangs &lt;- function(n_ships, gangs = gang, prob = p) {
+  if (length(gangs) == 1) {
+    gangs &lt;- c(gangs, gangs)
+    prob &lt;- c(1, 1)
+  }
+  requests &lt;- sample(
+    gangs,
+    size = n_ships,
+    replace = TRUE,
+    prob = prob
+  )
+  sum(requests)
+}
+
+# Testing our function (a Data Science-standard!)
+test_that(&quot;demand_gangs output is as expected&quot;, {
+  expect_identical(demand_gangs(0), 0L)
+  expect_gte(demand_gangs(1), min(gang))
+  expect_lte(demand_gangs(1), max(gang))
+  expect_gte(demand_gangs(10), 10 * min(gang))
+  expect_lte(demand_gangs(10), 10 * max(gang))
+  expect_identical(length(demand_gangs(10)), 1L)
+  expect_identical(demand_gangs(10, gangs = 2, prob = 1), 20)
+})
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test passed 🌈
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As an example, let us check out the simulated <strong>grand total gang request</strong> from 10 ships:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span>
+
+set.seed(551)
+demand_gangs(n_ships = 10)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 20
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Suppose the number of ships arriving on a given day follows the Poisson distribution with a mean of <span class="math notranslate nohighlight">\(\lambda = 5 \text{ ships}\)</span>. Now, this is our main statistical inquiry: <strong>what is the distribution of total gang requests on a given day?</strong></p>
+<p>Let us simulate the process to find out:</p>
+<ol class="arabic simple">
+<li><p>Generate arrival quantities for <span class="math notranslate nohighlight">\(n\)</span> days from the <span class="math notranslate nohighlight">\(\text{Poisson}(\lambda = 5 \text{ ships})\)</span> distribution.</p></li>
+<li><p>For each day, simulate <strong>the grand total gang request</strong> for the simulated number of ships.</p></li>
+<li><p>You now have your random sample of size <span class="math notranslate nohighlight">\(n\)</span> – compute things as you normally would.</p></li>
+</ol>
+<p>We will try this by obtaining <strong>a sample of <span class="math notranslate nohighlight">\(n = 10000\)</span> days</strong>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">R</span> -o simulation_outputs
+
+n_days &lt;- 10000
+
+# Setting global seed!
+set.seed(551)
+
+## Step 1: generate a bunch of ships arriving each day.
+arrivals &lt;- rpois(n_days, lambda = 5)
+
+## Step 2: Simulate the grand total gang request on each day.
+total_requests &lt;- purrr::map_int(arrivals, demand_gangs)
+
+## Step 3: Compute mean and variance.
+simulation_outputs &lt;- tibble(
+  mean = mean(total_requests),
+  variance = var(total_requests)
+)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Python environment</span>
+<span class="c1"># Showing simulation outputs in a more Jupyter book-friendly format</span>
+<span class="n">simulation_outputs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>mean</th>
+      <th>variance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>11.5393</td>
+      <td>31.650421</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>From our 10,000 replicates, the summary statistics above indicate that <strong>we typically expect a demand of 11.5393 gangs on a given day in the whole port</strong>.</p>
+<p>Nonetheless, <strong>our distribution is slightly right-skewed</strong>, meaning that gang demand leans towards less than this mean. We can check it out by plotting our simulation results stored in <code class="docutils literal notranslate"><span class="pre">total_requests</span></code> (<strong>mean gang request is indicated as a solid vertical blue line</strong>):</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<img alt="../_images/31b56cc0e3772530714cf2d1f86de1aadb42d136f6640839bbb4109f2054b4b6.png" src="../_images/31b56cc0e3772530714cf2d1f86de1aadb42d136f6640839bbb4109f2054b4b6.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_lecture-maximum-likelihood-estimation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 7: Maximum Likelihood Estimation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="appendix-prob-cheatsheet.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Probability Cheatsheet</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#review-on-random-samples">1. Review on Random Samples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeds">2. Seeds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-random-samples-code">3. Generating Random Samples: Code</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-finite-number-of-categories">3.1. From Finite Number of Categories</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-distribution-families">3.2. From Distribution Families</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-simulations">4. Running Simulations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-for-empirical-quantities">4.1. Code for Empirical Quantities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-simulation">4.2. Basic Simulation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">4.2.1. Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">4.2.2. Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-deviation">4.2.3. Standard deviation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-of-seeing-0-failures-i-e-0-failed-dates">4.2.4. Probability of Seeing <span class="math notranslate nohighlight">\(0\)</span> Failures (i.e., <span class="math notranslate nohighlight">\(0\)</span> failed dates!)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-mass-function">4.2.5. Probability Mass Function</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mode">4.2.6. Mode</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-large-numbers">4.2.7. Law of Large Numbers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-step-simulations">5. Multi-Step Simulations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

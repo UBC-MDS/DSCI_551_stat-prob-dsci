@@ -1,0 +1,1246 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 2: Parametric Families &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/02_lecture-parametric-families';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 3: Joint Probability" href="03_lecture-joint.html" />
+    <link rel="prev" title="Lecture 1: Depicting Uncertainty" href="01_lecture-uncertainty.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/02_lecture-parametric-families.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/02_lecture-parametric-families.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 2: Parametric Families</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-distributions">1. Properties of Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-single-probability-mass-function">1.1. A Single Probability Mass Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-multiple-probability-mass-functions">1.2. Comparing Multiple Probability Mass Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-variable-transformations">2. Random Variable Transformations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#revisiting-variance">2.1. Revisiting Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-1">Method 1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-2">Method 2</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-mapping">2.2. Distribution Mapping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-value-properties">2.3. Expected Value Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-properties">2.4. Variance Properties</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-of-families">3. Distribution of Families</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli">3.1. Bernoulli</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#process">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pmf">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binomial-distribution">3.2. Binomial Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#families-versus-distributions">3.3. Families Versus Distributions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">3.4. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameterization">3.5. Parameterization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-families-in-practice">3.6. Distribution Families in Practice</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-common-discrete-distribution-families">4. Another Common Discrete Distribution Families</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-distribution">4.1. Geometric Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#negative-binomial-distribution-a-k-a-pascal">4.2. Negative Binomial Distribution (a.k.a. Pascal)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson">4.3. Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-2-parametric-families">
+<h1>Lecture 2: Parametric Families<a class="headerlink" href="#lecture-2-parametric-families" title="Permalink to this heading">#</a></h1>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Calculate expectations of a linear combination of random variables.</p></li>
+<li><p>Match a physical process to a distribution family (Binomial, Geometric, Negative Binomial, Poisson, and Bernoulli).</p></li>
+<li><p>Calculate probabilities, mean, and variance of a distribution belonging to a distribution family.</p></li>
+<li><p>Find the probability mass function of a random variable transformation, e.g., <span class="math notranslate nohighlight">\(X^2\)</span>.</p></li>
+<li><p>Distinguish between a family of distributions and a distribution.</p></li>
+<li><p>Identify whether a specification of parameters (such as mean and variance) is enough/too little/too much to specify a distribution from a family of distributions.</p></li>
+</ul>
+</section>
+<section id="properties-of-distributions">
+<h2>1. Properties of Distributions<a class="headerlink" href="#properties-of-distributions" title="Permalink to this heading">#</a></h2>
+<p>We must start getting familiar with central tendency and uncertainty measures from <a class="reference internal" href="01_lecture-uncertainty.html"><span class="doc">Lecture 1: Depicting Uncertainty</span></a>. Hence, let us practice their computations with some in-class iClicker exercises.</p>
+<section id="a-single-probability-mass-function">
+<h3>1.1. A Single Probability Mass Function<a class="headerlink" href="#a-single-probability-mass-function" title="Permalink to this heading">#</a></h3>
+<p>Suppose <span class="math notranslate nohighlight">\(X\)</span> is a discrete random variable denoting the following:</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Number of crabs found at a nest in a Mexican beach.}\]</div>
+<figure class="align-default" id="crab">
+<a class="reference internal image-reference" href="../_images/crab.png"><img alt="../_images/crab.png" src="../_images/crab.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">A crab</span><a class="headerlink" href="#crab" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Its probability mass function (PMF) is given by <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-crabs">
+<caption><span class="caption-number">Table 6 </span><span class="caption-text">Probability mass function (PMF) of count-type random variable <span class="math notranslate nohighlight">\(X\)</span></span><a class="headerlink" href="#pmf-crabs" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(X\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(X = x)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>0.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>0.4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Then, we plot this PMF as a <strong>bar chart</strong>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/63d608d9b118e34dd3aea82135904c0302c39185b917bdf22d088bf2f9f41f93.png"><img alt="../_images/63d608d9b118e34dd3aea82135904c0302c39185b917bdf22d088bf2f9f41f93.png" src="../_images/63d608d9b118e34dd3aea82135904c0302c39185b917bdf22d088bf2f9f41f93.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Now, let us start with some in-class questions via <a class="reference external" href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="exercise admonition" id="lecture2-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 6 </span></p>
+<section id="exercise-content">
+<p>Using the <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a> for random variable <span class="math notranslate nohighlight">\(X\)</span>, compute <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span>. Select the correct option:</p>
+<p><strong>A.</strong> 1</p>
+<p><strong>B.</strong> 1.5</p>
+<p><strong>C.</strong> 1.9</p>
+<p><strong>D.</strong> 6</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 7 </span></p>
+<section id="exercise-content">
+<p>Using the <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a> for random variable <span class="math notranslate nohighlight">\(X\)</span>, compute the variance <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span>. Select the correct option:</p>
+<p><strong>A.</strong> 2.6</p>
+<p><strong>B.</strong> 1.85</p>
+<p><strong>C.</strong> 4.1</p>
+<p><strong>D.</strong> -1.85</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q3">
+
+<p class="admonition-title"><span class="caption-number">Exercise 8 </span></p>
+<section id="exercise-content">
+<p>Using the <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a> for random variable <span class="math notranslate nohighlight">\(X\)</span>, obtain the mode <span class="math notranslate nohighlight">\(\text{Mode}(X)\)</span>. Select the correct option:</p>
+<p><strong>A.</strong> 0</p>
+<p><strong>B.</strong> 3</p>
+<p><strong>C.</strong> Both 0 and 3</p>
+<p><strong>D.</strong> Neither</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q4">
+
+<p class="admonition-title"><span class="caption-number">Exercise 9 </span></p>
+<section id="exercise-content">
+<p>Using the <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a> for random variable <span class="math notranslate nohighlight">\(X\)</span>, obtain the entropy <span class="math notranslate nohighlight">\(H(X)\)</span>. Select the correct option:</p>
+<p><strong>A.</strong> -1.19</p>
+<p><strong>B.</strong> 0.52</p>
+<p><strong>C.</strong> -0.52</p>
+<p><strong>D.</strong> 1.19</p>
+</section>
+</div>
+</section>
+<section id="comparing-multiple-probability-mass-functions">
+<h3>1.2. Comparing Multiple Probability Mass Functions<a class="headerlink" href="#comparing-multiple-probability-mass-functions" title="Permalink to this heading">#</a></h3>
+<p>Now, suppose there are four different random variables related to four Mexican beaches:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+U =  \text{Number of crabs found at a nest in a beach at Acapulco.} \\
+V =  \text{Number of crabs found at a nest in a beach at Cabo San Lucas.} \\
+W =  \text{Number of crabs found at a nest in a beach at Cancún.} \\
+Y =  \text{Number of crabs found at a nest in a beach at Puerto Vallarta.}
+\end{gather*}\end{split}\]</div>
+<figure class="align-default" id="cancun">
+<a class="reference internal image-reference" href="../_images/cancun.jpg"><img alt="../_images/cancun.jpg" src="../_images/cancun.jpg" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Cancún</span><a class="headerlink" href="#cancun" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Their corresponding PMFs are:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/b8e7cf1d86604b53d34d08a755a4b03991743f4555a32035c0643ead0e9e80cd.png"><img alt="../_images/b8e7cf1d86604b53d34d08a755a4b03991743f4555a32035c0643ead0e9e80cd.png" src="../_images/b8e7cf1d86604b53d34d08a755a4b03991743f4555a32035c0643ead0e9e80cd.png" style="width: 930px; height: 420px;" /></a>
+</div>
+</div>
+<p>Let us continue with some other in-class questions via <a class="reference external" href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="exercise admonition" id="lecture2-q5">
+
+<p class="admonition-title"><span class="caption-number">Exercise 10 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p><strong>By only looking at the PMFs</strong>, <span class="math notranslate nohighlight">\(U\)</span> has higher entropy than <span class="math notranslate nohighlight">\(V\)</span>.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q6">
+
+<p class="admonition-title"><span class="caption-number">Exercise 11 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p><strong>By only looking at the PMFs</strong>, <span class="math notranslate nohighlight">\(U\)</span> has higher variance than <span class="math notranslate nohighlight">\(V\)</span>.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q7">
+
+<p class="admonition-title"><span class="caption-number">Exercise 12 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p><strong>By only looking at the PMFs</strong>, <span class="math notranslate nohighlight">\(W\)</span> has the highest variance amongst the four distributions.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture2-q8">
+
+<p class="admonition-title"><span class="caption-number">Exercise 13 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p><strong>By only looking at the PMFs</strong>, <span class="math notranslate nohighlight">\(Y\)</span> has the highest entropy amongst the four distributions.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+</section>
+</section>
+<section id="random-variable-transformations">
+<h2>2. Random Variable Transformations<a class="headerlink" href="#random-variable-transformations" title="Permalink to this heading">#</a></h2>
+<p>A fundamental characteristic of a random variable is that it can be turned into other random variables via mathematical transformations. This characteristic is crucial in data modelling since we can easily adjust random variables to find proper estimation and inference methods.</p>
+<section id="revisiting-variance">
+<h3>2.1. Revisiting Variance<a class="headerlink" href="#revisiting-variance" title="Permalink to this heading">#</a></h3>
+<p>In <a class="reference internal" href="01_lecture-uncertainty.html#mean-and-variance"><span class="std std-ref">3.2. Mean and Variance</span></a>, we checked the formula for the variance of a random variable <span class="math notranslate nohighlight">\(X\)</span> in two forms:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\text{Var}(X) =  \mathbb{E}\{[X - \mathbb{E}(X)]^2\}\)</span>, or alternatively</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{Var}(X) =  \mathbb{E}(X^2) - [\mathbb{E}(X)]^2\)</span>.</p></li>
+</ol>
+<p>Given that <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> is the mean of the random variable, the form in (1) is more intuitive to grasp the variance concept: <strong>it is the squared deviation of the random variable <span class="math notranslate nohighlight">\(X\)</span> to its mean</strong>. On the other hand, (2) is handier for mathematical manipulations <strong>involving expected value properties</strong>.</p>
+<p>Now, using both methods to calculate the variance as depicted earlier with <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a>, we can calculate the variance of <span class="math notranslate nohighlight">\(X\)</span> as follows:</p>
+<section id="method-1">
+<h4>Method 1<a class="headerlink" href="#method-1" title="Permalink to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\text{Var}(X) &amp;= \mathbb{E}\{[X - \mathbb{E}(X)]^2\} \\
+&amp;= \mathbb{E}[(X - 1.5)^2] \qquad \qquad \text{since } \mathbb{E}(X) = 1.5 \\ 
+&amp;= (-1.5)^2(0.4) + (-0.5)^2(0.1) + (0.5)^2(0.1) + (1.5)^2(0.4) \\ 
+&amp;= 1.85.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="method-2">
+<h4>Method 2<a class="headerlink" href="#method-2" title="Permalink to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\text{Var}(X) &amp;= \mathbb{E}(X^2) - [\mathbb{E}(X)]^2 \\
+&amp;= \mathbb{E}(X^2) - (1.5)^2 \qquad \qquad \text{since } \mathbb{E}(X) = 1.5 \\ 
+&amp;= (0)^2(0.4) + (1)^2(0.1) + (2)^2(0.1) + (3)^2(0.4) - (1.5)^2 \\ 
+&amp;= 1.85.
+\end{align*}\end{split}\]</div>
+</section>
+</section>
+<section id="distribution-mapping">
+<h3>2.2. Distribution Mapping<a class="headerlink" href="#distribution-mapping" title="Permalink to this heading">#</a></h3>
+<p>For the sake of the topic of random variable transformations, let us focus the attention on the expected value <span class="math notranslate nohighlight">\(\mathbb{E}(X^2)\)</span> for the random variable</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Number of crabs found at a nest in a Mexican beach}\]</div>
+<p>whose PMF is defined in <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a>.</p>
+<p>More specifically, what does <span class="math notranslate nohighlight">\(X^2\)</span> mean? It comes down to what we define in Statistics as a <strong>random variable transformation</strong>. First, it is essential to clarify that <span class="math notranslate nohighlight">\(X^2\)</span> will be a new transformed random variable that takes on the squares of the values of <span class="math notranslate nohighlight">\(X\)</span>. However, <strong>their distributions are different</strong> .</p>
+<p>In this class of matters, we usually rename our transformed variable. For example:</p>
+<div class="math notranslate nohighlight">
+\[Z = X^2.\]</div>
+<p>Moreover, let us revisit the PMF from earlier for <span class="math notranslate nohighlight">\(X\)</span>, calling it <span class="math notranslate nohighlight">\(P(X)\)</span>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/2116ad87922726a95c83a7c32cd1a6f8fe0be085695986e3d553a28050fa97a3.png"><img alt="../_images/2116ad87922726a95c83a7c32cd1a6f8fe0be085695986e3d553a28050fa97a3.png" src="../_images/2116ad87922726a95c83a7c32cd1a6f8fe0be085695986e3d553a28050fa97a3.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>To obtain the PMF of <span class="math notranslate nohighlight">\(Z = X^2\)</span>, we basically need to map the possible values of <span class="math notranslate nohighlight">\(Z\)</span> <strong>while still keeping the same probabilities!</strong> This is a crucial point in random variable transformation. Therefore, the previous PMF for <span class="math notranslate nohighlight">\(X\)</span> becomes for <span class="math notranslate nohighlight">\(Z\)</span> as:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/fa38ff3666c4a7bdd62416387d3191a023bda7af02e4d72e6e3abbf2d385210a.png"><img alt="../_images/fa38ff3666c4a7bdd62416387d3191a023bda7af02e4d72e6e3abbf2d385210a.png" src="../_images/fa38ff3666c4a7bdd62416387d3191a023bda7af02e4d72e6e3abbf2d385210a.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Even though we keep the same probabilities in <span class="math notranslate nohighlight">\(P(Z)\)</span>, note that the values on the horizontal axis correspond to the squared outcomes of <span class="math notranslate nohighlight">\(X\)</span>.</p>
+</div>
+<p>Just as in <a class="reference internal" href="#pmf-crabs"><span class="std std-numref">Table 6</span></a>, the PMF of <span class="math notranslate nohighlight">\(Z\)</span> can be put as a table:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-z">
+<caption><span class="caption-number">Table 7 </span><span class="caption-text">Probability mass function (PMF) of count-type random variable <span class="math notranslate nohighlight">\(Z\)</span></span><a class="headerlink" href="#pmf-z" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(Z\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(Z = z)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>0.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>0.4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We already clarified that random variables are denoted in uppercase. Nonetheless, once we <strong>observe</strong> a specific outcome of a given random variable, we use lowercase.</p>
+</div>
+</section>
+<section id="expected-value-properties">
+<h3>2.3. Expected Value Properties<a class="headerlink" href="#expected-value-properties" title="Permalink to this heading">#</a></h3>
+<p>Expected values have certain useful properties. For instance, we can calculate them under <strong>linear random variable transformations</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Linearity of Expectations</p>
+<p>If <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are constants, with <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> as random variables, then we can obtain the expected value of the following expressions as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+\mathbb{E}(a X) = a \mathbb{E}(X) \\
+\mathbb{E}(X + Y) = \mathbb{E}(X) + \mathbb{E}(Y) \\
+\mathbb{E}(aX + bY) = a\mathbb{E}(X) + b\mathbb{E}(Y).
+\end{gather*}\end{split}\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Let us be cautious with the mathematical manipulations of the expected value operator <span class="math notranslate nohighlight">\(\mathbb{E}(\cdot)\)</span>. <strong>It does not follow the usual algebraic rules</strong>. For instance, if no further assumptions are made for random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(XY) \neq \mathbb{E}(X)\mathbb{E}(Y).\]</div>
+<p>Moreover, note the following:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X^2) \neq [\mathbb{E}(X)]^2.\]</div>
+</div>
+</section>
+<section id="variance-properties">
+<h3>2.4. Variance Properties<a class="headerlink" href="#variance-properties" title="Permalink to this heading">#</a></h3>
+<p>The variance also has important properties in terms of <strong>linear random variable transformations</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Linearity of Variance for Independent Random Variables</p>
+<p>If <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are constants, with <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> as independent random variables, then we can obtain the variance of the following expressions as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+\text{Var}(a X) = a^2 \text{Var}(X) \\
+\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) \\
+\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y).
+\end{gather*}\end{split}\]</div>
+</div>
+</section>
+</section>
+<section id="distribution-of-families">
+<h2>3. Distribution of Families<a class="headerlink" href="#distribution-of-families" title="Permalink to this heading">#</a></h2>
+<p>So far, we have discussed the properties of probability distributions in general. Again, this is important because a huge component of Data Science is to model data as random variables with uncertain outcomes. For instance:</p>
+<ul class="simple">
+<li><p>The number of ships that arrive at the port of Vancouver on a given day (i.e., a discrete and count random variable).</p></li>
+<li><p>A rock type (i.e., a discrete and categorical random variable).</p></li>
+</ul>
+<p>Certain variables in common random processes give rise to probability distributions having a particular form, and these distributions are very useful in data modelling (e.g., regression analysis). The world of statistical distributions is vast. In the case of <strong>univariate distributions</strong> (i.e., a single random variable), <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/UDR.html">this resource</a> will be especially helpful throughout the program since it contains key information such as their corresponding PMFs or probability density functions (PDFs). Moreover, the chart illustrates how these distributions are related via random variable transformations.</p>
+<p>As a first step, we will start with common discrete random variables. Particularly, let us use the Bernoulli and Binomial families of distributions as an example.</p>
+<section id="bernoulli">
+<h3>3.1. <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Bernoulli.pdf">Bernoulli</a><a class="headerlink" href="#bernoulli" title="Permalink to this heading">#</a></h3>
+<section id="process">
+<h4>Process<a class="headerlink" href="#process" title="Permalink to this heading">#</a></h4>
+<p>Suppose you play a game and win with probability <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>. Let <span class="math notranslate nohighlight">\(X\)</span> be the outcome of this game. It is a <strong>binary random variable</strong> as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X =
+\begin{cases}
+1 \; \; \; \; \text{if you win the game (success)},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+\end{split}\]</div>
+<p>The value <span class="math notranslate nohighlight">\(1\)</span> has a probability of <span class="math notranslate nohighlight">\(p\)</span>, whereas the value <span class="math notranslate nohighlight">\(0\)</span> has a probability of <span class="math notranslate nohighlight">\(1 - p\)</span>.</p>
+<p>A <strong>Bernoulli distribution</strong> is depicted as:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Bernoulli}(p).\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The symbol “<span class="math notranslate nohighlight">\(\sim\)</span>” means “is distributed as.”</p>
+</div>
+</section>
+<section id="pmf">
+<h4>PMF<a class="headerlink" href="#pmf" title="Permalink to this heading">#</a></h4>
+<p>A Bernoulli distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid p) = p^x (1 - p)^{1 - x} \quad \text{for} \quad x = 0, 1.\]</div>
+</section>
+<section id="mean">
+<h4>Mean<a class="headerlink" href="#mean" title="Permalink to this heading">#</a></h4>
+<p>Using Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-mean-discrete">(3)</a>, the mean of a Bernoulli random variable is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-mean-bernoulli">
+<span class="eqno">(10)<a class="headerlink" href="#equation-mean-bernoulli" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+\mathbb{E}(X) &amp;= \sum_{x = 0}^1 x \cdot P(X = x \mid p) \\
+&amp;= \sum_{x = 0}^1 x \cdot p^x (1 - p)^{1 - x} \\
+&amp;= \underbrace{0 \times \left[ p^0 \times (1 - p)^{1 - 0} \right]}_{0} + \underbrace{1 \times \left[ p \times (1 - p)^{1 - 1} \right]}_{p} \\
+&amp;= p.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="variance">
+<h4>Variance<a class="headerlink" href="#variance" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Bernoulli random variable is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-variance-bernoulli">
+<span class="eqno">(11)<a class="headerlink" href="#equation-variance-bernoulli" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+\text{Var}(X) &amp;= \mathbb{E}(X^2) - [\mathbb{E}(X)]^2 \\
+&amp;= \mathbb{E}(X^2) - p^2 \qquad \qquad \text{since } \mathbb{E}(X) = p \\ 
+&amp;= \sum_{x = 0}^1 x^2 \cdot P(X = x \mid p) - p^2 \\ 
+&amp;= \underbrace{0^2 \times \left[ p^0 \times (1 - p)^{1 - 0} \right]}_{0} + \underbrace{1^2 \times \left[ p \times (1 - p)^{1 - 1} \right]}_{p} - p^2 \\
+&amp;= p - p^2 \\
+&amp;= p(1 - p).
+\end{align*}\end{split}\]</div>
+</section>
+</section>
+<section id="binomial-distribution">
+<h3>3.2. <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Binomial.pdf">Binomial Distribution</a><a class="headerlink" href="#binomial-distribution" title="Permalink to this heading">#</a></h3>
+<section id="id1">
+<h4>Process<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<p>Suppose you play a game and win with probability <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>. Let <span class="math notranslate nohighlight">\(X\)</span> be the number of games you win within <span class="math notranslate nohighlight">\(n\)</span> <strong>independent</strong> games in total. <span class="math notranslate nohighlight">\(X\)</span> is said to have a <strong>Binomial distribution</strong>, written as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Binomial} \left( n, p \right).\]</div>
+</section>
+<section id="id2">
+<h4>PMF<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
+<p>A Binomial distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P \left( X = x \mid n, p \right) = {n \choose x} p^x (1 - p)^{n - x} \quad \text{for} \quad x = 0, 1, \dots, n.\]</div>
+<p>Note the Bernoulli distribution is a special case of the Binomial family with <span class="math notranslate nohighlight">\(n = 1\)</span>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Term <span class="math notranslate nohighlight">\({n \choose x}\)</span> is read as “<em>n choose x</em>.” You can think of it as the number of ways to make a team of <span class="math notranslate nohighlight">\(x\)</span> people from a total of <span class="math notranslate nohighlight">\(n\)</span> people. You can calculate this in <code class="docutils literal notranslate"><span class="pre">R</span></code> with <code class="docutils literal notranslate"><span class="pre">choose(n,</span> <span class="pre">x)</span></code>, and its formula is</p>
+<div class="math notranslate nohighlight">
+\[{n \choose x} = \frac{n!}{x!(n - x)!}.\]</div>
+</div>
+</section>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h4>
+<p>Let us derive the probability of winning exactly two games out of five. That is, <span class="math notranslate nohighlight">\(P(X = 2)\)</span> when <span class="math notranslate nohighlight">\(n = 5\)</span> and <span class="math notranslate nohighlight">\(p = 0.25\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = 2 \mid n = 5, p = 0.25) &amp;= {5 \choose 2} (0.25)^2 (1 - 0.25)^{5 - 2} \\
+&amp;= \frac{5!}{2!(5 - 2)!} (0.25)^2 (1 - 0.25)^{5 - 2} \\
+&amp;= 0.26.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="id3">
+<h4>Mean<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = n p.\]</div>
+</section>
+<section id="id4">
+<h4>Variance<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = n p (1 - p).\]</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>As we did previously with Equation <a class="reference internal" href="#equation-mean-bernoulli">(10)</a> for the expected value and Equation <a class="reference internal" href="#equation-variance-bernoulli">(11)</a> for the variance of the Bernoulli distribution, there are ways to prove the expressions for the expected value and variance of any known distribution (either continuous or discrete). Nonetheless, <strong>this is out of the scope of MDS</strong>.</p>
+<p>Instead, we will work directly with the corresponding expressions for the expected values and variances of all these specific distributions.</p>
+</div>
+</section>
+<section id="code">
+<h4>Code<a class="headerlink" href="#code" title="Permalink to this heading">#</a></h4>
+<p>The Binomial PMF can be calculated in <code class="docutils literal notranslate"><span class="pre">R</span></code> with <code class="docutils literal notranslate"><span class="pre">dbinom()</span></code> and in <code class="docutils literal notranslate"><span class="pre">Python</span></code> with <code class="docutils literal notranslate"><span class="pre">scipy.stats.binom()</span></code>.</p>
+</section>
+</section>
+<section id="families-versus-distributions">
+<h3>3.3. Families Versus Distributions<a class="headerlink" href="#families-versus-distributions" title="Permalink to this heading">#</a></h3>
+<p>Here is an example for a <span class="math notranslate nohighlight">\(\text{Binomial}(n = 5, p = 0.25)\)</span> distribution:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/14ca3abd6d6fa7a18e1b4781b2f9a745f3c63ab6a626a8bf11c09d4e9daf26a9.png"><img alt="../_images/14ca3abd6d6fa7a18e1b4781b2f9a745f3c63ab6a626a8bf11c09d4e9daf26a9.png" src="../_images/14ca3abd6d6fa7a18e1b4781b2f9a745f3c63ab6a626a8bf11c09d4e9daf26a9.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Specifying a value for both <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(n\)</span> results in a unique Binomial distribution. For example, the <span class="math notranslate nohighlight">\(\text{Binomial}(n = 5, p = 0.25)\)</span> distribution is plotted above. It is helpful to remember that there are, in fact, <strong>many Binomial distributions</strong> (actually infinite!), one for each choice of <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(n\)</span>. We refer to the entire set of probability distributions as the <strong>Binomial family of distributions</strong>.</p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>It does not actually make sense to talk about “one” Binomial distribution! This is important to remember as we add concepts throughout MDS, such as the maximum likelihood estimator you will see later on in this course.</p>
+</div>
+</section>
+<section id="parameters">
+<h3>3.4. Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h3>
+<p>In the case of the Binomial distribution, knowing <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(n\)</span> is enough to know the entire distribution within the Binomial family. That is, no further information is needed – we know all <span class="math notranslate nohighlight">\(n + 1\)</span> probabilities based on only two numbers! Since <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(n\)</span> fully specify a Binomial distribution, we call them <strong>parameters</strong> of the Binomial family, and we call the Binomial family a <strong>parametric family</strong> of distributions.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In general, a <strong>parameter</strong> is a variable whose specification narrows down the space of possible distributions (or, to be even more general, the space of possible models).</p>
+</div>
+</section>
+<section id="parameterization">
+<h3>3.5. Parameterization<a class="headerlink" href="#parameterization" title="Permalink to this heading">#</a></h3>
+<p>A Binomial distribution can be specified by knowing <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(p\)</span>, but there are other ways we can specify the distribution. For instance, specifying the mean and variance is enough to identify a Binomial distribution.</p>
+<p>Exactly which variables we decide to use to identify a distribution within a family is called the family’s <strong>parameterization</strong>. So, the Binomial distribution is usually <strong>parameterized</strong> according to <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(p\)</span>, but could also be parameterized in terms of the mean and variance. A distribution family’s “usual” parameterization is sometimes called the <strong>canonical parameterization</strong>.</p>
+<p>In general, there are many ways in which a distribution family can be parameterized. The parameterization you use in practice will depend on the information you can more easily obtain.</p>
+</section>
+<section id="distribution-families-in-practice">
+<h3>3.6. Distribution Families in Practice<a class="headerlink" href="#distribution-families-in-practice" title="Permalink to this heading">#</a></h3>
+<blockquote>
+<div><p>Why is it useful to know about distribution families?</p>
+</div></blockquote>
+<p>In general, when we are modelling something, like a river flow, next month’s net gains, or the number of ships arriving at port tomorrow, we have the choice to make a distributional assumption or not. That is:</p>
+<ul class="simple">
+<li><p>Do we want to declare the random variable of interest as belonging to a specific distribution family?</p></li>
+<li><p>Or, do we want to allow the random variable to have a fully general distribution?</p></li>
+</ul>
+<p>Of course, both are good options depending on the scenario, and later in the program, we will explore the tradeoff with both options in more detail.</p>
+</section>
+</section>
+<section id="another-common-discrete-distribution-families">
+<h2>4. Another Common Discrete Distribution Families<a class="headerlink" href="#another-common-discrete-distribution-families" title="Permalink to this heading">#</a></h2>
+<p>Aside from the Binomial family of distributions, many other families come up in practice. Here are some of them. For a complete list, check out <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_probability_distributions">Wikipedia’s list of probability distributions</a>. In practice, it is rare to encounter situations that a distribution family exactly describes, but distribution families still act as useful approximations.</p>
+<section id="geometric-distribution">
+<h3>4.1. <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Geometric.pdf">Geometric Distribution</a><a class="headerlink" href="#geometric-distribution" title="Permalink to this heading">#</a></h3>
+<section id="id5">
+<h4>Process<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
+<p>Suppose you play a game, and win with probability <span class="math notranslate nohighlight">\(p\)</span>. Let <span class="math notranslate nohighlight">\(X\)</span> be the number of <strong>independent</strong> failures at playing the game before experiencing the first <strong>independent</strong> win. Then <span class="math notranslate nohighlight">\(X\)</span> is said to have a <strong>Geometric distribution</strong>, written as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Geometric} (p).\]</div>
+</section>
+<section id="id6">
+<h4>PMF<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
+<p>A Geometric distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid p) = p (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note the following:</p>
+<ul class="simple">
+<li><p>Sometimes this family is defined so that <span class="math notranslate nohighlight">\(X\)</span> <strong>includes</strong> the winning attempt. The properties of the distribution differ, so be sure to be deliberate about which one you use.</p></li>
+<li><p>Since there is only one parameter, this means that if you know the mean, you also know the variance!</p></li>
+<li><p>The Geometric distribution has <strong>infinite support</strong>, or in other words infinitely many possible outcomes. We can still place a non-zero probability on each outcome and have the probabilities sum to 1 thanks to <a class="reference external" href="https://en.wikipedia.org/wiki/Convergent_series">convergent series</a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="id7">
+<h4>Mean<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Geometric random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{1 - p}{p}.\]</div>
+</section>
+<section id="id8">
+<h4>Variance<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Geometric random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{1 - p}{p^2}.\]</div>
+</section>
+<section id="id9">
+<h4>Code<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h4>
+<p>The Geometric PMF can be calculated in <code class="docutils literal notranslate"><span class="pre">R</span></code> with <code class="docutils literal notranslate"><span class="pre">dgeom()</span></code> and in <code class="docutils literal notranslate"><span class="pre">Python</span></code> with <code class="docutils literal notranslate"><span class="pre">scipy.stats.geom()</span></code>.</p>
+</section>
+</section>
+<section id="negative-binomial-distribution-a-k-a-pascal">
+<h3>4.2. <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Geometric.pdf">Negative Binomial Distribution (a.k.a. Pascal)</a><a class="headerlink" href="#negative-binomial-distribution-a-k-a-pascal" title="Permalink to this heading">#</a></h3>
+<section id="id10">
+<h4>Process<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h4>
+<p>Suppose you play a game, and win with probability <span class="math notranslate nohighlight">\(p\)</span>. Let <span class="math notranslate nohighlight">\(X\)</span> be the number of <strong>independent</strong> losses at playing the game before experiencing <span class="math notranslate nohighlight">\(k\)</span> <strong>independent</strong> wins. Then <span class="math notranslate nohighlight">\(X\)</span> is said to have a <strong>Negative Binomial</strong> distribution, written as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Negative Binomial} (k, p).\]</div>
+</section>
+<section id="id11">
+<h4>PMF<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h4>
+<p>A Negative Binomial distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid k, p) = {k - 1 + x \choose x} p^k (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note the following:</p>
+<ul class="simple">
+<li><p>It has two parameters: <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(p\)</span>.</p></li>
+<li><p>The Geometric family results with <span class="math notranslate nohighlight">\(k = 1\)</span>.</p></li>
+</ul>
+</div>
+</section>
+<section id="id12">
+<h4>Mean<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Negative Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{k(1 - p)}{p}.\]</div>
+</section>
+<section id="id13">
+<h4>Variance<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Negative Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{k(1 - p)}{p^2}.\]</div>
+</section>
+<section id="id14">
+<h4>Code<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h4>
+<p>The Negative Binomial PMF can be calculated in <code class="docutils literal notranslate"><span class="pre">R</span></code> with <code class="docutils literal notranslate"><span class="pre">dnbinom()</span></code> and in <code class="docutils literal notranslate"><span class="pre">Python</span></code> with <code class="docutils literal notranslate"><span class="pre">scipy.stats.nbinom</span></code>.</p>
+</section>
+</section>
+<section id="poisson">
+<h3>4.3. <a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Poisson.pdf">Poisson</a><a class="headerlink" href="#poisson" title="Permalink to this heading">#</a></h3>
+<section id="id15">
+<h4>Process<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h4>
+<p>Suppose customers independently arrive at a store at some average rate <span class="math notranslate nohighlight">\(\lambda\)</span>. Then, the total number <span class="math notranslate nohighlight">\(X\)</span> of customers arriving after a pre-specified length of time follows a <strong>Poisson distribution</strong>:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Poisson} (\lambda).\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note this distribution is parameterized by a single parameter: the mean <span class="math notranslate nohighlight">\(\lambda\)</span>. We can find other examples that are indicative of a Poisson process:</p>
+<ul class="simple">
+<li><p>The number of ships arriving at Vancouver port on a given day.</p></li>
+<li><p>The number of emails you receive on a given day.</p></li>
+</ul>
+</div>
+</section>
+<section id="id16">
+<h4>PMF<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h4>
+<p>A Poisson distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid \lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+</section>
+<section id="id17">
+<h4>Mean<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Poisson random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \lambda.\]</div>
+</section>
+<section id="id18">
+<h4>Variance<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Poisson random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \lambda.\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A notable property of this family is that the mean is equal to the variance.</p>
+</div>
+</section>
+<section id="id19">
+<h4>Code<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h4>
+<p>The Poisson PMF can be calculated in <code class="docutils literal notranslate"><span class="pre">R</span></code> with <code class="docutils literal notranslate"><span class="pre">dpois()</span></code> and in <code class="docutils literal notranslate"><span class="pre">Python</span></code> with <code class="docutils literal notranslate"><span class="pre">scipy.stats.poisson()</span></code>.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_lecture-uncertainty.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 1: Depicting Uncertainty</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_lecture-joint.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 3: Joint Probability</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#properties-of-distributions">1. Properties of Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-single-probability-mass-function">1.1. A Single Probability Mass Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-multiple-probability-mass-functions">1.2. Comparing Multiple Probability Mass Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#random-variable-transformations">2. Random Variable Transformations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#revisiting-variance">2.1. Revisiting Variance</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-1">Method 1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#method-2">Method 2</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-mapping">2.2. Distribution Mapping</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-value-properties">2.3. Expected Value Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-properties">2.4. Variance Properties</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-of-families">3. Distribution of Families</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli">3.1. Bernoulli</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#process">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pmf">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binomial-distribution">3.2. Binomial Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#code">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#families-versus-distributions">3.3. Families Versus Distributions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">3.4. Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parameterization">3.5. Parameterization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution-families-in-practice">3.6. Distribution Families in Practice</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#another-common-discrete-distribution-families">4. Another Common Discrete Distribution Families</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-distribution">4.1. Geometric Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#negative-binomial-distribution-a-k-a-pascal">4.2. Negative Binomial Distribution (a.k.a. Pascal)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">Code</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson">4.3. Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Code</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

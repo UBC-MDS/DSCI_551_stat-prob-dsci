@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'README';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Lecture 1: Depicting Uncertainty" href="notes/01_lecture-uncertainty.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notes/01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="notes/appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/README.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-goals">High-Level Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-topics">Lecture Topics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cheat-sheet">Cheat sheet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables">Deliverables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-of-llms">Use of LLMs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#policies">Policies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-dsci-551-descriptive-statistics-and-probability-for-data-science">
+<h1>Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science<a class="headerlink" href="#welcome-to-dsci-551-descriptive-statistics-and-probability-for-data-science" title="Permalink to this heading">#</a></h1>
+<p>This course introduces descriptive statistics and probability, including measures of location and spread, random variables, distributions, parameters, categorical variables, and uncertainty.</p>
+<section id="high-level-goals">
+<h2>High-Level Goals<a class="headerlink" href="#high-level-goals" title="Permalink to this heading">#</a></h2>
+<p>By the end of the course, students are expected to:</p>
+<ul class="simple">
+<li><p>Provide fundamental concepts in probability, including conditional, joint, and marginal distributions.</p></li>
+<li><p>Develop a statistical view of data coming from a probability distribution.</p></li>
+</ul>
+</section>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Compute summary statistics, such as expected value and variance, of simple discrete and continuous probability distributions.</p></li>
+<li><p>Compare/contrast location summary statistics such as mean/median/mode/quantiles.</p></li>
+<li><p>Estimate summary statistics such as mean/median/variance from a plot of a distribution’s PDF or CDF.</p></li>
+<li><p>Identify common continuous distributions such as Gaussian/Poisson/uniform from a plot of a distribution’s PDF or CDF.</p></li>
+<li><p>Match common discrete distributions such as Bernoulli/binomial/multinomial to descriptions.</p></li>
+<li><p>Compare/contrast conditional, joint and marginal distributions.</p></li>
+<li><p>Explain the notion of “marginalizing out” a random variable.</p></li>
+<li><p>Identify independence between random variables from plots/tables of conditional/joint/marginal distributions.</p></li>
+<li><p>Connect conditional distributions to the notion of supervised learning.</p></li>
+<li><p>Explain the concept of maximum likelihood estimation.</p></li>
+<li><p>Identify the units of various quantities such as mean/variance/density for continuous distributions.</p></li>
+<li><p>Simulate sample generation from probability distributions, and interpret the results.</p></li>
+</ul>
+</section>
+<section id="lecture-topics">
+<h2>Lecture Topics<a class="headerlink" href="#lecture-topics" title="Permalink to this heading">#</a></h2>
+<p>This course occurs during <strong>Block 1</strong> in the 2024/25 school year. The course notes can be accessed <a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/README.html"><strong>here</strong></a>.</p>
+<div class="pst-scrollable-table-container"><table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>Lecture Topic/Notes</p></th>
+<th class="text-center head"><p>Required Readings</p></th>
+<th class="text-center head"><p>Optional Readings</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Depicting Uncertainty</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/01_lecture-uncertainty.html"><code class="docutils literal notranslate"><span class="pre">lecture1</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability/">Part 1: Core Probability</a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Parametric Families</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/02_lecture-parametric-families.html"><code class="docutils literal notranslate"><span class="pre">lecture2</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/">Part 2: Random Variables</a></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Joint Probability</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/03_lecture-joint.html"><code class="docutils literal notranslate"><span class="pre">lecture3</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/">Part 3: Probabilistic Models</a>, <a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Chapter 5.1</a>, <a class="reference external" href="https://www.youtube.com/watch?v=KDw3hC2YNFc">Covariance and correlation (video)</a>, <a class="reference external" href="https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean">How would you explain covariance …</a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Conditional Probabilities</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/04_lecture-conditional.html"><code class="docutils literal notranslate"><span class="pre">lecture4</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/">Part 3: Probabilistic Models</a>, <a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Chapter 5.3</a></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Continuous Distributions</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/05_lecture-continuous.html"><code class="docutils literal notranslate"><span class="pre">lecture5</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Chapter 4</a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Common Distribution Families and Conditioning</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/06_lecture-continuous-families.html"><code class="docutils literal notranslate"><span class="pre">lecture6</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/">Part 2: Random Variables</a></p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Maximum Likelihood Estimation</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/07_lecture-maximum-likelihood-estimation.html"><code class="docutils literal notranslate"><span class="pre">lecture7</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/part5/parameter_estimation/">Part 5: Machine Learning</a>,<a class="reference external" href="https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html#sex_unconditional_model">Beyond Multiple Linear Regression, sections 2.1 to 2.4</a>, <a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Chapter 7.1 &amp; 7.2</a></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Simulation and Empirical Distributions</p></td>
+<td class="text-center"><p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/08_lecture-simulation.html"><code class="docutils literal notranslate"><span class="pre">lecture8</span></code> notes</a></p></td>
+<td class="text-center"><p><a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Chapter 9: Applications to Computing</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cheat-sheet">
+<h2>Cheat sheet<a class="headerlink" href="#cheat-sheet" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/appendix-prob-cheatsheet.html"><strong>Here</strong></a> is a cheat sheet we created to summarize the main formulas and concepts covered in DSCI 551.</p>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading">#</a></h2>
+<p>This is an <strong>assignment-based course</strong>. The following deliverables will determine your course grade:</p>
+<div class="pst-scrollable-table-container"><table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-center head"><p>Assessment</p></th>
+<th class="text-center head"><p>Weight</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Lab Assignment 1</p></td>
+<td class="text-center"><p>12%</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Lab Assignment 2</p></td>
+<td class="text-center"><p>12%</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Lab Assignment 3</p></td>
+<td class="text-center"><p>12%</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Lab Assignment 4</p></td>
+<td class="text-center"><p>12%</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Quiz 1</p></td>
+<td class="text-center"><p>25%</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Quiz 2</p></td>
+<td class="text-center"><p>25%</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Lecture Attendance (<a class="reference external" href="https://student.iclicker.com/#/login">iClicker</a>)</p></td>
+<td class="text-center"><p>2%</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="use-of-llms">
+<h2>Use of LLMs<a class="headerlink" href="#use-of-llms" title="Permalink to this heading">#</a></h2>
+<p>LLMs, such as ChatGPT, can be helpful tools if we use them responsibly. In this course, students are permitted to use these tools to gather more information, review concepts, or brainstorm, and students must cite these tools if they use them for assignment. Having said all this, it is <strong>not</strong> permitted to write any given assignment via copying and pasting AI-generated responses.</p>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
+<blockquote>
+<div><p><strong>Note:</strong> Some of these resources cover much more material than DSCI 551.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p><a class="reference external" href="https://probability4datascience.com/">Introduction to Probability for Data Science</a></p></li>
+<li><p><a class="reference external" href="https://chrispiech.github.io/probabilityForComputerScientists/en/index.html">Course Reader CS109 Stanford by Chris Piech</a></p></li>
+<li><p><a class="reference external" href="https://www.deeplearningbook.org/contents/prob.html">Chapter 3: Probability and Information Theory,from the Deep Learning Book by Goodfellow, I., Bengio, Y., and Courville, A. (2016)</a></p></li>
+<li><p><a class="reference external" href="https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf">Probability &amp; Statistics with Applications to Computing by Alex Tsun, Stanford</a></p></li>
+<li><p><a class="reference external" href="http://www.jbstatistics.com/">JBstatistics</a> (also on <a class="reference external" href="https://www.youtube.com/channel/UCiHi6xXLzi9FMr9B0zgoHqA">YouTube</a>)</p></li>
+<li><p><a class="reference external" href="https://www.probabilitycourse.com/">Introduction to Probability, Statistics, and Random Processes</a></p></li>
+<li><p><a class="reference external" href="https://projects.iq.harvard.edu/stat110">Harvard STAT 110 course</a>, <a class="reference external" href="https://www.youtube.com/playlist?list=PL2SOU6wwxB0uwwH80KTQ6ht66KWxbzTIo">YouTube videos</a></p></li>
+<li><p><a class="reference external" href="https://github.com/wzchen/probability_cheatsheet">Probability Cheatsheet</a></p></li>
+<li><p><a class="reference external" href="https://www.math.kth.se/matstat/gru/sf1901/TCOMK/exercises.pdf">Word problems for conditional probability</a></p></li>
+</ul>
+</section>
+<section id="policies">
+<h2>Policies<a class="headerlink" href="#policies" title="Permalink to this heading">#</a></h2>
+<p>See the general <a class="reference external" href="https://ubc-mds.github.io/policies/">MDS policies</a>.</p>
+</section>
+<section id="attribution">
+<h2>Attribution<a class="headerlink" href="#attribution" title="Permalink to this heading">#</a></h2>
+<p>The course is built upon previous years’ materials developed by previous instructors.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">#</a></h2>
+<p>© 2024 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu.</p>
+<p>Software licensed under <a class="reference external" href="https://spdx.org/licenses/MIT.html">the MIT License</a>, non-software content licensed under <a class="reference external" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License</a>. See the <a class="reference internal" href="LICENSE.html"><span class="std std-doc">license file</span></a> for more information.</p>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="notes/01_lecture-uncertainty.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 1: Depicting Uncertainty</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-goals">High-Level Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lecture-topics">Lecture Topics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cheat-sheet">Cheat sheet</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deliverables">Deliverables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-of-llms">Use of LLMs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resources">Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#policies">Policies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attribution">Attribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
