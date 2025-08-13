@@ -1,0 +1,1322 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Distribution Cheatsheet &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/appendix-dist-cheatsheet';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Greek Alphabet" href="appendix-greek-alphabet.html" />
+    <link rel="prev" title="Probability Cheatsheet" href="appendix-prob-cheatsheet.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/appendix-dist-cheatsheet.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/appendix-dist-cheatsheet.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Distribution Cheatsheet</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-distributions">Discrete Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli">Bernoulli</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#process">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pmf">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binomial-distribution">Binomial Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-mass-function-pmf">Probability Mass Function (PMF)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-distribution">Geometric Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#negative-binomial-distribution-a-k-a-pascal">Negative Binomial Distribution (a.k.a. Pascal)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson">Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#r-functions"><code class="docutils literal notranslate"><span class="pre">R</span></code> Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ppois"><code class="docutils literal notranslate"><span class="pre">ppois()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#qpois"><code class="docutils literal notranslate"><span class="pre">qpois()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-discrete">Uniform (Discrete)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Variance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-distributions">Continuous Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#beta">Beta</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pdf">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bivariate-gaussian-or-normal">Bivariate Gaussian or Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">PDF</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exponential">Exponential</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gamma">Gamma</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-or-normal">Gaussian or Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-normal">Log-Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-continuous">Uniform (Continuous)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weibull">Weibull</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">Variance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="distribution-cheatsheet">
+<h1>Distribution Cheatsheet<a class="headerlink" href="#distribution-cheatsheet" title="Permalink to this heading">#</a></h1>
+<p>The below mindmap summarizes all the distributions to be covered in this course.</p>
+<p><a class="reference external" href="https://mermaid.live/edit#pako:eNp9VE1v2zAM_SuCTgkQd3HrpIkx9NB262Urhg7dgsEXxqYdYhYVSHKaLsh_n2wn_Vjs6WBY_HiP5JO0k6nOUMZSEWcK1gkLYbR2g0emDRgCh6K2CfEAnGnV_v-oPcsSh-32lmxq0GG7q1ccU6p5kIMVOQRuNXx1XRODee4LzSjFwD3pNwn12u0WgqwAYas0RWuFNuLj0ny4yoHKyuB-_z6-XsNrNKyrsqTBq_NGV-z6yCuLxnYwt6RoBXHLysL5AZS2m5ZYK-8d_Av0mYx1Lx1A7vDQxEIc2ugGvEOt0BOmg9PSjokt0BJzbVDgdo2GkFPionYkydUp7O9jJT2s91iAow2K3n4WAjfI7sDtZwMipy1mfky-tQ2UrUPnwpHCWjK7hrRbq2-arPVKtK4bzY640pXtk8pUJZoTqa69uhlmXQzeie4JkUVJio5Fg_CnWixrYQtkNFB25TYV-gvhh6sG_4NuMMcNZtgL5IOhE-Vec8CHqXdlv59AqbkIwBj9FEDpAkPFyg17KL_oIrj3xZ-I-BLxabvW7MWk_pA7UAr6nD-Rlv6qnZyRR152a_K-GdymK-AC61aGXYfxbfHtV46kQm-lzL9eu9qWSLdChYmM_W-GOVSlS2TCex8KldPfnzmVsTMVjmS1zvzTdktQGFAyzv1l9tY1sIx3civj-fwsvIguJ9Fkfh7OoulsJJ9lPPHWWRhOJ-F0Op1Hk2g_kn-09gDjs9l4Fk4vx9H4IpqNJ-fzkcSMnDZf2_e1eWYbhl9NQl3G_i9rgoWY"><img alt="" src="https://mermaid.ink/img/pako:eNp9VE1v2zAM_SuCTgkQd3HrpIkx9NB262Urhg7dgsEXxqYdYhYVSHKaLsh_n2wn_Vjs6WBY_HiP5JO0k6nOUMZSEWcK1gkLYbR2g0emDRgCh6K2CfEAnGnV_v-oPcsSh-32lmxq0GG7q1ccU6p5kIMVOQRuNXx1XRODee4LzSjFwD3pNwn12u0WgqwAYas0RWuFNuLj0ny4yoHKyuB-_z6-XsNrNKyrsqTBq_NGV-z6yCuLxnYwt6RoBXHLysL5AZS2m5ZYK-8d_Av0mYx1Lx1A7vDQxEIc2ugGvEOt0BOmg9PSjokt0BJzbVDgdo2GkFPionYkydUp7O9jJT2s91iAow2K3n4WAjfI7sDtZwMipy1mfky-tQ2UrUPnwpHCWjK7hrRbq2-arPVKtK4bzY640pXtk8pUJZoTqa69uhlmXQzeie4JkUVJio5Fg_CnWixrYQtkNFB25TYV-gvhh6sG_4NuMMcNZtgL5IOhE-Vec8CHqXdlv59AqbkIwBj9FEDpAkPFyg17KL_oIrj3xZ-I-BLxabvW7MWk_pA7UAr6nD-Rlv6qnZyRR152a_K-GdymK-AC61aGXYfxbfHtV46kQm-lzL9eu9qWSLdChYmM_W-GOVSlS2TCex8KldPfnzmVsTMVjmS1zvzTdktQGFAyzv1l9tY1sIx3civj-fwsvIguJ9Fkfh7OoulsJJ9lPPHWWRhOJ-F0Op1Hk2g_kn-09gDjs9l4Fk4vx9H4IpqNJ-fzkcSMnDZf2_e1eWYbhl9NQl3G_i9rgoWY?type=png" /></a></p>
+<section id="discrete-distributions">
+<h2>Discrete Distributions<a class="headerlink" href="#discrete-distributions" title="Permalink to this heading">#</a></h2>
+<section id="bernoulli">
+<span id="bernoulli-distribution"></span><h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Bernoulli.pdf">Bernoulli</a><a class="headerlink" href="#bernoulli" title="Permalink to this heading">#</a></h3>
+<section id="process">
+<h4>Process<a class="headerlink" href="#process" title="Permalink to this heading">#</a></h4>
+<p>It is a random variable <span class="math notranslate nohighlight">\(X\)</span> that is binary as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X =
+\begin{cases}
+1 \; \; \; \; \text{if there is a success},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+\end{split}\]</div>
+<p>The value <span class="math notranslate nohighlight">\(1\)</span> has a probability of <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>, whereas the value <span class="math notranslate nohighlight">\(0\)</span> has a probability of <span class="math notranslate nohighlight">\(1 - p\)</span>.</p>
+<p>Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a Bernoulli distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Bernoulli}(p).\]</div>
+</section>
+<section id="pmf">
+<h4>PMF<a class="headerlink" href="#pmf" title="Permalink to this heading">#</a></h4>
+<p>A Bernoulli distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid p) = p^x (1 - p)^{1 - x} \quad \text{for} \quad x = 0, 1.\]</div>
+</section>
+<section id="mean">
+<h4>Mean<a class="headerlink" href="#mean" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Bernoulli random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = p.\]</div>
+</section>
+<section id="variance">
+<h4>Variance<a class="headerlink" href="#variance" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Bernoulli random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = p(1 - p).\]</div>
+</section>
+</section>
+<section id="binomial-distribution">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Binomial.pdf">Binomial Distribution</a><a class="headerlink" href="#binomial-distribution" title="Permalink to this heading">#</a></h3>
+<section id="id1">
+<h4>Process<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be the number of succcesses after <span class="math notranslate nohighlight">\(n\)</span> independent Bernoulli trials with probability of success <span class="math notranslate nohighlight">\(0 \leq p \leq 1\)</span>.</p>
+<p>Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a Binomial distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Binomial} \left( n, p \right).\]</div>
+</section>
+<section id="probability-mass-function-pmf">
+<h4>Probability Mass Function (PMF)<a class="headerlink" href="#probability-mass-function-pmf" title="Permalink to this heading">#</a></h4>
+<p>A Binomial distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P \left( X = x \mid n, p \right) = {n \choose x} p^x (1 - p)^{n - x} \quad \text{for} \quad x = 0, 1, \dots, n.\]</div>
+<p>Term <span class="math notranslate nohighlight">\({n \choose x}\)</span> indicates the total number of combinations for <span class="math notranslate nohighlight">\(x\)</span> successes out of <span class="math notranslate nohighlight">\(n\)</span> trials:</p>
+<div class="math notranslate nohighlight">
+\[{n \choose x} = \frac{n!}{x!(n - x)!}.\]</div>
+</section>
+<section id="id2">
+<h4>Mean<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = n p.\]</div>
+</section>
+<section id="id3">
+<h4>Variance<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = n p (1 - p).\]</div>
+</section>
+</section>
+<section id="geometric-distribution">
+<span id="id4"></span><h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Geometric.pdf">Geometric Distribution</a><a class="headerlink" href="#geometric-distribution" title="Permalink to this heading">#</a></h3>
+<section id="id5">
+<h4>Process<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be the number of failed independent Bernoulli trials before experiencing the first success.</p>
+<p>Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a Geometric distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Geometric} (p).\]</div>
+</section>
+<section id="id6">
+<h4>PMF<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
+<p>A Geometric distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid p) = p (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+</section>
+<section id="id7">
+<h4>Mean<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Geometric random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{1 - p}{p}.\]</div>
+</section>
+<section id="id8">
+<h4>Variance<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Geometric random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{1 - p}{p^2}.\]</div>
+</section>
+</section>
+<section id="negative-binomial-distribution-a-k-a-pascal">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Geometric.pdf">Negative Binomial Distribution (a.k.a. Pascal)</a><a class="headerlink" href="#negative-binomial-distribution-a-k-a-pascal" title="Permalink to this heading">#</a></h3>
+<section id="id9">
+<h4>Process<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be the number of failed independent Bernoulli trials before experiencing <span class="math notranslate nohighlight">\(k\)</span> independent successes.</p>
+<p>Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a Negative Binomial distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Negative Binomial} (k, p).\]</div>
+</section>
+<section id="id10">
+<h4>PMF<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h4>
+<p>A Negative Binomial distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \mid k, p) = {k - 1 + x \choose x} p^k (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+</section>
+<section id="id11">
+<h4>Mean<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Negative Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{k(1 - p)}{p}.\]</div>
+</section>
+<section id="id12">
+<h4>Variance<a class="headerlink" href="#id12" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Negative Binomial random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{k(1 - p)}{p^2}.\]</div>
+</section>
+</section>
+<section id="poisson">
+<span id="poisson-distribution"></span><h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Poisson.pdf">Poisson</a><a class="headerlink" href="#poisson" title="Permalink to this heading">#</a></h3>
+<section id="id13">
+<h4>Process<a class="headerlink" href="#id13" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be the number of events happening in a fixed interval of time or space at some average rate <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a Poisson distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Poisson} (\lambda).\]</div>
+</section>
+<section id="id14">
+<h4>PMF<a class="headerlink" href="#id14" title="Permalink to this heading">#</a></h4>
+<p>A Poisson distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight" id="equation-appendix-poisson-pmf">
+<span class="eqno">(54)<a class="headerlink" href="#equation-appendix-poisson-pmf" title="Permalink to this equation">#</a></span>\[P(X = x \mid \lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}  \quad \text{for} \quad x = 0, 1, \dots\]</div>
+</section>
+<section id="id15">
+<h4>Mean<a class="headerlink" href="#id15" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Poisson random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \lambda.\]</div>
+</section>
+<section id="id16">
+<h4>Variance<a class="headerlink" href="#id16" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Poisson random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \lambda.\]</div>
+</section>
+<section id="r-functions">
+<h4><code class="docutils literal notranslate"><span class="pre">R</span></code> Functions<a class="headerlink" href="#r-functions" title="Permalink to this heading">#</a></h4>
+<p>The Poisson distribution has some handy <code class="docutils literal notranslate"><span class="pre">R</span></code> functions to perform different probabilistic computations. Let us check them via some quick example.</p>
+<p>Suppose that we have the following random variable:</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Number of orders received at an online store during the weekend.}\]</div>
+<p>Note we have a count-type random variable denoting the number of events (i.e., <strong>orders</strong>) happening in a fixed interval of time (i.e., <strong>the weekend</strong>). Let us assume that, in average during the weekend, we receive 15 orders. We can model <span class="math notranslate nohighlight">\(X\)</span> as a Poisson random variable:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Poisson}(\lambda = 15).\]</div>
+<section id="ppois">
+<h5><code class="docutils literal notranslate"><span class="pre">ppois()</span></code><a class="headerlink" href="#ppois" title="Permalink to this heading">#</a></h5>
+<p>Given the above random variable modelling, let us answer the following:</p>
+<ol class="arabic simple">
+<li><p>What is the probability of getting more than 10 orders during the weekend, i.e., <span class="math notranslate nohighlight">\(P(X &gt; 10)\)</span>?</p></li>
+<li><p>What is the probability of getting between 12 and 16 orders during the weekend, i.e., <span class="math notranslate nohighlight">\(P(12 \leq X \leq 16)\)</span>?</p></li>
+</ol>
+<p>We can manually compute these probabilities via Equation <a class="reference internal" href="#equation-appendix-poisson-pmf">(54)</a>. Nevertheless, let us try a quicker way via <code class="docutils literal notranslate"><span class="pre">ppois()</span></code>. This function allows us to compute probabilities as follows:</p>
+<ul class="simple">
+<li><p>We must indicate an argument <code class="docutils literal notranslate"><span class="pre">q</span></code> for the quantile corresponding to <span class="math notranslate nohighlight">\(P(X \leq \texttt{q})\)</span>.</p></li>
+<li><p>Argument <code class="docutils literal notranslate"><span class="pre">lambda</span></code> corresponds to <span class="math notranslate nohighlight">\(\lambda\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">answer_ppois_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">ppois</span><span class="p">(</span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">,</span><span class="w"> </span><span class="n">lower.tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> </span><span class="c1"># lower.tail = TRUE indicates P(X &lt;= q)</span>
+<span class="n">answer_ppois_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">answer_ppois_1</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"> </span><span class="c1"># Rounding to three decimal places</span>
+<span class="n">answer_ppois_1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.882</div></div>
+</div>
+<p>The above code corresponds to:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X &gt; 10) &amp;= 1 - P(X \leq 10) \\
+&amp; = 0.882.
+\end{align*}\end{split}\]</div>
+<p>Now, for the second question:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">answer_ppois_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">ppois</span><span class="p">(</span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">16</span><span class="p">,</span><span class="w"> </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">,</span><span class="w"> </span><span class="n">lower.tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">-</span>
+<span class="w">  </span><span class="nf">ppois</span><span class="p">(</span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">12</span><span class="p">,</span><span class="w"> </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">,</span><span class="w"> </span><span class="n">lower.tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">answer_ppois_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="n">answer_ppois_2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">)</span>
+<span class="n">answer_ppois_2</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">0.397</div></div>
+</div>
+<p>The above code corresponds to:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(12 \leq X \leq 16) &amp;= P(X \leq 16) - P(X \leq 12) \\
+&amp; = 0.397.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="qpois">
+<h5><code class="docutils literal notranslate"><span class="pre">qpois()</span></code><a class="headerlink" href="#qpois" title="Permalink to this heading">#</a></h5>
+<p>It is also possible to obtain the <span class="math notranslate nohighlight">\(p\)</span>-quantile <span class="math notranslate nohighlight">\(Q(p)\)</span> associated with the probability <span class="math notranslate nohighlight">\(P\left[X \leq Q(p) \right]\)</span>. Suppose we want to obtain the <span class="math notranslate nohighlight">\(0.6\)</span>-quantile, i.e. <span class="math notranslate nohighlight">\(Q(0.6)\)</span>, for this specific example. Function <code class="docutils literal notranslate"><span class="pre">qpois()</span></code> allows us to compute this quantile as follows:</p>
+<ul class="simple">
+<li><p>We must indicate an argument <code class="docutils literal notranslate"><span class="pre">p</span></code> for the corresponding probability <span class="math notranslate nohighlight">\(p\)</span>.</p></li>
+<li><p>Argument <code class="docutils literal notranslate"><span class="pre">lambda</span></code> corresponds to <span class="math notranslate nohighlight">\(\lambda\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">answer_qpois</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">qpois</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.6</span><span class="p">,</span><span class="w"> </span><span class="n">lambda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">)</span>
+<span class="n">answer_qpois</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">answer_qpois</span>
+<span class="n">answer_qpois</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">16</div></div>
+</div>
+<p>The above code corresponds to:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+P\left[X \leq Q(0.6) \right] = 0.6 \\
+P\left[X \leq 16 \right] = 0.6.
+\end{gather*}\end{split}\]</div>
+</section>
+</section>
+</section>
+<section id="uniform-discrete">
+<h3>Uniform (Discrete)<a class="headerlink" href="#uniform-discrete" title="Permalink to this heading">#</a></h3>
+<section id="id17">
+<h4>Process<a class="headerlink" href="#id17" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be the random discrete outcome of a finite set of <span class="math notranslate nohighlight">\(N\)</span> outcomes. Suppose each outcome has a numeric label whose lower and upper bounds are <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>, respectively. Then, <span class="math notranslate nohighlight">\(X\)</span> is said to have a discrete Uniform distribution:</p>
+<div class="math notranslate nohighlight">
+\[X \sim \text{Discrete Uniform} (a, b).\]</div>
+</section>
+<section id="id18">
+<h4>PMF<a class="headerlink" href="#id18" title="Permalink to this heading">#</a></h4>
+<p>A discrete Uniform distribution is characterized by the PMF</p>
+<div class="math notranslate nohighlight">
+\[
+P(X = x \mid a, b) = \frac{1}{N}  \quad \text{for} \quad x = a, \dots, b.
+\]</div>
+</section>
+<section id="id19">
+<h4>Mean<a class="headerlink" href="#id19" title="Permalink to this heading">#</a></h4>
+<p>The mean of a discrete Uniform random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{a + b}{2}.\]</div>
+</section>
+<section id="id20">
+<h4>Variance<a class="headerlink" href="#id20" title="Permalink to this heading">#</a></h4>
+<p>The variance of a discrete Uniform random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{N^2 - 1}{12}.\]</div>
+</section>
+</section>
+</section>
+<section id="continuous-distributions">
+<h2>Continuous Distributions<a class="headerlink" href="#continuous-distributions" title="Permalink to this heading">#</a></h2>
+<section id="beta">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Beta.pdf">Beta</a><a class="headerlink" href="#beta" title="Permalink to this heading">#</a></h3>
+<section id="id21">
+<h4>Process<a class="headerlink" href="#id21" title="Permalink to this heading">#</a></h4>
+<p>The Beta family of distributions is defined for random variables taking values between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>, so is useful for modelling the distribution of proportions. This family is quite flexible, and has the Uniform distribution as a special case. It is characterized by two positive shape parameters, <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> and <span class="math notranslate nohighlight">\(\beta &gt; 0\)</span>.</p>
+<p>The Beta family is denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Beta}(\alpha, \beta).\]</div>
+</section>
+<section id="pdf">
+<h4>PDF<a class="headerlink" href="#pdf" title="Permalink to this heading">#</a></h4>
+<p>The density is parameterized as</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1} \qquad \text{for} \quad 0 \leq x \leq 1,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Gamma(\cdot)\)</span> is the <a class="reference external" href="https://www.statlect.com/mathematical-tools/gamma-function">Gamma function</a>.</p>
+<p>Here are some examples of densities:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/1ed44475645a8f6064fb3d978856db0554efdc39677e1ba4c2e8584045c75aac.png"><img alt="../_images/1ed44475645a8f6064fb3d978856db0554efdc39677e1ba4c2e8584045c75aac.png" src="../_images/1ed44475645a8f6064fb3d978856db0554efdc39677e1ba4c2e8584045c75aac.png" style="width: 900px; height: 630px;" /></a>
+</div>
+</div>
+</section>
+<section id="id22">
+<h4>Mean<a class="headerlink" href="#id22" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Beta random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{\alpha}{\alpha + \beta}.\]</div>
+</section>
+<section id="id23">
+<h4>Variance<a class="headerlink" href="#id23" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Beta random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}.\]</div>
+</section>
+</section>
+<section id="bivariate-gaussian-or-normal">
+<span id="bivariate-normal"></span><h3>Bivariate Gaussian or Normal<a class="headerlink" href="#bivariate-gaussian-or-normal" title="Permalink to this heading">#</a></h3>
+<section id="id24">
+<h4>Process<a class="headerlink" href="#id24" title="Permalink to this heading">#</a></h4>
+<p>Members of this family need to have all Gaussian marginals, and their dependence has to be Gaussian dependence. Gaussian dependence is obtained as a consequence of requiring that any linear combination of Gaussian random variables is also Gaussian.</p>
+</section>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h4>
+<p>To characterize the bivariate Gaussian family (i.e., <span class="math notranslate nohighlight">\(d = 2\)</span> involved random variables), we need the following parameters:</p>
+<ul class="simple">
+<li><p>Mean for both <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> denoted as <span class="math notranslate nohighlight">\(-\infty &lt; \mu_X &lt; \infty\)</span> and <span class="math notranslate nohighlight">\(-\infty &lt; \mu_Y &lt; \infty\)</span>, respectively.</p></li>
+<li><p>Variance for both <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> denoted as <span class="math notranslate nohighlight">\(\sigma^2_X &gt; 0\)</span> and <span class="math notranslate nohighlight">\(\sigma^2_Y &gt; 0\)</span>, respectively.</p></li>
+<li><p>The covariance between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, sometimes denoted <span class="math notranslate nohighlight">\(\sigma_{XY}\)</span> or, equivalently, the Pearson correlation <a class="reference internal" href="appendix-prob-cheatsheet.html#equation-pearson-coefficient-appendix">(49)</a> denoted <span class="math notranslate nohighlight">\(-1 \leq \rho_{XY} \leq 1\)</span>.</p></li>
+</ul>
+<p>That is five parameters altogether; and only one of them, Pearson correlation or covariance <a class="reference internal" href="appendix-prob-cheatsheet.html#equation-covariance-appendix">(42)</a>, is needed to specify the dependence part in a bivariate Gaussian family.</p>
+<p>Then, we can construct two objects that are useful for computations: a mean vector <span class="math notranslate nohighlight">\(\boldsymbol{\mu}\)</span> and a covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{\mu}=\begin{pmatrix} \mu_X \\ \mu_Y \end{pmatrix}\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight" id="equation-covariance-matrix-appendix">
+<span class="eqno">(55)<a class="headerlink" href="#equation-covariance-matrix-appendix" title="Permalink to this equation">#</a></span>\[\begin{split}\boldsymbol{\Sigma} = \begin{pmatrix} \sigma_X^2 &amp; \sigma_{XY} \\ \sigma_{XY} &amp; \sigma_Y^2 \end{pmatrix}.\end{split}\]</div>
+<p>Note that the covariance matrix <a class="reference internal" href="#equation-covariance-matrix-appendix">(55)</a> is always defined as above. Even if we are given the correlation <span class="math notranslate nohighlight">\(\rho_{XY}\)</span> instead of the covariance <span class="math notranslate nohighlight">\(\sigma_{XY}\)</span>, we would then need to calculate the covariance as</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{XY} = \rho_{XY}  \sigma_X  \sigma_Y\]</div>
+<p>before constructing the covariance matrix. However, there is another matrix that is sometimes useful, called the correlation matrix <span class="math notranslate nohighlight">\(\mathbf{P}\)</span>. Firstly, let us recall the formula of the Pearson correlation <a class="reference internal" href="appendix-prob-cheatsheet.html#equation-pearson-coefficient-appendix">(49)</a> between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\rho_{XY} = \frac{\operatorname{Cov}(X, Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}} = \frac{\sigma_{XY}}{\sqrt{\sigma_X^2 \sigma_Y^2}}.\]</div>
+<p>It turns out that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+\rho_{XX} = \frac{\operatorname{Cov}(X, X)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(X)}} = \frac{\text{Var}(X)}{\sqrt{\sigma^2_X \sigma^2_X}} = \frac{\sigma^2_X}{\sigma^2_X} = 1 \\
+\rho_{YY} = \frac{\operatorname{Cov}(Y, Y)}{\sqrt{\operatorname{Var}(Y)\operatorname{Var}(Y)}} = \frac{\text{Var}(Y)}{\sqrt{\sigma^2_Y \sigma^2_Y}} = \frac{\sigma^2_Y}{\sigma^2_Y} = 1.
+\end{gather*}\end{split}\]</div>
+<p>Thus, correlation matrix <span class="math notranslate nohighlight">\(\mathbf{P}\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\mathbf{P} &amp;= \begin{pmatrix} \frac{\sigma^2_X}{\sigma^2_X} &amp; \frac{\sigma_{XY}}{\sqrt{\sigma_X^2 \sigma_Y^2}} \\ \frac{\sigma_{XY}}{\sqrt{\sigma_X^2 \sigma_Y^2}} &amp; \frac{\sigma^2_Y}{\sigma^2_Y} \end{pmatrix}  \\
+&amp;= \begin{pmatrix} \rho_{XX} &amp; \rho_{XY} \\ \rho_{XY} &amp; \rho_{YY} \end{pmatrix} \\
+&amp;= \begin{pmatrix} 1 &amp; \rho_{XY} \\ \rho_{XY} &amp; 1 \end{pmatrix}.
+\end{align*}\end{split}\]</div>
+</section>
+<section id="id25">
+<h4>PDF<a class="headerlink" href="#id25" title="Permalink to this heading">#</a></h4>
+<p>The density can be parameterized as</p>
+<div class="math notranslate nohighlight" id="equation-bivariate-normal-pdf-appendix">
+<span class="eqno">(56)<a class="headerlink" href="#equation-bivariate-normal-pdf-appendix" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+f_{XY}\left(x, y \mid \mu_X, \mu_Y, \sigma^2_X, \sigma^2_Y, \rho_{XY}\right) &amp;= \frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1 - \rho_{XY}^2}} \times \\
+&amp; \qquad \quad \exp \left\{  - \frac{1}{2 \left( 1 - \rho_{XY}^2 \right)} \left[ \left( \frac{x - \mu_X}{\sigma_X} \right)^2 + \left( \frac{y - \mu_Y}{\sigma_Y} \right)^2 - 2 \rho_{XY} \frac{\left( x - \mu_X \right) \left( y - \mu_Y \right)}{\sigma_X \sigma_Y} \right] \right\}.
+\end{align*}\end{split}\]</div>
+</section>
+</section>
+<section id="exponential">
+<span id="exponential-distribution"></span><h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Exponential.pdf">Exponential</a><a class="headerlink" href="#exponential" title="Permalink to this heading">#</a></h3>
+<section id="id26">
+<h4>Process<a class="headerlink" href="#id26" title="Permalink to this heading">#</a></h4>
+<p>The Exponential family is for positive random variables, often interpreted as <strong>wait time</strong> for some event to happen. Characterized by a <strong>memoryless property</strong>, where after waiting for a certain period of time, the remaining wait time has the same distribution.</p>
+<p>The family is characterized by a single parameter, usually either the <strong>mean wait time</strong> <span class="math notranslate nohighlight">\(\beta &gt; 0\)</span>, or its reciprocal, the <strong>average rate</strong> <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> at which events happen.</p>
+<p>The Exponential family is denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Exponential}(\beta),\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Exponential}(\lambda).\]</div>
+</section>
+<section id="id27">
+<h4>PDF<a class="headerlink" href="#id27" title="Permalink to this heading">#</a></h4>
+<p>The density can be parameterized as</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \beta) = \frac{1}{\beta} \exp(-x / \beta) \qquad \text{for} \quad x \geq 0\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \lambda) = \lambda \exp(-\lambda x) \qquad \text{for} \quad x \geq 0.\]</div>
+<p>The densities from this family all decay starting at <span class="math notranslate nohighlight">\(x = 0\)</span> for rate <span class="math notranslate nohighlight">\(\lambda\)</span>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/cca02534cec6b43baf83fdfc74e33a1d1bb386d32e527d9bc6f211235a57898c.png"><img alt="../_images/cca02534cec6b43baf83fdfc74e33a1d1bb386d32e527d9bc6f211235a57898c.png" src="../_images/cca02534cec6b43baf83fdfc74e33a1d1bb386d32e527d9bc6f211235a57898c.png" style="width: 900px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="id28">
+<h4>Mean<a class="headerlink" href="#id28" title="Permalink to this heading">#</a></h4>
+<p><strong>Using a <span class="math notranslate nohighlight">\(\beta\)</span> parameterization</strong>, the mean of an Exponential random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \beta.\]</div>
+<p>On the other hand, <strong>using a <span class="math notranslate nohighlight">\(\lambda\)</span> parameterization</strong>, the mean of an Exponential random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = 1 / \lambda.\]</div>
+</section>
+<section id="id29">
+<h4>Variance<a class="headerlink" href="#id29" title="Permalink to this heading">#</a></h4>
+<p><strong>Using a <span class="math notranslate nohighlight">\(\beta\)</span> parameterization</strong>, the variance of an Exponential random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \beta^2.\]</div>
+<p>On the other hand, <strong>using a <span class="math notranslate nohighlight">\(\lambda\)</span> parameterization</strong>, the variance of an Exponential random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = 1 / \lambda^2.\]</div>
+</section>
+</section>
+<section id="gamma">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Gamma.pdf">Gamma</a><a class="headerlink" href="#gamma" title="Permalink to this heading">#</a></h3>
+<section id="id30">
+<h4>Process<a class="headerlink" href="#id30" title="Permalink to this heading">#</a></h4>
+<p>Another useful two-parameter family with support on non-negative numbers. One common parameterization is with a shape parameter <span class="math notranslate nohighlight">\(k &gt; 0\)</span> and a scale parameter <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span>.</p>
+<p>The Gamma family can be denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Gamma}(k, \theta).\]</div>
+</section>
+<section id="id31">
+<h4>PDF<a class="headerlink" href="#id31" title="Permalink to this heading">#</a></h4>
+<p>The density is parameterized as</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid k, \theta) = \frac{1}{\Gamma(k) \theta^k} x^{k - 1} \exp(-x / \theta) \qquad \text{for} \quad x \geq 0,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Gamma(\cdot)\)</span> is the <a class="reference external" href="https://www.statlect.com/mathematical-tools/gamma-function">Gamma function</a>.</p>
+<p>Here are some densities:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/bc23e25947d50c7b88e045d7438c40e9cdaf02e64fee235c1ea1c8fc7e3ebc1f.png"><img alt="../_images/bc23e25947d50c7b88e045d7438c40e9cdaf02e64fee235c1ea1c8fc7e3ebc1f.png" src="../_images/bc23e25947d50c7b88e045d7438c40e9cdaf02e64fee235c1ea1c8fc7e3ebc1f.png" style="width: 900px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="id32">
+<h4>Mean<a class="headerlink" href="#id32" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Gamma random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = k \theta.\]</div>
+</section>
+<section id="id33">
+<h4>Variance<a class="headerlink" href="#id33" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Gamma random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = k \theta^2.\]</div>
+</section>
+</section>
+<section id="gaussian-or-normal">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Normal.pdf">Gaussian or Normal</a><a class="headerlink" href="#gaussian-or-normal" title="Permalink to this heading">#</a></h3>
+<section id="id34">
+<h4>Process<a class="headerlink" href="#id34" title="Permalink to this heading">#</a></h4>
+<p>Probably the most famous family of distributions. It has a density that follows a <strong>“bell-shaped”</strong> curve. It is parameterized by its mean <span class="math notranslate nohighlight">\(-\infty &lt; \mu &lt; \infty\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 &gt; 0\)</span>. A Normal distribution is usually denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \mathcal N\left(\mu, \sigma^2\right).\]</div>
+</section>
+<section id="id35">
+<h4>PDF<a class="headerlink" href="#id35" title="Permalink to this heading">#</a></h4>
+<p>The density is</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp \left[-\frac{(x - \mu)^2}{2\sigma^2} \right] \qquad \text{for} \quad -\infty &lt; x &lt; \infty.\]</div>
+<p>Here are some densities from members of this family:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c9b5999bd8f1366470d5062ecfd0ee3d0692a2cf67defd44e1b66415f7d40650.png"><img alt="../_images/c9b5999bd8f1366470d5062ecfd0ee3d0692a2cf67defd44e1b66415f7d40650.png" src="../_images/c9b5999bd8f1366470d5062ecfd0ee3d0692a2cf67defd44e1b66415f7d40650.png" style="width: 900px; height: 630px;" /></a>
+</div>
+</div>
+</section>
+<section id="id36">
+<h4>Mean<a class="headerlink" href="#id36" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Normal random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \mu.\]</div>
+</section>
+<section id="id37">
+<h4>Variance<a class="headerlink" href="#id37" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Normal random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \sigma^2.\]</div>
+</section>
+</section>
+<section id="log-normal">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Lognormal.pdf">Log-Normal</a><a class="headerlink" href="#log-normal" title="Permalink to this heading">#</a></h3>
+<section id="id38">
+<h4>Process<a class="headerlink" href="#id38" title="Permalink to this heading">#</a></h4>
+<p>A random variable <span class="math notranslate nohighlight">\(X\)</span> is a Log-Normal distribution if the transformation <span class="math notranslate nohighlight">\(\log(X)\)</span> is Normal. This family is often parameterized by the mean <span class="math notranslate nohighlight">\(-\infty &lt; \mu &lt; \infty\)</span> and variance <span class="math notranslate nohighlight">\(\sigma^2 &gt; 0\)</span> of <span class="math notranslate nohighlight">\(\log X\)</span>. The Log-Normal family is denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Log-Normal}\left(\mu, \sigma^2\right).\]</div>
+</section>
+<section id="id39">
+<h4>PDF<a class="headerlink" href="#id39" title="Permalink to this heading">#</a></h4>
+<p>The density is</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \mu, \sigma^2) = \frac{1}{x\sqrt{2\pi \sigma^2}} \exp \left\{ -\frac{[\log(x) - \mu]^2}{2\sigma^2} \right\} \qquad \text{for} \quad x \geq 0.\]</div>
+<p>Here are some densities from members of this family:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/3e8c928aa4ebfbd2a32d38b54fd5f930cedcc91a97dea3828549c370bd2786aa.png"><img alt="../_images/3e8c928aa4ebfbd2a32d38b54fd5f930cedcc91a97dea3828549c370bd2786aa.png" src="../_images/3e8c928aa4ebfbd2a32d38b54fd5f930cedcc91a97dea3828549c370bd2786aa.png" style="width: 900px; height: 630px;" /></a>
+</div>
+</div>
+</section>
+<section id="id40">
+<h4>Mean<a class="headerlink" href="#id40" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Log-Normal random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \exp{\left[ \mu + \left( \sigma^2 / 2 \right) \right]}.\]</div>
+</section>
+<section id="id41">
+<h4>Variance<a class="headerlink" href="#id41" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Log-Normal random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \exp{\left[ 2 \left( \mu + \sigma^2 \right) \right]} - \exp{\left( 2\mu + \sigma^2 \right)}.\]</div>
+</section>
+</section>
+<section id="uniform-continuous">
+<h3>Uniform (Continuous)<a class="headerlink" href="#uniform-continuous" title="Permalink to this heading">#</a></h3>
+<section id="id42">
+<h4>Process<a class="headerlink" href="#id42" title="Permalink to this heading">#</a></h4>
+<p>A continuous Uniform distribution has an equal density in between two points <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> (for <span class="math notranslate nohighlight">\(a &lt; b\)</span>), and is usually denoted by</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Continuous Uniform}(a, b).\]</div>
+<p>That means that there are <strong>two parameters</strong>: <strong>one for each end-point</strong>. A reference to a “<em>Uniform distribution</em>” usually implies <strong>continuous uniform</strong>, as opposed to discrete uniform.</p>
+</section>
+<section id="id43">
+<h4>PDF<a class="headerlink" href="#id43" title="Permalink to this heading">#</a></h4>
+<p>The density is</p>
+<div class="math notranslate nohighlight">
+\[f_X(x\mid a, b) = \frac{1}{b - a} \qquad \text{for} \quad a \leq x \leq b.\]</div>
+<p>Here are some densities from members of this family:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/83e76fe3c90c02efefeacd4883c312840236d023e65bd6c0e16fad4e56bb2930.png"><img alt="../_images/83e76fe3c90c02efefeacd4883c312840236d023e65bd6c0e16fad4e56bb2930.png" src="../_images/83e76fe3c90c02efefeacd4883c312840236d023e65bd6c0e16fad4e56bb2930.png" style="width: 900px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="id44">
+<h4>Mean<a class="headerlink" href="#id44" title="Permalink to this heading">#</a></h4>
+<p>The mean of a continuous Uniform random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \frac{a + b}{2}.\]</div>
+</section>
+<section id="id45">
+<h4>Variance<a class="headerlink" href="#id45" title="Permalink to this heading">#</a></h4>
+<p>The variance of a continuous Uniform random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \frac{(b - a)^2}{12}.\]</div>
+</section>
+</section>
+<section id="weibull">
+<h3><a class="reference external" href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Weibull.pdf">Weibull</a><a class="headerlink" href="#weibull" title="Permalink to this heading">#</a></h3>
+<section id="id46">
+<h4>Process<a class="headerlink" href="#id46" title="Permalink to this heading">#</a></h4>
+<p>A generalization of the Exponential family, which allows for an event to be more likely the longer you wait. Because of this flexibility and interpretation, this family is used heavily in <strong>survival analysis</strong> when modelling <strong>time until an event</strong>.</p>
+<p>This family is characterized by two parameters, a <strong>scale parameter</strong> <span class="math notranslate nohighlight">\(\lambda &gt; 0\)</span> and a <strong>shape parameter</strong> <span class="math notranslate nohighlight">\(k &gt; 0\)</span> (where <span class="math notranslate nohighlight">\(k = 1\)</span> results in the Exponential family).</p>
+<p>The Weibull family is denoted as</p>
+<div class="math notranslate nohighlight">
+\[X \sim \operatorname{Weibull}(\lambda, k).\]</div>
+</section>
+<section id="id47">
+<h4>PDF<a class="headerlink" href="#id47" title="Permalink to this heading">#</a></h4>
+<p>The density is parameterized as</p>
+<div class="math notranslate nohighlight">
+\[f_X(x \mid \lambda, k) = \frac{k}{\lambda} \left( \frac{x}{\lambda} \right)^{k - 1} \exp^{-(x / \lambda)^k} \qquad \text{for} \quad x \geq 0.\]</div>
+<p>Here are some examples of densities:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/d8920759ec9b3cd674bccb65d183aace5e317b3ef48cbc5420f651080cd33890.png"><img alt="../_images/d8920759ec9b3cd674bccb65d183aace5e317b3ef48cbc5420f651080cd33890.png" src="../_images/d8920759ec9b3cd674bccb65d183aace5e317b3ef48cbc5420f651080cd33890.png" style="width: 900px; height: 630px;" /></a>
+</div>
+</div>
+</section>
+<section id="id48">
+<h4>Mean<a class="headerlink" href="#id48" title="Permalink to this heading">#</a></h4>
+<p>The mean of a Weibull random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(X) = \lambda \Gamma \left( 1 + \frac{1}{k} \right).\]</div>
+</section>
+<section id="id49">
+<h4>Variance<a class="headerlink" href="#id49" title="Permalink to this heading">#</a></h4>
+<p>The variance of a Weibull random variable is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \lambda^2 \left[ \Gamma \left( 1 + \frac{2}{k} \right) - \Gamma^2 \left( 1 + \frac{1}{k} \right) \right].\]</div>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="appendix-prob-cheatsheet.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Probability Cheatsheet</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="appendix-greek-alphabet.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Greek Alphabet</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-distributions">Discrete Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bernoulli">Bernoulli</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#process">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pmf">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mean">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#variance">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binomial-distribution">Binomial Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-mass-function-pmf">Probability Mass Function (PMF)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geometric-distribution">Geometric Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#negative-binomial-distribution-a-k-a-pascal">Negative Binomial Distribution (a.k.a. Pascal)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson">Poisson</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Variance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#r-functions"><code class="docutils literal notranslate"><span class="pre">R</span></code> Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ppois"><code class="docutils literal notranslate"><span class="pre">ppois()</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#qpois"><code class="docutils literal notranslate"><span class="pre">qpois()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-discrete">Uniform (Discrete)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">PMF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Variance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#continuous-distributions">Continuous Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#beta">Beta</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pdf">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bivariate-gaussian-or-normal">Bivariate Gaussian or Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">PDF</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exponential">Exponential</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gamma">Gamma</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gaussian-or-normal">Gaussian or Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-normal">Log-Normal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniform-continuous">Uniform (Continuous)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Variance</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weibull">Weibull</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Process</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">PDF</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Mean</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">Variance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

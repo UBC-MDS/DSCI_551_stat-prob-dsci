@@ -1,0 +1,18 @@
+format: jb-book
+root: README
+parts:
+  - caption: Lectures
+    chapters:
+    - file: notes/01_lecture-uncertainty
+    - file: notes/02_lecture-parametric-families
+    - file: notes/03_lecture-joint
+    - file: notes/04_lecture-conditional
+    - file: notes/05_lecture-continuous
+    - file: notes/06_lecture-continuous-families
+    - file: notes/07_lecture-maximum-likelihood-estimation
+    - file: notes/08_lecture-simulation
+  - caption: Appendices
+    chapters:
+    - file: notes/appendix-prob-cheatsheet
+    - file: notes/appendix-dist-cheatsheet
+    - file: notes/appendix-greek-alphabet

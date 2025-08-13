@@ -1,0 +1,1657 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 3: Joint Probability &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/03_lecture-joint';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 4: Conditional Probabilities" href="04_lecture-conditional.html" />
+    <link rel="prev" title="Lecture 2: Parametric Families" href="02_lecture-parametric-families.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/03_lecture-joint.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/03_lecture-joint.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 3: Joint Probability</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-distributions">1. Joint Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-length-of-stay-versus-gang-demand">1.1. Example: Length of Stay Versus Gang Demand</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-marginal-distributions-from-the-joint-distribution">1.2. Calculating Marginal Distributions from the Joint Distribution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-and-dependence-concepts">2. Independence and Dependence Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independence">2.1. Independence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measures-of-dependence">2.2. Measures of Dependence</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-and-pearson-s-correlation">2.2.1. Covariance and Pearson’s Correlation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kendall-s-tau-k">2.2.2. Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mutual-information-optional-section">2.2.3. Mutual Information (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-of-a-sum-involving-two-non-independent-random-variables">2.3. Variance of a Sum Involving Two Non-Independent Random Variables</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-3-joint-probability">
+<h1>Lecture 3: Joint Probability<a class="headerlink" href="#lecture-3-joint-probability" title="Permalink to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this heading">#</a></h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ul class="simple">
+<li><p>Calculate marginal distributions from a joint distribution of random variables.</p></li>
+<li><p>Describe the probabilistic consequences of working with independent random variables.</p></li>
+<li><p>Calculate and describe covariance in multivariate cases (i.e., with more than one random variable).</p></li>
+<li><p>Calculate and describe two mainstream correlation metrics: Pearson’s correlation and Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span>.</p></li>
+</ul>
+</section>
+<section id="joint-distributions">
+<span id="discrete-joint-distributions"></span><h2>1. Joint Distributions<a class="headerlink" href="#joint-distributions" title="Permalink to this heading">#</a></h2>
+<p>This lecture will explore cases simultaneously involving multiple random variables. Hence, let us begin with the concept of <strong>joint distribution</strong>. So far, we have only considered one random variable at a time. Its distribution is called <strong>univariate</strong> because there is just one variable. However, we very often have more than one random variable.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Joint Distribution</p>
+<p>A joint distribution is a formal probability distribution involving two or more simultaneous random variables, either discrete or continuous, in a random process or system. This joint distribution has to encompass all possible outcomes for these two or more random variables.</p>
+</div>
+<figure class="align-default" id="coin">
+<a class="reference internal image-reference" href="../_images/two_coins.png"><img alt="../_images/two_coins.png" src="../_images/two_coins.png" style="height: 200px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Two coins</span><a class="headerlink" href="#coin" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Let us start with an example involving coin tosses. Thus, consider <strong>two independent fair coins</strong> with two possible outcomes each: heads (<span class="math notranslate nohighlight">\(\text{H}\)</span>) or tails (<span class="math notranslate nohighlight">\(\text{T}\)</span>). The possible <strong>joint outcomes</strong> are: <span class="math notranslate nohighlight">\(\texttt{HH}\)</span>, <span class="math notranslate nohighlight">\(\texttt{HT}\)</span>, <span class="math notranslate nohighlight">\(\texttt{TH}\)</span>, <span class="math notranslate nohighlight">\(\texttt{TT}\)</span>, each with a probability <span class="math notranslate nohighlight">\(0.25\)</span>. We can visualize this as a joint distribution in <a class="reference internal" href="#joint-dist-coins"><span class="std std-numref">Table 8</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="joint-dist-coins">
+<caption><span class="caption-number">Table 8 </span><span class="caption-text">Joint probability distribution of two independent coin tosses</span><a class="headerlink" href="#joint-dist-coins" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(X/Y\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note that an outcome in <a class="reference internal" href="#joint-dist-coins"><span class="std std-numref">Table 8</span></a> consists of a pair of values. The sum of all probabilities still adds to 1 since this is <strong>proper</strong> a probability distribution. Moreover, we could set the following <strong>binary random variables</strong> (since each one could only have two outcomes, <span class="math notranslate nohighlight">\(\texttt{H}\)</span> or <span class="math notranslate nohighlight">\(\texttt{T}\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+X = \text{First coin's outcome} \\
+Y = \text{Second coin's outcome.}
+\end{gather*}\end{split}\]</div>
+<p>Therefore, for example via the independence property shown in Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-independence">(1)</a>, one cell from <a class="reference internal" href="#joint-dist-coins"><span class="std std-numref">Table 8</span></a> can be written as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{H} \cap Y = \texttt{H}) &amp;= P(X = \texttt{H}) \cdot P(Y = \texttt{H}) \qquad \qquad \text{since both tosses are independent} \\
+&amp;= 0.5 \cdot 0.5  \qquad \qquad \text{both coins are fair} \\
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<p>Note this is not really any different from what we have already seen. We can still write this as an <strong>univariate distribution with four categories</strong>. This is useful to remember when we are calculating probabilities. Thus, alternatively, we can define the following random variable:</p>
+<div class="math notranslate nohighlight">
+\[Z = \text{Outcomes obtained when tossing two independent coins,}\]</div>
+<p>whose probability mass function (PMF) is shown in <a class="reference internal" href="#pmf-z-coins"><span class="std std-numref">Table 9</span></a>.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-z-coins">
+<caption><span class="caption-number">Table 9 </span><span class="caption-text">Probability mass function (PMF) of random variable <span class="math notranslate nohighlight">\(Z\)</span> for two independent coin tosses</span><a class="headerlink" href="#pmf-z-coins" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(Z\)</span></p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{HH}\)</span></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{HT}\)</span></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{TH}\)</span></p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{TT}\)</span></p></td>
+<td><p>0.25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The PMF of <span class="math notranslate nohighlight">\(Z\)</span> in <a class="reference internal" href="#pmf-z-coins"><span class="std std-numref">Table 9</span></a> considers the order in which we obtain the outcomes.</p>
+</div>
+<p>Viewing the distribution in <a class="reference internal" href="#joint-dist-coins"><span class="std std-numref">Table 8</span></a> as a (2-dimensional) matrix, instead of a (1-dimensional) vector as in <a class="reference internal" href="#pmf-z-coins"><span class="std std-numref">Table 9</span></a>, is more useful when determining the properties of individual random variables. Thus, in practice, many cases will require multivariate distributions.</p>
+<section id="example-length-of-stay-versus-gang-demand">
+<h3>1.1. Example: Length of Stay Versus Gang Demand<a class="headerlink" href="#example-length-of-stay-versus-gang-demand" title="Permalink to this heading">#</a></h3>
+<p>Throughout this lecture, we will work with the following joint distribution of <strong>length of stay</strong> of a ship and its <strong>gang demand</strong>.</p>
+<figure class="align-default" id="ship">
+<a class="reference internal image-reference" href="../_images/ship.png"><img alt="../_images/ship.png" src="../_images/ship.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">A cargo ship</span><a class="headerlink" href="#ship" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Consider an example that a Vancouver port faces with “<em>gang demand</em>.” Whenever a ship arrives at the port of Vancouver, they request a certain number of “<em>gangs</em>” (groups of people) to help unload the ship. Let us suppose the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> requested by a ship has the following PMF:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">los</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tribble</span><span class="p">(</span>
+<span class="w">  </span><span class="o">~</span><span class="n">ngang</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="n">p</span><span class="p">,</span>
+<span class="w">  </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0.2</span><span class="p">,</span>
+<span class="w">  </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.4</span><span class="p">,</span>
+<span class="w">  </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">0.3</span><span class="p">,</span>
+<span class="w">  </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">0.1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nf">kable</span><span class="p">(</span><span class="n">los</span><span class="p">,</span>
+<span class="w">  </span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Number of Gangs&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Probability&quot;</span><span class="p">),</span><span class="w"> </span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cc&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;html&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">as.character</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span>
+<span class="w">  </span><span class="nf">display_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Number of Gangs </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 0.4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.3 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 4 </td>
+   <td style="text-align:center;"> 0.1 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Furthermore, each ship will stay at port for a random number of days, which is the length of stay (<span class="math notranslate nohighlight">\(\text{LOS}\)</span>), according to the following distribution:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Length of Stay (LOS) in Days </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 0.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 4 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The above PMF can be conveyed as a plot, table, or mathematical function; all options are correct. There is no significance (not statistically speaking!).</p>
+</div>
+<p>Given the above information coming from the <span class="math notranslate nohighlight">\(\text{LOS}\)</span> PMF, here is a question we might be interested in:</p>
+<blockquote>
+<div><p>What is the probability that a ship requires 4 gangs <strong>AND</strong> will stay in port for 5 days?</p>
+</div></blockquote>
+<p>There is some bad news here. First, the information provided by both separate PMFs (<span class="math notranslate nohighlight">\(\text{Gangs}\)</span> and <span class="math notranslate nohighlight">\(\text{LOS}\)</span>) is not sufficient to answer this question.</p>
+<p>Of course, there is a 10% chance of needing 4 gangs <strong>in the absence of other information</strong>, and a 10% chance of staying for 5 days <strong>in the absence of other information</strong>. We could try multiplying these numbers together, giving us 1%. But what if more extended stays require fewer gangs because there is more time to do the work? In that case, it might be extremely unlikely to find the combination of needed 4 gangs and stay for 5 days: perhaps 0.1% or lower. Or maybe something else is going on, and the probability is higher than 1%! Who knows?</p>
+<p>In this and the following lecture, we will focus on these types of questions. Specifically, this lecture will focus on the question above (<strong>4 gangs AND 5 days</strong>), and <a class="reference internal" href="04_lecture-conditional.html"><span class="doc">Lecture 4: Conditional Probabilities</span></a> will focus on a slightly different question:</p>
+<blockquote>
+<div><p><strong>IF</strong> you already know that the length of stay is 5 days, what is the probability of needing 4 gangs?</p>
+</div></blockquote>
+<p>For now, let us proceed with joint distributions. Above, we have the PMFs for the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> and <span class="math notranslate nohighlight">\(\text{LOS}\)</span> <strong>individually</strong>. Formally, these individual distributions are called <strong>marginal distributions</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Marginal Distribution</p>
+<p><strong>In a random system/process with more than one random variable</strong>, the distribution of a standalone variable is called marginal distribution (sometimes just “<em>marginal</em>” or “<em>margin</em>”).</p>
+<p>We use the word “marginal” to emphasize that the distribution is being considered <strong>in isolation</strong> from other related variables in the same random process or system.</p>
+</div>
+<p>Since we have 4 possibilities for the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>, we have 4 probabilities that add up to 1; and since we have 5 possibilities for <span class="math notranslate nohighlight">\(\text{LOS}\)</span>, we have 5 probabilities that add up to 1. But these 9 probabilities do not tell the whole story. So how many do we need? We need a probability for <strong>every possible combination</strong> of the number of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>. In this case, <span class="math notranslate nohighlight">\(5 \times 4 = 20\)</span> probabilities (that again add up to 1). We might display these 20 probabilities in a <span class="math notranslate nohighlight">\(5 \times 4\)</span> joint probability table:</p>
+<div class="cell tag_remove-input docutils container">
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">joint_distribution</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>Gangs = 1</th><th scope=col>Gangs = 2</th><th scope=col>Gangs = 3</th><th scope=col>Gangs = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>LOS = 1</th><td>0.00170</td><td>0.04253</td><td>0.12471</td><td>0.08106</td></tr>
+	<tr><th scope=row>LOS = 2</th><td>0.02664</td><td>0.16981</td><td>0.13598</td><td>0.01757</td></tr>
+	<tr><th scope=row>LOS = 3</th><td>0.05109</td><td>0.11563</td><td>0.03203</td><td>0.00125</td></tr>
+	<tr><th scope=row>LOS = 4</th><td>0.04653</td><td>0.04744</td><td>0.00593</td><td>0.00010</td></tr>
+	<tr><th scope=row>LOS = 5</th><td>0.07404</td><td>0.02459</td><td>0.00135</td><td>0.00002</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>We can make sure these probabilities add up to 1 via the function <code class="docutils literal notranslate"><span class="pre">sum()</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">sum</span><span class="p">(</span><span class="n">joint_distribution</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">1</div></div>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>Going from the initial marginal distributions to the joint distribution is not a straightforward procedure. It requires more advanced statistical techniques. Specifically, in this case, we use a <strong>Gaussian copula</strong>, which is common in risk management.</p>
+<p>Roughly speaking, a copula allows us to understand the dependency structure in a multivariate random system or process in which the marginal distributions play a crucial role. Since the construction of joint distributions via copulas is out of the scope of this course, we will use the resulting <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> “as is” to illustrate this lecture’s concepts.</p>
+</div>
+<p>Moving along with the corresponding joint distribution, we can see the probability of needing 4 <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> and <span class="math notranslate nohighlight">\(\text{LOS}\)</span> of 5 days is less than 1% in this case, i.e.:</p>
+<div class="math notranslate nohighlight">
+\[P(\text{LOS} = 5 \cap \text{Gangs} = 4) = 0.00002.\]</div>
+<p>Now, we might wonder:</p>
+<blockquote>
+<div><p>Could the 20 numbers in the matrix <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> be absolutely <strong>ANY</strong> probabilities between 0 and 1?</p>
+</div></blockquote>
+<p>No, they cannot be any probability between 0 and 1. They are restricted by the fact that they will need to add up to 1 (recall <a class="reference internal" href="01_lecture-uncertainty.html#law-total-probability"><span class="std std-ref">1.2.1.  Law of Total Probability</span></a>!). Furthermore, there are other restrictions:</p>
+<ul class="simple">
+<li><p>We already specified the marginal distributions of the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> and <span class="math notranslate nohighlight">\(\text{LOS}\)</span> earlier. Therefore, we need the joint distribution above to be consistent with those marginal distributions (otherwise, we would likely break the probability rules from <a class="reference internal" href="01_lecture-uncertainty.html"><span class="doc">Lecture 1: Depicting Uncertainty</span></a>).</p></li>
+<li><p>If we already said the <strong>marginal probability</strong> of needing 4 <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> is 10%, the joint distribution <strong>should not contradict that information</strong> or something would be wrong. This is why multivariate methods such as a Gaussian copula are used to reflect this class of facts.</p></li>
+</ul>
+</section>
+<section id="calculating-marginal-distributions-from-the-joint-distribution">
+<h3>1.2. Calculating Marginal Distributions from the Joint Distribution<a class="headerlink" href="#calculating-marginal-distributions-from-the-joint-distribution" title="Permalink to this heading">#</a></h3>
+<p>We have just specified a joint distribution of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>. But beforehand, we specified a distribution for these variables individually. Therefore:</p>
+<ul class="simple">
+<li><p>If you have a joint distribution, then the marginal distribution of each individual variable follows as a consequence.</p></li>
+<li><p>If you have the marginal distribution of each individual variable, you still do not have enough information to form the joint distribution between the variables.</p></li>
+</ul>
+<p>In the case of discrete random variables, such as in our cargo ship example, calculating a marginal distribution involves adding up the probabilities corresponding to standalone outcomes of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>.</p>
+<p>Let us start with the marginal distribution of <span class="math notranslate nohighlight">\(\text{LOS}\)</span>. Thus, using our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">joint_distribution</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>Gangs = 1</th><th scope=col>Gangs = 2</th><th scope=col>Gangs = 3</th><th scope=col>Gangs = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>LOS = 1</th><td>0.00170</td><td>0.04253</td><td>0.12471</td><td>0.08106</td></tr>
+	<tr><th scope=row>LOS = 2</th><td>0.02664</td><td>0.16981</td><td>0.13598</td><td>0.01757</td></tr>
+	<tr><th scope=row>LOS = 3</th><td>0.05109</td><td>0.11563</td><td>0.03203</td><td>0.00125</td></tr>
+	<tr><th scope=row>LOS = 4</th><td>0.04653</td><td>0.04744</td><td>0.00593</td><td>0.00010</td></tr>
+	<tr><th scope=row>LOS = 5</th><td>0.07404</td><td>0.02459</td><td>0.00135</td><td>0.00002</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Now, we can compute <span class="math notranslate nohighlight">\(P(\text{LOS} = 1)\)</span>. Thus, there are four ways this could happen:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\text{LOS} = 1\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs} = 1\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{LOS} = 1\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs} = 2\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{LOS} = 1\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs} = 3\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\text{LOS} = 1\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs} = 4\)</span>.</p></li>
+</ul>
+<p>So, to find the marginal probability <span class="math notranslate nohighlight">\(P(\text{LOS} = 1)\)</span>, we need to add up those four joint probabilities. Looking at our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>, this corresponds to summing the first row of the joint probability table.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(\text{LOS} = 1) &amp;= P(\text{LOS} = 1 \cap \text{Gangs} = 1) + P(\text{LOS} = 1 \cap \text{Gangs} = 2) +  \\
+&amp; \quad \qquad P(\text{LOS} = 1 \cap \text{Gangs} = 3) + P(\text{LOS} = 1 \cap \text{Gangs} = 4) \\
+&amp;= 0.00170 + 0.04253 + 0.12471 + 0.08106 \\
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<p>We have <span class="math notranslate nohighlight">\(P(\text{LOS} = 1)\)</span>, but we would also need <span class="math notranslate nohighlight">\(P(\text{LOS} = 2)\)</span>, <span class="math notranslate nohighlight">\(P(\text{LOS} = 3)\)</span>, etc. It follows that the marginal distribution of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> can be obtained by adding up each row in our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> (we use the function <code class="docutils literal notranslate"><span class="pre">rowSums()</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">rowSums</span><span class="p">(</span><span class="n">joint_distribution</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">kable</span><span class="p">(</span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Probability&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">column_spec</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">bold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">as.character</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">display_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> LOS = 1 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> LOS = 2 </td>
+   <td style="text-align:center;"> 0.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> LOS = 3 </td>
+   <td style="text-align:center;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> LOS = 4 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> LOS = 5 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Note that the distribution of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> is the same we had at the beginning of the lecture. Hence, our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> is <strong>consistent</strong> with the initial marginal distribution of <span class="math notranslate nohighlight">\(\text{LOS}\)</span>.</p>
+<p>Analogously, the marginal distribution of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> can be obtained by summing the columns from our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> (we use function <code class="docutils literal notranslate"><span class="pre">colSums()</span></code>):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">colSums</span><span class="p">(</span><span class="n">joint_distribution</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">kable</span><span class="p">(</span><span class="n">col.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Probability&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">column_spec</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">bold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">as.character</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">display_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Gangs = 1 </td>
+   <td style="text-align:center;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Gangs = 2 </td>
+   <td style="text-align:center;"> 0.4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Gangs = 3 </td>
+   <td style="text-align:center;"> 0.3 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Gangs = 4 </td>
+   <td style="text-align:center;"> 0.1 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Also, the marginal distribution of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> is the same we had at the beginning of the lecture. Thus, our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> is <strong>consistent</strong> with the initial marginal distribution of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>It is crucial to highlight that there is more than one way to obtain a joint distribution. Any specific procedure will depend on factors such as the existing correlation between a given set of random variables.</p>
+</div>
+<p>Now, we will start with in-class questions via <a class="reference external" href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="exercise admonition" id="lecture3-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 14 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>We obtain a marginal distribution by summing the rows of a joint distribution; therefore, each row of a joint distribution must sum to 1.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+</section>
+</section>
+<section id="independence-and-dependence-concepts">
+<h2>2. Independence and Dependence Concepts<a class="headerlink" href="#independence-and-dependence-concepts" title="Permalink to this heading">#</a></h2>
+<p>In practice, a big part of Data Science is about harvesting the relationship between the variables in our datasets. For instance, we might be interested in inferring what factors influence leisure expenditure in Canadian households with similar sociodemographic profiles (i.e., there might be some data <strong>dependence</strong>). Or maybe, what factors influence leisure expenditure in Canadian households with totally different sociodemographic profiles (i.e., there might be some data <strong>independence</strong>).</p>
+<section id="independence">
+<h3>2.1. Independence<a class="headerlink" href="#independence" title="Permalink to this heading">#</a></h3>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two random variables. Retaking <a class="reference internal" href="01_lecture-uncertainty.html#independent-events"><span class="std std-ref">1.2.3. Independent Events</span></a>, we say <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are <strong>independent</strong> if knowing something about one of them tells us nothing about the other. Analogous to Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-independence">(1)</a>, a definition of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> being independent is the following:</p>
+<div class="math notranslate nohighlight" id="equation-independence-variables">
+<span class="eqno">(12)<a class="headerlink" href="#equation-independence-variables" title="Permalink to this equation">#</a></span>\[P(X = x \cap Y = y) = P(X = x) \cdot P(Y = y), \text{for all } x \text{ and } y\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>What does Equation <a class="reference internal" href="#equation-independence-variables">(12)</a> tell us about a <strong>hypothetical joint probability table</strong> whose cells are <span class="math notranslate nohighlight">\(P(X = x \cap Y = y)\)</span>?</p>
+<p>Well, <strong>if <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent</strong>, we do not actually need the whole table! Instead, we only need the marginals of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>. Therefore, the full joint distribution between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> is just the product of their respective marginal probabilities.</p>
+</div>
+<p>Note independence is not some property that you can specify separately from the joint PMF. Recall the joint PMF specifies everything about a given situation/process/system involving more than one random variable, including whether or not the random variables are independent.</p>
+<p>Going back to our earlier example of two coin flips, recall we had this joint distribution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+X = \text{First coin's outcome} \\
+Y = \text{Second coin's outcome.}
+\end{gather*}\end{split}\]</div>
+<div class="pst-scrollable-table-container"><table class="table" id="joint-dist-coins-2">
+<caption><span class="caption-number">Table 10 </span><span class="caption-text">Joint probability distribution of two independent coin tosses</span><a class="headerlink" href="#joint-dist-coins-2" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(X/Y\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></td>
+<td><p>0.25</p></td>
+<td><p>0.25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>From the joint PMF in <a class="reference internal" href="#joint-dist-coins-2"><span class="std std-numref">Table 10</span></a>, we can see that the two coin flips are independent. The marginals are the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{H}) &amp;= P(X = \texttt{H} \cap Y = \texttt{H}) + P(X = \texttt{H} \cap Y = \texttt{T}) \\
+&amp;= 0.25 + 0.25 \\
+&amp;= 0.5 \\
+P(X = \texttt{T}) &amp;= P(X = \texttt{T} \cap Y = \texttt{H}) + P(X = \texttt{T} \cap Y = \texttt{T}) \\
+&amp;= 0.25 + 0.25 \\
+&amp;= 0.5 \\
+P(Y = \texttt{H}) &amp;= P(X = \texttt{H} \cap Y = \texttt{H}) + P(X = \texttt{T} \cap Y = \texttt{H}) \\
+&amp;= 0.25 + 0.25 \\
+&amp;= 0.5 \\
+P(Y = \texttt{T}) &amp;= P(X = \texttt{H} \cap Y = \texttt{T}) + P(X = \texttt{T} \cap Y = \texttt{T}) \\
+&amp;= 0.25 + 0.25 \\
+&amp;= 0.5.
+\end{align*}\end{split}\]</div>
+<p>Moreover, we have that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{H} \cap Y = \texttt{H}) &amp;= P(X = \texttt{H}) \cdot P(Y = \texttt{H}) \\ 
+&amp;= 0.5 \cdot 0.5 \\
+&amp;= 0.25 \\
+P(X = \texttt{H} \cap Y = \texttt{T}) &amp;= P(X = \texttt{H}) \cdot P(Y = \texttt{T}) \\ 
+&amp;= 0.5 \cdot 0.5 \\
+&amp;= 0.25 \\
+P(X = \texttt{T} \cap Y = \texttt{H}) &amp;= P(X = \texttt{T}) \cdot P(Y = \texttt{H}) \\ 
+&amp;= 0.5 \cdot 0.5 \\
+&amp;= 0.25 \\
+P(X = \texttt{T} \cap Y = \texttt{T}) &amp;= P(X = \texttt{T}) \cdot P(Y = \texttt{T}) \\ 
+&amp;= 0.5 \cdot 0.5 \\
+&amp;= 0.25. 
+\end{align*}\end{split}\]</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>The entire marginal distribution for a coin can be specified with a single number, e.g.,</p>
+<div class="math notranslate nohighlight">
+\[P(X = \texttt{H}) = 0.5.\]</div>
+<p>The reason for this is the Law of Total Probability in the case of a <strong>single random variable</strong>:</p>
+<div class="math notranslate nohighlight">
+\[P(X = \texttt{H}) + P(X = \texttt{T}) = 1,\]</div>
+<p>so</p>
+<div class="math notranslate nohighlight">
+\[P(X = \texttt{T}) = 1 - P(X = \texttt{H})\]</div>
+<p>When talking about <strong>degrees of freedom</strong>, it is actually best to account for this fact. Thus, each coin has 1 degree of freedom, and (in general) the joint of two coins has 3 because the Law of Total Probability fixes the fourth probability. More on this later in <em>DSCI 552</em>.</p>
+</div>
+<p>Now, let us explore a <strong>different two-coin example</strong>. How about the below PMF? Are the two coins independent?</p>
+<div class="pst-scrollable-table-container"><table class="table" id="joint-dist-coins-3">
+<caption><span class="caption-number">Table 11 </span><span class="caption-text">Another joint probability distribution of two coin tosses</span><a class="headerlink" href="#joint-dist-coins-3" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(X/Y\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></td>
+<td><p>0.2</p></td>
+<td><p>0.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></td>
+<td><p>0.05</p></td>
+<td><p>0.15</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>To answer this independence question, let us reflect the following:</p>
+<blockquote>
+<div><p>Can we come up with a value of <span class="math notranslate nohighlight">\(P(X = \texttt{H})\)</span> and a value of <span class="math notranslate nohighlight">\(P(Y = \texttt{H})\)</span> such that the joint probabilities match the above joint distribution?</p>
+</div></blockquote>
+<p>It turns out we can! Let us first compute the marginals. Here, we have:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{H}) &amp;= P(X = \texttt{H} \cap Y = \texttt{H}) + P(X = \texttt{H} \cap Y = \texttt{T}) \\
+&amp;= 0.2 + 0.6 \\
+&amp;= 0.8.
+\end{align*}\end{split}\]</div>
+<p>By the Law of Total Probability, we can obtain:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{T}) &amp;= 1 - P(X = \texttt{H})\\
+&amp;= 1 - 0.8 \\
+&amp;= 0.2.
+\end{align*}\end{split}\]</div>
+<p>And likewise for the second coin:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(Y = \texttt{H}) &amp;= P(X = \texttt{H} \cap Y = \texttt{H}) + P(X = \texttt{T} \cap Y = \texttt{H}) \\
+&amp;= 0.2 + 0.05 \\
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<p>And, by the Law of Total Probability, we have that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(Y = \texttt{T}) &amp;= 1 - P(Y = \texttt{H})\\
+&amp;= 1 - 0.25 \\
+&amp;= 0.75.
+\end{align*}\end{split}\]</div>
+<p>Now, that last thing we need to do is check whether the joint distribution, from <a class="reference internal" href="#joint-dist-coins-3"><span class="std std-numref">Table 11</span></a>, satisfies the definition of independence:</p>
+<div class="math notranslate nohighlight">
+\[P(X = x \cap Y = y) = P(X = x) \cdot P(Y = y).\]</div>
+<p><strong>If <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent</strong>, then the following computations will match <a class="reference internal" href="#joint-dist-coins-3"><span class="std std-numref">Table 11</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(X = \texttt{H} \cap Y = \texttt{H}) &amp;= P(X = \texttt{H}) \cdot P(Y = \texttt{H}) \\ 
+&amp;= 0.8 \cdot 0.25 \\ 
+&amp;= 0.2 \\
+P(X = \texttt{H} \cap Y = \texttt{T}) &amp;= P(X = \texttt{H}) \cdot P(Y = \texttt{T}) \\ 
+&amp;= 0.8 \cdot 0.75 \\ 
+&amp;= 0.6 \\
+P(X = \texttt{T} \cap Y = \texttt{H}) &amp;= P(X = \texttt{T}) \cdot P(Y = \texttt{H}) \\ 
+&amp;= 0.2 \cdot 0.25 \\ 
+&amp;= 0.05 \\
+P(X = \texttt{T} \cap Y = \texttt{T}) &amp;= P(X = \texttt{T}) \cdot P(Y = \texttt{T}) \\ 
+&amp;= 0.2 \cdot 0.75  \\ 
+&amp;= 0.15.
+\end{align*}\end{split}\]</div>
+<p>And so, we again see that the two coins from <a class="reference internal" href="#joint-dist-coins-3"><span class="std std-numref">Table 11</span></a> are independent!</p>
+<p>Finally, here is a quick example of two coins that are definitely <strong>NOT</strong> independent:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="joint-dist-coins-4">
+<caption><span class="caption-number">Table 12 </span><span class="caption-text">Another joint probability distribution of two coin tosses</span><a class="headerlink" href="#joint-dist-coins-4" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(X/Y\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\texttt{H}\)</span></p></td>
+<td><p>0.5</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\texttt{T}\)</span></p></td>
+<td><p>0</p></td>
+<td><p>0.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In <a class="reference internal" href="#joint-dist-coins-4"><span class="std std-numref">Table 12</span></a>, the marginals are both 0.5 (the same marginals as our earlier example!), but the joint is not the product of the marginals. In fact, these two coins are <strong>completely dependent</strong>: if one is heads, then the other is always heads, and if one is tails then the other is always tails (<span class="math notranslate nohighlight">\(\texttt{HT}\)</span> and <span class="math notranslate nohighlight">\(\texttt{TH}\)</span> have probability zero).</p>
+</section>
+<section id="measures-of-dependence">
+<h3>2.2. Measures of Dependence<a class="headerlink" href="#measures-of-dependence" title="Permalink to this heading">#</a></h3>
+<p>Next, if two random variables <strong>ARE NOT</strong> independent, how can we go about measuring the strength/amount of dependence between these two random variables? For example, if the two coins above are “completely dependent,” can we quantify this?</p>
+<section id="covariance-and-pearson-s-correlation">
+<span id="covariance-correlation"></span><h4>2.2.1. Covariance and Pearson’s Correlation<a class="headerlink" href="#covariance-and-pearson-s-correlation" title="Permalink to this heading">#</a></h4>
+<p><strong>Covariance</strong> is one common way of measuring dependence between two <strong>numeric</strong> random variables. Let us check its formal definition.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Covariace</p>
+<p>Covariance measures how much two random variables jointly vary and in what direction. Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two random variables; their covariance is formally defined as follows:</p>
+<div class="math notranslate nohighlight" id="equation-covariance">
+<span class="eqno">(13)<a class="headerlink" href="#equation-covariance" title="Permalink to this equation">#</a></span>\[\begin{equation*}
+\operatorname{Cov}(X, Y) = \mathbb{E}[(X-\mu_X)(Y-\mu_Y)],
+\end{equation*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_X = \mathbb{E}(X)\)</span> and <span class="math notranslate nohighlight">\(\mu_Y = \mathbb{E}(Y)\)</span> are the respective means (or expected values) of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>. After some algebraic and expected value manipulations, Equation <a class="reference internal" href="#equation-covariance">(13)</a> reduces to a more practical form to work with:</p>
+<div class="math notranslate nohighlight" id="equation-covariance-2">
+<span class="eqno">(14)<a class="headerlink" href="#equation-covariance-2" title="Permalink to this equation">#</a></span>\[\begin{equation*}
+\operatorname{Cov}(X, Y) = \mathbb{E}(XY) - \left[ \mathbb{E}(X)\mathbb{E}(Y) \right],
+\end{equation*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbb{E}(XY)\)</span> is the mean (or expected value) of the multiplication of the random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p>
+</div>
+<p>For the ship example involving <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>, let us recheck the corresponding <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">joint_distribution</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>Gangs = 1</th><th scope=col>Gangs = 2</th><th scope=col>Gangs = 3</th><th scope=col>Gangs = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>LOS = 1</th><td>0.00170</td><td>0.04253</td><td>0.12471</td><td>0.08106</td></tr>
+	<tr><th scope=row>LOS = 2</th><td>0.02664</td><td>0.16981</td><td>0.13598</td><td>0.01757</td></tr>
+	<tr><th scope=row>LOS = 3</th><td>0.05109</td><td>0.11563</td><td>0.03203</td><td>0.00125</td></tr>
+	<tr><th scope=row>LOS = 4</th><td>0.04653</td><td>0.04744</td><td>0.00593</td><td>0.00010</td></tr>
+	<tr><th scope=row>LOS = 5</th><td>0.07404</td><td>0.02459</td><td>0.00135</td><td>0.00002</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Note that, in general for a larger <span class="math notranslate nohighlight">\(\text{LOS}\)</span>, there are larger probabilities associated with a smaller gang demand; <strong>this inverse relationship indicates negative covariance</strong>. Now, let us code the marginal PMFs of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Marginal_PMF_LOS</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tribble</span><span class="p">(</span>
+<span class="w">  </span><span class="o">~</span><span class="n">n_days</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="n">p</span><span class="p">,</span>
+<span class="w">  </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0.25</span><span class="p">,</span>
+<span class="w">  </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.35</span><span class="p">,</span>
+<span class="w">  </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">0.2</span><span class="p">,</span>
+<span class="w">  </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">0.1</span><span class="p">,</span>
+<span class="w">  </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">0.1</span>
+<span class="p">)</span>
+<span class="n">Marginal_PMF_LOS</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A tibble: 5 × 2</caption>
+<thead>
+	<tr><th scope=col>n_days</th><th scope=col>p</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>1</td><td>0.25</td></tr>
+	<tr><td>2</td><td>0.35</td></tr>
+	<tr><td>3</td><td>0.20</td></tr>
+	<tr><td>4</td><td>0.10</td></tr>
+	<tr><td>5</td><td>0.10</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">Marginal_PMF_Gangs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tribble</span><span class="p">(</span>
+<span class="w">  </span><span class="o">~</span><span class="n">n_gangs</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="n">p</span><span class="p">,</span>
+<span class="w">  </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0.2</span><span class="p">,</span>
+<span class="w">  </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.4</span><span class="p">,</span>
+<span class="w">  </span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">0.3</span><span class="p">,</span>
+<span class="w">  </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">0.1</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">Marginal_PMF_Gangs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A tibble: 4 × 2</caption>
+<thead>
+	<tr><th scope=col>n_gangs</th><th scope=col>p</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>1</td><td>0.2</td></tr>
+	<tr><td>2</td><td>0.4</td></tr>
+	<tr><td>3</td><td>0.3</td></tr>
+	<tr><td>4</td><td>0.1</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Using our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code>, along with <code class="docutils literal notranslate"><span class="pre">Marginal_PMF_LOS</span></code> and <code class="docutils literal notranslate"><span class="pre">Marginal_PMF_Gangs</span></code>, we can calculate the covariance using Equation <a class="reference internal" href="#equation-covariance-2">(14)</a>. First of all, let us compute the corresponding marginal expected values:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expected value of LOS, E(LOS)</span>
+<span class="n">E_LOS</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Marginal_PMF_LOS</span><span class="o">$</span><span class="n">n_days</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Marginal_PMF_LOS</span><span class="o">$</span><span class="n">p</span><span class="p">)</span>
+<span class="n">E_LOS</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">2.45</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expected value of Gangs, E(Gangs)</span>
+<span class="n">E_Gangs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Marginal_PMF_Gangs</span><span class="o">$</span><span class="n">n_gangs</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Marginal_PMF_Gangs</span><span class="o">$</span><span class="n">p</span><span class="p">)</span>
+<span class="n">E_Gangs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">2.3</div></div>
+</div>
+<p>Now, we need the expected value of the multiplication of both random variables. But firstly, we need to “<em>melt</em>” our <code class="docutils literal notranslate"><span class="pre">joint_distribution</span></code> matrix as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Melting (manually!) our matrix containing the joing distribution of LOS and Gangs</span>
+<span class="n">joint_distribution</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">data.frame</span><span class="p">(</span>
+<span class="w">  </span><span class="n">LOS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">),</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">4</span><span class="p">)),</span><span class="w"> </span><span class="n">Gangs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">),</span>
+<span class="w">  </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span>
+<span class="w">    </span><span class="m">0.00170</span><span class="p">,</span><span class="w"> </span><span class="m">0.04253</span><span class="p">,</span><span class="w"> </span><span class="m">0.12471</span><span class="p">,</span><span class="w"> </span><span class="m">0.08106</span><span class="p">,</span>
+<span class="w">    </span><span class="m">0.02664</span><span class="p">,</span><span class="w"> </span><span class="m">0.16981</span><span class="p">,</span><span class="w"> </span><span class="m">0.13598</span><span class="p">,</span><span class="w"> </span><span class="m">0.01757</span><span class="p">,</span>
+<span class="w">    </span><span class="m">0.05109</span><span class="p">,</span><span class="w"> </span><span class="m">0.11563</span><span class="p">,</span><span class="w"> </span><span class="m">0.03203</span><span class="p">,</span><span class="w"> </span><span class="m">0.00125</span><span class="p">,</span>
+<span class="w">    </span><span class="m">0.04653</span><span class="p">,</span><span class="w"> </span><span class="m">0.04744</span><span class="p">,</span><span class="w"> </span><span class="m">0.00593</span><span class="p">,</span><span class="w"> </span><span class="m">0.00010</span><span class="p">,</span>
+<span class="w">    </span><span class="m">0.07404</span><span class="p">,</span><span class="w"> </span><span class="m">0.02459</span><span class="p">,</span><span class="w"> </span><span class="m">0.00135</span><span class="p">,</span><span class="w"> </span><span class="m">0.00002</span>
+<span class="w">  </span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">joint_distribution</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A data.frame: 20 × 3</caption>
+<thead>
+	<tr><th scope=col>LOS</th><th scope=col>Gangs</th><th scope=col>p</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;int&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>1</td><td>1</td><td>0.00170</td></tr>
+	<tr><td>1</td><td>2</td><td>0.04253</td></tr>
+	<tr><td>1</td><td>3</td><td>0.12471</td></tr>
+	<tr><td>1</td><td>4</td><td>0.08106</td></tr>
+	<tr><td>2</td><td>1</td><td>0.02664</td></tr>
+	<tr><td>2</td><td>2</td><td>0.16981</td></tr>
+	<tr><td>2</td><td>3</td><td>0.13598</td></tr>
+	<tr><td>2</td><td>4</td><td>0.01757</td></tr>
+	<tr><td>3</td><td>1</td><td>0.05109</td></tr>
+	<tr><td>3</td><td>2</td><td>0.11563</td></tr>
+	<tr><td>3</td><td>3</td><td>0.03203</td></tr>
+	<tr><td>3</td><td>4</td><td>0.00125</td></tr>
+	<tr><td>4</td><td>1</td><td>0.04653</td></tr>
+	<tr><td>4</td><td>2</td><td>0.04744</td></tr>
+	<tr><td>4</td><td>3</td><td>0.00593</td></tr>
+	<tr><td>4</td><td>4</td><td>0.00010</td></tr>
+	<tr><td>5</td><td>1</td><td>0.07404</td></tr>
+	<tr><td>5</td><td>2</td><td>0.02459</td></tr>
+	<tr><td>5</td><td>3</td><td>0.00135</td></tr>
+	<tr><td>5</td><td>4</td><td>0.00002</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Then, we compute the corresponding <strong>crossed expected value</strong>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Expected value LOS times Gangs, E(LOS x Gangs)</span>
+<span class="n">E_LOS_Gangs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">joint_distribution</span><span class="o">$</span><span class="n">LOS</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">joint_distribution</span><span class="o">$</span><span class="n">Gangs</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">joint_distribution</span><span class="o">$</span><span class="n">p</span><span class="p">)</span>
+<span class="n">E_LOS_Gangs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">4.89956</div></div>
+</div>
+<p>The above numeric results are plugged in Equation <a class="reference internal" href="#equation-covariance-2">(14)</a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\operatorname{Cov}(\text{LOS}, \text{Gangs}) &amp;= \mathbb{E}(\text{LOS} \cdot \text{Gangs}) - \mathbb{E}(\text{LOS})\mathbb{E}(\text{Gangs}) \\
+&amp;= 4.89956 - \left[ (2.45)(2.3) \right] \\
+&amp;= -0.73544.
+\end{align*}\end{split}\]</div>
+<p>Indeed, we can see that the covariance between <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> is negative.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The sign of the covariance can be interpreted as follows:</p>
+<ul class="simple">
+<li><p><strong>Positive covariance</strong> indicates that an increase in one variable is associated with an increase in the other variable.</p></li>
+<li><p><strong>Negative covariance</strong> indicates that an increase in one variable is associated with a decrease in the other variable.</p></li>
+<li><p><strong>Zero covariance</strong> indicates that there is no <strong>linear</strong> trend – but this does not necessarily mean that <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent!</p></li>
+</ul>
+</div>
+<p>It turns out covariance by itself is not very interpretable, because it depends on the spread of the random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>. For example, if we multiply <span class="math notranslate nohighlight">\(X\)</span> by 10, then the covariance of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> increases by a factor of 10 as well:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\operatorname{Cov}(10X,Y) &amp;= \mathbb{E}(10XY) - \mathbb{E}(10X) \mathbb{E}(Y) \\
+&amp;= 10\mathbb{E}(XY) - 10\mathbb{E}(X)\mathbb{E}(Y) \\
+&amp;= 10[\mathbb{E}(XY) - \mathbb{E}(X) \mathbb{E}(Y)] \\
+&amp;= 10\operatorname{Cov}(X,Y).
+\end{align*}\end{split}\]</div>
+<p>The scale problem in the covariance is fixed by <strong>Pearson’s correlation</strong>. Let us formally define it.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Pearson’s Correlation</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two random variables, whose respective variances are defined by Equation <a class="reference internal" href="01_lecture-uncertainty.html#equation-variance">(8)</a>, with a covariance defined as in Equation <a class="reference internal" href="#equation-covariance-2">(14)</a>. Pearson’s correlation <strong>standardizes</strong> the distances according to the standard deviations <span class="math notranslate nohighlight">\(\sigma_X\)</span> and <span class="math notranslate nohighlight">\(\sigma_Y\)</span> of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, respectively. It is defined as (<em>note proof is skipped</em>):</p>
+<div class="math notranslate nohighlight" id="equation-pearson-coefficient">
+<span class="eqno">(15)<a class="headerlink" href="#equation-pearson-coefficient" title="Permalink to this equation">#</a></span>\[\begin{split}\begin{align*}
+\rho_{XY} = \operatorname{Corr}(X, Y) &amp;= \mathbb{E} \left[ 
+   \left(\frac{X-\mu_X}{\sigma_X}\right) 
+   \left(\frac{Y-\mu_Y}{\sigma_Y}\right)
+ \right] \\
+ &amp;= \frac{\operatorname{Cov}(X, Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}.
+\end{align*}\end{split}\]</div>
+<p>As a result of Equation <a class="reference internal" href="#equation-pearson-coefficient">(15)</a>, it turns out that</p>
+<div class="math notranslate nohighlight">
+\[-1 \leq \rho_{XY} \leq 1.\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Pearson’s correlation measures the <strong>strength of linear dependence</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(-1\)</span> means a perfect negative linear relationship between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(0\)</span> means no linear relationship (<strong>however, this does not mean independence!</strong>).</p></li>
+<li><p><span class="math notranslate nohighlight">\(1\)</span> means a perfect positive linear relationship.</p></li>
+</ul>
+<p>Pearson’s correlation is ubiquitous and is often what is meant when “correlation” is referred to.</p>
+</div>
+<div class="exercise admonition" id="lecture3-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 15 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>Covariance can be negative, but not the variance.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture3-q3">
+
+<p class="admonition-title"><span class="caption-number">Exercise 16 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>Without any further assumptions between random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, covariance is calculated as</p>
+<div class="math notranslate nohighlight">
+\[\operatorname{Cov}(X,Y) = \mathbb{E}(XY) - \left[ \mathbb{E}(X) \mathbb{E}(Y) \right].\]</div>
+<p>Computing <span class="math notranslate nohighlight">\(\mathbb{E}(XY)\)</span> requires the joint distribution, but computing <span class="math notranslate nohighlight">\(\mathbb{E}(X) \mathbb{E}(Y)\)</span> only requires the marginals.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+</section>
+<section id="kendall-s-tau-k">
+<span id="kendall-tau"></span><h4>2.2.2. Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span><a class="headerlink" href="#kendall-s-tau-k" title="Permalink to this heading">#</a></h4>
+<p>As mentioned before, although Pearson’s correlation is ubiquitous, its forced adherence to measuring <strong>linear dependence</strong> is a big downfall, especially because many relationships between real-world variables are not linear. Hence, there is an alternative measure called Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span>. Its formal definition can be found below.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span></p>
+<p>Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> is an alternative measure of dependence between random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>. Unlike Pearson’s correlation, which measures linear dependence, Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> can measure non-linear dependence.</p>
+<p>That said, instead of measuring <strong>concordance</strong> between each observation <span class="math notranslate nohighlight">\((x, y)\)</span> and the means <span class="math notranslate nohighlight">\((\mu_x, \mu_y)\)</span>, it measures concordance between <strong>each pair</strong> of observations <span class="math notranslate nohighlight">\((x_i, y_i)\)</span> and <span class="math notranslate nohighlight">\((x_j, y_j)\)</span> with <span class="math notranslate nohighlight">\(i \neq j\)</span>:</p>
+<ul class="simple">
+<li><p><strong>Concordant</strong>, which gets a positive sign, means</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+x_i &lt; x_j \quad \text{and} \quad y_i &lt; y_j, \\
+\text{or} \\
+x_i &gt; x_j \quad \text{and} \quad y_i &gt; y_j.
+\end{gather*}\end{split}\]</div>
+<ul class="simple">
+<li><p><strong>Discordant</strong>, which gets a negative sign, means</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+x_i &lt; x_j \quad \text{and} \quad y_i &gt; y_j, \\
+\text{or} \\
+x_i &gt; x_j \quad \text{and} \quad y_i &lt; y_j.
+\end{gather*}\end{split}\]</div>
+<p>The formal definition is</p>
+<div class="math notranslate nohighlight">
+\[\tau_K = \frac{\text{Number of concordant pairs} - \text{Number of discordant pairs}}{{n \choose 2}},\]</div>
+<p>with the “true” Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> value obtained by sending <span class="math notranslate nohighlight">\(n \rightarrow \infty\)</span> (this is the <strong>estimation paradigm</strong> in frequentist Statistics!). Here, <span class="math notranslate nohighlight">\(n\)</span> is the sample size (i.e., the number of data points).</p>
+</div>
+<p><strong>As in Pearson’s correlation</strong>, Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> is between -1 and 1, and measures dependence’s strength (and direction). For instance, consider the two correlation measures for the following hypothetical dataset plotted below. Note that we are creating this dataset as follows:</p>
+<div class="math notranslate nohighlight">
+\[y = x^{1/3},\]</div>
+<p>which is a non-linear dependency between <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>. Moreover, we are creating a sequence for <code class="docutils literal notranslate"><span class="pre">x</span></code> from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">100</span></code> by <code class="docutils literal notranslate"><span class="pre">5</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">non_linear_pairs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tibble</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="p">(</span><span class="m">1</span><span class="w"> </span><span class="o">/</span><span class="m">3</span><span class="p">))</span>
+<span class="n">non_linear_pairs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A tibble: 21 × 2</caption>
+<thead>
+	<tr><th scope=col>x</th><th scope=col>y</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>  0</td><td>0.000000</td></tr>
+	<tr><td>  5</td><td>1.709976</td></tr>
+	<tr><td> 10</td><td>2.154435</td></tr>
+	<tr><td> 15</td><td>2.466212</td></tr>
+	<tr><td> 20</td><td>2.714418</td></tr>
+	<tr><td> 25</td><td>2.924018</td></tr>
+	<tr><td> 30</td><td>3.107233</td></tr>
+	<tr><td> 35</td><td>3.271066</td></tr>
+	<tr><td> 40</td><td>3.419952</td></tr>
+	<tr><td> 45</td><td>3.556893</td></tr>
+	<tr><td> 50</td><td>3.684031</td></tr>
+	<tr><td> 55</td><td>3.802952</td></tr>
+	<tr><td> 60</td><td>3.914868</td></tr>
+	<tr><td> 65</td><td>4.020726</td></tr>
+	<tr><td> 70</td><td>4.121285</td></tr>
+	<tr><td> 75</td><td>4.217163</td></tr>
+	<tr><td> 80</td><td>4.308869</td></tr>
+	<tr><td> 85</td><td>4.396830</td></tr>
+	<tr><td> 90</td><td>4.481405</td></tr>
+	<tr><td> 95</td><td>4.562903</td></tr>
+	<tr><td>100</td><td>4.641589</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>The above <span class="math notranslate nohighlight">\(n = 21\)</span> pairs from <code class="docutils literal notranslate"><span class="pre">non_linear_pairs</span></code> are plotted below. We clearly see a <strong>non-linear relationship</strong> between <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/90373ee3977ac0be86a9540690170fcbf142b3300de123883e065f70d5553992.png"><img alt="../_images/90373ee3977ac0be86a9540690170fcbf142b3300de123883e065f70d5553992.png" src="../_images/90373ee3977ac0be86a9540690170fcbf142b3300de123883e065f70d5553992.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">R</span></code>, the sample Kendall’s  <span class="math notranslate nohighlight">\(\tau_K\)</span> can be calculated using the <code class="docutils literal notranslate"><span class="pre">cor()</span></code> function with <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;kendall&quot;</span></code>. On the other hand, Pearson’s correlation can be computed via <code class="docutils literal notranslate"><span class="pre">method</span> <span class="pre">=</span> <span class="pre">&quot;pearson&quot;</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">tribble</span><span class="p">(</span>
+<span class="w">  </span><span class="o">~</span><span class="n">Pearson</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="n">Kendall</span><span class="p">,</span>
+<span class="w">  </span><span class="nf">round</span><span class="p">(</span><span class="nf">cor</span><span class="p">(</span><span class="n">non_linear_pairs</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;pearson&quot;</span><span class="p">)[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="m">4</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">round</span><span class="p">(</span><span class="nf">cor</span><span class="p">(</span><span class="n">non_linear_pairs</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kendall&quot;</span><span class="p">)[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="m">4</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">kable</span><span class="p">(</span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cc&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;html&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">as.character</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">display_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Pearson </th>
+   <th style="text-align:center;"> Kendall </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 0.9097 </td>
+   <td style="text-align:center;"> 1 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Note that this dataset’s sample Pearson’s correlation is not 1! Recall it measures linear dependence, which is not true in <code class="docutils literal notranslate"><span class="pre">non_linear_pairs</span></code>. On the other hand, Kendall’s <span class="math notranslate nohighlight">\(\tau_k\)</span> only measures the strength of <strong>monotonic dependence</strong>; thus, it equals 1.</p>
+<p>Now, let us check a different case that does not fit the conditions for Pearson’s correlation and Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">parabola_pairs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">tibble</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">seq</span><span class="p">(</span><span class="n">from</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-50</span><span class="p">,</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">^</span><span class="m">2</span><span class="p">)</span>
+<span class="n">parabola_pairs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A tibble: 21 × 2</caption>
+<thead>
+	<tr><th scope=col>x</th><th scope=col>y</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>-50</td><td>2500</td></tr>
+	<tr><td>-45</td><td>2025</td></tr>
+	<tr><td>-40</td><td>1600</td></tr>
+	<tr><td>-35</td><td>1225</td></tr>
+	<tr><td>-30</td><td> 900</td></tr>
+	<tr><td>-25</td><td> 625</td></tr>
+	<tr><td>-20</td><td> 400</td></tr>
+	<tr><td>-15</td><td> 225</td></tr>
+	<tr><td>-10</td><td> 100</td></tr>
+	<tr><td> -5</td><td>  25</td></tr>
+	<tr><td>  0</td><td>   0</td></tr>
+	<tr><td>  5</td><td>  25</td></tr>
+	<tr><td> 10</td><td> 100</td></tr>
+	<tr><td> 15</td><td> 225</td></tr>
+	<tr><td> 20</td><td> 400</td></tr>
+	<tr><td> 25</td><td> 625</td></tr>
+	<tr><td> 30</td><td> 900</td></tr>
+	<tr><td> 35</td><td>1225</td></tr>
+	<tr><td> 40</td><td>1600</td></tr>
+	<tr><td> 45</td><td>2025</td></tr>
+	<tr><td> 50</td><td>2500</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/2cb458c626226260f19f160e6064be8b5bc894b8de6e8349b7efb53443c62fea.png"><img alt="../_images/2cb458c626226260f19f160e6064be8b5bc894b8de6e8349b7efb53443c62fea.png" src="../_images/2cb458c626226260f19f160e6064be8b5bc894b8de6e8349b7efb53443c62fea.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Patterns like the above parabola are not monotonically increasing or decreasing (i.e., there is no monotonic dependence!). Hence, this matter will not even be captured by Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> either:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">tribble</span><span class="p">(</span>
+<span class="w">    </span><span class="o">~</span><span class="w"> </span><span class="n">Pearson</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">Kendall</span><span class="p">,</span>
+<span class="w">    </span><span class="nf">round</span><span class="p">(</span><span class="nf">cor</span><span class="p">(</span><span class="n">parabola_pairs</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;pearson&quot;</span><span class="p">)[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="m">4</span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">round</span><span class="p">(</span><span class="nf">cor</span><span class="p">(</span><span class="n">parabola_pairs</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kendall&quot;</span><span class="p">)[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="m">4</span><span class="p">)</span>
+<span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">kable</span><span class="p">(</span><span class="n">align</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;cc&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">format</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;html&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">as.character</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">display_html</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> Pearson </th>
+   <th style="text-align:center;"> Kendall </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 0 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Even though both dependence measures (Pearson and Kendall) are 0, there is actually deterministic dependence here (i.e., <span class="math notranslate nohighlight">\(X\)</span> <strong>determines</strong> <span class="math notranslate nohighlight">\(Y\)</span>). Luckily, there are many monotonic relationships in practice, making Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span> a handy measure of dependence.</p>
+</section>
+<section id="mutual-information-optional-section">
+<h4>2.2.3. Mutual Information (Optional Section)<a class="headerlink" href="#mutual-information-optional-section" title="Permalink to this heading">#</a></h4>
+<p>Covariance and correlation measure the strength of dependence for numeric random variables, but what about categorical random variables? Back in <a class="reference internal" href="01_lecture-uncertainty.html"><span class="doc">Lecture 1: Depicting Uncertainty</span></a>, we saw entropy <a class="reference internal" href="01_lecture-uncertainty.html#equation-entropy-discrete">(2)</a> as a measure of spread that works even for categorical variables. If covariance is a (multivariate) generalization of variance, do we have a (multivariate) generalization of entropy? The answer is yes! And it is called <strong>mutual information</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Mutual Information</p>
+<p>The mutual information between two random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[H(X,Y) = \displaystyle \sum_x \displaystyle \sum_y P(X = x \cap Y = y)\log\left[\frac{P(X = x \cap Y = y)}{P(X = x) \cdot P(Y = y)}\right].\]</div>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>Later, you will also encounter <strong>cross-entropy</strong>, which is somewhat related to mutual information, except that it is not symmetric between <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>; that is <span class="math notranslate nohighlight">\(H(X , Y) \neq H(Y,X)\)</span>. Again, when you get to your Machine Learning courses, the motivation for this will make more sense.</p>
+</div>
+</section>
+</section>
+<section id="variance-of-a-sum-involving-two-non-independent-random-variables">
+<h3>2.3. Variance of a Sum Involving Two Non-Independent Random Variables<a class="headerlink" href="#variance-of-a-sum-involving-two-non-independent-random-variables" title="Permalink to this heading">#</a></h3>
+<p>Suppose <strong><span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are not independent random variables</strong>. Therefore, the variance of their sum is:</p>
+<div class="math notranslate nohighlight" id="equation-variance-dependent-sum">
+<span class="eqno">(16)<a class="headerlink" href="#equation-variance-dependent-sum" title="Permalink to this equation">#</a></span>\[\operatorname{Var}(X + Y) = \operatorname{Var}(X) + \operatorname{Var}(Y) + 2\operatorname{Cov}(X, Y).\]</div>
+<p>Furthermore, <strong>if <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent</strong>, then</p>
+<div class="math notranslate nohighlight" id="equation-cross-independent">
+<span class="eqno">(17)<a class="headerlink" href="#equation-cross-independent" title="Permalink to this equation">#</a></span>\[\mathbb{E}(XY) = \mathbb{E}(X) \mathbb{E}(Y).\]</div>
+<p>Using Equation <a class="reference internal" href="#equation-cross-independent">(17)</a>, the covariance is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\operatorname{Cov}(X, Y) &amp;=  \mathbb{E}(XY) - \left[ \mathbb{E}(X)\mathbb{E}(Y) \right] \\
+&amp;= \left[ \mathbb{E}(X) \mathbb{E}(Y) \right] - \left[ \mathbb{E}(X)\mathbb{E}(Y) \right] \\
+&amp; = 0, 
+\end{align*}\end{split}\]</div>
+<p>and the sum <a class="reference internal" href="#equation-variance-dependent-sum">(16)</a> becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align*}
+\operatorname{Var}(X + Y) &amp;= \operatorname{Var}(X) + \operatorname{Var}(Y).
+\end{align*}\]</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_lecture-parametric-families.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 2: Parametric Families</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_lecture-conditional.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 4: Conditional Probabilities</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#joint-distributions">1. Joint Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-length-of-stay-versus-gang-demand">1.1. Example: Length of Stay Versus Gang Demand</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-marginal-distributions-from-the-joint-distribution">1.2. Calculating Marginal Distributions from the Joint Distribution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-and-dependence-concepts">2. Independence and Dependence Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independence">2.1. Independence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measures-of-dependence">2.2. Measures of Dependence</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#covariance-and-pearson-s-correlation">2.2.1. Covariance and Pearson’s Correlation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kendall-s-tau-k">2.2.2. Kendall’s <span class="math notranslate nohighlight">\(\tau_K\)</span></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mutual-information-optional-section">2.2.3. Mutual Information (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variance-of-a-sum-involving-two-non-independent-random-variables">2.3. Variance of a Sum Involving Two Non-Independent Random Variables</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

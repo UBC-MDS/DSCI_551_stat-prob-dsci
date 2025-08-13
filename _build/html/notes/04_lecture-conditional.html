@@ -1,0 +1,1613 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 4: Conditional Probabilities &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/04_lecture-conditional';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 5: Continuous Distributions" href="05_lecture-continuous.html" />
+    <link rel="prev" title="Lecture 3: Joint Probability" href="03_lecture-joint.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_lecture-uncertainty.html">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/04_lecture-conditional.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/04_lecture-conditional.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 4: Conditional Probabilities</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conditional-distributions">1. Univariate Conditional Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-approach">1.1. Table Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-approach">1.2. Formula Approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-conditional-distributions">2. Multivariate Conditional Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.1. Table Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.2. Formula Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-and-conditional-probabilities">2.3. Independence and Conditional Probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-probability-expectation">2.4. Law of Total Probability/Expectation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-independence">3. Conditional Independence</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-4-conditional-probabilities">
+<h1>Lecture 4: Conditional Probabilities<a class="headerlink" href="#lecture-4-conditional-probabilities" title="Permalink to this heading">#</a></h1>
+<section id="learning-objectives">
+<h2>Learning Objectives<a class="headerlink" href="#learning-objectives" title="Permalink to this heading">#</a></h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ul class="simple">
+<li><p>Calculate conditional distributions when given a full distribution.</p></li>
+<li><p>Obtain the marginal mean from conditional means and marginal probabilities, using the Law of Total Expectation.</p></li>
+<li><p>Use the Law of Total Probability to convert between conditional, marginal distributions, and joint distributions.</p></li>
+<li><p>Compare and contrast independence versus conditional independence.</p></li>
+</ul>
+</section>
+<section id="univariate-conditional-distributions">
+<span id="discrete-univariate-conditional-distributions"></span><h2>1. Univariate Conditional Distributions<a class="headerlink" href="#univariate-conditional-distributions" title="Permalink to this heading">#</a></h2>
+<p>Let us start with the following inquiry:</p>
+<blockquote>
+<div><p>Probability distributions describe an uncertain outcome, but what if we have partial information?</p>
+</div></blockquote>
+<figure class="align-default" id="ship">
+<a class="reference internal image-reference" href="../_images/ship.png"><img alt="../_images/ship.png" src="../_images/ship.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">A cargo ship</span><a class="headerlink" href="#ship" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Consider the example of ships arriving at the port of Vancouver again. Each ship will stay at port for a random number of days, which we will call the <strong>length of stay</strong> (<span class="math notranslate nohighlight">\(\text{LOS}\)</span>). For the sake of our notation, let us call it <span class="math notranslate nohighlight">\(L\)</span>, which has the following distribution:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> L (Days) </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 0.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 4 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>We can also plot this probability mass function (PMF) as a bar chart:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/a3abde9b63854cf63815e50d5b1e95ab2e2bf2fe6166cad60647de69f4f017a4.png"><img alt="../_images/a3abde9b63854cf63815e50d5b1e95ab2e2bf2fe6166cad60647de69f4f017a4.png" src="../_images/a3abde9b63854cf63815e50d5b1e95ab2e2bf2fe6166cad60647de69f4f017a4.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>Before continuing with our example, let us formally define conditional probability.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Conditional Probability</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest within the sample <span class="math notranslate nohighlight">\(S\)</span>, and <span class="math notranslate nohighlight">\(P(B) &gt; 0\)</span>, then the <strong>conditional probability</strong> of <span class="math notranslate nohighlight">\(A\)</span> given <span class="math notranslate nohighlight">\(B\)</span> is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-conditional-probability">
+<span class="eqno">(18)<a class="headerlink" href="#equation-conditional-probability" title="Permalink to this equation">#</a></span>\[P(A \mid B) = \frac{P(A \cap B)}{P(B)}.\]</div>
+<p>What is going on here? Basically, event <span class="math notranslate nohighlight">\(B\)</span> is becoming the new sample space; note that <span class="math notranslate nohighlight">\(P(B \mid B) = 1\)</span>. The tweak here is that our original sample space <span class="math notranslate nohighlight">\(S\)</span> has been updated to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Conditional Probability Distribution</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest within the sample <span class="math notranslate nohighlight">\(S\)</span>. A conditional probability distribution of event <span class="math notranslate nohighlight">\(A\)</span> given <span class="math notranslate nohighlight">\(B\)</span> is a <strong>proper probability distribution</strong> for event <span class="math notranslate nohighlight">\(A\)</span> after observing event <span class="math notranslate nohighlight">\(B\)</span>. This distribution is restricted to the subsample space provided by event <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</div>
+<p>Now, suppose a ship has been at port for 2 days now, and it will be staying longer. <strong>This means that we know the <span class="math notranslate nohighlight">\(L\)</span> will be greater than 2.</strong> Now we might wonder, what is the distribution of the <span class="math notranslate nohighlight">\(L\)</span> now? Using symbols, this is written as</p>
+<div class="math notranslate nohighlight">
+\[P(L = l \mid L &gt; 2),\]</div>
+<p>where the bar “<span class="math notranslate nohighlight">\(\mid\)</span>” reads as “given” or “conditional on” the event <span class="math notranslate nohighlight">\(L &gt; 2\)</span>. One of these probabilities, like <span class="math notranslate nohighlight">\(P(L = 3 \mid L &gt; 2)\)</span>, is called a <strong>conditional probability</strong>, and the whole distribution, <span class="math notranslate nohighlight">\(P(L = l \mid L &gt; 2)\)</span> for all <span class="math notranslate nohighlight">\(l\)</span>, is called a <strong>conditional probability distribution</strong>.</p>
+<p>It is essential to stop here for a moment and recognize that this is, in fact, a probability distribution, i.e.,</p>
+<div class="math notranslate nohighlight" id="equation-ships-conditional">
+<span class="eqno">(19)<a class="headerlink" href="#equation-ships-conditional" title="Permalink to this equation">#</a></span>\[\displaystyle \sum_{l = 3}^5 P(L = l \mid L &gt; 2) = 1.\]</div>
+<p>Why is ? Well, the ship has been here for two days, and something still has to happen. So just like <span class="math notranslate nohighlight">\(P(L = l)\)</span> was a probability distribution with probabilities summing to 1, <span class="math notranslate nohighlight">\(P(L = l \mid L &gt; 2)\)</span> is also a probability distribution with probabilities summing to 1. <strong>But the probabilities will be different because they have to be updated given the information that <span class="math notranslate nohighlight">\(L &gt; 2\)</span>.</strong></p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that, in Equation <a class="reference internal" href="#equation-ships-conditional">(19)</a>, we restrict the values of <span class="math notranslate nohighlight">\(l\)</span> from <span class="math notranslate nohighlight">\(3\)</span> to <span class="math notranslate nohighlight">\(5\)</span> given the condition <span class="math notranslate nohighlight">\(L &gt; 2\)</span>.</p>
+</div>
+<p><strong>In the case of a discrete random variable</strong>, we can calculate a conditional distribution in two ways:</p>
+<ol class="arabic simple">
+<li><p>A <strong>table approach</strong> and</p></li>
+<li><p>a <strong>formula approach</strong>.</p></li>
+</ol>
+<section id="table-approach">
+<h3>1.1. Table Approach<a class="headerlink" href="#table-approach" title="Permalink to this heading">#</a></h3>
+<p>Let us start with the table approach for our cargo ship example via the following steps:</p>
+<ol class="arabic simple">
+<li><p>Subset the PMF table to only those outcomes that satisfy the <strong>condition</strong> (<span class="math notranslate nohighlight">\(L &gt; 2\)</span> in this case). You will end up with a sub-table.</p></li>
+<li><p>Re-normalize the remaining probabilities so that they add up to 1. You will end up with the conditional distribution under that condition.</p></li>
+</ol>
+<p>Recall our original PMF is the following:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> L (Days) </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 0.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 4 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Nevertheless, now that we know <span class="math notranslate nohighlight">\(L &gt; 2\)</span>, we have to “delete” some of these options:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="step-1-conditional-pmf-l">
+<caption><span class="caption-number">Table 13 </span><span class="caption-text">First step to update of the probability mass function (PMF) of random variable <span class="math notranslate nohighlight">\(L\)</span> given condition <span class="math notranslate nohighlight">\(L &gt; 2\)</span></span><a class="headerlink" href="#step-1-conditional-pmf-l" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(L\)</span> (Days)</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = l \mid L &gt; 2)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>IMPOSSIBLE</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>IMPOSSIBLE</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Used to be 0.20</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Used to be 0.10</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Used to be 0.10</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Since the only possible outcomes now are <span class="math notranslate nohighlight">\(L = 3, 4, 5\)</span>, we <strong>scale</strong> (or <strong>re-normalize</strong>) these remaining probabilities up to bigger values so that they all add up to 1 again. In this case,</p>
+<div class="math notranslate nohighlight">
+\[0.20 + 0.10 + 0.10 = 0.40,\]</div>
+<p>so if we divide all the probabilities by <span class="math notranslate nohighlight">\(0.40\)</span> in <a class="reference internal" href="#step-1-conditional-pmf-l"><span class="std std-numref">Table 13</span></a>, except for <span class="math notranslate nohighlight">\(L = 1, 2\)</span> whose probabilities are now 0, we will be good to go:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="conditional-pmf-l">
+<caption><span class="caption-number">Table 14 </span><span class="caption-text">Conditional probability mass function (PMF) of random variable <span class="math notranslate nohighlight">\(L\)</span> given condition <span class="math notranslate nohighlight">\(L &gt; 2\)</span></span><a class="headerlink" href="#conditional-pmf-l" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(L\)</span> (Days)</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = l \mid L &gt; 2)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>0.50</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>0.25</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note how, for outcomes satisfying the condition <span class="math notranslate nohighlight">\(L &gt; 2\)</span>, the <strong>ratios</strong> of the probabilities stay the same: <span class="math notranslate nohighlight">\(L = 3\)</span> used to be twice as likely as <span class="math notranslate nohighlight">\(L = 4\)</span>, and that is still the case after conditioning.</p>
+</section>
+<section id="formula-approach">
+<h3>1.2. Formula Approach<a class="headerlink" href="#formula-approach" title="Permalink to this heading">#</a></h3>
+<p>Now, let us proceed with the formula approach via Equation <a class="reference internal" href="#equation-conditional-probability">(18)</a>. For our example, the event <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(L = l\)</span> and the event <span class="math notranslate nohighlight">\(B\)</span> is <span class="math notranslate nohighlight">\(L &gt; 2\)</span>. Plugging this in, we get</p>
+<div class="math notranslate nohighlight">
+\[P(L = l \mid L &gt; 2) = \frac{P(L = l \cap L &gt; 2)}{P(L &gt; 2)} = \frac{P(L = l)}{P(L &gt; 2)} \quad \text{for} \quad l = 3, 4, 5.\]</div>
+<p>The only real “trick” is the numerator. How did we reduce the convoluted event</p>
+<div class="math notranslate nohighlight">
+\[L = l \cap L &gt; 2\]</div>
+<p>to the simple event <span class="math notranslate nohighlight">\(L = l\)</span> for <span class="math notranslate nohighlight">\(l = 3, 4, 5\)</span>? The “trick” is to go through all outcomes and check which ones satisfy the requirement</p>
+<div class="math notranslate nohighlight">
+\[L = l \cap L &gt; 2.\]</div>
+<p>This reduces to <span class="math notranslate nohighlight">\(L = l\)</span>, as long as <span class="math notranslate nohighlight">\(l = 3, 4, 5\)</span>.</p>
+<p>Looking at the cargo ship example via the formula, we can see that the math is telling us to do the “re-normalizing” we did above: for all cases satisfying the condition, we would divide by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L &gt; 2) &amp;= P(L = 3) + P(L = 4) + P(L = 5) \\
+&amp;= 0.20 + 0.10 + 0.10 \\
+&amp;= 0.40.
+\end{align*}\end{split}\]</div>
+<p>which is exactly what we did when we re-normalized. Thus:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = 3 \mid L &gt; 2) &amp;= \frac{P(L = 3 \cap L &gt; 2)}{P(L &gt; 2)} \\
+&amp;= \frac{P(L = 3)}{P(L &gt; 2)} \\
+&amp;= \frac{0.20}{0.40} \\
+&amp;= 0.50.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = 4 \mid L &gt; 2) &amp;= \frac{P(L = 4 \cap L &gt; 2)}{P(L &gt; 2)} \\
+&amp;= \frac{P(L = 4)}{P(L &gt; 2)} \\
+&amp;= \frac{0.10}{0.40} \\
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = 5 \mid L &gt; 2) &amp;= \frac{P(L = 5 \cap L &gt; 2)}{P(L &gt; 2)} \\
+&amp;= \frac{P(L = 5)}{P(L &gt; 2)} \\
+&amp;= \frac{0.10}{0.40} \\
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<p>So, the two approaches are equivalent, but the first one is easier to remember and a lot more intuitive.</p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>Even though the table approach is more intuitive, it is necessary to get familiar with the conditional probability as a formula depicted in Equation <a class="reference internal" href="#equation-conditional-probability">(18)</a> for <em>DSCI 553</em>.</p>
+</div>
+</section>
+</section>
+<section id="multivariate-conditional-distributions">
+<span id="discrete-multivariate-conditional-distributions"></span><h2>2. Multivariate Conditional Distributions<a class="headerlink" href="#multivariate-conditional-distributions" title="Permalink to this heading">#</a></h2>
+<p>So far, we have considered conditioning in the one-variable (i.e., univariate) case.</p>
+<p>In our cargo ship examples, if we look at</p>
+<div class="math notranslate nohighlight" id="equation-conditional-probability-ship">
+<span class="eqno">(20)<a class="headerlink" href="#equation-conditional-probability-ship" title="Permalink to this equation">#</a></span>\[P(L = l \mid L &gt; 2),\]</div>
+<p>we encounter the same random variable <span class="math notranslate nohighlight">\(L\)</span> on both sides of the vertical bar <span class="math notranslate nohighlight">\(\mid\)</span> in Equation <a class="reference internal" href="#equation-conditional-probability-ship">(20)</a>. This is often useful. However, it is more useful to think about the distribution of one random variable <strong>when conditioned on a different random variable</strong>.</p>
+<p>To dig into that case, let us revisit our 2-variable example from <a class="reference internal" href="03_lecture-joint.html"><span class="doc">Lecture 3: Joint Probability</span></a> where we looked at both the <span class="math notranslate nohighlight">\(\text{LOS}\)</span> (i.e., random variable <span class="math notranslate nohighlight">\(L\)</span>) and the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> required (i.e., random variable <span class="math notranslate nohighlight">\(G\)</span>) via our joint distribution:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>0.0017</td><td>0.0425</td><td>0.1247</td><td>0.0811</td></tr>
+	<tr><th scope=row>L = 2</th><td>0.0266</td><td>0.1698</td><td>0.1360</td><td>0.0176</td></tr>
+	<tr><th scope=row>L = 3</th><td>0.0511</td><td>0.1156</td><td>0.0320</td><td>0.0013</td></tr>
+	<tr><th scope=row>L = 4</th><td>0.0465</td><td>0.0474</td><td>0.0059</td><td>0.0001</td></tr>
+	<tr><th scope=row>L = 5</th><td>0.0740</td><td>0.0246</td><td>0.0014</td><td>0.0000</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Thus, suppose a ship is arriving, and they have told you they will only be staying for <strong>exactly</strong> 1 day. What is the distribution of <span class="math notranslate nohighlight">\(G\)</span> under this information? That is, what is <span class="math notranslate nohighlight">\(P(G = g \mid L = 1)\)</span> for all possible <span class="math notranslate nohighlight">\(g\)</span>? We will check out the table and formula approaches once again.</p>
+<section id="id1">
+<h3>2.1. Table Approach<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>Let us start with the table approach:</p>
+<ol class="arabic simple">
+<li><p>We are supposed to throw away all the cases where the condition is not satisfied. Isolating the outcomes satisfying the condition (<span class="math notranslate nohighlight">\(L = 1\)</span>) in the joint distribution, we obtain the first row:</p></li>
+</ol>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type chr</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>Used to be 0.0017</td><td>Used to be 0.0425</td><td>Used to be 0.1247</td><td>Used to be 0.0811</td></tr>
+	<tr><th scope=row>L = 2</th><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td></tr>
+	<tr><th scope=row>L = 3</th><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td></tr>
+	<tr><th scope=row>L = 4</th><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td></tr>
+	<tr><th scope=row>L = 5</th><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td><td>IMPOSSIBLE       </td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Now, re-normalize the probabilities so that they add up to 1, by dividing them by their sum, which is</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[0.0017 + 0.0425 + 0.1247 + 0.0811 = 0.25.\]</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 1 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>0.0068</td><td>0.1701</td><td>0.4988</td><td>0.3242</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>And this is it, we have <span class="math notranslate nohighlight">\(P(G = g \mid L = 1)\)</span>. By the way, compare this with <strong>the marginal distribution of the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span></strong>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> G = 1 </th>
+   <th style="text-align:right;"> G = 2 </th>
+   <th style="text-align:right;"> G = 3 </th>
+   <th style="text-align:right;"> G = 4 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 0.2 </td>
+   <td style="text-align:right;"> 0.4 </td>
+   <td style="text-align:right;"> 0.3 </td>
+   <td style="text-align:right;"> 0.1 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Or, preferably, here is the same comparison in plot format:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/7829929544f5720ebd6947851fb53d1156e5f2b15d158c5c353ccebb00747e9c.png"><img alt="../_images/7829929544f5720ebd6947851fb53d1156e5f2b15d158c5c353ccebb00747e9c.png" src="../_images/7829929544f5720ebd6947851fb53d1156e5f2b15d158c5c353ccebb00747e9c.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>In the above plot, we see the effect of conditioning on the <span class="math notranslate nohighlight">\(\text{LOS}\)</span> being 1 day (i.e., <span class="math notranslate nohighlight">\(L = 1\)</span>) on the left-hand side panel. If the <span class="math notranslate nohighlight">\(\text{LOS}\)</span> is short, we shift the PMF towards higher numbers of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>. This would be good to know in a real shipping context! Furthermore, this result is consistent with our previous knowledge that <span class="math notranslate nohighlight">\(\text{LOS}\)</span> and <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> are negatively correlated; a smaller <span class="math notranslate nohighlight">\(\text{LOS}\)</span> is associated with a larger number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>.</p>
+<p>We can also look at expected values. Firstly, <strong>let us use the respective marginal PMF for <span class="math notranslate nohighlight">\(G\)</span>:</strong></p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:left;">   </th>
+   <th style="text-align:center;"> Probability </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> G = 1 </td>
+   <td style="text-align:center;"> 0.2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> G = 2 </td>
+   <td style="text-align:center;"> 0.4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> G = 3 </td>
+   <td style="text-align:center;"> 0.3 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> G = 4 </td>
+   <td style="text-align:center;"> 0.1 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Then, we can obtain the marginal expected number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\mathbb{E}(G) &amp;= 1(0.2) + 2(0.4) + 3(0.3) + 4(0.1) \\
+&amp;= 2.3.
+\end{align*}\end{split}\]</div>
+<p>That said, after conditioning on <span class="math notranslate nohighlight">\(L = 1\)</span>, we can obtain the <strong>conditional expectation</strong> of the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span>. This is exactly the same formula for expected value, but this time using the conditional distribution for <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> given <span class="math notranslate nohighlight">\(L = 1\)</span>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 1 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>0.0068</td><td>0.1701</td><td>0.4988</td><td>0.3242</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>We write it as <span class="math notranslate nohighlight">\(\mathbb{E}(G \mid L = 1)\)</span>. It is computed as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\mathbb{E}(G \mid L = 1) &amp;= 1(0.0068) + 2(0.1701) + 3(0.4988) + 4(0.3242) \\
+&amp;= 3.1406.
+\end{align*}\end{split}\]</div>
+<p>We see that indeed the expected number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> increased once we conditioned on the <span class="math notranslate nohighlight">\(\text{LOS}\)</span> being only 1 day.</p>
+</section>
+<section id="id2">
+<h3>2.2. Formula Approach<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>Now, let us proceed with the formula approach. By applying the formula for conditional probabilities <a class="reference internal" href="#equation-conditional-probability">(18)</a>, we get</p>
+<div class="math notranslate nohighlight" id="equation-ship-formula-approach">
+<span class="eqno">(21)<a class="headerlink" href="#equation-ship-formula-approach" title="Permalink to this equation">#</a></span>\[P(G = g \mid L = 1) = \frac{P(G = g \cap L = 1)}{P(L = 1)} \quad \text{for} \quad g = 1, 2, 3, 4.\]</div>
+<p>Let us check the joint distribution from <a class="reference internal" href="03_lecture-joint.html"><span class="doc">Lecture 3: Joint Probability</span></a>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>0.0017</td><td>0.0425</td><td>0.1247</td><td>0.0811</td></tr>
+	<tr><th scope=row>L = 2</th><td>0.0266</td><td>0.1698</td><td>0.1360</td><td>0.0176</td></tr>
+	<tr><th scope=row>L = 3</th><td>0.0511</td><td>0.1156</td><td>0.0320</td><td>0.0013</td></tr>
+	<tr><th scope=row>L = 4</th><td>0.0465</td><td>0.0474</td><td>0.0059</td><td>0.0001</td></tr>
+	<tr><th scope=row>L = 5</th><td>0.0740</td><td>0.0246</td><td>0.0014</td><td>0.0000</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<p>Then, we can obtain the denominator from Equation <a class="reference internal" href="#equation-ship-formula-approach">(21)</a> as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = 1) &amp;= P(G = 1 \cap L = 1) + P(G = 2 \cap L = 1) + \\
+&amp; \qquad P(G = 3 \cap L = 1) + P(G = 4 \cap L = 1) \\
+&amp;= 0.0017 + 0.0425 + 0.1247 +  0.0811 \\ 
+&amp;= 0.25.
+\end{align*}\end{split}\]</div>
+<p>Finally, using the first row of the joint distribution to obtain the intersections from the numerator, we compute the conditional probabilities:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(G = 1 \mid L = 1) &amp;= \frac{P(G = 1 \cap L = 1)}{P(L = 1)} \\
+&amp;= \frac{0.0017}{0.25} \\
+&amp;= 0.0068.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(G = 2 \mid L = 1) &amp;= \frac{P(G = 2 \cap L = 1)}{P(L = 1)} \\
+&amp;= \frac{0.0425}{0.25} \\
+&amp;= 0.1701.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(G = 3 \mid L = 1) &amp;= \frac{P(G = 3 \cap L = 1)}{P(L = 1)} \\
+&amp;= \frac{0.1247}{0.25} \\
+&amp;= 0.4988.
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(G = 4 \mid L = 1) &amp;= \frac{P(G = 4 \cap L = 1)}{P(L = 1)} \\
+&amp;= \frac{0.0811}{0.25} \\
+&amp;= 0.3242.
+\end{align*}\end{split}\]</div>
+<p>And the above four conditional probabilities are part of a proper conditional PMF:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+\sum_{g = 1}^4 P(G = g \mid L = 1) &amp;= 0.0068 + 0.1701 + 0.4988 + 0.3242 \\
+&amp;= 1.
+\end{align*}\end{split}\]</div>
+<p>Again, the table approach and the formula approach are equivalent.</p>
+</section>
+<section id="independence-and-conditional-probabilities">
+<h3>2.3. Independence and Conditional Probabilities<a class="headerlink" href="#independence-and-conditional-probabilities" title="Permalink to this heading">#</a></h3>
+<p>In <a class="reference internal" href="03_lecture-joint.html"><span class="doc">Lecture 3: Joint Probability</span></a>, we saw the notion of <strong>independence</strong> of random variables. We said that random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent if and only if</p>
+<div class="math notranslate nohighlight">
+\[P(Y = y \cap X = x) = P(Y = y) \cdot P(X = x), \text{ for all } x \text{ and } y.\]</div>
+<p>With conditional probabilities introduced, we now have a new (and equivalent) definition of independence:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(Y = y \mid X = x) &amp;= \frac{P(Y = y \cap X = x)}{P(X = x)} \\
+&amp;= \frac{P(Y = y) \cdot P(X = x)}{P(X = x)} \\
+&amp;= P(Y = y),
+\end{align*}\end{split}\]</div>
+<p>and likewise, if you switch <span class="math notranslate nohighlight">\(Y\)</span> and <span class="math notranslate nohighlight">\(X\)</span>. Intuitively, this says that knowing <span class="math notranslate nohighlight">\(X\)</span> tells you nothing about <span class="math notranslate nohighlight">\(Y\)</span>, and knowing <span class="math notranslate nohighlight">\(Y\)</span> tells you nothing about <span class="math notranslate nohighlight">\(X\)</span>.</p>
+</section>
+<section id="law-of-total-probability-expectation">
+<h3>2.4. Law of Total Probability/Expectation<a class="headerlink" href="#law-of-total-probability-expectation" title="Permalink to this heading">#</a></h3>
+<p>Quite often, we know the conditional distributions. Nonetheless, we do not directly have the marginal distributions. In fact, most regression and Machine Learning models are about seeking <strong>conditional means</strong> (note that <strong>conditional mean</strong> and <strong>conditional expectation</strong> are synonyms).</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of the Law of Total Expectation</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> be two random variables. Generally, a marginal mean <span class="math notranslate nohighlight">\(\mathbb{E}_Y(Y)\)</span> can be computed from the <strong>conditional means</strong> <span class="math notranslate nohighlight">\(\mathbb{E}_Y(Y \mid X = x)\)</span> and the <strong>probabilities of the conditioning variable</strong> <span class="math notranslate nohighlight">\(P(X = x)\)</span>.</p>
+<p>The formula, known as the <strong>Law of Total Expectation</strong>, is</p>
+<div class="math notranslate nohighlight" id="equation-law-total-expectation">
+<span class="eqno">(22)<a class="headerlink" href="#equation-law-total-expectation" title="Permalink to this equation">#</a></span>\[\mathbb{E}_Y(Y) = \sum_x \mathbb{E}_Y(Y \mid X = x) \cdot P(X = x).\]</div>
+<p>Or, it can also be written as:</p>
+<div class="math notranslate nohighlight" id="equation-law-total-expectation-2">
+<span class="eqno">(23)<a class="headerlink" href="#equation-law-total-expectation-2" title="Permalink to this equation">#</a></span>\[\mathbb{E}_Y(Y) = \mathbb{E}_X [\mathbb{E}_Y(Y \mid X)].\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>We are omitting the proof of this law since it is out of the scope of the course.</p>
+</div>
+<p>In Equations <a class="reference internal" href="#equation-law-total-expectation">(22)</a> and <a class="reference internal" href="#equation-law-total-expectation-2">(23)</a>, we take care to put subscripts on the expected value operator <span class="math notranslate nohighlight">\(\mathbb{E}(\cdot)\)</span> to make clear what random variable we are taking an expectation over. This is often a good idea. <strong>Expectations are sums in the case of discrete random variables</strong> (or, as we will see later, <strong>integrals for continuous random variables</strong>). So, just like how we have the little <span class="math notranslate nohighlight">\(x\)</span> in a sum or a <span class="math notranslate nohighlight">\(dx\)</span> in an integral, we can use a subscript on the <span class="math notranslate nohighlight">\(\mathbb{E}\)</span> to be extra clear.</p>
+<p>Also, the previous result in Equation <a class="reference internal" href="#equation-law-total-expectation">(22)</a> extends to probabilities:</p>
+<div class="math notranslate nohighlight">
+\[P(Y = y \cap X = x) = P(Y = y \mid X = x) \cdot P(X = x).\]</div>
+<p>Now, for the ship case of our random variables <span class="math notranslate nohighlight">\(\text{LOS}\)</span> <span class="math notranslate nohighlight">\(L\)</span> (the condition) and the number of <span class="math notranslate nohighlight">\(\text{Gangs}\)</span> <span class="math notranslate nohighlight">\(G\)</span>, suppose we have the following <strong>conditional means of gang request <span class="math notranslate nohighlight">\(G\)</span> GIVEN the length of stay <span class="math notranslate nohighlight">\(L\)</span> of a ship</strong>:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/f730be553abe89cbdb467b28124b9b4d2426a25d87a1c316e4847d880419fe52.png"><img alt="../_images/f730be553abe89cbdb467b28124b9b4d2426a25d87a1c316e4847d880419fe52.png" src="../_images/f730be553abe89cbdb467b28124b9b4d2426a25d87a1c316e4847d880419fe52.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<p>This curve is called a <strong>model function</strong> and is helpful if we want to predict a ship’s daily gang request if we know their <span class="math notranslate nohighlight">\(\text{LOS}\)</span>. But what if we want to compute a <strong>marginal expected gang request</strong>? We can use the marginal mean of gang request.</p>
+<p>Furthermore, coming from the above plot plus the marginal PMF of <span class="math notranslate nohighlight">\(L\)</span>, we have the following table with the conditional expectations:</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table>
+ <thead>
+  <tr>
+   <th style="text-align:center;"> l (Days) </th>
+   <th style="text-align:center;"> E(G | L = l) </th>
+   <th style="text-align:center;"> P(L = l) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:center;"> 1 </td>
+   <td style="text-align:center;"> 3.1405 </td>
+   <td style="text-align:center;"> 0.25 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:center;"> 2.4128 </td>
+   <td style="text-align:center;"> 0.35 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1.9172 </td>
+   <td style="text-align:center;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 4 </td>
+   <td style="text-align:center;"> 1.5960 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:center;"> 5 </td>
+   <td style="text-align:center;"> 1.2735 </td>
+   <td style="text-align:center;"> 0.10 </td>
+  </tr>
+</tbody>
+</table></div></div>
+</div>
+<p>Multiplying the last two columns together, and summing, gives us the marginal expectation; i.e., using Equation <a class="reference internal" href="#equation-law-total-expectation">(22)</a>:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}_G(G) = \sum_l \mathbb{E}_G(G \mid L = l) \cdot P(L = l) = 2.3.\]</div>
+<p>Now, we will start with in-class questions via <a class="reference external" href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="exercise admonition" id="lecture4-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 17 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>In general for two random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, <span class="math notranslate nohighlight">\(P(X = x \mid Y = y)\)</span> is a normalized probability distribution in the sense that</p>
+<div class="math notranslate nohighlight">
+\[\sum_x P(X = x \mid Y = y) = 1.\]</div>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture4-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 18 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>In general for two random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span>, <span class="math notranslate nohighlight">\(P(X = x \mid Y = y)\)</span> is a normalized probability distribution in the sense that</p>
+<div class="math notranslate nohighlight">
+\[\sum_y P(X = x \mid Y = y) = 1.\]</div>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<div class="exercise admonition" id="lecture4-q3">
+
+<p class="admonition-title"><span class="caption-number">Exercise 19 </span></p>
+<section id="exercise-content">
+<p>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a random variable with non-zero entropy <a class="reference internal" href="01_lecture-uncertainty.html#equation-entropy-discrete">(2)</a> and <span class="math notranslate nohighlight">\(Y\)</span> be a random variable with zero entropy. Then, <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent.</p>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+</div>
+<p>We will solve the below exercise during class (<strong>it is not an iClicker question</strong>):</p>
+<div class="exercise admonition" id="lecture4-q4">
+
+<p class="admonition-title"><span class="caption-number">Exercise 20 </span></p>
+<section id="exercise-content">
+<p>Given the marginal probabilities of <span class="math notranslate nohighlight">\(L\)</span>, what is the expected gang request <span class="math notranslate nohighlight">\(G\)</span> given that the ship captain says they will not be at port any longer than 2 days? In symbols:</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(G \mid L \leq 2).\]</div>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-los">
+<caption><span class="caption-number">Table 15 </span><span class="caption-text">Probability mass function (PMF) of <span class="math notranslate nohighlight">\(\text{LOS}\)</span> <span class="math notranslate nohighlight">\(L\)</span></span><a class="headerlink" href="#pmf-los" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(L\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = l)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>0.35</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>0.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>You would also need the below joint distribution between <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(G\)</span>.</p>
+</section>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="dataframe">
+<caption>A matrix: 5 × 4 of type dbl</caption>
+<thead>
+	<tr><th></th><th scope=col>G = 1</th><th scope=col>G = 2</th><th scope=col>G = 3</th><th scope=col>G = 4</th></tr>
+</thead>
+<tbody>
+	<tr><th scope=row>L = 1</th><td>0.0017</td><td>0.0425</td><td>0.1247</td><td>0.0811</td></tr>
+	<tr><th scope=row>L = 2</th><td>0.0266</td><td>0.1698</td><td>0.1360</td><td>0.0176</td></tr>
+	<tr><th scope=row>L = 3</th><td>0.0511</td><td>0.1156</td><td>0.0320</td><td>0.0013</td></tr>
+	<tr><th scope=row>L = 4</th><td>0.0465</td><td>0.0474</td><td>0.0059</td><td>0.0001</td></tr>
+	<tr><th scope=row>L = 5</th><td>0.0740</td><td>0.0246</td><td>0.0014</td><td>0.0000</td></tr>
+</tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="conditional-independence">
+<h2>3. Conditional Independence<a class="headerlink" href="#conditional-independence" title="Permalink to this heading">#</a></h2>
+<p>So far, we have discussed the notions of independence and conditional probabilities. We have already discussed conditional distributions such as <span class="math notranslate nohighlight">\(P(Y \mid X)\)</span>. However, here are a couple of important questions:</p>
+<blockquote>
+<div><p>Can the dependence/independence of random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> change if we condition on another random variable <span class="math notranslate nohighlight">\(Z\)</span>?</p>
+</div></blockquote>
+<blockquote>
+<div><p>If random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent, are they also independent given random variable <span class="math notranslate nohighlight">\(Z\)</span>?</p>
+</div></blockquote>
+<p>The answer is: <strong>not necessarily!</strong> Independence and conditional independence are two different things. Here is our old definition of independence: <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are independent if and only if</p>
+<div class="math notranslate nohighlight" id="equation-marginal-independence">
+<span class="eqno">(24)<a class="headerlink" href="#equation-marginal-independence" title="Permalink to this equation">#</a></span>\[P(X = x \cap Y = y) = P(X = x) \cdot P(Y = y).\]</div>
+<p>Below, we provide the formal definition of <strong>conditional independence</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Conditional Independence</p>
+<p>Random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are conditionally independent given random variable <span class="math notranslate nohighlight">\(Z\)</span> if and only if, for any <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span>,</p>
+<div class="math notranslate nohighlight" id="equation-conditional-independence">
+<span class="eqno">(25)<a class="headerlink" href="#equation-conditional-independence" title="Permalink to this equation">#</a></span>\[P(X = x \cap Y = y \mid Z = z) = P(X = x \mid Z = z) \cdot P(Y = y \mid Z = z).\]</div>
+<p>In short, we drop in “<span class="math notranslate nohighlight">\(\mid Z = z\)</span>” everywhere we can in the original definition of independence.</p>
+</div>
+<p>Conditional independence <a class="reference internal" href="#equation-conditional-independence">(25)</a> has all the same properties as regular (marginal) independence <a class="reference internal" href="#equation-marginal-independence">(24)</a>, but the intuition is quite different. For one thing, we have to consider <strong>three random variables</strong>, not just two. Let us check a further example.</p>
+<p>Let <span class="math notranslate nohighlight">\(L\)</span> be a student’s lab grade in DSCI 551, <span class="math notranslate nohighlight">\(Q\)</span> be a student’s quiz grade in DSCI 551, and <span class="math notranslate nohighlight">\(S\)</span> represents whether the student majored in Statistics in their undergraduate studies. For simplicity, we will consider only <a class="reference internal" href="appendix-dist-cheatsheet.html#bernoulli-distribution"><span class="std std-ref">Bernoulli</span></a> random variables, so <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> will only take on the values “<em>high</em>” and “<em>low</em>” – but everything here also applies to random variables with more than two possible outcomes.</p>
+<p>Here is the joint distribution of <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(Q\)</span>, and <span class="math notranslate nohighlight">\(S\)</span>:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional">
+<caption><span class="caption-number">Table 16 </span><span class="caption-text">Joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(S\)</span></span><a class="headerlink" href="#pmf-example-conditional" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(s\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q \cap S = s)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p>yes</p></td>
+<td><p>0.01</p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p>yes</p></td>
+<td><p>0.03</p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p>yes</p></td>
+<td><p>0.03</p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p>yes</p></td>
+<td><p>0.09</p></td>
+</tr>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p>no</p></td>
+<td><p>0.21</p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p>no</p></td>
+<td><p>0.21</p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p>no</p></td>
+<td><p>0.21</p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p>no</p></td>
+<td><p>0.21</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Let us answer the first question:</p>
+<blockquote>
+<div><p>Are <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> independent?</p>
+</div></blockquote>
+<p>Well, this question has nothing to do with <span class="math notranslate nohighlight">\(S\)</span>, so let us <strong>marginalize out</strong> <span class="math notranslate nohighlight">\(S\)</span>. In other words, let us compute the distribution <span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q)\)</span> for all values of <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(q\)</span>. The rules stay the same – we add up the probabilities associated with the different scenarios. For instance:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{high} \cap Q = \text{high}) &amp;= P(L = \text{high} \cap Q = \text{high} \cap S = \text{yes}) + \\
+&amp; \qquad P(L = \text{high} \cap Q = \text{high} \cap S = \text{no}) \\
+&amp;= 0.09 + 0.21 \\
+&amp;= 0.30.
+\end{align*}\end{split}\]</div>
+<p>Doing this for all four cases yields:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional-2">
+<caption><span class="caption-number">Table 17 </span><span class="caption-text">Joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span></span><a class="headerlink" href="#pmf-example-conditional-2" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q)\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p>0.22</p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p>0.24</p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p>0.24</p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p>0.30</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Note the above probabilities still add up to 1.</p>
+<p>So, are <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> independent? <strong>Apparently not.</strong> The marginal probabilities are</p>
+<div class="math notranslate nohighlight">
+\[P(L = \text{high}) = 0.54\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[P(Q = \text{high}) = 0.54,\]</div>
+<p>but</p>
+<div class="math notranslate nohighlight">
+\[P(L = \text{high} \cap Q = \text{high}) = 0.30 \neq 0.54 \times 0.54.\]</div>
+<p>Rather, <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> appear to have a mild positive correlation: <em>when the lab grade is high, the quiz grade is a bit more likely to be also high</em>.</p>
+<p>Fine, <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> are not independent.</p>
+<blockquote>
+<div><p>But, what about <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> given <span class="math notranslate nohighlight">\(S\)</span>? Are they conditionally independent?</p>
+</div></blockquote>
+<p>As we will see, yes, they are. But before we get to the math, let us discuss the intuition. As we saw above, when the lab grade is high, the quiz grade is a bit more likely to be also high. Why does this happen? In this example, when the lab grade is more likely to be high, that indicates that maybe this person is a Statistics major (a high-scorer, in other words); if so, that means their quiz grade would also be higher.</p>
+<p>Now, here is the tricky part: because of the way I carefully crafted this joint distribution, the above reasoning is the <strong>only reason</strong> why high lab grades are associated with high quiz grades. <strong>If you already know that a person is (or is not) a Statistics major, then their lab and quiz grades are completely independent.</strong> This is <strong>conditional independence</strong>.</p>
+<p>Like marginal independence, conditional independence is determined entirely by the joint distribution; it is not a property that you can specify separately from the joint. Thus, let us dig into the joint. What we want to know is whether</p>
+<div class="math notranslate nohighlight">
+\[P(L = \ell \cap Q=q \mid S = s) = P(L = \ell \mid S = s) \cdot P(Q = q \mid S = s).\]</div>
+<p>We would need the corresponding conditional distributions <span class="math notranslate nohighlight">\(P(L = \ell \mid S = s)\)</span> and <span class="math notranslate nohighlight">\(P(Q = q \mid S = s)\)</span>. Thus, we will check this for both <span class="math notranslate nohighlight">\(S = \text{yes}\)</span> and <span class="math notranslate nohighlight">\(S = \text{no}\)</span>.</p>
+<p>When <span class="math notranslate nohighlight">\(S = \text{yes}\)</span>, we have:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional-3">
+<caption><span class="caption-number">Table 18 </span><span class="caption-text">First step to obtain the joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> given <span class="math notranslate nohighlight">\(S = \text{yes}\)</span></span><a class="headerlink" href="#pmf-example-conditional-3" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q \cap S = \text{yes})\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.01\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.03\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.03\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.09\)</span> in the three-variable PMF</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Now, using the formula approach for a conditional probability, we need the following to get the corresponding conditional distribution given <span class="math notranslate nohighlight">\(S = \text{yes}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \ell \cap Q = q \mid S = \text{yes}) &amp;= \frac{P(L = \ell \cap Q = q \cap S = \text{yes})}{P(S = \text{yes})} \\ 
+\\
+&amp; \qquad \qquad \qquad \qquad \text{for} \quad \ell = \text{low}, \text{high} \quad \text{and} \quad q = \text{low}, \text{high}
+\end{align*}\end{split}\]</div>
+<p>From the original three-variable PMF in <a class="reference internal" href="#pmf-example-conditional"><span class="std std-numref">Table 16</span></a>, we know that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(S = \text{yes}) &amp;= P(L = \text{low} \cap Q = \text{low} \cap S = \text{yes}) + P(L = \text{low} \cap Q = \text{high} \cap S = \text{yes}) + \\
+&amp; \qquad P(L = \text{high} \cap Q = \text{low} \cap S = \text{yes}) + P(L = \text{high} \cap Q = \text{high} \cap S = \text{yes}) \\
+&amp;= 0.01 + 0.03 + 0.03 + 0.09 \\
+&amp;= 0.16.
+\end{align*}\end{split}\]</div>
+<p>Therefore, re-normalizing yields:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional-4">
+<caption><span class="caption-number">Table 19 </span><span class="caption-text">Re-normalized joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> given <span class="math notranslate nohighlight">\(S = \text{yes}\)</span></span><a class="headerlink" href="#pmf-example-conditional-4" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q \mid S = \text{yes})\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.01 / 0.16 = 0.0625\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.03 / 0.16 = 0.1875\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.03 / 0.16 = 0.1875\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.09 / 0.16 = 0.5625\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can check that this conditional distribution on <span class="math notranslate nohighlight">\(S = \text{yes}\)</span> satisfies the definition of independence; i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+P(L = \text{low} \cap Q = \text{low} \mid S = \text{yes}) = \frac{0.01}{0.16} = 0.0625 \\
+P(L = \text{low} \cap Q = \text{high} \mid S = \text{yes}) = \frac{0.03}{0.16} = 0.1875 \\
+P(L = \text{high} \cap Q = \text{low} \mid S = \text{yes}) = \frac{0.03}{0.16} = 0.1875 \\
+P(L = \text{high} \cap Q = \text{high} \mid S = \text{yes}) = \frac{0.09}{0.16} = 0.5625
+\end{gather*}\end{split}\]</div>
+<p>should be the respective products of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{low} \mid S = \text{yes}) \cdot P(Q = \text{low} \mid S = \text{yes})
+&amp;= \left( \frac{0.01}{0.16} + \frac{0.03}{0.16} \right) \left( \frac{0.01}{0.16} + \frac{0.03}{0.16}  \right) \\
+&amp;= \left( \frac{0.04}{0.16} \right) \left( \frac{0.04}{0.16} \right) \\
+&amp;= 0.0625 \\
+&amp;= P(L = \text{low} \cap Q = \text{low} \mid S = \text{yes})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{low} \mid S = \text{yes}) \cdot P(Q = \text{high} \mid S = \text{yes})
+&amp;= \left( \frac{0.01}{0.16} + \frac{0.03}{0.16} \right) \left( \frac{0.03}{0.16} + \frac{0.09}{0.16}  \right) \\
+&amp;= \left( \frac{0.04}{0.16} \right) \left( \frac{0.12}{0.16} \right) \\
+&amp;= 0.1875 \\
+&amp;= P(L = \text{low} \cap Q = \text{high} \mid S = \text{yes})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{high} \mid S = \text{yes}) \cdot P(Q = \text{low} \mid S = \text{yes})
+&amp;= \left( \frac{0.03}{0.16} + \frac{0.09}{0.16} \right) \left( \frac{0.01}{0.16} + \frac{0.03}{0.16}  \right) \\
+&amp;= \left( \frac{0.12}{0.16} \right) \left( \frac{0.04}{0.16} \right) \\
+&amp;= 0.1875 \\
+&amp;= P(L = \text{high} \cap Q = \text{low} \mid S = \text{yes})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{high} \mid S = \text{yes}) \cdot P(Q = \text{high} \mid S = \text{yes})
+&amp;= \left( \frac{0.03}{0.16} + \frac{0.09}{0.16} \right) \left( \frac{0.03}{0.16} + \frac{0.09}{0.16}  \right) \\
+&amp;= \left( \frac{0.12}{0.16} \right) \left( \frac{0.12}{0.16} \right) \\
+&amp;= 0.5625 \\
+&amp;= P(L = \text{high} \cap Q = \text{high} \mid S = \text{yes}).
+\end{align*}\end{split}\]</div>
+<p>Using the formula approach for a conditional probability, we need the following to get the corresponding conditional distribution given <span class="math notranslate nohighlight">\(S = \text{no}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \ell \cap Q = q \mid S = \text{no}) &amp;= \frac{P(L = \ell \cap Q = q \cap S = \text{no})}{P(S = \text{no})} \\ 
+\\
+&amp; \qquad \qquad \qquad \qquad \text{for} \quad \ell = \text{low}, \text{high} \quad \text{and} \quad q = \text{low}, \text{high}
+\end{align*}\end{split}\]</div>
+<p>When <span class="math notranslate nohighlight">\(S = \text{no}\)</span>, we have:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional-5">
+<caption><span class="caption-number">Table 20 </span><span class="caption-text">First step to obtain the joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> given <span class="math notranslate nohighlight">\(S = \text{no}\)</span></span><a class="headerlink" href="#pmf-example-conditional-5" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q \cap S = \text{no})\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.21\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.21\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.21\)</span> in the three-variable PMF</p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p>Used to be <span class="math notranslate nohighlight">\(0.21\)</span> in the three-variable PMF</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>From the original three-variable PMF, we know that:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(S = \text{no}) &amp;= P(L = \text{low} \cap Q = \text{low} \cap S = \text{no}) + P(L = \text{low} \cap Q = \text{high} \cap S = \text{no}) + \\
+&amp; \qquad P(L = \text{high} \cap Q = \text{low} \cap S = \text{no}) + P(L = \text{high} \cap Q = \text{high} \cap S = \text{no}) \\
+&amp;= 0.21 + 0.21 + 0.21 + 0.21 \\
+&amp;= 0.84.
+\end{align*}\end{split}\]</div>
+<p>Therefore, re-normalizing yields:</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-example-conditional-6">
+<caption><span class="caption-number">Table 21 </span><span class="caption-text">Re-normalized joint probability mass function (PMF) of <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(Q\)</span> given <span class="math notranslate nohighlight">\(S = \text{no}\)</span></span><a class="headerlink" href="#pmf-example-conditional-6" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(\ell\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(q\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(P(L = \ell \cap Q = q \mid S = \text{no})\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>low</p></td>
+<td><p>low</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.21 / 0.84 = 0.25\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>low</p></td>
+<td><p>high</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.21 / 0.84 = 0.25\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>high</p></td>
+<td><p>low</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.21 / 0.84 = 0.25\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>high</p></td>
+<td><p>high</p></td>
+<td><p><span class="math notranslate nohighlight">\(0.21 / 0.84 = 0.25\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can check that this conditional distribution on <span class="math notranslate nohighlight">\(S = \text{no}\)</span> satisfies the definition of independence; i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+P(L = \text{low} \cap Q = \text{low} \mid S = \text{no}) = \frac{0.21}{0.84} = 0.25 \\
+P(L = \text{low} \cap Q = \text{high} \mid S = \text{no}) = \frac{0.21}{0.84} = 0.25 \\
+P(L = \text{high} \cap Q = \text{low} \mid S = \text{no}) = \frac{0.21}{0.84} = 0.25 \\
+P(L = \text{high} \cap Q = \text{high} \mid S = \text{no}) = \frac{0.21}{0.84} = 0.25 \\ 
+\end{gather*}\end{split}\]</div>
+<p>should be the respective products of</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{low} \mid S = \text{no}) \cdot P(Q = \text{low} \mid S = \text{no})
+&amp;= \left( \frac{0.21}{0.84} + \frac{0.21}{0.84} \right) \left( \frac{0.21}{0.84} + \frac{0.21}{0.84}  \right) \\
+&amp;= \left( \frac{0.42}{0.84} \right) \left( \frac{0.42}{0.84} \right) \\
+&amp;= (0.5) (0.5) \\
+&amp;= 0.25 \\
+&amp;= P(L = \text{low} \cap Q = \text{low} \mid S = \text{no})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{low} \mid S = \text{no}) \cdot P(Q = \text{high} \mid S = \text{no})
+&amp;= \left( \frac{0.21}{0.84} + \frac{0.21}{0.84} \right) \left( \frac{0.21}{0.84} + \frac{0.21}{0.84}  \right) \\
+&amp;= \left( \frac{0.42}{0.84} \right) \left( \frac{0.42}{0.84} \right) \\
+&amp;= (0.5) (0.5) \\
+&amp;= 0.25 \\
+&amp;= P(L = \text{low} \cap Q = \text{high} \mid S = \text{no})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{high} \mid S = \text{no}) \cdot P(Q = \text{low} \mid S = \text{no})
+&amp;= \left( \frac{0.21}{0.84} + \frac{0.21}{0.84} \right) \left( \frac{0.21}{0.84} + \frac{0.21}{0.84}  \right) \\
+&amp;= \left( \frac{0.42}{0.84} \right) \left( \frac{0.42}{0.84} \right) \\
+&amp;= (0.5) (0.5) \\
+&amp;= 0.25 \\
+&amp;= P(L = \text{high} \cap Q = \text{low} \mid S = \text{no})
+\end{align*}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(L = \text{high} \mid S = \text{no}) \cdot P(Q = \text{high} \mid S = \text{no})
+&amp;= \left( \frac{0.21}{0.84} + \frac{0.21}{0.84} \right) \left( \frac{0.21}{0.84} + \frac{0.21}{0.84}  \right) \\
+&amp;= \left( \frac{0.42}{0.84} \right) \left( \frac{0.42}{0.84} \right) \\
+&amp;= (0.5) (0.5) \\
+&amp;= 0.25 \\
+&amp;= P(L = \text{high} \cap Q = \text{high} \mid S = \text{no}).
+\end{align*}\end{split}\]</div>
+<p>Note we can recognize the case when <span class="math notranslate nohighlight">\(S = \text{no}\)</span> as two independent Bernoulli trials each with <span class="math notranslate nohighlight">\(p = 0.5\)</span>.</p>
+<p><strong>Finally, we are done. The lab grade and quiz grade are not independent, but they are conditionally independent given information about whether the student was a Statistics major.</strong></p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>It is also possible to have the opposite case: two variables that <strong>are</strong> marginally independent, but <strong>not</strong> conditionally independent given a third variable.</p>
+<p>A classic example is whether a burglar is robbing your home is independent of whether an earthquake is happening. But, if you condition on the fact that your alarm system is ringing, then these variables actually become dependent. Given the alarm, both robbery and earthquake are somewhat likely. But given the alarm, if a robbery is happening, then an earthquake is probably not happening; and if an earthquake is happening, then a robbery is not happening.</p>
+<p>This is sometimes called <strong>explaining away</strong>; if you see the robber, this explains why the alarm is ringing, and “explains away” your suspicion that there might be an earthquake; likewise, if you feel an earthquake, this explains why the alarm is ringing and “explains away” your suspicion that there might be a robbery.</p>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_lecture-joint.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Lecture 3: Joint Probability</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_lecture-continuous.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 5: Continuous Distributions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-objectives">Learning Objectives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#univariate-conditional-distributions">1. Univariate Conditional Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-approach">1.1. Table Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formula-approach">1.2. Formula Approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-conditional-distributions">2. Multivariate Conditional Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">2.1. Table Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.2. Formula Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#independence-and-conditional-probabilities">2.3. Independence and Conditional Probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-probability-expectation">2.4. Law of Total Probability/Expectation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-independence">3. Conditional Independence</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

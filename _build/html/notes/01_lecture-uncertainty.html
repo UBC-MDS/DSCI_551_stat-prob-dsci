@@ -1,0 +1,1182 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Lecture 1: Depicting Uncertainty &#8212; DSCI 551 - Descriptive Statistics and Probability for Data Science</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/exercise.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notes/01_lecture-uncertainty';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Lecture 2: Parametric Families" href="02_lecture-parametric-families.html" />
+    <link rel="prev" title="Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science" href="../README.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UBC_MDS_logo.png" class="logo__image only-light" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>
+    <script>document.write(`<img src="../_static/UBC_MDS_logo.png" class="logo__image only-dark" alt="DSCI 551 - Descriptive Statistics and Probability for Data Science - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Lectures</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lecture 1: Depicting Uncertainty</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_lecture-parametric-families.html">Lecture 2: Parametric Families</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_lecture-joint.html">Lecture 3: Joint Probability</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_lecture-conditional.html">Lecture 4: Conditional Probabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_lecture-continuous.html">Lecture 5: Continuous Distributions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_lecture-maximum-likelihood-estimation.html">Lecture 7: Maximum Likelihood Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_lecture-simulation.html">Lecture 8: Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Appendices</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix-prob-cheatsheet.html">Probability Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-dist-cheatsheet.html">Distribution Cheatsheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix-greek-alphabet.html">Greek Alphabet</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues/new?title=Issue%20on%20page%20%2Fnotes/01_lecture-uncertainty.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notes/01_lecture-uncertainty.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Lecture 1: Depicting Uncertainty</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-digression-on-textboxes">A Brief Digression on Textboxes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thinking-about-probability">1. Thinking about Probability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-probability">1.1. Defining Probability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-probabilities-using-laws">1.2. Calculating Probabilities using Laws</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-probability">1.2.1.  Law of Total Probability</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-exclusion-principle">1.2.2. Inclusion-Exclusion Principle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-events">1.2.3. Independent Events</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-probabilities">1.3. Comparing Probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-probability-optional-section">1.4. Interpreting Probability (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-distributions">2. Probability Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-probability-mass-functions">2.1. Examples of Probability Mass Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measures-of-central-tendency-and-uncertainty">3. Measures of Central Tendency and Uncertainty</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-and-entropy">3.1. Mode and Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-and-variance">3.2. Mean and Variance</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="lecture-1-depicting-uncertainty">
+<h1>Lecture 1: Depicting Uncertainty<a class="headerlink" href="#lecture-1-depicting-uncertainty" title="Permalink to this heading">#</a></h1>
+<section id="a-brief-digression-on-textboxes">
+<h2>A Brief Digression on Textboxes<a class="headerlink" href="#a-brief-digression-on-textboxes" title="Permalink to this heading">#</a></h2>
+<p>Throughout these lecture notes, you could find textboxes that highlight the following:</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition</p>
+<p>A formal statistical definition of any given concept with a key role in the lecture’s main topic.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>An idea of crucial relevance for the lecture’s main topic. Mapping this idea in your learning process will help in the course’s lab assignments and quizzes.</p>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>An idea that might be slightly out of the main scope of the lecture but with particular relevance for subsequent MDS courses.</p>
+</div>
+<p>Moreover, you might find some sections marked as “<strong>optional</strong>.” This labelling indicates we will not review that specific material in this course. Still, it will have relevance in subsequent courses where we will allocate the necessary lecture time for a broader discussion.</p>
+</section>
+<section id="learning-goals">
+<h2>Learning Goals<a class="headerlink" href="#learning-goals" title="Permalink to this heading">#</a></h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ol class="arabic simple">
+<li><p>Identify probability as a proportion that converges to the truth as you collect more data.</p></li>
+<li><p>Calculate probabilities using the Inclusion-Exclusion Principle, the Law of Total Probability, and probability distributions.</p></li>
+<li><p>Convert between and interpret odds and probability.</p></li>
+<li><p>Specify the usefulness of odds over probability.</p></li>
+<li><p>Be aware that probability has multiple interpretations/philosophies.</p></li>
+<li><p>Calculate and interpret mean, mode, entropy, variance, and standard deviation, mainly from a distribution.</p></li>
+</ol>
+</section>
+<section id="thinking-about-probability">
+<h2>1. Thinking about Probability<a class="headerlink" href="#thinking-about-probability" title="Permalink to this heading">#</a></h2>
+<p>The concept of <strong>probability</strong> is recurring throughout different Data Science-related topics. In MDS, you will find it in either the Statistics or Machine Learning courses. For instance, a fair probability understanding is vital to delivering inferential tools such as <em>hypothesis testing</em> and <em>confidence intervals</em> (to be discussed in <em>DSCI 552</em>).</p>
+<figure class="align-default" id="loteria">
+<a class="reference internal image-reference" href="../_images/loteria.jpg"><img alt="../_images/loteria.jpg" src="../_images/loteria.jpg" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Mexican Lotería, a Bingo-type game (photo by <a href="https://unsplash.com/@irvinmac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">irvin Macfarland</a> on <a href="https://unsplash.com/photos/clelay10tfg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>)</span><a class="headerlink" href="#loteria" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Thus, let us begin with a smooth introduction to the fundamentals of probability.</p>
+<section id="defining-probability">
+<span id="probability-definition"></span><h3>1.1. Defining Probability<a class="headerlink" href="#defining-probability" title="Permalink to this heading">#</a></h3>
+<p>We will start with the <strong>formal definition of probability</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Probability</p>
+<p>In general, the probability of an event <span class="math notranslate nohighlight">\(A\)</span> occurring is denoted as <span class="math notranslate nohighlight">\(P(A)\)</span> and is defined as</p>
+<div class="math notranslate nohighlight">
+\[P(A) = \frac{\text{Number of times event $A$ is observed}}{\text{Total number of events observed}},\]</div>
+<p><strong>as the <em>total number of events observed</em> goes to infinity</strong>.</p>
+<p>This definition will always put <span class="math notranslate nohighlight">\(P(A)\)</span> in the following range:</p>
+<div class="math notranslate nohighlight">
+\[0 \leq P(A) \leq 1.\]</div>
+</div>
+<p>You might wonder:</p>
+<blockquote>
+<div><p>Why are we highlighting “<strong>as the <em>total number of events observed</em> goes to infinity</strong>.
+“?</p>
+</div></blockquote>
+<p>This is a crucial statement in a <strong>frequentist</strong> approach. Frequentist Statistics is the mainstream approach we learn in introductory courses. As its name says, we heavily rely on the “<strong>frequency of events</strong>” to make estimations of specific parameters of interest in a <strong>population</strong> or <strong>system</strong>.</p>
+<p>All this might sound quite heavy to digest at first. Hence, let us illustrate the ideas mentioned above with the typical coin toss example.</p>
+<figure class="align-default" id="coin">
+<a class="reference internal image-reference" href="../_images/coin_toss.png"><img alt="../_images/coin_toss.png" src="../_images/coin_toss.png" style="height: 200px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">A coin</span><a class="headerlink" href="#coin" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The coin toss represents our system for which we assume two possible <strong>random outcomes</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+H = \{ \text{Getting heads} \} \\
+T = \{ \text{Getting tails} \}.
+\end{gather*}\end{split}\]</div>
+<p>Our system has the following <strong>parameters of interest</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{gather*}
+P(H) = \text{Probability of getting heads} \\
+P(T) = \text{Probability of getting tails}.
+\end{gather*}\end{split}\]</div>
+<p>Now, let us make this example even more interesting and suppose this coin is unfair, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[P(H) \neq P(T) \neq \frac{1}{2}.\]</div>
+<p>Furthermore, <strong>we do not know the real values of the parameters of interest <span class="math notranslate nohighlight">\(P(H)\)</span> nor <span class="math notranslate nohighlight">\(P(T)\)</span></strong>! And we are indeed interested in learning them.</p>
+<p>Thus, is there a way to overcome this matter? Yes, in cases like this, we rely on <strong>parameter estimation</strong>.</p>
+<p>The intuition behind parameter estimation (i.e., the estimation of both probabilities) lies in tossing the coin <strong>a given number of times</strong>. Then, you count how many times you got heads and tails and divide them over the total number of times you tossed the coin to obtain the estimates of <span class="math notranslate nohighlight">\(P(H)\)</span> and <span class="math notranslate nohighlight">\(P(T)\)</span>, respectively.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The above intuition for the coin toss example is the foundation of a frequentist approach: <strong>relying on the frequency (or “number”!) of events to estimate your parameters of interest</strong>.</p>
+</div>
+<p>Finally, what is the role of the term <strong>“infinity”</strong> here? This is another essential characteristic of frequentist parameter estimation. Roughly speaking, as the number of coin tosses increases (i.e., it tends to infinity), we increase the <strong>accuracy</strong> and <strong>precision</strong> of these parameter estimations of <span class="math notranslate nohighlight">\(P(H)\)</span> and <span class="math notranslate nohighlight">\(P(T)\)</span>.</p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>We have an <strong>accurate</strong> estimate when it converges to the <strong>true</strong> and <strong>unknown</strong> parameter of interest. On the other hand, a <strong>precise</strong> estimate is that one with a small variability. You will explore this terminology more in-depth in <em>DSCI 552</em>.</p>
+</div>
+</section>
+<section id="calculating-probabilities-using-laws">
+<h3>1.2. Calculating Probabilities using Laws<a class="headerlink" href="#calculating-probabilities-using-laws" title="Permalink to this heading">#</a></h3>
+<p>Now, we will look at <strong>two fundamental laws of probability</strong>: the <strong>Law of Total Probability</strong> and the <strong>Inclusion-Exclusion Principle</strong>. To introduce these two laws, let us set up a different and more substantial example.</p>
+<p>Possibly, some of us are avid Nintendo gamers, and we also like playing Mario Kart 8! This is a racing game with some “combat” involved in using items. Within the game, you are given an item <strong>randomly</strong> whenever you get an “<em>item box</em>.”</p>
+<p>Putting aside the estimation paradigm (we will leave that for subsequent courses such as <em>DSCI 552</em>), suppose we have access to the game’s source code and <strong>we know the true probabilities for each item to appear</strong>. Also, let us add some properties to these items such as <em>Combat Type</em> and whether the item <em>Defeats Blue Shells</em> or not.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="mario-kart">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">True probabilities for each item to appear in a Mario Kart 8’s item box (images from <a class="reference external" href="https://www.pngkey.com/detail/u2w7e6o0i1q8i1y3_randome-clipart-mario-kart-mario-kart-8-deluxe/">pngkey</a>)</span><a class="headerlink" href="#mario-kart" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Probability</p></th>
+<th class="head"><p>Combat Type</p></th>
+<th class="head"><p>Defeats Blue Shells</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img alt="" src="../_images/banana.png" /></p></td>
+<td><p>Banana</p></td>
+<td><p>0.12</p></td>
+<td><p>contact</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><img alt="" src="../_images/bobomb.png" /></p></td>
+<td><p>Bob-omb</p></td>
+<td><p>0.05</p></td>
+<td><p>explosion</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p><img alt="" src="../_images/coin.png" /></p></td>
+<td><p>Coin</p></td>
+<td><p>0.75</p></td>
+<td><p>ineffective</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><img alt="" src="../_images/horn.png" /></p></td>
+<td><p>Horn</p></td>
+<td><p>0.03</p></td>
+<td><p>explosion</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p><img alt="" src="../_images/shell.png" /></p></td>
+<td><p>Shell</p></td>
+<td><p>0.05</p></td>
+<td><p>contact</p></td>
+<td><p>no</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="law-of-total-probability">
+<span id="law-total-probability"></span><h4>1.2.1.  Law of Total Probability<a class="headerlink" href="#law-of-total-probability" title="Permalink to this heading">#</a></h4>
+<p>Let us start with a couple of formal definitions. The first one is a foundational concept called the <strong>sample space</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Sample Space</p>
+<p>The sample space, usually represented with the letter <span class="math notranslate nohighlight">\(S\)</span>, is the collection of all the possible outcomes of a <strong>random process or system</strong>. Each one of these outcomes has a probability associated with it. These probabilities have to add up to one in this sample space, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[P(S) = 1.\]</div>
+</div>
+<p>Next, we could proceed defining the Law of Total of Probability using mathematical notation. Nevertheless, this would require going into more complex Probability Theory, which is out of the scope of this course. That said, we will still define this law using plain words, as below.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of the Law of Total Probability</p>
+<p>The Law of Total Probability allows us to break down the sample space <span class="math notranslate nohighlight">\(S\)</span> of a random process or system into disjoint parts. Hence, for example, if we are interested in computing the probability of an event <span class="math notranslate nohighlight">\(A\)</span>, then we can use these sample space partitions to do so.</p>
+</div>
+<p>Now, to apply the above definitions via a numerical example, let us work on some in-class exercises.</p>
+<div class="exercise admonition" id="lecture1-q1">
+
+<p class="admonition-title"><span class="caption-number">Exercise 1 </span></p>
+<section id="exercise-content">
+<p>According to <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>, are there any other items possible? Why or why not?</p>
+</section>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/4454291d1e6b965b4877ddbcfaec233c1332aa729d53fef6abc23a7480ac47c8.png"><img alt="../_images/4454291d1e6b965b4877ddbcfaec233c1332aa729d53fef6abc23a7480ac47c8.png" src="../_images/4454291d1e6b965b4877ddbcfaec233c1332aa729d53fef6abc23a7480ac47c8.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="exercise admonition" id="lecture1-q2">
+
+<p class="admonition-title"><span class="caption-number">Exercise 2 </span></p>
+<section id="exercise-content">
+<p>What is the probability of getting something other than a coin? How can we arrive at that number?</p>
+</section>
+</div>
+<p>We will use another probability concept called the <strong>complement</strong> of an event. It relies on the characteristics of the sample space and Law of Total Probability. Hence, before solving <a class="reference internal" href="#lecture1-q2"><span class="std std-numref">Exercise 2</span></a>, let us check the below definition.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of the Complement of an Event</p>
+<p>In general, for a given event <span class="math notranslate nohighlight">\(A\)</span>, the complement is the subset of other outcomes that do not belong to event <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[1 = P(A) + P(A^c),\]</div>
+<p>where <span class="math notranslate nohighlight">\(^c\)</span> means the complement (we read it as “not”).</p>
+</div>
+<p>Now, let us introduce another class of plot to help us illustrate the probabilities of different events of interest. It is called the <strong>Venn diagram</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of the Venn Diagram</p>
+<p>A Venn diagram allows us to illustrate the logical relationships, in terms of probability, between different events of interest within a random process or system. Each event probability is represented by a circle, which lies on the whole sample space <span class="math notranslate nohighlight">\(S\)</span>.</p>
+</div>
+<p>The below plot is a Venn diagram representing a single event of interest as a circle: <em>getting a coin from the item box</em>. Note that this event probability, the blue circle, lies on the whole sample space <span class="math notranslate nohighlight">\(S\)</span>.</p>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/f16bfe2591a656762d10064054c1181d0c9d87d49bad84da1eeab75d17cb1898.png"><img alt="../_images/f16bfe2591a656762d10064054c1181d0c9d87d49bad84da1eeab75d17cb1898.png" src="../_images/f16bfe2591a656762d10064054c1181d0c9d87d49bad84da1eeab75d17cb1898.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="inclusion-exclusion-principle">
+<h4>1.2.2. Inclusion-Exclusion Principle<a class="headerlink" href="#inclusion-exclusion-principle" title="Permalink to this heading">#</a></h4>
+<p>To learn the application of this principle, we will work on the following questions altogether. But beforehand, we need define it.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of the Complement of the Inclusion-Exclusion Principle</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. The probability of <span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(B\)</span> occuring is denoted as <span class="math notranslate nohighlight">\(P(A \cup B)\)</span>, where <span class="math notranslate nohighlight">\(\cup\)</span> means <strong>“OR.”</strong> The Inclusion-Exclusion Principle allows us to compute this probability as:</p>
+<div class="math notranslate nohighlight">
+\[P(A \cup B) = P(A) + P(B) - P(A \cap B),\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(A \cap B)\)</span> denotes the probability of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> occuring simultaneously (<span class="math notranslate nohighlight">\(\cap\)</span> means <strong>“AND”</strong>). Note we can also extend this principle to three events (<span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span> in the sample space <span class="math notranslate nohighlight">\(S\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(A \cup B \cup C)) &amp;= P(A) + P(B) + P(C) - P(A \cap B) - P(B \cap C) - P(A \cap C) + \\
+&amp; \qquad P(A \cap B \cap C),
+\end{align*}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(P(A \cap B \cap C)\)</span> denotes the probability of <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span> occuring simultaneously.</p>
+<p>In general, this principle could be extended to a further number of events.</p>
+</div>
+<p>Now, let us solve the following exercises.</p>
+<div class="exercise admonition" id="lecture1-q3">
+
+<p class="admonition-title"><span class="caption-number">Exercise 3 </span></p>
+<section id="exercise-content">
+<p>Using <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>, what is the probability of getting an item with an explosion combat type (event <span class="math notranslate nohighlight">\(E\)</span>)?</p>
+</section>
+</div>
+<p>For <a class="reference internal" href="#lecture1-q3"><span class="std std-numref">Exercise 3</span></a>, we will need to introduce the below definition related to mutually exclusive (or disjoint) events.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Mutually Exclusive (or Disjoint) Events</p>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. These events are mutually exclusive (or disjoint) if they cannot happen at the same time in the sample space <span class="math notranslate nohighlight">\(S\)</span>. Thus, in probability notation, their intersection will be:</p>
+<div class="math notranslate nohighlight">
+\[P(A \cap B) = 0.\]</div>
+<p>Therefore, by the Inclusion-Exclusion Principle, the union of these two events can be obtained as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+P(A \cup B) &amp;= P(A) + P(B) - \underbrace{P(A \cap B)}_{0} \\
+&amp;= P(A) + P(B).
+\end{align*}\end{split}\]</div>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/846525249200926bace917eec99c461e306e6ab2d49bee2e397b0628fcd868d9.png"><img alt="../_images/846525249200926bace917eec99c461e306e6ab2d49bee2e397b0628fcd868d9.png" src="../_images/846525249200926bace917eec99c461e306e6ab2d49bee2e397b0628fcd868d9.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="exercise admonition" id="lecture1-q4">
+
+<p class="admonition-title"><span class="caption-number">Exercise 4 </span></p>
+<section id="exercise-content">
+<p>What is the probability of getting an item that is both an explosion item (event <span class="math notranslate nohighlight">\(E\)</span>) and defeats blue shells (event <span class="math notranslate nohighlight">\(D\)</span>)?</p>
+<p>The below Venn diagram can help you to solve this probability puzzle along with <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>.</p>
+</section>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png"><img alt="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png" src="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+<div class="exercise admonition" id="lecture1-q5">
+
+<p class="admonition-title"><span class="caption-number">Exercise 5 </span></p>
+<section id="exercise-content">
+<p>What is the probability of getting an item that is an explosion item (event <span class="math notranslate nohighlight">\(E\)</span>) or an item that defeats blue shells (event <span class="math notranslate nohighlight">\(D\)</span>)?</p>
+<p>The below Venn diagram can help you to solve this probability puzzle along with <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>.</p>
+</section>
+</div>
+<div class="cell tag_remove-input docutils container">
+<div class="cell_output docutils container">
+<a class="reference internal image-reference" href="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png"><img alt="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png" src="../_images/c37b23e3af11afd724253ec48a9e1c088c611df2e0baea5d0d868e19f059958d.png" style="width: 750px; height: 420px;" /></a>
+</div>
+</div>
+</section>
+<section id="independent-events">
+<span id="id1"></span><h4>1.2.3. Independent Events<a class="headerlink" href="#independent-events" title="Permalink to this heading">#</a></h4>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be two events of interest in the sample space <span class="math notranslate nohighlight">\(S\)</span>. These two events are independent if the occurrence of one of them does not affect the probability of the other. In probability notation, their intersection is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-independence">
+<span class="eqno">(1)<a class="headerlink" href="#equation-independence" title="Permalink to this equation">#</a></span>\[P(A \cap B) = P(A) \cdot P(B).\]</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Having independent events is different from mutually exclusive (or disjoint) events. In the case of independent events, they could still happen simultaneously, unlike mutually exclusive events.</p>
+</div>
+</section>
+</section>
+<section id="comparing-probabilities">
+<h3>1.3. Comparing Probabilities<a class="headerlink" href="#comparing-probabilities" title="Permalink to this heading">#</a></h3>
+<p>Probability is quite useful for communicating the chance of an event happening in an absolute sense, but what if we want to compare probabilities? In that case, the <strong>odds</strong> are quite helpful in comparing the chance of two events.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Odds</p>
+<p>Let <span class="math notranslate nohighlight">\(p\)</span> be the probability of an event of interest <span class="math notranslate nohighlight">\(A\)</span>. The odds <span class="math notranslate nohighlight">\(o\)</span> is the ratio of the probability of the event <span class="math notranslate nohighlight">\(A\)</span> to the probability of the non-event <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[o = \frac{p}{1 - p}.\]</div>
+<p>In plain words, the odds will tell how many times event <span class="math notranslate nohighlight">\(A\)</span> is more likely compared to how unlikely it is.</p>
+</div>
+<p>For instance, suppose you often win at a game of solitaire. If <span class="math notranslate nohighlight">\(p\)</span> is the chance that you win at solitaire, your <em>odds of winning</em> <span class="math notranslate nohighlight">\(o\)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[o = \frac{p}{1 - p}.\]</div>
+<p>This means that, <strong>after some algebraic rearrangements</strong>, the probability of winning <span class="math notranslate nohighlight">\(p\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[p = \frac{o}{o+1}.\]</div>
+<p>Hence, if you win 80% (i.e., <span class="math notranslate nohighlight">\(p = 0.8\)</span>) of the times, your odds are</p>
+<div class="math notranslate nohighlight">
+\[o = \frac{p}{1 - p} = \frac{0.8}{0.2} = 4.\]</div>
+<p>This is sometimes written as 4:1 odds – that is, <em>four wins for every loss</em>.</p>
+<p>Now suppose that your friend is twice as good as you, it is <em>most useful</em> to say that this means your friend wins twice as many games before experiencing a loss – that is, 8:1 odds, or simply 8, and a probability of</p>
+<div class="math notranslate nohighlight">
+\[0.89 = \frac{8}{8 + 1}.\]</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>Understanding the interpretation of the odds in probability is key for subsequent data models such as logistic regression (to be covered in <em>DSCI 562</em>).</p>
+</div>
+</section>
+<section id="interpreting-probability-optional-section">
+<h3>1.4. Interpreting Probability (Optional Section)<a class="headerlink" href="#interpreting-probability-optional-section" title="Permalink to this heading">#</a></h3>
+<p>Probabilities are the way we have to represent <strong>uncertainty</strong>. This is especially critical regarding <strong>inferential</strong> matters in a given population or system. As a Data Scientist, you will usually work with <strong>sampled data</strong> involving uncertainty. Moreover, note we can interpret probability in two ways: frequentist or <strong>Bayesian</strong>. For example:</p>
+<ol class="arabic simple">
+<li><p>What is the probability of seeing a six after rolling a die? (<em>frequentist</em>)</p></li>
+<li><p>If I roll a die and cover the outcome, what is the probability of seeing a six after I uncover the face? (<em>Bayesian</em>)</p></li>
+</ol>
+<p><strong>Note no paradigm is “wrong”!</strong> But why is this relevant in practice? We can state the following about both paradigms:</p>
+<ul class="simple">
+<li><p>It often does not actually make sense to talk about the probability of an event, such as the probability that a patient has a particular disease in a <em>frequentist</em> way. Instead, it is a belief system that can be modified <strong>given the patient’s background</strong>. This is more of a Bayesian approach that relies on some <strong>prior knowledge</strong>.</p></li>
+<li><p>In statistical inference and data modelling, it influences our choice of whether we choose a <em>Bayesian</em> or <em>frequentist</em> analysis. More on this later in <em>DSCI 552</em> and <em>553</em>.</p></li>
+</ul>
+</section>
+</section>
+<section id="probability-distributions">
+<h2>2. Probability Distributions<a class="headerlink" href="#probability-distributions" title="Permalink to this heading">#</a></h2>
+<p>So far, we have been discussing probabilities of single events. But it is often useful to characterize the full “spectrum” of uncertainty associated with an outcome. This paves the way to two important probabilistic concepts: <strong>probability distribution</strong> and <strong>random variable</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definitions of Probability Distribution and Random Variable</p>
+<p>A probability distribution (or, often, just <strong>distribution</strong>) is the set of all outcomes and their corresponding probabilities in the sample space <span class="math notranslate nohighlight">\(S\)</span> of a random process or system.</p>
+<p>Now, the outcome itself of this probability distribution belongs to a random variable. In Statistics, a random variable is denoted with an uppercase. For example:</p>
+<div class="math notranslate nohighlight">
+\[X = \text{Number of customers standing in line at a bank branch.}\]</div>
+</div>
+<p>In general, random variables are classified as follows:</p>
+<ul class="simple">
+<li><p><strong>Continuous:</strong> A continuous random variable can take on a set of uncountable outcomes (e.g., variables that could have decimal places such as length, mass, time, etc.). In this case, the probability distribution is called <strong>probability DENSITY function (PDF).</strong></p></li>
+<li><p><strong>Discrete:</strong> A discrete random variable can take on a set of countable values (e.g., variables that could be binary, categorical either ordinal or nominal, or counts). In this case, the probability distribution is called <strong>probability MASS function (PMF).</strong></p></li>
+</ul>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A random variable does not necessarily need to be numerical. For instance, we can encounter discrete categorical random variables such as the item box in the Mario Kart 8 example in <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>.</p>
+</div>
+<section id="examples-of-probability-mass-functions">
+<h3>2.1. Examples of Probability Mass Functions<a class="headerlink" href="#examples-of-probability-mass-functions" title="Permalink to this heading">#</a></h3>
+<p>Let us continue with the Mario Kart 8 example using <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a> as our starting point. <a class="reference internal" href="#pmf-y"><span class="std std-numref">Table 2</span></a> corresponds to a PMF if we have the following discrete random variable:</p>
+<div class="math notranslate nohighlight">
+\[Y = \text{Item obtained from the box.}\]</div>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-y">
+<caption><span class="caption-number">Table 2 </span><span class="caption-text">Probability mass function (PMF) of categorical random variable <span class="math notranslate nohighlight">\(Y\)</span></span><a class="headerlink" href="#pmf-y" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Illustration</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(Y\)</span></p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img alt="" src="../_images/banana.png" /></p></td>
+<td><p>Banana</p></td>
+<td><p>0.12</p></td>
+</tr>
+<tr class="row-odd"><td><p><img alt="" src="../_images/bobomb.png" /></p></td>
+<td><p>Bob-omb</p></td>
+<td><p>0.05</p></td>
+</tr>
+<tr class="row-even"><td><p><img alt="" src="../_images/coin.png" /></p></td>
+<td><p>Coin</p></td>
+<td><p>0.75</p></td>
+</tr>
+<tr class="row-odd"><td><p><img alt="" src="../_images/horn.png" /></p></td>
+<td><p>Horn</p></td>
+<td><p>0.03</p></td>
+</tr>
+<tr class="row-even"><td><p><img alt="" src="../_images/shell.png" /></p></td>
+<td><p>Shell</p></td>
+<td><p>0.05</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can also have an alternative PMF, as in <a class="reference internal" href="#pmf-z-mario"><span class="std std-numref">Table 3</span></a>, by setting up another random variable:</p>
+<div class="math notranslate nohighlight">
+\[Z = \text{Combat type of an item obtained from the box.}\]</div>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-z-mario">
+<caption><span class="caption-number">Table 3 </span><span class="caption-text">Probability mass function (PMF) of categorical random variable <span class="math notranslate nohighlight">\(Z\)</span></span><a class="headerlink" href="#pmf-z-mario" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(Z\)</span></p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>contact</p></td>
+<td><p>0.17</p></td>
+</tr>
+<tr class="row-odd"><td><p>explosion</p></td>
+<td><p>0.08</p></td>
+</tr>
+<tr class="row-even"><td><p>ineffective</p></td>
+<td><p>0.75</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If we want to set up a random variable on whether the item defeats blue shells or not (again, check the original <a class="reference internal" href="#mario-kart"><span class="std std-numref">Table 1</span></a>), the corresponding PMF in <a class="reference internal" href="#pmf-w"><span class="std std-numref">Table 4</span></a> associated to</p>
+<div class="math notranslate nohighlight">
+\[W = \text{Whether the item obtained from the box defeats blue shells or not,}\]</div>
+<p>becomes <strong>binary</strong> (i.e., categories “<em>yes</em>” or “<em>no</em>”).</p>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-w">
+<caption><span class="caption-number">Table 4 </span><span class="caption-text">Probability mass function (PMF) of categorical and binary random variable <span class="math notranslate nohighlight">\(W\)</span></span><a class="headerlink" href="#pmf-w" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(W\)</span></p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>yes</p></td>
+<td><p>0.03</p></td>
+</tr>
+<tr class="row-odd"><td><p>no</p></td>
+<td><p>0.97</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Finally, let us put aside the previous categorical PMFs and explore a numerical one related to a <strong>count</strong> (which is still discrete).</p>
+<figure class="align-default" id="ship">
+<a class="reference internal image-reference" href="../_images/ship.png"><img alt="../_images/ship.png" src="../_images/ship.png" style="height: 350px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">A cargo ship</span><a class="headerlink" href="#ship" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Suppose a cargo ship arriving at Vancouver port will stay there. We can define the count-type random variable</p>
+<div class="math notranslate nohighlight">
+\[C = \text{Length of cargo ship stay in days.}\]</div>
+<div class="pst-scrollable-table-container"><table class="table" id="pmf-v">
+<caption><span class="caption-number">Table 5 </span><span class="caption-text">Probability mass function (PMF) of count-type random variable <span class="math notranslate nohighlight">\(C\)</span></span><a class="headerlink" href="#pmf-v" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(C\)</span></p></th>
+<th class="head"><p>Probability</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0.25</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>0.50</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>0.15</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>0.10</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The fact that <span class="math notranslate nohighlight">\(C\)</span> is a count means that we can pave the way to a specific <strong>discrete distribution</strong> as we will see further in this course.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Note that all the previous probability distributions add up to 1. This fact indicates that no other outcome can occur except for the ones in the corresponding tables. For instance, in the case of the cargo ship stay, the PMF denotes that there is <strong>no chance</strong> that the ship will stay longer than four days, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[P(C &gt; 4) = 0.\]</div>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>It is crucial we start thinking about all the different types of random variables (i.e., discrete or continuous) we can encounter in Data Science-related problems. A proper random variable classification will allow us to set up the <strong>most suitable data modelling</strong>.</p>
+</div>
+</section>
+</section>
+<section id="measures-of-central-tendency-and-uncertainty">
+<h2>3. Measures of Central Tendency and Uncertainty<a class="headerlink" href="#measures-of-central-tendency-and-uncertainty" title="Permalink to this heading">#</a></h2>
+<p>Once we have introduced the concept of a random variable and its corresponding probability distribution, we need to find a way to summarize all this information adequately. A random variable summary allows us to get further insights into how this variable behaves in the long run regarding <strong>typical values</strong> and <strong>variability</strong>. Hence, let us introduce two concepts for this purpose.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definitions of Central Tendency and Uncertainty Metrics</p>
+<p>In general, a random variable can be summarized with two classes of metrics:</p>
+<ol class="arabic simple">
+<li><p><strong>Central tendency</strong>. It is a metric denoting a “typical” value in a random variable. For example, a mean (commonly known as an “average”) or a median.</p></li>
+<li><p><strong>Uncertainty</strong>. It is a measure of how “spread” the random variable is. For example, a standard deviation.</p></li>
+</ol>
+</div>
+<p>There are different measures of central tendency and uncertainty. Following up with <a class="reference internal" href="#probability-definition"><span class="std std-ref">1.1. Defining Probability</span></a>, these measures are called <strong>parameters</strong> when it comes to a population. Parameters are defined via a probability distribution. For instance, some of us might be familiar with the Normal distribution. This distribution is characterized by its mean (a central tendency metric) and standard deviation (an uncertainty metric).</p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>Analogous to a probability that can be defined as the limit of a fraction based on a <strong>sample</strong>, these parameters are estimated via <strong>sample statistics</strong>. As such, let us call <span class="math notranslate nohighlight">\(X\)</span> the random variable, and <span class="math notranslate nohighlight">\(X_1, \ldots, X_n\)</span> a set of <span class="math notranslate nohighlight">\(n\)</span> <strong>observations</strong> that form a sample.</p>
+<p>Sampling concepts are related to statistical inference (to be discussed in <em>DSCI 552</em>).</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Let us be cautious when using the plural term <strong>samples</strong> in Statistics and Machine Learning since it has different meanings depending on the field (check the <a class="reference external" href="https://ubc-mds.github.io/resources_pages/terminology/#sample">MDS Stat-ML dictionary</a> for further references).</p>
+</div>
+<section id="mode-and-entropy">
+<h3>3.1. Mode and Entropy<a class="headerlink" href="#mode-and-entropy" title="Permalink to this heading">#</a></h3>
+<p>These two metrics are commonly used with discrete random variables. No matter the class of discrete random variable, we can always calculate the <strong>mode</strong> and <strong>entropy</strong>.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When the outcome is <strong>discrete and categorical</strong> (like the Mario Kart 8 example), we are pretty much stuck with these two measures as our choices.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Mode in Discrete Random Variables</p>
+<p>The mode of a distribution is the outcome having the highest probability.</p>
+</div>
+<p>The above metric has the following characteristics:</p>
+<ul class="simple">
+<li><p>It is a measure of central tendency.</p></li>
+<li><p>Its sample version is the observation you saw the most in your data collection.</p></li>
+<li><p>It is measured as an <em>outcome</em>, not as the probabilities.</p></li>
+</ul>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Entropy in Discrete Random Variables</p>
+<p>The entropy of a discrete random variable <span class="math notranslate nohighlight">\(X\)</span> is defined as</p>
+<div class="math notranslate nohighlight" id="equation-entropy-discrete">
+<span class="eqno">(2)<a class="headerlink" href="#equation-entropy-discrete" title="Permalink to this equation">#</a></span>\[H(X) = -\displaystyle \sum_x P(X = x)\log[P(X = x)].\]</div>
+<p>Note that, in Statistics, the <span class="math notranslate nohighlight">\(\log(\cdot)\)</span> notation implicates base <span class="math notranslate nohighlight">\(e\)</span>.</p>
+</div>
+<p>The above metric has the following characteristics:</p>
+<ul class="simple">
+<li><p>It is a measure of uncertainty. An entropy equal to zero means no randomness.</p></li>
+<li><p>It cannot be negative.</p></li>
+<li><p>The concept of entropy was introduced in information theory by Claude Shannon. Entropy can be thought of as the average amount of “information” produced by a random process, where “information” is a measure of surprise, quantified as <span class="math notranslate nohighlight">\(-\log P(X = x)\)</span>.</p></li>
+<li><p>It is measured as a transformation of probabilities, not as the outcomes.</p></li>
+</ul>
+</section>
+<section id="mean-and-variance">
+<span id="id2"></span><h3>3.2. Mean and Variance<a class="headerlink" href="#mean-and-variance" title="Permalink to this heading">#</a></h3>
+<p>When our random variable is numeric (either discrete or continuous), we can take advantage of this property and calculate the <strong>mean</strong> and <strong>variance</strong>.</p>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Mean</p>
+<p>Let <span class="math notranslate nohighlight">\(X\)</span> be a numeric random variable. The mean <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> (also known as <strong>expected value</strong> or <strong>expectation</strong>) is defined as:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a PMF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-discrete">
+<span class="eqno">(3)<a class="headerlink" href="#equation-mean-discrete" title="Permalink to this equation">#</a></span>\[\mathbb{E}(X) = \displaystyle \sum_x x \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a PDF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-continuous">
+<span class="eqno">(4)<a class="headerlink" href="#equation-mean-continuous" title="Permalink to this equation">#</a></span>\[\mathbb{E}(X) = \displaystyle \int_x x \cdot f_X(x) \text{d}x.\]</div>
+<p>The mean <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> is the mainstream measure of central tendency for numeric random variables.</p>
+</div>
+<p>Note that, in general for a function of <span class="math notranslate nohighlight">\(X\)</span> such as <span class="math notranslate nohighlight">\(g(X)\)</span>, the expected value is defined as:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is discrete, with <span class="math notranslate nohighlight">\(P(X = x)\)</span> as a PMF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-function-discrete">
+<span class="eqno">(5)<a class="headerlink" href="#equation-mean-function-discrete" title="Permalink to this equation">#</a></span>\[\mathbb{E}\left[ g(X) \right] = \displaystyle \sum_x g(X) \cdot P(X = x).\]</div>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(X\)</span> is continuous, with <span class="math notranslate nohighlight">\(f_X(x)\)</span> as a PDF, then</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-mean-function-continuous">
+<span class="eqno">(6)<a class="headerlink" href="#equation-mean-function-continuous" title="Permalink to this equation">#</a></span>\[\mathbb{E}\left[ g(X) \right] = \displaystyle \int_x g(X) \cdot f_X(x) \text{d}x.\]</div>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>We can usually estimate <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> via the <strong>sample mean</strong></p>
+<div class="math notranslate nohighlight" id="equation-sample-mean">
+<span class="eqno">(7)<a class="headerlink" href="#equation-sample-mean" title="Permalink to this equation">#</a></span>\[\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i.\]</div>
+<p>Moreover, <strong>under specific conditions</strong> (to be discussed in <em>DSCI 552</em>), the sample mean <span class="math notranslate nohighlight">\(\bar{X}\)</span> converges to the true mean <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span> as the sample size <span class="math notranslate nohighlight">\(n \rightarrow \infty\)</span>.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Definition of Variance</p>
+<p>The variance is defined as</p>
+<div class="math notranslate nohighlight">
+\[\text{Var}(X) = \mathbb{E}\{[X - \mathbb{E}(X)]^2\}.\]</div>
+<p>After some algebraic rearrangements and some expected value properties, the expression above is equivalent to</p>
+<div class="math notranslate nohighlight" id="equation-variance">
+<span class="eqno">(8)<a class="headerlink" href="#equation-variance" title="Permalink to this equation">#</a></span>\[\text{Var}(X) = \mathbb{E}(X^2) - [\mathbb{E}(X)]^2.\]</div>
+</div>
+<p>Note that <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span> is a numeric measure of uncertainty. Furthermore, as shown in the two expressions above, the variance is an expectation (specifically, the squared deviation from the mean).</p>
+<div class="warning admonition">
+<p class="admonition-title">Note</p>
+<p>We can usually estimate <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span> via the <strong>sample variance</strong></p>
+<div class="math notranslate nohighlight">
+\[S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2.\]</div>
+<p>Moreover, <strong>under specific conditions</strong> (to be discussed in <em>DSCI 552</em>), the sample variance <span class="math notranslate nohighlight">\(S^2\)</span> converges to the true variance <span class="math notranslate nohighlight">\(\text{Var}(X)\)</span> as the sample size <span class="math notranslate nohighlight">\(n \rightarrow \infty\)</span>.</p>
+</div>
+<p>Note that, as in the case of entropy, the variance cannot be negative. Also, a zero variance means no randomness. On the other hand, unlike entropy, the variance depends on the actual values of the random variable.</p>
+<p>Finally, the <strong>standard deviation</strong> is the square root of the variance:</p>
+<div class="math notranslate nohighlight" id="equation-sd">
+<span class="eqno">(9)<a class="headerlink" href="#equation-sd" title="Permalink to this equation">#</a></span>\[\text{SD}\left[ \text{Var}(X) \right] = \sqrt{\text{Var}(X)}.\]</div>
+<p>This measure is more practical because it is on the same scale as the outcome, unlike the variance.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>There are some other numeric measures of central tendency and uncertainty. We will check them later on during this block.</p>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "r"
+        },
+        kernelOptions: {
+            name: "ir",
+            path: "./notes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'ir'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="02_lecture-parametric-families.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Lecture 2: Parametric Families</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-brief-digression-on-textboxes">A Brief Digression on Textboxes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-goals">Learning Goals</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thinking-about-probability">1. Thinking about Probability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-probability">1.1. Defining Probability</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#calculating-probabilities-using-laws">1.2. Calculating Probabilities using Laws</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#law-of-total-probability">1.2.1.  Law of Total Probability</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inclusion-exclusion-principle">1.2.2. Inclusion-Exclusion Principle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#independent-events">1.2.3. Independent Events</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-probabilities">1.3. Comparing Probabilities</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpreting-probability-optional-section">1.4. Interpreting Probability (Optional Section)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-distributions">2. Probability Distributions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#examples-of-probability-mass-functions">2.1. Examples of Probability Mass Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measures-of-central-tendency-and-uncertainty">3. Measures of Central Tendency and Uncertainty</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-and-entropy">3.1. Mode and Entropy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mean-and-variance">3.2. Mean and Variance</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Vincenzo Coia, Mike Gelbart, Aaron Berk, G. Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
