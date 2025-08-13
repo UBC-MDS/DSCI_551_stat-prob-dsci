@@ -31,18 +31,18 @@ This course occurs during **Block 1** in the 2024/25 school year. The course not
 
 | Lecture Topic/Notes | Required Readings | Optional Readings |
 |:-------------------------------------------------------------:|:-------------------:|:-------------------:|
-| Depicting Uncertainty | [`lecture1` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/01_lecture-uncertainty.html) | [Part 1: Core Probability](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability/)|
-| Parametric Families | [`lecture2` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/02_lecture-parametric-families.html) |  [Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
-| Joint Probability | [`lecture3` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/03_lecture-joint.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.1](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf), [Covariance and correlation (video)](https://www.youtube.com/watch?v=KDw3hC2YNFc), [How would you explain covariance ...](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean) |
-| Conditional Probabilities | [`lecture4` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/04_lecture-conditional.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.3](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
-| Continuous Distributions | [`lecture5` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/05_lecture-continuous.html) |[Chapter 4](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
-| Common Distribution Families and Conditioning | [`lecture6` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/06_lecture-continuous-families.html) |[Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
-| Maximum Likelihood Estimation | [`lecture7` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/07_lecture-maximum-likelihood-estimation.html)| [Part 5: Machine Learning](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/parameter_estimation/),[Beyond Multiple Linear Regression, sections 2.1 to 2.4](https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html#sex_unconditional_model), [Chapter 7.1 & 7.2](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
-| Simulation and Empirical Distributions | [`lecture8` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/08_lecture-simulation.html) |[Chapter 9: Applications to Computing](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
+| Depicting Uncertainty | [`lecture1` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/01_lecture-uncertainty.html) | [Part 1: Core Probability](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability/)|
+| Parametric Families | [`lecture2` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/02_lecture-parametric-families.html) |  [Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
+| Joint Probability | [`lecture3` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/03_lecture-joint.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.1](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf), [Covariance and correlation (video)](https://www.youtube.com/watch?v=KDw3hC2YNFc), [How would you explain covariance ...](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean) |
+| Conditional Probabilities | [`lecture4` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/04_lecture-conditional.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.3](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
+| Continuous Distributions | [`lecture5` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/05_lecture-continuous.html) |[Chapter 4](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
+| Common Distribution Families and Conditioning | [`lecture6` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/06_lecture-continuous-families.html) |[Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
+| Maximum Likelihood Estimation | [`lecture7` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/07_lecture-maximum-likelihood-estimation.html)| [Part 5: Machine Learning](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/parameter_estimation/),[Beyond Multiple Linear Regression, sections 2.1 to 2.4](https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html#sex_unconditional_model), [Chapter 7.1 & 7.2](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
+| Simulation and Empirical Distributions | [`lecture8` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/08_lecture-simulation.html) |[Chapter 9: Applications to Computing](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
 
 ## Cheat sheet
 
-[**Here**](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/notes/appendix-prob-cheatsheet.html) is a cheat sheet we created to summarize the main formulas and concepts covered in DSCI 551.
+[**Here**](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/appendix-prob-cheatsheet.html) is a cheat sheet we created to summarize the main formulas and concepts covered in DSCI 551.
 
 ## Deliverables
 
@@ -86,6 +86,6 @@ The course is built upon previous years' materials developed by previous instruc
 
 ## License
 
-© 2024 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu.
+© 2024 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, and Vincent Liu.
 
 Software licensed under [the MIT License](https://spdx.org/licenses/MIT.html), non-software content licensed under [the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/). See the [license file](LICENSE.md) for more information.
