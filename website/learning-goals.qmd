@@ -1,0 +1,80 @@
+---
+title: "Learning Goals by Lecture"
+---
+
+## Lecture 1: Depicting Uncertainty
+
+By the end of this lecture, you should be able to:
+
+- Identify probability as a proportion that converges to the truth as you collect more data.
+- Calculate probabilities using the Inclusion-Exclusion Principle, the Law of Total Probability, and probability distributions.
+- Convert between and interpret odds and probability. 
+- Specify the usefulness of odds over probability.
+- Be aware that probability has multiple interpretations/philosophies.
+- Calculate and interpret mean, mode, entropy, variance, and standard deviation, mainly from a distribution.
+
+## Lecture 2: Parametric Families
+
+- Calculate expectations of a linear combination of random variables.
+- Match a physical process to a distribution family (Binomial, Geometric, Negative Binomial, Poisson, and Bernoulli). 
+- Calculate probabilities, mean, and variance of a distribution belonging to a distribution family.
+- Find the probability mass function of a random variable transformation, e.g., $X^2$.
+- Distinguish between a family of distributions and a distribution.
+- Identify whether a specification of parameters (such as mean and variance) is enough/too little/too much to specify a distribution from a family of distributions.
+
+## Lecture 3: Joint Probability
+
+By the end of this lecture, you should be able to:
+
+- Calculate marginal distributions from a joint distribution of random variables.
+- Describe the probabilistic consequences of working with independent random variables.
+- Calculate and describe covariance in multivariate cases (i.e., with more than one random variable).
+- Calculate and describe two mainstream correlation metrics: Pearson's correlation and Kendall's $\tau_K$.
+
+## Lecture 4: Conditional Probabilities
+
+By the end of this lecture, you should be able to:
+
+- Calculate conditional distributions when given a full distribution.
+- Obtain the marginal mean from conditional means and marginal probabilities, using the Law of Total Expectation.
+- Use the Law of Total Probability to convert between conditional, marginal distributions, and joint distributions.
+- Compare and contrast independence versus conditional independence.
+
+## Lecture 5: Continuous Distributions
+
+By the end of this lecture, you should be able to:
+
+- Differentiate between continuous and discrete random variables.
+- Interpret probability density functions and calculate probabilities from them.
+- Calculate and interpret probabilistic quantities (mean, quantiles, prediction intervals, etc.) for a continuous random variable.
+- Explain whether a function is a valid probability density function, cumulative distribution function, quantile function, and survival function.
+- Calculate quantiles from a cumulative distribution function, survival function, or quantile function.
+
+## Lecture 6: Common Distribution Families and Conditioning
+
+By the end of this lecture, you should be able to:
+
+- Identify and apply common continuous distribution families.
+- Identify what makes a function a bivariate probability density function.
+- Compute probabilities from bivariate probability density functions.
+- Compute conditional distributions for continuous random variables.
+
+## Lecture 7: Maximum Likelihood Estimation
+
+By the end of this lecture, you should be able to:
+
+- Explain the concept of a random sample.
+- Explain the concept of maximum likelihood estimation.
+- Define the likelihood function for a parametric model and recall why we often take its logarithm.
+- Apply maximum likelihood estimation for cases with one population parameter (i.e., univariate maximum likelihood estimation).
+- Use `R` to implement maximum likelihood estimation by an empirical approach.
+
+## Lecture 8: Simulation
+
+By the end of this lecture, you should be able to:
+
+- Generate a random sample from a discrete distribution in both `R` and `Python`.
+- Reproduce the same random sample each time you re-run your code in either `R` or `Python` by setting the seed or random state. 
+- Evaluate whether or not a set of observations are independent and identically distributed (*iid*).
+- Use simulation to approximate distribution properties (e.g., mean and variance) using empirical quantities, especially for random variables involving multiple other random variables.
+- Argue why simulations can approximate true properties of a stochastic quantity.

@@ -1,0 +1,101 @@
+project:
+  type: website
+  output-dir: ../docs
+  preview:
+    port: 54320
+    browser: true
+  resources:
+    - slides/01_lecture-uncertainty
+    - slides/02_lecture-parametric-families
+    - slides/03_lecture-joint
+    - slides/04_lecture-conditional
+    - slides/05_lecture-continuous
+    - slides/06_lecture-continuous-families
+    - slides/07_lecture-maximum-likelihood-estimation
+    - slides/08_lecture-simulation
+
+  # Only render files explicitly listed here
+  render:
+    - index.qmd
+    - notes/01_lecture-uncertainty.qmd
+    - notes/02_lecture-parametric-families.qmd
+    - notes/03_lecture-joint.qmd
+    - notes/04_lecture-conditional.qmd
+    - notes/05_lecture-continuous.qmd
+    - notes/06_lecture-continuous-families.qmd
+    - notes/07_lecture-maximum-likelihood-estimation.qmd
+    - notes/08_lecture-simulation.qmd
+    - notes/appendix-prob-cheatsheet.qmd
+    - notes/appendix-dist-cheatsheet.qmd
+    - notes/appendix-greek-alphabet.qmd
+    - learning-goals.qmd
+    - LICENSE.qmd
+
+website:
+  title: "DSCI 551: Descriptive Statistics and Probability for Data Science"
+  site-url: https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/
+  issue-url: https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues
+  repo-actions: [edit, source, issue]
+  page-navigation: true
+  bread-crumbs: true
+  search:
+    show-item-context: true
+    type: overlay
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci
+        aria-label: GitHub
+    left:
+      - href: index.qmd
+        text: Home
+        
+  sidebar:
+    logo: notes/img/UBC_MDS_logo.png
+    logo-alt: "UBC-MDS Logo Image"
+    style: "docked"
+    search: true
+    contents:
+    
+      - section: "Lectures"
+        contents:
+          - learning-goals.qmd
+          - notes/01_lecture-uncertainty.qmd
+          - notes/02_lecture-parametric-families.qmd
+          - notes/03_lecture-joint.qmd
+          - notes/04_lecture-conditional.qmd
+          - notes/05_lecture-continuous.qmd
+          - notes/06_lecture-continuous-families.qmd
+          - notes/07_lecture-maximum-likelihood-estimation.qmd
+          - notes/08_lecture-simulation.qmd
+      - section: "Appendices"
+        contents:
+          - notes/appendix-prob-cheatsheet.qmd
+          - notes/appendix-dist-cheatsheet.qmd
+          - notes/appendix-greek-alphabet.qmd
+          - LICENSE.qmd
+
+format:
+  html:
+    css: styles.css
+    theme: cosmo
+    toc: true
+    toc-depth: 4
+    toc-expand: 4
+    toc-location: right
+    code-fold: false
+    fontsize: 1.3em
+    linestretch: 1.6
+    link-external-icon: true
+    link-external-newwindow: true
+    citations-hover: true
+    footnotes-hover: true
+    code-link: true
+    number-sections: true
+    number-depth: 4
+    smooth-scroll: true
+    grid:
+      sidebar-width: 300px
+      body-width: 960px
+      margin-width: 275px
+      gutter-width: 1.3em

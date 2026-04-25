@@ -1,9 +1,8 @@
-# LICENSE
+# License
 
 ## Instructional Material
 
 All instructional material in this repository is made available under the **Attribution 4.0 International** ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)). 
-
 
 This is a human-readable summary of (and not a substitute for) the [license](https://creativecommons.org/licenses/by/4.0/legalcode). 
 
@@ -12,9 +11,7 @@ You are free to:
 * **Adapt** -- remix, transform, and build upon the material
     for any purpose, even commercially.
 
-
 The licensor cannot revoke these freedoms as long as you follow the license terms.
-
 
 Under the following terms:
 
@@ -27,14 +24,13 @@ Notices:
 - You do not have to comply with the license for elements of the material in the public domain or where your use is permitted by an applicable exception or limitation.
 - No warranties are given. The license may not give you all of the permissions necessary for your intended use. For example, other rights such as publicity, privacy, or moral rights may limit how you use the material.
 
-
 ## Software
 
 Except where otherwise noted, the example programs and other software provided in this repository are made available under the MIT license.
 
 MIT License
 
-© 2024 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, Katie Burak, and Vincent Liu
+© 2025 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, Katie Burak, Vincent Liu, and Andy Tai
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

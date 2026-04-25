@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Lecture 6: Common Distribution Families and Conditioning – DSCI 551: Descriptive Statistics and Probability for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notes/appendix-prob-cheatsheet.html" rel="next">
+<link href="../notes/05_lecture-continuous.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": true,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<script src="../site_libs/kePrint-0.0.1/kePrint.js"></script><link href="../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="../site_libs/plotly-binding-4.10.4/plotly.js"></script><script src="../site_libs/typedarray-0.1/typedarray.min.js"></script><script src="../site_libs/jquery-3.5.1/jquery.min.js"></script><link href="../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script><link href="../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../styles.css">
+</head>
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DSCI 551: Descriptive Statistics and Probability for Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.ubc.ca/mds-2025-26/DSCI_551_stat-prob-dsci_students"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../learning-goals.html">Lectures</a></li><li class="breadcrumb-item"><a href="../notes/06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../notes/img/UBC_MDS_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none"></a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lectures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../learning-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Learning Goals by Lecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/01_lecture-uncertainty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Depicting Uncertainty</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/02_lecture-parametric-families.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Parametric Families</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/03_lecture-joint.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Joint Probability</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/04_lecture-conditional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Conditional Probabilities</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/05_lecture-continuous.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Continuous Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/06_lecture-continuous-families.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lecture 6: Common Distribution Families and Conditioning</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-prob-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Cheatsheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-dist-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distribution Cheatsheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Greek Alphabet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../LICENSE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">License</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#slides" id="toc-slides" class="nav-link active" data-scroll-target="#slides"><span class="header-section-number">1</span> Slides</a></li>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link" data-scroll-target="#learning-goals"><span class="header-section-number">2</span> Learning Goals</a></li>
+  <li>
+<a href="#common-continuous-distribution-families" id="toc-common-continuous-distribution-families" class="nav-link" data-scroll-target="#common-continuous-distribution-families"><span class="header-section-number">3</span> Common Continuous Distribution Families</a>
+  <ul>
+<li>
+<a href="#uniform" id="toc-uniform" class="nav-link" data-scroll-target="#uniform"><span class="header-section-number">3.1</span> Uniform</a>
+  <ul class="collapse">
+<li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process"><span class="header-section-number">3.1.1</span> Process</a></li>
+  <li><a href="#pdf" id="toc-pdf" class="nav-link" data-scroll-target="#pdf"><span class="header-section-number">3.1.2</span> PDF</a></li>
+  <li><a href="#mean" id="toc-mean" class="nav-link" data-scroll-target="#mean"><span class="header-section-number">3.1.3</span> Mean</a></li>
+  <li><a href="#variance" id="toc-variance" class="nav-link" data-scroll-target="#variance"><span class="header-section-number">3.1.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#gaussian-or-normal" id="toc-gaussian-or-normal" class="nav-link" data-scroll-target="#gaussian-or-normal"><span class="header-section-number">3.2</span> Gaussian or Normal</a>
+  <ul class="collapse">
+<li><a href="#process-1" id="toc-process-1" class="nav-link" data-scroll-target="#process-1"><span class="header-section-number">3.2.1</span> Process</a></li>
+  <li><a href="#pdf-1" id="toc-pdf-1" class="nav-link" data-scroll-target="#pdf-1"><span class="header-section-number">3.2.2</span> PDF</a></li>
+  <li><a href="#mean-1" id="toc-mean-1" class="nav-link" data-scroll-target="#mean-1"><span class="header-section-number">3.2.3</span> Mean</a></li>
+  <li><a href="#variance-1" id="toc-variance-1" class="nav-link" data-scroll-target="#variance-1"><span class="header-section-number">3.2.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#log-normal" id="toc-log-normal" class="nav-link" data-scroll-target="#log-normal"><span class="header-section-number">3.3</span> Log-Normal</a>
+  <ul class="collapse">
+<li><a href="#process-2" id="toc-process-2" class="nav-link" data-scroll-target="#process-2"><span class="header-section-number">3.3.1</span> Process</a></li>
+  <li><a href="#pdf-2" id="toc-pdf-2" class="nav-link" data-scroll-target="#pdf-2"><span class="header-section-number">3.3.2</span> PDF</a></li>
+  <li><a href="#mean-2" id="toc-mean-2" class="nav-link" data-scroll-target="#mean-2"><span class="header-section-number">3.3.3</span> Mean</a></li>
+  <li><a href="#variance-2" id="toc-variance-2" class="nav-link" data-scroll-target="#variance-2"><span class="header-section-number">3.3.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#exponential" id="toc-exponential" class="nav-link" data-scroll-target="#exponential"><span class="header-section-number">3.4</span> Exponential</a>
+  <ul class="collapse">
+<li><a href="#process-3" id="toc-process-3" class="nav-link" data-scroll-target="#process-3"><span class="header-section-number">3.4.1</span> Process</a></li>
+  <li><a href="#pdf-3" id="toc-pdf-3" class="nav-link" data-scroll-target="#pdf-3"><span class="header-section-number">3.4.2</span> PDF</a></li>
+  <li><a href="#mean-3" id="toc-mean-3" class="nav-link" data-scroll-target="#mean-3"><span class="header-section-number">3.4.3</span> Mean</a></li>
+  <li><a href="#variance-3" id="toc-variance-3" class="nav-link" data-scroll-target="#variance-3"><span class="header-section-number">3.4.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#beta" id="toc-beta" class="nav-link" data-scroll-target="#beta"><span class="header-section-number">3.5</span> Beta</a>
+  <ul class="collapse">
+<li><a href="#process-4" id="toc-process-4" class="nav-link" data-scroll-target="#process-4"><span class="header-section-number">3.5.1</span> Process</a></li>
+  <li><a href="#pdf-4" id="toc-pdf-4" class="nav-link" data-scroll-target="#pdf-4"><span class="header-section-number">3.5.2</span> PDF</a></li>
+  <li><a href="#mean-4" id="toc-mean-4" class="nav-link" data-scroll-target="#mean-4"><span class="header-section-number">3.5.3</span> Mean</a></li>
+  <li><a href="#variance-4" id="toc-variance-4" class="nav-link" data-scroll-target="#variance-4"><span class="header-section-number">3.5.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#weibull" id="toc-weibull" class="nav-link" data-scroll-target="#weibull"><span class="header-section-number">3.6</span> Weibull</a>
+  <ul class="collapse">
+<li><a href="#process-5" id="toc-process-5" class="nav-link" data-scroll-target="#process-5"><span class="header-section-number">3.6.1</span> Process</a></li>
+  <li><a href="#pdf-5" id="toc-pdf-5" class="nav-link" data-scroll-target="#pdf-5"><span class="header-section-number">3.6.2</span> PDF</a></li>
+  <li><a href="#mean-5" id="toc-mean-5" class="nav-link" data-scroll-target="#mean-5"><span class="header-section-number">3.6.3</span> Mean</a></li>
+  <li><a href="#variance-5" id="toc-variance-5" class="nav-link" data-scroll-target="#variance-5"><span class="header-section-number">3.6.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#gamma" id="toc-gamma" class="nav-link" data-scroll-target="#gamma"><span class="header-section-number">3.7</span> Gamma</a>
+  <ul class="collapse">
+<li><a href="#process-6" id="toc-process-6" class="nav-link" data-scroll-target="#process-6"><span class="header-section-number">3.7.1</span> Process</a></li>
+  <li><a href="#pdf-6" id="toc-pdf-6" class="nav-link" data-scroll-target="#pdf-6"><span class="header-section-number">3.7.2</span> PDF</a></li>
+  <li><a href="#mean-6" id="toc-mean-6" class="nav-link" data-scroll-target="#mean-6"><span class="header-section-number">3.7.3</span> Mean</a></li>
+  <li><a href="#variance-6" id="toc-variance-6" class="nav-link" data-scroll-target="#variance-6"><span class="header-section-number">3.7.4</span> Variance</a></li>
+  </ul>
+</li>
+  <li><a href="#relevant-r-functions" id="toc-relevant-r-functions" class="nav-link" data-scroll-target="#relevant-r-functions"><span class="header-section-number">3.8</span> Relevant <code>R</code> Functions</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#continuous-multivariate-distributions" id="toc-continuous-multivariate-distributions" class="nav-link" data-scroll-target="#continuous-multivariate-distributions"><span class="header-section-number">4</span> Continuous Multivariate Distributions</a>
+  <ul>
+<li><a href="#multivariate-probability-density-functions" id="toc-multivariate-probability-density-functions" class="nav-link" data-scroll-target="#multivariate-probability-density-functions"><span class="header-section-number">4.1</span> Multivariate Probability Density Functions</a></li>
+  <li><a href="#calculating-probabilities" id="toc-calculating-probabilities" class="nav-link" data-scroll-target="#calculating-probabilities"><span class="header-section-number">4.2</span> Calculating Probabilities</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#conditional-distributions-revisited" id="toc-conditional-distributions-revisited" class="nav-link" data-scroll-target="#conditional-distributions-revisited"><span class="header-section-number">5</span> Conditional Distributions (Revisited)</a>
+  <ul>
+<li><a href="#when-pa-0" id="toc-when-pa-0" class="nav-link" data-scroll-target="#when-pa-0"><span class="header-section-number">5.1</span> When <span class="math inline">\(P(A) = 0\)</span></a></li>
+  <li><a href="#when-pb-0" id="toc-when-pb-0" class="nav-link" data-scroll-target="#when-pb-0"><span class="header-section-number">5.2</span> When <span class="math inline">\(P(B) = 0\)</span></a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.ubc.ca/mds-2025-26/DSCI_551_stat-prob-dsci_students/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../learning-goals.html">Lectures</a></li><li class="breadcrumb-item"><a href="../notes/06_lecture-continuous-families.html">Lecture 6: Common Distribution Families and Conditioning</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Lecture 6: Common Distribution Families and Conditioning</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="slides" class="level2" data-number="1"><h2 data-number="1" class="anchored" data-anchor-id="slides">
+<span class="header-section-number">1</span> Slides</h2>
+<iframe src="../slides/06_lecture-continuous-families/06_lecture-continuous-families.html" width="100%" height="600px" style="border: none;">
+</iframe>
+</section><section id="learning-goals" class="level2" data-number="2"><h2 data-number="2" class="anchored" data-anchor-id="learning-goals">
+<span class="header-section-number">2</span> Learning Goals</h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ul>
+<li>Identify and apply common continuous distribution families.</li>
+<li>Identify what makes a function a bivariate probability density function.</li>
+<li>Compute probabilities from bivariate probability density functions.</li>
+<li>Compute conditional distributions for continuous random variables.</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let us make a <strong>note on the Greek alphabet</strong>. Throughout MDS, we will use diverse Greek letters in various statistical topics. Usually, these letters represent distributional parameters. That said, it is not necessary to memorize these letters right away. With practice over time, you will get familiar with this alphabet. You can find the whole alphabet in the appendix on <a href="../notes/appendix-greek-alphabet.html">Greek alphabet</a>.</p>
+</div>
+</div>
+</section><section id="common-continuous-distribution-families" class="level2" data-number="3"><h2 data-number="3" class="anchored" data-anchor-id="common-continuous-distribution-families">
+<span class="header-section-number">3</span> Common Continuous Distribution Families</h2>
+<p>Just like for discrete distributions, there are also parametric families of continuous distributions. <a href="http://www.math.wm.edu/~leemis/chart/UDR/UDR.html">Recall the chart of univariate distributions</a>, where you will find key information, such as their corresponding probability density functions (PDFs). Furthermore, the chart illustrates how these distributions are related via random variable transformations.</p>
+<section id="uniform" class="level3" data-number="3.1"><h3 data-number="3.1" class="anchored" data-anchor-id="uniform">
+<span class="header-section-number">3.1</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Uniform.pdf">Uniform</a>
+</h3>
+<section id="process" class="level4" data-number="3.1.1"><h4 data-number="3.1.1" class="anchored" data-anchor-id="process">
+<span class="header-section-number">3.1.1</span> Process</h4>
+<p>A Uniform distribution has equal density in between two points <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> (for <span class="math inline">\(a &lt; b\)</span>), and is usually denoted by</p>
+<p><span class="math display">\[X \sim \operatorname{Uniform}(a, b).\]</span></p>
+<p>That means that there are <strong>two parameters</strong>: <strong>one for each end-point</strong>. A reference to a “<em>Uniform distribution</em>” usually implies <strong>continuous uniform</strong>, as opposed to <a href="../notes/appendix-dist-cheatsheet.html#sec-uniform-discrete">discrete uniform</a>.</p>
+</section><section id="pdf" class="level4" data-number="3.1.2"><h4 data-number="3.1.2" class="anchored" data-anchor-id="pdf">
+<span class="header-section-number">3.1.2</span> PDF</h4>
+<p>The density is</p>
+<p><span class="math display">\[f_X(x\mid a, b) = \frac{1}{b - a} \qquad \text{for} \quad a \leq x \leq b.\]</span></p>
+<p>Here are some densities from members of this family:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean" class="level4" data-number="3.1.3"><h4 data-number="3.1.3" class="anchored" data-anchor-id="mean">
+<span class="header-section-number">3.1.3</span> Mean</h4>
+<p>The mean of a Uniform random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \frac{a + b}{2}.\]</span></p>
+</section><section id="variance" class="level4" data-number="3.1.4"><h4 data-number="3.1.4" class="anchored" data-anchor-id="variance">
+<span class="header-section-number">3.1.4</span> Variance</h4>
+<p>The variance of a Uniform random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \frac{(b - a)^2}{12}.\]</span></p>
+</section></section><section id="gaussian-or-normal" class="level3" data-number="3.2"><h3 data-number="3.2" class="anchored" data-anchor-id="gaussian-or-normal">
+<span class="header-section-number">3.2</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Normal.pdf">Gaussian or Normal</a>
+</h3>
+<section id="process-1" class="level4" data-number="3.2.1"><h4 data-number="3.2.1" class="anchored" data-anchor-id="process-1">
+<span class="header-section-number">3.2.1</span> Process</h4>
+<p>Probably the most famous family of distributions. It has a density that follows a <strong>“bell-shaped”</strong> curve. It is parameterized by its mean <span class="math inline">\(-\infty &lt; \mu &lt; \infty\)</span> and variance <span class="math inline">\(\sigma^2 &gt; 0\)</span>. A Normal distribution is usually denoted as</p>
+<p><span class="math display">\[X \sim \mathcal N\left(\mu, \sigma^2\right).\]</span></p>
+</section><section id="pdf-1" class="level4" data-number="3.2.2"><h4 data-number="3.2.2" class="anchored" data-anchor-id="pdf-1">
+<span class="header-section-number">3.2.2</span> PDF</h4>
+<p>The density is</p>
+<p><span class="math display">\[f_X(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp \left[-\frac{(x - \mu)^2}{2\sigma^2} \right] \qquad \text{for} \quad -\infty &lt; x &lt; \infty.\]</span></p>
+<p>Here are some densities from members of this family:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-1" class="level4" data-number="3.2.3"><h4 data-number="3.2.3" class="anchored" data-anchor-id="mean-1">
+<span class="header-section-number">3.2.3</span> Mean</h4>
+<p>The mean of a Normal random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \mu.\]</span></p>
+</section><section id="variance-1" class="level4" data-number="3.2.4"><h4 data-number="3.2.4" class="anchored" data-anchor-id="variance-1">
+<span class="header-section-number">3.2.4</span> Variance</h4>
+<p>The variance of a Normal random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \sigma^2.\]</span></p>
+</section></section><section id="log-normal" class="level3" data-number="3.3"><h3 data-number="3.3" class="anchored" data-anchor-id="log-normal">
+<span class="header-section-number">3.3</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Lognormal.pdf">Log-Normal</a>
+</h3>
+<section id="process-2" class="level4" data-number="3.3.1"><h4 data-number="3.3.1" class="anchored" data-anchor-id="process-2">
+<span class="header-section-number">3.3.1</span> Process</h4>
+<p>A random variable <span class="math inline">\(X\)</span> is a Log-Normal distribution if the transformation <span class="math inline">\(\log(X)\)</span> is Normal. This family is often parameterized by the mean <span class="math inline">\(-\infty &lt; \mu &lt; \infty\)</span> and variance <span class="math inline">\(\sigma^2 &gt; 0\)</span> of <span class="math inline">\(\log X\)</span>. The Log-Normal family is denoted as</p>
+<p><span class="math display">\[X \sim \operatorname{Log-Normal}\left(\mu, \sigma^2\right).\]</span></p>
+</section><section id="pdf-2" class="level4" data-number="3.3.2"><h4 data-number="3.3.2" class="anchored" data-anchor-id="pdf-2">
+<span class="header-section-number">3.3.2</span> PDF</h4>
+<p>The density is</p>
+<p><span class="math display">\[f_X(x \mid \mu, \sigma^2) = \frac{1}{x\sqrt{2\pi \sigma^2}} \exp \left\{ -\frac{[\log(x) - \mu]^2}{2\sigma^2} \right\} \qquad \text{for} \quad x \geq 0.\]</span></p>
+<p>Here are some densities from members of this family:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-2" class="level4" data-number="3.3.3"><h4 data-number="3.3.3" class="anchored" data-anchor-id="mean-2">
+<span class="header-section-number">3.3.3</span> Mean</h4>
+<p>The mean of a Log-Normal random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \exp{\left[ \mu + \left( \sigma^2 / 2 \right) \right]}.\]</span></p>
+</section><section id="variance-2" class="level4" data-number="3.3.4"><h4 data-number="3.3.4" class="anchored" data-anchor-id="variance-2">
+<span class="header-section-number">3.3.4</span> Variance</h4>
+<p>The variance of a Log-Normal random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \exp{\left[ 2 \left( \mu + \sigma^2 \right) \right]} - \exp{\left( 2\mu + \sigma^2 \right)}.\]</span></p>
+</section></section><section id="exponential" class="level3" data-number="3.4"><h3 data-number="3.4" class="anchored" data-anchor-id="exponential">
+<span class="header-section-number">3.4</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Exponential.pdf">Exponential</a>
+</h3>
+<section id="process-3" class="level4" data-number="3.4.1"><h4 data-number="3.4.1" class="anchored" data-anchor-id="process-3">
+<span class="header-section-number">3.4.1</span> Process</h4>
+<p>The Exponential family is for positive random variables, often interpreted as <strong>wait time</strong> for some event to happen. Characterized by a <strong>memoryless property</strong>, where after waiting for a certain period of time, the remaining wait time has the same distribution.</p>
+<p>The family is characterized by a single parameter, usually either the <strong>mean wait time</strong> <span class="math inline">\(\beta &gt; 0\)</span>, or its reciprocal, the <strong>average rate</strong> <span class="math inline">\(\lambda &gt; 0\)</span> at which events happen.</p>
+<p>The Exponential family is denoted as</p>
+<p><span class="math display">\[X \sim \operatorname{Exponential}(\beta),\]</span> or</p>
+<p><span class="math display">\[X \sim \operatorname{Exponential}(\lambda).\]</span></p>
+</section><section id="pdf-3" class="level4" data-number="3.4.2"><h4 data-number="3.4.2" class="anchored" data-anchor-id="pdf-3">
+<span class="header-section-number">3.4.2</span> PDF</h4>
+<p>The density can be parameterized as</p>
+<p><span class="math display">\[f_X(x \mid \beta) = \frac{1}{\beta} \exp(-x / \beta) \qquad \text{for} \quad x \geq 0\]</span> or</p>
+<p><span class="math display">\[f_X(x \mid \lambda) = \lambda \exp(-\lambda x) \qquad \text{for} \quad x \geq 0.\]</span></p>
+<p>The densities from this family all decay starting at <span class="math inline">\(x = 0\)</span> for rate <span class="math inline">\(\lambda\)</span>:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-3" class="level4" data-number="3.4.3"><h4 data-number="3.4.3" class="anchored" data-anchor-id="mean-3">
+<span class="header-section-number">3.4.3</span> Mean</h4>
+<p><strong>Using a <span class="math inline">\(\beta\)</span> parameterization</strong>, the mean of an Exponential random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \beta.\]</span></p>
+<p>On the other hand, <strong>using a <span class="math inline">\(\lambda\)</span> parameterization</strong>, the mean of an Exponential random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = 1 / \lambda.\]</span></p>
+</section><section id="variance-3" class="level4" data-number="3.4.4"><h4 data-number="3.4.4" class="anchored" data-anchor-id="variance-3">
+<span class="header-section-number">3.4.4</span> Variance</h4>
+<p><strong>Using a <span class="math inline">\(\beta\)</span> parameterization</strong>, the variance of an Exponential random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \beta^2.\]</span></p>
+<p>On the other hand, <strong>using a <span class="math inline">\(\lambda\)</span> parameterization</strong>, the variance of an Exponential random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = 1 / \lambda^2.\]</span></p>
+</section></section><section id="beta" class="level3" data-number="3.5"><h3 data-number="3.5" class="anchored" data-anchor-id="beta">
+<span class="header-section-number">3.5</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Beta.pdf">Beta</a>
+</h3>
+<section id="process-4" class="level4" data-number="3.5.1"><h4 data-number="3.5.1" class="anchored" data-anchor-id="process-4">
+<span class="header-section-number">3.5.1</span> Process</h4>
+<p>The Beta family of distributions is defined for random variables taking values between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>, so is useful for modelling the distribution of proportions. This family is quite flexible, and has the Uniform distribution as a special case. It is characterized by two positive shape parameters, <span class="math inline">\(\alpha &gt; 0\)</span> and <span class="math inline">\(\beta &gt; 0\)</span>.</p>
+<p>The Beta family is denoted as</p>
+<p><span class="math display">\[X \sim \operatorname{Beta}(\alpha, \beta).\]</span></p>
+</section><section id="pdf-4" class="level4" data-number="3.5.2"><h4 data-number="3.5.2" class="anchored" data-anchor-id="pdf-4">
+<span class="header-section-number">3.5.2</span> PDF</h4>
+<p>The density is parameterized as</p>
+<p><span class="math display">\[f_X(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha) \Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1} \qquad \text{for} \quad 0 \leq x \leq 1,\]</span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> is the <a href="https://www.statlect.com/mathematical-tools/gamma-function">Gamma function</a>.</p>
+<p>Here are some examples of densities:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-4" class="level4" data-number="3.5.3"><h4 data-number="3.5.3" class="anchored" data-anchor-id="mean-4">
+<span class="header-section-number">3.5.3</span> Mean</h4>
+<p>The mean of a Beta random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \frac{\alpha}{\alpha + \beta}.\]</span></p>
+</section><section id="variance-4" class="level4" data-number="3.5.4"><h4 data-number="3.5.4" class="anchored" data-anchor-id="variance-4">
+<span class="header-section-number">3.5.4</span> Variance</h4>
+<p>The variance of a Beta random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}.\]</span></p>
+</section></section><section id="weibull" class="level3" data-number="3.6"><h3 data-number="3.6" class="anchored" data-anchor-id="weibull">
+<span class="header-section-number">3.6</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Weibull.pdf">Weibull</a>
+</h3>
+<section id="process-5" class="level4" data-number="3.6.1"><h4 data-number="3.6.1" class="anchored" data-anchor-id="process-5">
+<span class="header-section-number">3.6.1</span> Process</h4>
+<p>A generalization of the Exponential family, which allows for an event to be more likely the longer you wait. Because of this flexibility and interpretation, this family is used heavily in <strong>survival analysis</strong> when modelling <strong>time until an event</strong>.</p>
+<p>This family is characterized by two parameters, a <strong>scale parameter</strong> <span class="math inline">\(\lambda &gt; 0\)</span> and a <strong>shape parameter</strong> <span class="math inline">\(k &gt; 0\)</span> (where <span class="math inline">\(k = 1\)</span> results in the Exponential family).</p>
+<p>The Weibull family is denoted as</p>
+<p><span class="math display">\[X \sim \operatorname{Weibull}(\lambda, k).\]</span></p>
+</section><section id="pdf-5" class="level4" data-number="3.6.2"><h4 data-number="3.6.2" class="anchored" data-anchor-id="pdf-5">
+<span class="header-section-number">3.6.2</span> PDF</h4>
+<p>The density is parameterized as</p>
+<p><span class="math display">\[f_X(x \mid \lambda, k) = \frac{k}{\lambda} \left( \frac{x}{\lambda} \right)^{k - 1} \exp^{-(x / \lambda)^k} \qquad \text{for} \quad x \geq 0.\]</span></p>
+<p>Here are some examples of densities:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-5" class="level4" data-number="3.6.3"><h4 data-number="3.6.3" class="anchored" data-anchor-id="mean-5">
+<span class="header-section-number">3.6.3</span> Mean</h4>
+<p>The mean of a Weibull random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = \lambda \Gamma \left( 1 + \frac{1}{k} \right).\]</span></p>
+</section><section id="variance-5" class="level4" data-number="3.6.4"><h4 data-number="3.6.4" class="anchored" data-anchor-id="variance-5">
+<span class="header-section-number">3.6.4</span> Variance</h4>
+<p>The variance of a Weibull random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = \lambda^2 \left[ \Gamma \left( 1 + \frac{2}{k} \right) - \Gamma^2 \left( 1 + \frac{1}{k} \right) \right].\]</span></p>
+</section></section><section id="gamma" class="level3" data-number="3.7"><h3 data-number="3.7" class="anchored" data-anchor-id="gamma">
+<span class="header-section-number">3.7</span> <a href="http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Gamma.pdf">Gamma</a>
+</h3>
+<section id="process-6" class="level4" data-number="3.7.1"><h4 data-number="3.7.1" class="anchored" data-anchor-id="process-6">
+<span class="header-section-number">3.7.1</span> Process</h4>
+<p>Another useful two-parameter family with support on non-negative numbers. One common parameterization is with a shape parameter <span class="math inline">\(k &gt; 0\)</span> and a scale parameter <span class="math inline">\(\theta &gt; 0\)</span>.</p>
+<p>The Gamma family can be denoted as</p>
+<p><span class="math display">\[X \sim \operatorname{Gamma}(k, \theta).\]</span></p>
+</section><section id="pdf-6" class="level4" data-number="3.7.2"><h4 data-number="3.7.2" class="anchored" data-anchor-id="pdf-6">
+<span class="header-section-number">3.7.2</span> PDF</h4>
+<p>The density is parameterized as</p>
+<p><span class="math display">\[f_X(x \mid k, \theta) = \frac{1}{\Gamma(k) \theta^k} x^{k - 1} \exp(-x / \theta) \qquad \text{for} \quad x \geq 0,\]</span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> is the <a href="https://www.statlect.com/mathematical-tools/gamma-function">Gamma function</a>.</p>
+<p>Here are some densities:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_lecture-continuous-families_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="mean-6" class="level4" data-number="3.7.3"><h4 data-number="3.7.3" class="anchored" data-anchor-id="mean-6">
+<span class="header-section-number">3.7.3</span> Mean</h4>
+<p>The mean of a Gamma random variable is defined as:</p>
+<p><span class="math display">\[\mathbb{E}(X) = k \theta.\]</span></p>
+</section><section id="variance-6" class="level4" data-number="3.7.4"><h4 data-number="3.7.4" class="anchored" data-anchor-id="variance-6">
+<span class="header-section-number">3.7.4</span> Variance</h4>
+<p>The variance of a Gamma random variable is defined as:</p>
+<p><span class="math display">\[\text{Var}(X) = k \theta^2.\]</span></p>
+</section></section><section id="relevant-r-functions" class="level3" data-number="3.8"><h3 data-number="3.8" class="anchored" data-anchor-id="relevant-r-functions">
+<span class="header-section-number">3.8</span> Relevant <code>R</code> Functions</h3>
+<p><code>R</code> has functions for many distribution families. We have seen a few already in the case of discrete families, but here is a more complete overview.</p>
+<p>The functions are of the form <code>&lt;x&gt;&lt;dist&gt;</code>, where <code>&lt;dist&gt;</code> is an abbreviation of a distribution family, and <code>&lt;x&gt;</code> is one of <code>d</code>, <code>p</code>, <code>q</code>, or <code>r</code>, depending on exactly what about the distribution you would like to calculate.</p>
+<p>The possible prefixes for <code>&lt;x&gt;</code> indicate the following:</p>
+<ul>
+<li>
+<code>d</code>: density function – we call this <span class="math inline">\(f_X(x)\)</span>.</li>
+<li>
+<code>p</code>: cumulative distribution function (CDF) – we call this <span class="math inline">\(F_X(x)\)</span>.</li>
+<li>
+<code>q</code>: quantile function (inverse CDF).</li>
+<li>
+<code>r</code>: random number generator.</li>
+</ul>
+<p>Here are some abbreviations for <code>&lt;dist&gt;</code>:</p>
+<ul>
+<li>
+<code>unif</code>: Uniform (continuous).</li>
+<li>
+<code>norm</code>: Normal (continuous).</li>
+<li>
+<code>lnorm</code>: Log-Normal (continuous).</li>
+<li>
+<code>geom</code>: Geometric (discrete).</li>
+<li>
+<code>pois</code>: Poisson (discrete).</li>
+<li>
+<code>binom</code>: Binomial (discrete).</li>
+<li>etc.</li>
+</ul>
+<p>Let us check the following examples:</p>
+<ul>
+<li>For the Uniform family, we have the following <code>R</code> functions:
+<ul>
+<li>
+<code><a href="https://rdrr.io/r/stats/Uniform.html">dunif()</a></code>, <code><a href="https://rdrr.io/r/stats/Uniform.html">punif()</a></code>, <code><a href="https://rdrr.io/r/stats/Uniform.html">qunif()</a></code>, and <code><a href="https://rdrr.io/r/stats/Uniform.html">runif()</a></code>.</li>
+</ul>
+</li>
+<li>For the Gaussian or Normal family, we have the following <code>R</code> functions:
+<ul>
+<li>
+<code><a href="https://rdrr.io/r/stats/Normal.html">dnorm()</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html">pnorm()</a></code>, <code><a href="https://rdrr.io/r/stats/Normal.html">qnorm()</a></code>, and <code><a href="https://rdrr.io/r/stats/Normal.html">rnorm()</a></code>.</li>
+</ul>
+</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For any <code>R</code> function, you can get syntax help via the <code>R</code> Studio console. For instance, if we want help with the function <code><a href="https://rdrr.io/r/stats/Uniform.html">dunif()</a></code>, we type <code><a href="https://rdrr.io/r/stats/Uniform.html">?dunif</a></code> in the console. More ways to find help can be found <a href="https://www.r-project.org/help.html">here</a>.</p>
+</div>
+</div>
+<p>Now, let us proceed with some in-class questions via <a href="https://student.iclicker.com/"><strong>iClicker</strong></a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 28
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What <code>R</code> function do we need to obtain the density corresponding for <span class="math inline">\(X \sim \mathcal N(\mu = 2, \sigma^2 = 4)\)</span> at point <span class="math inline">\(x = 3\)</span>?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <code>pnorm(q = 3, mean = 2, sd = 2)</code></p>
+<p><strong>B.</strong> <code>dnorm(x = 3, mean = 2, sd = 4)</code></p>
+<p><strong>C.</strong> <code>pnorm(q = 3, mean = 2, sd = 4)</code></p>
+<p><strong>D.</strong> <code>dnorm(x = 3, mean = 2, sd = 2)</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 29
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What <code>R</code> function do we need to obtain the CDF for <span class="math inline">\(X \sim \operatorname{Uniform}(a = 0, b = 2)\)</span> evaluated at points <span class="math inline">\(x = 0.25, 0.5, 0.75\)</span>?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <code>qunif(p = c(0.25, 0.5, 0.75), min = 0, max = 2, lower.tail = TRUE)</code></p>
+<p><strong>B.</strong> <code>punif(q = c(0.25, 0.5, 0.75), min = 0, max = 2, lower.tail = TRUE)</code></p>
+<p><strong>C.</strong> <code>dunif(x = c(0.25, 0.5, 0.75), min = 0, max = 2)</code></p>
+<p><strong>D.</strong> <code>punif(q = c(0.25, 0.5, 0.75), min = 0, max = 2, lower.tail = FALSE)</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 30
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What <code>R</code> function do we need to obtain the median of <span class="math inline">\(X \sim \operatorname{Uniform}(a = 0, b = 2)\)</span>?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <code>qunif(p = 0.5, min = 0, max = 2, lower.tail = TRUE)</code></p>
+<p><strong>B.</strong> <code>punif(q = 0.5, min = 0, max = 2, lower.tail = TRUE)</code></p>
+<p><strong>C.</strong> <code>dunif(x = 0.5, min = 0, max = 2)</code></p>
+<p><strong>D.</strong> <code>punif(q = 0.5, min = 0, max = 2, lower.tail = FALSE)</code></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 31
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What <code>R</code> function do we need to generate a random sample of size <span class="math inline">\(10\)</span> from the distribution <span class="math inline">\(\mathcal N(\mu = 0, \sigma^2 = 25)\)</span>?</p>
+<p>Select the correct option:</p>
+<p><strong>A.</strong> <code>runif(n = 10, min = 0, max = 25)</code></p>
+<p><strong>B.</strong> <code>rnorm(n = 10, mean = 0, sd = 25)</code></p>
+<p><strong>C.</strong> <code>rnorm(n = 10, mean = 0, sd = 5)</code></p>
+<p><strong>D.</strong> <code>runif(n = 10, min = 0, max = 5)</code></p>
+</div>
+</div>
+</section></section><section id="continuous-multivariate-distributions" class="level2" data-number="4"><h2 data-number="4" class="anchored" data-anchor-id="continuous-multivariate-distributions">
+<span class="header-section-number">4</span> Continuous Multivariate Distributions</h2>
+<p>In the discrete case, we already saw joint distributions, univariate conditional distributions, multivariate conditional distributions, marginal distributions, etc. All these concepts are carried over to continuous distributions. Let us start with two continuous random variables (i.e., a <strong>bivariate</strong> case).</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let us make a <strong>note on depictions of distributions</strong>. There is such thing as a multivariate CDF. It comes in handy in Copula Theory (a more advanced field in Statistics). But otherwise, it is not as useful as a <strong>multivariate density</strong>, so we will not cover it in this course. Moreover, there is no such thing as a multivariate quantile function.</p>
+</div>
+</div>
+<section id="multivariate-probability-density-functions" class="level3" data-number="4.1"><h3 data-number="4.1" class="anchored" data-anchor-id="multivariate-probability-density-functions">
+<span class="header-section-number">4.1</span> Multivariate Probability Density Functions</h3>
+<p>Recall the joint <strong>probability mass function</strong> (PMF) from <a href="../notes/03_lecture-joint.html"><code>lecture3</code> notes</a> between <span class="math inline">\(\text{Gang}\)</span> demand and length of stay (<span class="math inline">\(\text{LOS}\)</span>):</p>
+<div class="cell">
+<div id="tbl-joint-pmf-gangs-los" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-joint-pmf-gangs-los-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Joint probability mass function (PMF) for the number of gangs (G) and length of stay (L) in days.
+</figcaption><div aria-describedby="tbl-joint-pmf-gangs-los-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead><tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">G = 1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">G = 2</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">G = 3</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">G = 4</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left; width: 5em; font-weight: bold; border-right: 1px solid;">L = 1</td>
+<td style="text-align: center;">0.0017</td>
+<td style="text-align: center;">0.0425</td>
+<td style="text-align: center;">0.1247</td>
+<td style="text-align: center;">0.0811</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 5em; font-weight: bold; border-right: 1px solid;">L = 2</td>
+<td style="text-align: center;">0.0266</td>
+<td style="text-align: center;">0.1698</td>
+<td style="text-align: center;">0.1360</td>
+<td style="text-align: center;">0.0176</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 5em; font-weight: bold; border-right: 1px solid;">L = 3</td>
+<td style="text-align: center;">0.0511</td>
+<td style="text-align: center;">0.1156</td>
+<td style="text-align: center;">0.0320</td>
+<td style="text-align: center;">0.0013</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; width: 5em; font-weight: bold; border-right: 1px solid;">L = 4</td>
+<td style="text-align: center;">0.0465</td>
+<td style="text-align: center;">0.0474</td>
+<td style="text-align: center;">0.0059</td>
+<td style="text-align: center;">0.0001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; width: 5em; font-weight: bold; border-right: 1px solid;">L = 5</td>
+<td style="text-align: center;">0.0740</td>
+<td style="text-align: center;">0.0246</td>
+<td style="text-align: center;">0.0014</td>
+<td style="text-align: center;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Each entry in the table corresponds to the probability of that unique row (<span class="math inline">\(\text{LOS}\)</span> value) and column (<span class="math inline">\(\text{Gang}\)</span> value). These probabilities add up to 1.</p>
+<p>For the <strong>continuous case</strong>, instead of rows and columns, we have an <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>-axis for our two random variables, defining a region of possible values. For example, suppose two marathon runners can only finish a marathon between <span class="math inline">\(5.0\)</span> and <span class="math inline">\(5.5\)</span> hours each, and their end times are totally random. In that case, the possible values are indicated by the <strong>orange square</strong> in <a href="#fig-joint-pdf-marathon" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-joint-pdf-marathon" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-joint-pdf-marathon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_lecture-continuous-families_files/figure-html/fig-joint-pdf-marathon-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-joint-pdf-marathon-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Top view of a joint bivariate probability density function (PDF).
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>Each point in the square is like an entry in the joint probability mass function (PMF) table in the discrete case, except now, instead of holding a probability, it holds a <strong>density</strong>. Then, the <strong>density function</strong> is a <strong>surface</strong> overtop of this square (or, generally, the outcome’s sample space). It is a function that takes two variables (marathon time for Runner 1 and Runner 2) and calculates a single density value from those two points. This function is called a <strong>bivariate probability density function</strong>.</p>
+<p>We can extend the above plot to a 3D setting as below as in <a href="#fig-joint-pdf-marathon-2" class="quarto-xref">Figure&nbsp;2</a>. Note that the orange distribution surface corresponds to the projection of the joint distribution between the two runners on the <span class="math inline">\(z\)</span>-axis.</p>
+<div class="cell">
+<div id="fig-joint-pdf-marathon-2" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-joint-pdf-marathon-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-d69f16e91aa135583c96" style="width:100%;height:650px;"></div>
+<script type="application/json" data-for="htmlwidget-d69f16e91aa135583c96">{"x":{"visdat":{"98096a2964d9":["function () ","plotlyVisDat"]},"cur_data":"98096a2964d9","attrs":{"98096a2964d9":{"x":[5,5,5.5,5.5,5,5,5.5,5.5],"y":[5,5.5,5.5,5,5,5.5,5.5,5],"z":[0,0,0,0,4,4,4,4],"i":[7,0,0,0,4,4,2,6,4,0,3,7],"j":[3,4,1,2,5,6,5,5,0,1,2,2],"k":[0,7,2,3,6,7,1,2,5,5,7,6],"facecolor":["rgba(0,0,4,1)","rgba(0,0,4,1)","rgba(120,28,109,1)","rgba(120,28,109,1)","rgba(237,105,37,1)","rgba(237,105,37,1)","rgba(252,255,164,1)","rgba(252,255,164,1)"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"mesh3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Marathon <br>Time (Hours): <br>Runner 1","range":[4.5,6]},"yaxis":{"title":"Marathon <br>Time (Hours): <br>Runner 2","range":[4.5,6]},"zaxis":{"title":"Probability <br>Density","range":[0,4]}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"colorscale":[["0","rgba(68,1,84,1)"],["0.0416666666666667","rgba(70,19,97,1)"],["0.0833333333333333","rgba(72,32,111,1)"],["0.125","rgba(71,45,122,1)"],["0.166666666666667","rgba(68,58,128,1)"],["0.208333333333333","rgba(64,70,135,1)"],["0.25","rgba(60,82,138,1)"],["0.291666666666667","rgba(56,93,140,1)"],["0.333333333333333","rgba(49,104,142,1)"],["0.375","rgba(46,114,142,1)"],["0.416666666666667","rgba(42,123,142,1)"],["0.458333333333333","rgba(38,133,141,1)"],["0.5","rgba(37,144,140,1)"],["0.541666666666667","rgba(33,154,138,1)"],["0.583333333333333","rgba(39,164,133,1)"],["0.625","rgba(47,174,127,1)"],["0.666666666666667","rgba(53,183,121,1)"],["0.708333333333333","rgba(79,191,110,1)"],["0.75","rgba(98,199,98,1)"],["0.791666666666667","rgba(119,207,85,1)"],["0.833333333333333","rgba(147,214,70,1)"],["0.875","rgba(172,220,52,1)"],["0.916666666666667","rgba(199,225,42,1)"],["0.958333333333333","rgba(226,228,40,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"x":[5,5,5.5,5.5,5,5,5.5,5.5],"y":[5,5.5,5.5,5,5,5.5,5.5,5],"z":[0,0,0,0,4,4,4,4],"i":[7,0,0,0,4,4,2,6,4,0,3,7],"j":[3,4,1,2,5,6,5,5,0,1,2,2],"k":[0,7,2,3,6,7,1,2,5,5,7,6],"facecolor":["rgba(0,0,4,1)","rgba(0,0,4,1)","rgba(120,28,109,1)","rgba(120,28,109,1)","rgba(237,105,37,1)","rgba(237,105,37,1)","rgba(252,255,164,1)","rgba(252,255,164,1)"],"type":"mesh3d","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-joint-pdf-marathon-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: 3D plot of a joint bivariate probability density function (PDF).
+</figcaption></figure>
+</div>
+</div>
+</section><section id="calculating-probabilities" class="level3" data-number="4.2"><h3 data-number="4.2" class="anchored" data-anchor-id="calculating-probabilities">
+<span class="header-section-number">4.2</span> Calculating Probabilities</h3>
+<p>Recall the univariate continuous case; we calculated probabilities as the <strong>area under the density curve</strong>. Now, let us check the specifics of the bivariate density function.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Definition of the Bivariate Probability Density Function
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be two random variables. For these two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, their joint PDF evaluated at the points <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is usually denoted</p>
+<p><span class="math display">\[f_{X,Y}(x,y).\]</span></p>
+<p>Therefore, we have a <strong>density surface</strong> and can calculate probabilities as the <strong>volume under the density surface</strong>. This means that the total volume under the density function must equal 1. Formally, this may be written as</p>
+<p><span class="math display">\[\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f_{X, Y} (x,y)\,\mathrm{d}x\,\mathrm{d}y = 1.\]</span></p>
+<p>Note what this implies about the units of <span class="math inline">\(f_{X, Y}(x,y)\)</span>. For example, if <span class="math inline">\(x\)</span> is measured in metres and <span class="math inline">\(y\)</span> is measure in seconds, then the units of <span class="math inline">\(f_{X, Y}(x,y)\)</span> are <span class="math inline">\(\text{m}^{-1} \text{s}^{-1}\)</span>.</p>
+</div>
+</div>
+<p>Now, let us answer the following questions:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 32
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the density is equal/flat across the entire sample space, what is the height of this surface? That is, what does the density evaluate to? What does it evaluate to <strong>outside</strong> of the sample space?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 33
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(X\)</span> be the marathon time of Runner 1 in hours, and <span class="math inline">\(Y\)</span> be the marathon time of Runner 2 in hours. What is the probability that Runner 1 will finish the marathon before Runner 2, i.e., <span class="math inline">\(P(X &lt; Y)\)</span>? <a href="#fig-joint-pdf-marathon-4" class="quarto-xref">Figure&nbsp;3</a> might be helpful to visualize this.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-joint-pdf-marathon-4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-joint-pdf-marathon-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_lecture-continuous-families_files/figure-html/fig-joint-pdf-marathon-4-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-joint-pdf-marathon-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Top view of a joint bivariate probability density function (PDF).
+</figcaption></figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Exercise 34
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now, what is the probability that Runner 1 finishes in <span class="math inline">\(5.2\)</span> hours or less, i.e., <span class="math inline">\(P(X \leq 5.2)\)</span>? <a href="#fig-joint-pdf-marathon-5" class="quarto-xref">Figure&nbsp;4</a> might be helpful to visualize this.</p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-joint-pdf-marathon-5" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-joint-pdf-marathon-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_lecture-continuous-families_files/figure-html/fig-joint-pdf-marathon-5-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-joint-pdf-marathon-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Top view of a joint bivariate probability density function (PDF).
+</figcaption></figure>
+</div>
+</div>
+</div>
+</section></section><section id="conditional-distributions-revisited" class="level2" data-number="5"><h2 data-number="5" class="anchored" data-anchor-id="conditional-distributions-revisited">
+<span class="header-section-number">5</span> Conditional Distributions (Revisited)</h2>
+<p>Recall the basic formula for conditional probabilities for events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>:</p>
+<p><span class="math display">\[P(A \mid B) = \frac{P(A \cap B)}{P(B)}.\]</span></p>
+<p>Nonetheless, this is only true if <span class="math inline">\(P(B) \neq 0\)</span>, and it is not useful if <span class="math inline">\(P(A) = 0\)</span> – two situations we face with continuous distributions.</p>
+<section id="when-pa-0" class="level3" data-number="5.1"><h3 data-number="5.1" class="anchored" data-anchor-id="when-pa-0">
+<span class="header-section-number">5.1</span> When <span class="math inline">\(P(A) = 0\)</span>
+</h3>
+<p>To describe this situation, let us use a univariate continuous example: the monthly expenses.</p>
+<p>Suppose the month is halfway over, and you only have <span class="math inline">\(\$2500\)</span> worth of expenses so far! Given this information, what is the distribution of this month’s total expenditures now?</p>
+<p>If we use the formula of conditional probability, we would get a formula that is not useful. Let</p>
+<p><span class="math display">\[X = \text{Monthly Expenses in CAD}.\]</span></p>
+<p>Moreover, assume</p>
+<p><span class="math display">\[X \sim \operatorname{Log-Normal}(\mu = 8, \sigma^2 = 0.5).\]</span></p>
+<p>Using the conditional probability formula, the conditional probability <strong>would</strong> be given by</p>
+<p><span class="math display">\[P(X = x \mid X \geq 2500) = \frac{P(X = x)}{P(X \geq 2500)} \qquad \qquad \text{(NO!)}\]</span></p>
+<p>This is not good because the outcome <span class="math inline">\(x\)</span> would have a probability of <span class="math inline">\(0\)</span> in a continuous case, which makes no sense!</p>
+<p>Instead, in general, <strong>we replace probabilities with densities</strong>. In this case, what we actually have is:</p>
+<p><span class="math display">\[f_{X \mid X \geq 2500}(x) = \frac{f_X(x)}{P(X \geq 2500)} \qquad \text{for} \quad x \geq 2500,\]</span></p>
+<p>and</p>
+<p><span class="math display">\[f_{X \mid X \geq 2500}(x) = 0 \qquad \text{for} \quad x &lt; 2500.\]</span></p>
+<p>The formula of the resulting conditional PDF is just the original PDF but confined to <span class="math inline">\(x \geq 2500\)</span>, and re-normalized to have an area <span class="math inline">\(1\)</span>.</p>
+<p>In <a href="#fig-joint-pdf-conditional-vs-marginal" class="quarto-xref">Figure&nbsp;5</a>, we plot the marginal distribution <span class="math inline">\(f_X(x)\)</span> and the conditional distribution <span class="math inline">\(f_{X \mid X \geq 2500}(x)\)</span>. Notice the conditional distribution is just a segment of the marginal, and then re-normalized to have an area under the curve equal to <span class="math inline">\(1\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-joint-pdf-conditional-vs-marginal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-joint-pdf-conditional-vs-marginal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_lecture-continuous-families_files/figure-html/fig-joint-pdf-conditional-vs-marginal-1.png" class="img-fluid figure-img" width="1440">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-joint-pdf-conditional-vs-marginal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Conditional and marginal probability density functions (PDFs).
+</figcaption></figure>
+</div>
+</div>
+</div>
+</section><section id="when-pb-0" class="level3" data-number="5.2"><h3 data-number="5.2" class="anchored" data-anchor-id="when-pb-0">
+<span class="header-section-number">5.2</span> When <span class="math inline">\(P(B) = 0\)</span>
+</h3>
+<p>To describe this situation, let us use the marathon runners’ example again:</p>
+<blockquote class="blockquote">
+<p><strong>If Runner 1 ended up finishing in <span class="math inline">\(5.2\)</span> hours</strong>, what is the distribution of Runner 2’s time?</p>
+</blockquote>
+<p>Let <span class="math inline">\(X\)</span> be the time for Runner 1, and <span class="math inline">\(Y\)</span> for Runner 2, what we are asking for is</p>
+<p><span class="math display">\[f_{Y|X = 5.2}(y).\]</span></p>
+<p>However, we already pointed out that</p>
+<p><span class="math display">\[P(X = 5.2) = 0.\]</span></p>
+<p>Therefore, we need to find a proper workaround. In this case, the stopwatch used to calculate the run time has rounded the true run time to <span class="math inline">\(5.2\)</span> hours, even though, in reality, it would have been something like <span class="math inline">\(5.2133843789373 \dots\)</span> hours.</p>
+<p>As seen earlier, plugging in the formula for conditional probabilities will not work. But, as in the case of <span class="math inline">\(P(A) = 0\)</span>, we can generally replace probabilities with densities.</p>
+<p>We end up with</p>
+<p><span class="math display">\[f_{Y|X = 5.2}(y) = \frac{f_{Y,X}(y, 5.2)}{f_X(5.2)}.\]</span></p>
+<p>This formula is true in general</p>
+<p><span id="eq-conditional-PDF"><span class="math display">\[f_{Y|X}(y) = \frac{f_{Y,X}(y, x)}{f_X(x)}. \tag{1}\]</span></span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that when two (or more) continuous random variables are independent, their joint PDF is the multiplication of their marginal PDFs. For example, let continuous random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have <span class="math inline">\(f_X(x)\)</span> and <span class="math inline">\(f_Y(y)\)</span> as marginal PDFs, respectively. <strong>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are assumed as independent</strong>, then their joint PDF is given by:</p>
+<p><span class="math display">\[
+f_{Y,X}(y, x) = f_Y(y) \cdot f_X(x).
+\]</span></p>
+<p>Thus, the conditional PDF of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span> (as in <a href="#eq-conditional-PDF" class="quarto-xref">Equation&nbsp;1</a>) boils down to:</p>
+<p><span class="math display">\[
+\begin{align*}
+f_{Y|X}(y) &amp;= \frac{f_{Y,X}(y, x)}{f_X(x)} \\
+&amp;= \frac{f_Y(y) \cdot f_X(x)}{f_X(x)} \\
+&amp;= f_Y(y).
+\end{align*}
+\]</span></p>
+<p>This means that the conditional PDF of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X\)</span> is merely the marginal PDF of <span class="math inline">\(Y\)</span>, <strong>when <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are assumed to be independent</strong> (i.e., whatever happens to <span class="math inline">\(X\)</span> does not affect <span class="math inline">\(Y\)</span> and viceversa). Something analogous happens with <span class="math inline">\(f_{X|Y}(x)\)</span>.</p>
+</div>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/pages\.github\.ubc\.ca\/mds-2025-26\/DSCI_551_stat-prob-dsci_students\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../notes/05_lecture-continuous.html" class="pagination-link" aria-label="Lecture 5: Continuous Distributions">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 5: Continuous Distributions</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notes/appendix-prob-cheatsheet.html" class="pagination-link" aria-label="Probability Cheatsheet">
+        <span class="nav-page-text">Probability Cheatsheet</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.ubc.ca/mds-2025-26/DSCI_551_stat-prob-dsci_students/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

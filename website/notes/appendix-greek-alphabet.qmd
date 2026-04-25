@@ -1,0 +1,35 @@
+---
+title: Greek Alphabet
+format: html
+execute:
+  enabled: false
+---
+
+Throughout MDS, we will use diverse Greek letters in various statistical topics. Usually, these letters represent distributional parameters. That said, it is not necessary to memorize these letters right away. With practice over time, you will get familiar with this alphabet.
+
+| Name | Uppercase | Lowercase |
+|:----------:|:-------------:|:------:|
+| Alpha | $\text{A}$ | $\alpha$ |
+| Beta | $\text{B}$ | $\beta$ |
+| Gamma | $\Gamma$ | $\gamma$ |
+| Delta | $\Delta$ | $\delta$ |
+| Epsilon | $\text{E}$ | $\epsilon$ |
+| Zeta | $\text{Z}$ | $\zeta$ |
+| Eta | $\text{H}$ | $\eta$ |
+| Theta | $\Theta$ | $\theta$ |
+| Iota | $\text{I}$ | $\iota$ |
+| Kappa | $\text{K}$ | $\kappa$ |
+| Lambda | $\Lambda$ | $\lambda$ |
+| Mu | $\text{M}$ | $\mu$ |
+| Nu | $\text{N}$ | $\nu$ |
+| Xi | $\Xi$ | $\xi$ |
+| O | $\text{O}$ | $\text{o}$ |
+| Pi | $\Pi$ | $\pi$ |
+| Rho | $\text{P}$ | $\rho$ |
+| Sigma | $\Sigma$ | $\sigma$ |
+| Tau | $\text{T}$ | $\tau$ |
+| Upsilon | $\Upsilon$ | $\upsilon$ |
+| Phi | $\Phi$ | $\phi$ |
+| Chi | $\text{X}$ | $\chi$ |
+| Psi | $\Psi$ | $\psi$ |
+| Omega | $\Omega$ | $\omega$ |

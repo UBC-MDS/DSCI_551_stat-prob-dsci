@@ -1,0 +1,695 @@
+---
+title: "Parametric Families"
+subtitle: "Lecture 2"
+author: "Please, sign in on iClicker"
+format:
+  revealjs: 
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/UBC_MDS_logo.png
+    css: styles.css
+    footer: DSCI 551 - Descriptive Statistics and Probability for Data Science
+    slide-level: 4
+---
+
+# Today's Learning Goals
+
+## By the end of this lecture, we will be able to...
+
+- Calculate expectations of a linear combination of random variables.
+- Match a physical process to a distribution family (Binomial, Geometric, Negative Binomial, Poisson, and Bernoulli). 
+- Calculate probabilities, mean, and variance of a distribution belonging to a distribution family.
+
+## And...
+
+- Find the probability mass function of a random variable transformation, e.g., $X^2$.
+- Distinguish between a family of distributions and a distribution.
+- Identify whether a specification of parameters (such as mean and variance) is enough/too little/too much to specify a distribution from a family of distributions.
+
+# Outline
+
+1. Properties of Distributions
+2. Random Variable Transformations
+3. Distribution Families
+4. Another Common Discrete Distribution Families
+
+## 1. Properties of Distributions
+
+- We must start getting familiar with central tendency and uncertainty measures from `lecture1`. 
+- Hence, let us practice their computations with some in-class [**iClicker**](https://student.iclicker.com/).
+
+![](images/calculator.png){fig-align="center" width=30%}
+
+### 1.1. A Single Probability Mass Function
+
+. . .
+
+- Suppose $X$ is a discrete random variable denoting the following:
+$$X = \text{Number of crabs found at a nest in a Mexican beach.}$$
+
+. . .
+
+![](images/crab.png){fig-align="center" width=20%}
+
+. . .
+
+![](images/crab.png){.absolute top="350" left="30" width="20%"}
+
+![](images/crab.png){.absolute .fragment top="300" right="80" width="20%"}
+
+#### Probability Mass Function (PMF)
+
+. . .
+
+<br>
+
+| $X$ | $P(X = x)$ |
+|:---:|:------:|
+| 0 | 0.4 |
+| 1 | 0.1 |
+| 2 | 0.1 |
+| 3 | 0.4 |
+
+![](images/crab.png){fig-align="center" width=20%}
+
+#### We plot it as a bar chart...
+
+![](images/crab.png){.absolute top="-80" right="30" width="20%"}
+
+. . .
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+library(tidyverse)
+library(cowplot)
+
+PMF_X <- tibble(x = 0:3, p = c(0.4, 0.1, 0.1, 0.4)) %>%
+  ggplot(aes(x, p)) +
+  geom_col(fill = "orangered3") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 25, face = "bold"),
+    axis.text = element_text(size = 23),
+    axis.title = element_text(size = 23, face = "bold")) +
+  ggtitle("Probability Mass Function of Random Variable X")
+PMF_X
+```
+
+#### iClicker Question
+
+![](images/crab.png){.absolute top="350" right="30" width="20%"}
+
+![](images/crab.png){.absolute top="250" right="300" width="20%"}
+
+![](images/crab.png){.absolute top="450" right="300" width="20%"}
+
+<br>
+
+Using the PMF for random variable $X$, compute $\mathbb{E}(X)$. Select the correct option:
+
+**A.** 1
+
+**B.** 1.5
+
+**C.** 1.9
+
+**D.** 6
+
+#### iClicker Question
+
+![](images/crab.png){.absolute top="350" right="30" width="20%"}
+
+![](images/crab.png){.absolute top="250" right="300" width="20%"}
+
+![](images/crab.png){.absolute top="450" right="300" width="20%"}
+
+<br>
+
+Using the PMF for random variable $X$, compute the variance $\text{Var}(X)$. Select the correct option:
+
+**A.** 2.6
+
+**B.** 1.85
+
+**C.** 4.1
+
+**D.** -1.85
+
+#### iClicker Question
+
+![](images/crab.png){.absolute top="350" right="30" width="20%"}
+
+![](images/crab.png){.absolute top="250" right="300" width="20%"}
+
+![](images/crab.png){.absolute top="450" right="300" width="20%"}
+
+<br>
+
+Using the PMF for random variable $X$, obtain the mode $\text{Mode}(X)$. Select the correct option:
+
+**A.** 0
+
+**B.** 3
+
+**C.** Both 0 and 3
+
+**D.** Neither
+
+#### iClicker Question
+
+![](images/crab.png){.absolute top="350" right="30" width="20%"}
+
+![](images/crab.png){.absolute top="250" right="300" width="20%"}
+
+![](images/crab.png){.absolute top="450" right="300" width="20%"}
+
+Using the PMF for random variable $X$, obtain the entropy $H(X).$ Select the correct option:
+
+**A.** -1.19
+
+**B.** 0.52
+
+**C.** -0.52
+
+**D.** 1.19
+
+### 1.2. Comparing Multiple Probability Mass Functions
+
+Suppose there are four different random variables related to four Mexican beaches:
+
+\begin{gather*}
+U =  \text{Number of crabs found at a nest at Acapulco} \\
+V =  \text{Number of crabs found at a nest at Cabo San Lucas} \\
+W =  \text{Number of crabs found at a nest at Cancún} \\
+Y =  \text{Number of crabs found at a nest at Puerto Vallarta.}
+\end{gather*}
+
+#### Probability Mass Functions (PMFs)
+
+![](images/crab.png){.absolute top="450" left="30" width="20%"}
+
+![](images/crab.png){.absolute top="420" right="450" width="20%"}
+
+![](images/crab.png){.absolute top="400" right="80" width="20%"}
+
+. . .
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 4
+
+PMF_U <- tibble(u = 0:3, p = c(0.4, 0.1, 0.1, 0.4)) %>%
+  ggplot(aes(u, p)) +
+  geom_col(fill = "orangered3") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 19, face = "bold"),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 18, face = "bold"))
+PMF_V <- tibble(v = 0:3, p = c(0.1, 0.4, 0.4, 0.1)) %>%
+  ggplot(aes(v, p)) +
+  geom_col(fill = "orangered3") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 19, face = "bold"),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 18, face = "bold"))
+PMF_W <- tibble(w = 0:3, p = c(0.5, 0, 0, 0.5)) %>%
+  ggplot(aes(w, p)) +
+  geom_col(fill = "orangered3") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 19, face = "bold"),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 18, face = "bold"))
+PMF_Y <- tibble(y = 0:3, p = c(0.25, 0.25, 0.25, 0.25)) %>%
+  ggplot(aes(y, p)) +
+  geom_col(fill = "orangered3") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 19, face = "bold"),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 18, face = "bold"))
+(cowplot::plot_grid(PMF_U, PMF_V, PMF_W, PMF_Y,
+  nrow = 1, labels = c("U ", "V ", "W", "Y "), label_size = 17
+))
+```
+
+#### iClicker Question
+
+Answer **TRUE** or **FALSE**:
+
+By only looking at the PMFs, $U$ has higher entropy than $V$.
+
+**A.** TRUE
+
+**B.** FALSE
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 4
+
+(cowplot::plot_grid(PMF_U, PMF_V, PMF_W, PMF_Y,
+  nrow = 1, labels = c("U ", "V ", "W", "Y "), label_size = 17
+))
+```
+
+#### iClicker Question
+
+Answer **TRUE** or **FALSE**:
+
+By only looking at the PMFs, $U$ has higher variance than $V$.
+
+**A.** TRUE
+
+**B.** FALSE
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 4
+
+(cowplot::plot_grid(PMF_U, PMF_V, PMF_W, PMF_Y,
+  nrow = 1, labels = c("U ", "V ", "W", "Y "), label_size = 17
+))
+```
+
+#### iClicker Question
+
+Answer **TRUE** or **FALSE**:
+
+By only looking at the PMFs, $W$ has the highest variance amongst the four distributions.
+
+**A.** TRUE
+
+**B.** FALSE
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 3.5
+
+(cowplot::plot_grid(PMF_U, PMF_V, PMF_W, PMF_Y,
+  nrow = 1, labels = c("U ", "V ", "W", "Y "), label_size = 17
+))
+```
+
+#### iClicker Question
+
+Answer **TRUE** or **FALSE**:
+
+By only looking at the PMFs, $Y$ has the highest entropy amongst the four distributions.
+
+**A.** TRUE
+
+**B.** FALSE
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 3.5
+
+(cowplot::plot_grid(PMF_U, PMF_V, PMF_W, PMF_Y,
+  nrow = 1, labels = c("U ", "V ", "W", "Y "), label_size = 17
+))
+```
+
+## 2. Random Variable Transformations
+
+. . .
+
+<br>
+
+- A random variable can be turned into other random variables via mathematical transformations.
+- <span style="color: purple;">This characteristic is crucial in data modelling!</span>
+
+### 2.1.  Revisiting Variance
+
+<br>
+
+- We can compute the variance of a random variable $X$ in two forms:
+
+  1. $\text{Var}(X) =  \mathbb{E}\{[X - \mathbb{E}(X)]^2\}$, or alternatively
+  2. $\text{Var}(X) =  \mathbb{E}(X^2) - [\mathbb{E}(X)]^2$.
+
+#### Computing the Variance Using Crabs PMF for $X$
+
+![](images/crab.png){.absolute top="0" right="0" width="20%"}
+
+<br>
+
+**Method 1**
+
+\begin{align*}
+\text{Var}(X) &= \mathbb{E}\{[X - \mathbb{E}(X)]^2\} \\
+&= \mathbb{E}[(X - 1.5)^2] \qquad \qquad \text{since } \mathbb{E}(X) = 1.5 \\ 
+&= (-1.5)^2(0.4) + (-0.5)^2(0.1) + (0.5)^2(0.1) + (1.5)^2(0.4) \\ 
+&= 1.85.
+\end{align*}
+
+#### Now with the other approach...
+
+![](images/crab.png){.absolute top="0" right="0" width="20%"}
+
+<br>
+
+**Method 2**
+
+\begin{align*}
+\text{Var}(X) &= \mathbb{E}(X^2) - [\mathbb{E}(X)]^2 \\
+&= \mathbb{E}(X^2) - (1.5)^2 \qquad \qquad \text{since } \mathbb{E}(X) = 1.5 \\ 
+&= (0)^2(0.4) + (1)^2(0.1) + (2)^2(0.1) + (3)^2(0.4) - (1.5)^2 \\ 
+&= 1.85.
+\end{align*}
+
+### 2.2. Distribution Mapping
+
+![](images/crab.png){.absolute top="-80" right="30" width="20%"}
+
+<br>
+
+::: incremental
+- Following up with the crabs PMF, let us focus the attention on $\mathbb{E}(X^2)$. 
+- More specifically, what does $X^2$ mean?
+- It comes down to what we define in Statistics as a <span style="color: purple;">random variable transformation</span>.
+- We can rename $X^2$ as
+$$Z = X^2.$$
+:::
+
+#### Comparing PMFs
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+PMF_X <- PMF_X +
+  ggtitle("P(X)")
+
+PMF_Z <- tibble(z = 0:9, p = c(0.4, 0.1, 0, 0, 0.1, 0, 0, 0, 0, 0.4)) %>%
+  ggplot(aes(z, p)) +
+  geom_col(fill = "dodgerblue2") +
+  theme_bw() +
+  ylab("Probability") +
+  ylim(0, 0.5) +
+  theme(plot.title = element_text(size = 25, face = "bold"),
+    axis.text = element_text(size = 23),
+    axis.title = element_text(size = 23, face = "bold")) +
+  ggtitle("P(Z)") +
+  scale_x_continuous(breaks = 0:9)
+
+plot_grid(PMF_X, PMF_Z, nrow = 1)
+```
+
+### 2.3. Expected Value Properties
+
+- Expected values have certain useful properties. 
+- If $a$ and $b$ are constants, with $X$ and $Y$ as random variables, then we can obtain the expected value of the following expressions as:
+
+\begin{gather*}
+\mathbb{E}(a X) = a \mathbb{E}(X) \\
+\mathbb{E}(X + Y) = \mathbb{E}(X) + \mathbb{E}(Y) \\
+\mathbb{E}(aX + bY) = a\mathbb{E}(X) + b\mathbb{E}(Y).
+\end{gather*}
+
+#### Caution
+
+![](images/attention.png){.absolute top="-25" left="150" width="8%"}
+
+<br>
+
+::: incremental
+- The operator $\mathbb{E}(\cdot)$ does not follow the usual algebraic rules.
+- For instance, <span style="color: purple;">if no further assumptions are made for random variables $X$ and $Y$</span>, then
+$$\mathbb{E}(XY) \neq \mathbb{E}(X)\mathbb{E}(Y).$$
+- Moreover, note the following:
+$$\mathbb{E}(X^2) \neq [\mathbb{E}(X)]^2.$$
+:::
+
+### 2.3. Variance Properties
+
+- If $a$ and $b$ are constants, <span style="color: purple;"> with $X$ and $Y$ as independent random variables</span>, then we can obtain the variance of the following expressions as:
+
+\begin{gather*}
+\text{Var}(a X) = a^2 \text{Var}(X) \\
+\text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) \\
+\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y).
+\end{gather*}
+
+## 3. Distribution of Families
+
+<br>
+
+::: incremental
+- <span style="color: purple;">A huge component of Data Science is to model data as random variables with uncertain outcomes.</span> 
+- For instance:
+  + The number of ships that arrive at the port of Vancouver on a given day (i.e., a discrete and count random variable).
+  + A rock class (i.e., a discrete and categorical random variable).
+:::
+
+### 3.1. Bernoulli
+
+![](images/cards.png){.absolute top="-45" right="30" width="10%"}
+
+::: incremental
+- Suppose you play a game and win with probability $0 \leq p \leq 1$.
+- Let $X$ be the outcome of this game. It is a <span style="color: purple;">binary random variable</span> as follows
+$$ X =
+\begin{cases}
+1 \; \; \; \; \text{if you win the game (success)},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases} $$
+- The value $1$ has a probability of $p$, whereas the value $0$ has a probability of $1 - p$.
+:::
+
+#### PMF
+
+<br>
+
+- A <span style="color: purple;">Bernoulli distribution</span> is depicted as:
+$$X \sim \text{Bernoulli}(p).$$
+- Its PMF is
+$$P(X = x \mid p) = p^x (1 - p)^{1 - x} \quad \text{for} \quad x = 0, 1.$$
+
+#### Mean
+
+<br>
+
+. . .
+
+\begin{align*}
+\mathbb{E}(X) &= \sum_{x = 0}^1 x \cdot P(X = x \mid p) \\
+&= \sum_{x = 0}^1 x \cdot p^x (1 - p)^{1 - x} \\
+&= p.
+\end{align*}
+
+#### Variance
+
+<br>
+
+. . .
+
+\begin{align*}
+\text{Var}(X) &= \mathbb{E}(X^2) - [\mathbb{E}(X)]^2 \\
+&= \mathbb{E}(X^2) - p^2 \qquad \qquad \text{since } \mathbb{E}(X) = p \\ 
+&= \sum_{x = 0}^1 x^2 \cdot P(X = x \mid p) - p^2 \\ 
+&= p(1 - p).
+\end{align*}
+
+### 3.2. Binomial
+
+![](images/cards.png){.absolute top="-45" right="30" width="10%"}
+
+::: incremental
+- Suppose you play a game, and win with probability $0 \leq p \leq 1$. 
+- Let $X$ be the number of games you win within $n$  <span style="color: purple;">independent</span> games in total.
+- $X$ is said to have a <span style="color: purple;">Binomial distribution</span>, written as 
+$$X \sim \text{Binomial} (n, p).$$
+:::
+
+#### PMF
+
+- A Binomial distribution is characterized by the PMF 
+$$P \left( X = x \mid n, p \right) = {n \choose x} p^x (1 - p)^{n - x} \quad \text{for} \quad x = 0, 1, \dots, n.$$
+- The above PMF has the following component:
+$${n \choose x} = \frac{n!}{x!(n - x)!}.$$
+
+#### Example
+
+:::incremental
+- Let us derive the probability of winning exactly two games out of five.
+- I.e., $P(X = 2)$ when $n = 5$ and $p = 0.25$:
+\begin{align*}
+P(X = 2 \mid n = 5, p = 0.25) &= {5 \choose 2} (0.25)^2 (1 - 0.25)^{5 - 2} \\
+&= \frac{5!}{2!(5 - 2)!} (0.25)^2 (1 - 0.25)^{5 - 2} \\
+&= 0.26.
+\end{align*}
+:::
+
+#### Mean and Variance
+
+<br>
+
+$$\mathbb{E}(X) = n p$$
+
+$$\text{Var}(X) = n p (1 - p).$$
+
+### 3.3. Families Versus Distributions
+
+- Specifying a value for both $p$ and $n$ results in a unique Binomial distribution.
+
+```{r}
+#| echo: false
+#| fig-width: 8.25
+#| fig-height: 3.5
+
+PMF_Bin_5_0.25 <- tibble(x = 0:5, Probability = dbinom(x, size = 5, prob = 0.25)) %>% 
+  ggplot(aes(x, Probability)) +
+  geom_col(fill = "palegreen3") +
+  ggtitle("Binomial(n = 5, p = 0.25)") +
+  theme_bw() +
+  theme(plot.title = element_text(size = 23, face = "bold"),
+    axis.text = element_text(size = 21),
+    axis.title = element_text(size = 21, face = "bold")) +
+  scale_x_continuous(breaks = 0:5)
+
+PMF_Bin_5_0.25
+```
+
+. . .
+
+- There are, in fact, <span style="color: purple;">infinite Binomial distributions</span>.
+
+### 3.4. Parameters
+
+::: incremental
+- Since $p$ and $n$ fully specify a Binomial distribution, we call them <span style="color: purple;">parameters</span> of the Binomial family.
+- We call the Binomial family a <span style="color: purple;">parametric family</span> of distributions. 
+:::
+
+![](images/people.png){fig-align="center" width=40%}
+
+### 3.5. Parameterization
+
+<br>
+
+::: incremental
+- Which variables we decide to use to identify a distribution within a family is called the family's <span style="color: purple;">parameterization</span>.
+- Parameterization will depend on the information you can more easily obtain.
+:::
+
+## 4. Another Common Discrete Distribution Families
+
+<br>
+
+- Aside from the Binomial family of distributions, many other families come up in data modelling.
+- In practice, distribution families still act as useful approximations.
+
+### 4.1. Geometric
+
+![](images/cards.png){.absolute top="-45" right="30" width="10%"}
+
+::: incremental
+- Suppose you play a game, and win with probability $0 \leq p \leq 1$. 
+- Let $X$ be the number of <span style="color: purple;">independent</span> failures before the first <span style="color: purple;">independent</span> success.
+- $X$ is said to have a <span style="color: purple;">Geometric distribution</span>, written as 
+$$X \sim \text{Geometric} (p).$$
+:::
+
+#### PMF
+
+<br>
+
+- A Geometric distribution is characterized by the PMF 
+$$P(X = x \mid p) = p (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots$$
+- Since there is only one parameter, this means that if you know the mean, you also know the variance!
+- It has an <span style="color: purple;">infinite support</span>.
+
+#### Mean and Variance
+
+<br>
+
+$$\mathbb{E}(X) = \frac{1 - p}{p}$$
+
+$$\text{Var}(X) = \frac{1 - p}{p^2}.$$
+
+### 4.2. Negative Binomial (a.k.a. Pascal)
+
+![](images/cards.png){.absolute top="-45" right="30" width="10%"}
+
+::: incremental
+- Suppose you play a game, and win with probability $0 \leq p \leq 1$. 
+- Let $X$ be the number of <span style="color: purple;">independent</span> losses at playing the game before experiencing $k$ <span style="color: purple;">independent</span> wins.
+- $X$ is said to have a <span style="color: purple;">Negative Binomial distribution</span>, written as 
+$$X \sim \text{Negative Binomial} (k, p).$$
+:::
+
+#### PMF
+
+<br>
+
+- A Negative Binomial distribution is characterized by the PMF 
+$$P(X = x \mid k, p) = {k - 1 + x \choose x} p^k (1 - p)^x  \quad \text{for} \quad x = 0, 1, \dots$$
+- It has two parameters: $k$ and $p$.
+- The Geometric family results with $k = 1$.
+
+#### Mean and Variance
+
+<br>
+
+$$\mathbb{E}(X) = \frac{k(1 - p)}{p}$$
+
+$$\text{Var}(X) = \frac{k(1 - p)}{p^2}.$$
+
+### 4.3. Poisson
+
+![](images/count.png){.absolute top="-45" right="30" width="30%"}
+
+<br>
+
+::: incremental
+- Suppose customers independently arrive at a store at some average rate $\lambda$.
+- Then, the total number $X$ of customers arriving after a pre-specified length of time follows a <span style="color: purple;">Poisson distribution</span>:
+$$X \sim \text{Poisson} (\lambda).$$
+:::
+
+#### PMF
+
+::: incremental
+- We can find other examples that are indicative of a <span style="color: purple;">Poisson process</span>:
+  + The <span style="color: purple;">number of ships</span> arriving at Vancouver port <span style="color: purple;">on a given day</span>.
+  + The <span style="color: purple;">number of emails</span> you receive <span style="color: purple;">on a given day</span>.
+- A Poisson distribution is characterized by the PMF
+$$P(X = x \mid \lambda) = \frac{\lambda^x \exp(-\lambda)}{x!}  \quad \text{for} \quad x = 0, 1, \dots$$
+:::
+
+#### Mean and Variance
+
+<br>
+
+$$\mathbb{E}(X) = \lambda$$
+
+$$\text{Var}(X) = \lambda.$$
+
+. . .
+
+- A notable property of this family is that <span style="color: purple;">the mean is equal to the variance</span>!
+
+### 4.5. Finally, let us check this mindmap...
+
+<p align="center">
+<img src="https://mermaid.ink/img/pako:eNp1U9tu2zAM_RVBTw7gpr608QVDH9pie9owbNgQDH5RZDolZkmGLlkyI_8-OUrXbo35IEg8FA_JI42UqxZoTQXKVrChkYRopWz0TeKOaWQWyOQj5AuTrRJh_31CNj0swvERDddgIZwmq2vkSkYdM6RjV_Zp8QLdo2T6MBfaIocr-0u9ujDZOK4JGsKIcZyDMURp8m6jr-86hr3TcDz-Gz_Z4h60VK7vMXoBH5STdo7cGdDmAnMgBUNQBlZJrB9Aby7TolTCo9H_id6jNvZvB6yzcG5iTc5tXE74AZQAT8ijt6U9XwyJNtApDQT2A2gEyVFuJ6Bp7t6m_flcyQzrJ9gyizsgs_2sCexA2jO3nw0jHe6h9WPyre1YHwDVEYsCJsnMwPhlrT4rNMYrEaAHJS1Kp5yZk0q7HvRZqrDSmArQgmHrX_M4-Rpqn0BAQ2u_baFjrrcNbeTRhzJn1deD5LS22kFM3dD6p_6IbKuZoHXnxfXegUlaj3RP6zS7Wd7cplWySsukzPNkFdMDrbMqW2ZFlXtfucqKvDrG9LdSPkOyXBVZVqRJmme3VVkWRUyhRav0x_DhTv_uRPHjdGGq4_gH7PkJGw?type=png)](https://mermaid.live/edit#pako:eNp1U9tu2zAM_RVBTw7gpr608QVDH9pie9owbNgQDH5RZDolZkmGLlkyI_8-OUrXbo35IEg8FA_JI42UqxZoTQXKVrChkYRopWz0TeKOaWQWyOQj5AuTrRJh_31CNj0swvERDddgIZwmq2vkSkYdM6RjV_Zp8QLdo2T6MBfaIocr-0u9ujDZOK4JGsKIcZyDMURp8m6jr-86hr3TcDz-Gz_Z4h60VK7vMXoBH5STdo7cGdDmAnMgBUNQBlZJrB9Aby7TolTCo9H_id6jNvZvB6yzcG5iTc5tXE74AZQAT8ijt6U9XwyJNtApDQT2A2gEyVFuJ6Bp7t6m_flcyQzrJ9gyizsgs_2sCexA2jO3nw0jHe6h9WPyre1YHwDVEYsCJsnMwPhlrT4rNMYrEaAHJS1Kp5yZk0q7HvRZqrDSmArQgmHrX_M4-Rpqn0BAQ2u_baFjrrcNbeTRhzJn1deD5LS22kFM3dD6p_6IbKuZoHXnxfXegUlaj3RP6zS7Wd7cplWySsukzPNkFdMDrbMqW2ZFlXtfucqKvDrG9LdSPkOyXBVZVqRJmme3VVkWRUyhRav0x_DhTv_uRPHjdGGq4_gH7PkJGw" width="80%" height="30%">
+</p>

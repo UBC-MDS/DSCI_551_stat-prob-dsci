@@ -1,7 +1,7 @@
 Welcome to DSCI 551: Descriptive Statistics and Probability for Data Science
 ============================
 
-This course introduces descriptive statistics and probability, including measures of location and spread, random variables, distributions, parameters, categorical variables, and uncertainty.
+DSCI 551 introduces descriptive statistics and probability, including measures of location and spread, random variables, distributions, parameters, categorical variables, and uncertainty.
 
 ## High-Level Goals
 
@@ -15,34 +15,33 @@ By the end of the course, students are expected to:
 - Compute summary statistics, such as expected value and variance, of simple discrete and continuous probability distributions.
 - Compare/contrast location summary statistics such as mean/median/mode/quantiles.
 - Estimate summary statistics such as mean/median/variance from a plot of a distribution's PDF or CDF.
-- Identify common continuous distributions such as Gaussian/Poisson/uniform from a plot of a distribution's PDF or CDF.
-- Match common discrete distributions such as Bernoulli/binomial/multinomial to descriptions.
+- Identify common continuous distributions such as Normal/Poisson/Uniform from a plot of a distribution's PDF or CDF.
+- Match common discrete distributions such as Bernoulli/Binomial to descriptions.
 - Compare/contrast conditional, joint and marginal distributions. 
 - Explain the notion of "marginalizing out" a random variable.
 - Identify independence between random variables from plots/tables of conditional/joint/marginal distributions.
-- Connect conditional distributions to the notion of supervised learning.
 - Explain the concept of maximum likelihood estimation.
 - Identify the units of various quantities such as mean/variance/density for continuous distributions.
 - Simulate sample generation from probability distributions, and interpret the results.
 
 ## Lecture Topics
 
-This course occurs during **Block 1** in the 2024/25 school year. The course notes can be accessed [**here**](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci_students/README.html).
+This course occurs during **Block 1** in the school year.
 
 | Lecture Topic/Notes | Required Readings | Optional Readings |
 |:-------------------------------------------------------------:|:-------------------:|:-------------------:|
-| Depicting Uncertainty | [`lecture1` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/01_lecture-uncertainty.html) | [Part 1: Core Probability](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability/)|
-| Parametric Families | [`lecture2` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/02_lecture-parametric-families.html) |  [Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
-| Joint Probability | [`lecture3` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/03_lecture-joint.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.1](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf), [Covariance and correlation (video)](https://www.youtube.com/watch?v=KDw3hC2YNFc), [How would you explain covariance ...](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean) |
-| Conditional Probabilities | [`lecture4` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/04_lecture-conditional.html) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.3](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
-| Continuous Distributions | [`lecture5` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/05_lecture-continuous.html) |[Chapter 4](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
-| Common Distribution Families and Conditioning | [`lecture6` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/06_lecture-continuous-families.html) |[Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
-| Maximum Likelihood Estimation | [`lecture7` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/07_lecture-maximum-likelihood-estimation.html)| [Part 5: Machine Learning](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/parameter_estimation/),[Beyond Multiple Linear Regression, sections 2.1 to 2.4](https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html#sex_unconditional_model), [Chapter 7.1 & 7.2](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
-| Simulation and Empirical Distributions | [`lecture8` notes](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/08_lecture-simulation.html) |[Chapter 9: Applications to Computing](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
+| Depicting Uncertainty | [`lecture1` notes](notes/01_lecture-uncertainty.qmd) | [Part 1: Core Probability](https://chrispiech.github.io/probabilityForComputerScientists/en/part1/probability/)|
+| Parametric Families | [`lecture2` notes](notes/02_lecture-parametric-families.qmd) |  [Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
+| Joint Probability | [`lecture3` notes](notes/03_lecture-joint.qmd) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.1](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf), [Covariance and correlation (video)](https://www.youtube.com/watch?v=KDw3hC2YNFc), [How would you explain covariance ...](https://stats.stackexchange.com/questions/18058/how-would-you-explain-covariance-to-someone-who-understands-only-the-mean) |
+| Conditional Probabilities | [`lecture4` notes](notes/04_lecture-conditional.qmd) | [Part 3: Probabilistic Models](https://chrispiech.github.io/probabilityForComputerScientists/en/part3/joint/), [Chapter 5.3](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
+| Continuous Distributions | [`lecture5` notes](notes/05_lecture-continuous.qmd) |[Chapter 4](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
+| Common Distribution Families and Conditioning | [`lecture6` notes](notes/06_lecture-continuous-families.qmd) |[Part 2: Random Variables](https://chrispiech.github.io/probabilityForComputerScientists/en/part2/rvs/)|
+| Maximum Likelihood Estimation | [`lecture7` notes](notes/07_lecture-maximum-likelihood-estimation.qmd) | [Part 5: Machine Learning](https://chrispiech.github.io/probabilityForComputerScientists/en/part5/parameter_estimation/),[Beyond Multiple Linear Regression, sections 2.1 to 2.4](https://bookdown.org/roback/bookdown-BeyondMLR/ch-beyondmost.html#sex_unconditional_model), [Chapter 7.1 & 7.2](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf) |
+| Simulation and Empirical Distributions | [`lecture8` notes](notes/08_lecture-simulation.qmd) |[Chapter 9: Applications to Computing](https://www.alextsun.com/files/Prob_Stat_for_CS_Book.pdf)|
 
 ## Cheat sheet
 
-[**Here**](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/notes/appendix-prob-cheatsheet.html) is a cheat sheet we created to summarize the main formulas and concepts covered in DSCI 551.
+[**Here**](notes/appendix-dist-cheatsheet.qmd) is a cheat sheet we created to summarize the main formulas and concepts covered in DSCI 551.
 
 ## Deliverables
 
@@ -57,6 +56,15 @@ This is an **assignment-based course**. The following deliverables will determin
 | Quiz 1           | 25%     |
 | Quiz 2           | 25%     |
 | Lecture Attendance ([iClicker](https://student.iclicker.com/#/login))   | 2%     |
+
+### Lab Topics and Due Dates
+
+|      | **Lab Topic**        |
+| :---:| :---:            |
+| **1**    | Depicting Uncertainty and Parametric Families (Lectures 1 and 2) |
+| **2**    | Joint and Conditional Probabilities (Lectures 3 and 4) |
+| **3**    | Continuous Distribution Families (Lectures 5 and 6) |
+| **4**    | Maximum Likelihood Estimation and Simulation (Lectures 7 and 8) |
 
 ## Use of LLMs
 
@@ -86,6 +94,6 @@ The course is built upon previous years' materials developed by previous instruc
 
 ## License
 
-© 2024 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, and Vincent Liu.
+© 2025 Vincenzo Coia, Mike Gelbart, Aaron Berk, Alexi Rodríguez-Arelis, Katie Burak, Vincent Liu, and Andy Tai.
 
 Software licensed under [the MIT License](https://spdx.org/licenses/MIT.html), non-software content licensed under [the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](https://creativecommons.org/licenses/by-nc-sa/4.0/). See the [license file](LICENSE.md) for more information.
