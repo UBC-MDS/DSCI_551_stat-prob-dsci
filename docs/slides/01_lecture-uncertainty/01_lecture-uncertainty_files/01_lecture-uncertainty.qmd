@@ -1,0 +1,657 @@
+---
+title: "Depicting Uncertainty"
+subtitle: "Lecture 1"
+format:
+  revealjs: 
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/UBC_MDS_logo.png
+    css: styles.css
+    footer: DSCI 551 - Descriptive Statistics and Probability for Data Science
+    slide-level: 4
+---
+
+# Hello and welcome!
+
+::: {.fragment .fade-left}
+::: {#fig-team layout-ncol="2"}
+
+![<a href="https://andytai7.github.io/Andy-Tai/">Andy Man Yeung Tai</a>](images/photo_andy.jpg){width=220}
+
+![<a href="https://alexrod.netlify.app/">G. Alexi Rodríguez-Arelis</a>](images/photo_alexi.jpg){width=220}
+
+Teaching team for **sections 1** (*Andy Man Yeung Tai*) and **2** (*G. Alexi Rodríguez-Arelis*).
+:::
+:::
+
+# DSCI 551 Specifics
+
+## High-Level Goals
+
+<br>
+
+-   Provide fundamental concepts in probability, including conditional, joint, and marginal distributions.
+-   Develop a statistical view of data coming from a probability distribution.
+
+## Course Essentials
+
+<br>
+
+-   **Eight** lectures (non-graded), **four** labs (graded), and **two** PrairieLearn-based quizzes (graded).
+-   MDS general policies can be found [**here**](https://ubc-mds.github.io/policies/).
+
+. . .
+
+-   Course content/logistics can be found in the [**GitHub repo**](https://github.ubc.ca/MDS-2025-26/DSCI_551_stat-prob-dsci_students).
+-   There is a handy cheatsheet you can find [**here**](https://pages.github.ubc.ca/mds-2025-26/DSCI_551_stat-prob-dsci_students/notes/appendix-prob-cheatsheet.html).
+-   We will mostly use `R` in lectures and labs (except for `lecture8` on **Monte Carlo simulation** which will be delivered in `Python` and `R`).
+
+## Lecture Overview
+
+<br>
+
+-   You are required to do **some reading in advance** (except for `lecture1`).
+-   We have a rendered a **Quarto website** which you can find [**here**](https://pages.github.ubc.ca/mds-2025-26/DSCI_551_stat-prob-dsci_students).
+-   **iClicker** will be used for active learning via in-class activities beginning `lecture2`.
+
+## Lab Overview
+
+<br>
+
+-   Each cohort will be split in two sections: 
+    * `L01` and `L02` for **section 1**.
+    * `L03` and `L04` for **section 2**.
+-   Handouts to be submitted as **`R` markdowns** via **Gradescope**.
+-   Labs will have auto-graded questions.
+
+## Communication
+
+<br>
+
+-   We will use the course's **Slack channel** for your corresponding section.
+-   Try to post all your course general inquiries on your corresponding channel.
+
+> **Addressing your course related-questions can also be helpful for your classmates!**
+
+# Today's Learning Goals
+
+## By the end of this lecture, we will be able to...
+
+-   Identify probability as a proportion that converges to the truth as you collect more data.
+-   Calculate probabilities using the Inclusion-Exclusion Principle, the Law of Total Probability, and probability distributions.
+-   Convert between and interpret odds and probability.
+
+## And...
+
+-   Specify the usefulness of odds over probability.
+-   Be aware that probability has multiple interpretations/philosophies.
+-   Calculate and interpret mean, mode, entropy, variance, and standard deviation, mainly from a distribution.
+
+# Outline
+
+1.  Thinking About of Probability
+2.  Probability Distributions
+3.  Measures of Central Tendency and Uncertainty
+
+## 1. Thinking About of Probability
+
+- <span style="color: purple;">Probability</span> is recurring throughout different Data Science-related topics.
+- In MDS, you will find it in either the Statistics or Machine Learning courses.
+
+![Mexican Lotería (photo by <a href="https://unsplash.com/@irvinmac?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">irvin Macfarland</a> on <a href="https://unsplash.com/photos/clelay10tfg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>).](images/loteria.jpg){width="400" height="250"}
+
+### 1.1. Defining Probability
+
+<br>
+
+Let $A$ be an event of interest, its probability is denoted as 
+$$P(A) = \frac{\text{Number of times event $A$ is observed}}{\text{Total number of events observed}}$$
+
+**as the *total number of events observed* goes to infinity**.
+
+#### The Coin Toss
+
+::: incremental
+- Frequentist Statistics is the mainstream approach we learn in introductory courses.
+- Let us illustrate the frequentist paradigm idea with the typical coin toss example.
+
+![](images/coin_toss.png){fig-align="center" width=30%}
+
+:::
+
+#### System Insights
+
+The coin toss represents our <span style="color: purple;">system</span> for which we assume two possible <span style="color: purple;">random outcomes</span>:
+
+\begin{gather*}
+H = \{ \text{Getting heads} \} \\
+T = \{ \text{Getting tails} \}.
+\end{gather*}
+
+. . .
+
+Our system has the following <span style="color: purple;">parameters of interest</span>:
+
+\begin{gather*}
+P(H) = \text{Probability of getting heads} \\
+P(T) = \text{Probability of getting tails}.
+\end{gather*}
+
+#### Probabilistic Inquiries
+
+<br>
+
+Suppose this coin is unfair, i.e.,
+$$P(H) \neq P(T) \neq \frac{1}{2};$$
+
+. . .
+
+and we want to <span style="color: purple;">estimate</span> these two <span style="color: purple;">unknown</span> probabilities!
+
+#### Now, think about the following questions:
+
+<br>
+
+::: incremental
+a. How would you <span style="color: purple;">estimate</span> these two <span style="color: purple;">unknown probabilities</span>?
+b. What are the characteristics of these two <span style="color: purple;">estimated probabilities</span>?
+
+![](images/coin_toss.png){fig-align="center" width=30%}
+:::
+
+#### Answers
+
+<br>
+
+::: incremental
+a. Tossing the coin a given number of times $n$ and obtaining the proportions for both $H$ and $T$.
+b. Ideally, they will more <span style="color: purple;">accurate</span> and <span style="color: purple;">precise</span> as $n$ tends to infinity.
+
+![](images/coin_toss.png){fig-align="center" width=30%}
+:::
+
+### 1.2. Calculating Probabilities using Laws
+
+<br>
+
+::: incremental
+- Let us start with two fundamental laws that will allow us to exercise our probabilistic reasoning:
+  * **Law of Total Probability**.
+  * **Inclusion-Exclusion Principle**.
+:::
+
+#### Sample Space ($S$)
+
+. . .
+
+- It is the collection of all the possible outcomes of a <span style="color: purple;">random process or system</span>. 
+
+. . .
+
+
+- <span style="color: purple;">Each one of these outcomes has a probability associated with it.</span>
+- Note that 
+$$P(S) = 1.$$
+
+#### Law of Total Probability
+
+::: incremental
+- Breaks down the sample space $S$ of a random process or system into disjoint parts.
+- We can obtain specific probabilities based on <span style="color: purple;">sample space partitions</span>.
+
+![](images/jigsaw-puzzle.jpg){fig-align="center" width=40%}
+:::
+
+#### The Mario Kart Example
+
+:::{style="font-size: 30px;"}
+|Item | Name | Probability| Combat Type  | Defeats Blue Shells |
+|:---:|:-------:|:----------:|:------:|:---------:|
+| ![](images/banana.png){height="40"} | Banana  |     0.12| contact | no |
+| ![](images/bobomb.png){height="40"} | Bob-omb |     0.05| explosion  | no |
+| ![](images/coin.png){height="40"}   | Coin    |     0.75| ineffective | no |
+| ![](images/horn.png){height="40"}   | Horn    |     0.03| explosion | yes |
+| ![](images/shell.png){height="40"}  | Shell   |     0.05| contact | no |
+
+> **Attribution:** Images from [pngkey](https://www.pngkey.com/detail/u2w7e6o0i1q8i1y3_randome-clipart-mario-kart-mario-kart-8-deluxe/).
+:::
+
+#### Now, think about the following questions:
+
+. . .
+
+1. Are there any other items possible? Why or why not?
+2. What is the probability of getting something other than a coin?
+
+![](images/panda.png){fig-align="center" width=30%}
+
+#### Answers
+
+. . .
+
+1. We use the concept of the sample space:
+
+$$1 = P(\text{Banana}) + P(\text{Bob-omb}) + P(\text{Coin}) + P(\text{Horn}) + P(\text{Shell}).$$
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 3.5
+library(treemapify)
+library(tidyverse)
+
+item_box_prob <- tibble(
+  item = c("Banana", "Bob-omb", "Coin", "Horn", "Shell"),
+  defeat = c(rep("no", 3), "yes", "no"),
+  prob = c(0.12, 0.05, 0.75, 0.03, 0.05)
+)
+
+ggplot(item_box_prob, aes(
+  area = prob, fill = item,
+  label = paste(item, prob, sep = "\n")
+)) +
+  geom_treemap() +
+  geom_treemap_text(
+    colour = "white",
+    place = "centre",
+    size = 14
+  ) +
+  theme(legend.position = "none") +
+  scale_fill_brewer(palette = "Dark2") +
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+  ) +
+  ggtitle("Partition of the Sample Space S for the Outcome of the Item Box")
+```
+
+#### And...
+
+. . .
+
+2. We use another probability concept called the <span style="color: purple;">complement</span> of an event (check the below  <span style="color: purple;">Venn diagram</span>):
+$$P(\text{Coin}^c) = 1 - P(\text{Coin}) = 1 - 0.75 = 0.25.$$
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 3
+
+library(eulerr)
+coin_venn <- euler(c("Coin" = 0.75))
+
+plot(coin_venn,
+  quantities = list(fontsize = 16), fills = "lightskyblue",
+  labels = list(cex = 1.2),
+  main = "\n Sample Space S of an Item Box"
+)
+```
+
+#### Inclusion and Exclusion Principle
+
+. . .
+
+- Let $A$ and $B$ be two events of interest in the sample space $S$:
+$$P(A \cup B) = P(A) + P(B) - P(A \cap B).$$
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 3.5
+
+AB_venn <- euler(c("A" = 0.75, "B" = 0.75, "A&B" = 0.1))
+
+plot(AB_venn,
+  quantities = FALSE,
+  fills = c("rosybrown1", "lightsteelblue1"),
+  labels = list(cex = 1.2),
+  main = "\n Sample Space S"
+)
+```
+
+#### Extension to Three Events
+
+. . .
+
+- Let $A$, $B$, and $C$ be three events of interest in the sample space $S$:
+\begin{align*}
+P(A \cup B \cup C) &= P(A) + P(B) + P(C) - P(A \cap B) - P(B \cap C) \\
+& \qquad - P(A \cap C) + P(A \cap B \cap C)
+\end{align*}
+
+```{r}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 2.7
+
+ABC_venn <- euler(c(
+  "A" = 0.75, "B" = 0.75, "C" = 0.75,
+  "A&B" = 0.1, "A&C" = 0.1, "B&C" = 0.1,
+  "A&B&C" = 0.1
+))
+
+plot(ABC_venn,
+  quantities = FALSE, 
+  fills = c("rosybrown1", "lightsteelblue1", "moccasin"),
+  labels = list(cex = 1.2),
+  main = "\n Sample Space S"
+)
+```
+
+#### Now, let us answer the following questions:
+
+. . .
+
+3. Using the below table, what is the probability of getting an item with an explosion combat type (event $E$)?
+
+:::{style="font-size: 17px;"}
+|Item | Name | Probability| Combat Type  | Defeats Blue Shells |
+|:---:|:-------:|:----------:|:------:|:---------:|
+| ![](images/banana.png){height="40"} | Banana  |     0.12| contact | no |
+| ![](images/bobomb.png){height="40"} | Bob-omb |     0.05| explosion  | no |
+| ![](images/coin.png){height="40"}   | Coin    |     0.75| ineffective | no |
+| ![](images/horn.png){height="40"}   | Horn    |     0.03| explosion | yes |
+| ![](images/shell.png){height="40"}  | Shell   |     0.05| contact | no |
+
+> **Attribution:** Images from [pngkey](https://www.pngkey.com/detail/u2w7e6o0i1q8i1y3_randome-clipart-mario-kart-mario-kart-8-deluxe/).
+:::
+
+#### Mutually Exclusive (or Disjoint) Events
+
+. . .
+
+- Two events are mutually exclusive (or disjoint) <span style="color: purple;">if they cannot happen at the same time</span> in the sample space $S$:
+
+$$
+P(A \cup B) = P(A) + P(B) - \underbrace{P(A \cap B)}_{0} = P(A) + P(B).
+$$
+
+```{r}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 2.5
+
+ABC_venn <- euler(c(
+  "A" = 0.75, "B" = 0.75
+))
+
+plot(ABC_venn,
+  quantities = FALSE, 
+  fills = c("rosybrown1", "lightsteelblue1"),
+  labels = list(cex = 1.2),
+  main = "\n Sample Space S"
+)
+```
+
+#### Answer
+
+. . .
+
+We can compute this probability by adding up the following probabilities:
+
+$$P(E) = P(\text{Bob-omb}) + P(\text{Horn}) = 0.05 + 0.03 = 0.08.$$
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 3
+
+q3_venn <- euler(c("Bob-omb" = 0.05, "Horn" = 0.03))
+
+plot(q3_venn,
+  quantities = list(fontsize = 16), fills = c(
+    "thistle1",
+    "lightyellow"
+  ),
+  labels = list(cex = 1.5),
+  main = "\n Sample Space S of an Item Box"
+)
+```
+
+#### Then...
+
+. . .
+
+4. What is the probability of getting an item that is both an explosion item (event $E$) and defeats blue shells (event $D$)?
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 4.5
+
+q4_venn <- euler(c("E" = 0.08, "E&D" = 0.03))
+
+plot(q4_venn,
+  quantities = list(fontsize = 16), fills = c("lightskyblue", "khaki1"),
+  labels = list(cex = 1.5),
+  main = "\n Sample Space S of an Item Box "
+)
+```
+
+#### Answer
+
+<br>
+
+. . .
+
+This probability can be obtained as
+
+$$P(E \cap D) = P(\text{Horn}) = 0.03.$$
+
+This intersection is actually equal to the probability of getting a Horn.
+
+#### Finally...
+
+. . .
+
+5. What is the probability of getting an item that is an explosion item (event $E$) or an item that defeats blue shells (event $D$)?
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 4.2
+
+plot(q4_venn,
+  quantities = list(fontsize = 16), fills = c("lightskyblue", "khaki1"),
+  labels = list(cex = 1.5),
+  main = "\n Sample Space S of an Item Box "
+)
+```
+
+#### Answer
+
+<br>
+
+. . .
+
+By the Inclusion-Exclusion Principle, we have that
+
+\begin{align*}
+P(E \cup D) &= P(E) + P(D) - P(E \cap D) \\
+&= 0.08 + 0.03 - 0.03 \\
+&= 0.08.
+\end{align*}
+
+#### Independent Events
+
+<br>
+
+::: incremental
+- Two events are independent <span style="color: purple;">if the occurrence of one of them does not affect the probability of the other</span>. 
+- Their intersection is defined as:
+$$P(A \cap B) = P(A) \cdot P(B).$$
+:::
+
+### 1.3. Comparing Probabilities
+
+<br>
+
+::: incremental
+- We might be interested in <span style="color: purple;">comparing two probabilities</span>.
+- Suppose an event has a probability $p$ of happening. 
+:::
+
+#### The Odds
+
+::: incremental
+- The <span style="color: purple;">odds</span> $o$ are defined as the ratio of this probability to the probability of not happening $1 - p$:
+$$o = \frac{p}{1 - p}.$$
+- With some algebraic rearrangements, we can obtain $p$ with the odds:
+$$p = \frac{o}{o+1}.$$
+:::
+
+#### Example
+
+::: incremental
+- If you win 80% of the times at solitaire, i.e., $p = 0.8$; then your odds are:
+$$o = \frac{p}{1 - p} = \frac{0.8}{0.2} = 4$$
+- This is sometimes written as 4:1 odds -- that is, *four wins for every loss*.
+
+![](images/cards.png){fig-align="center" width=10%}
+:::
+
+## 2. Probability Distributions
+
+<br>
+
+::: incremental
+- A <span style="color: purple;">probability distribution</span> is the set of all outcomes and their corresponding probabilities. 
+- The outcome itself, which is uncertain, is called a <span style="color: purple;">random variable</span>; e.g.,
+$$X = \text{Number of customers standing in line at a bank branch.}$$
+:::
+
+### Types of Random Variables
+
+<br>
+
+In general, random variables are classified as:
+
+<br>
+
+::: incremental
+- <span style="color: purple;">Continuous:</span> it can take on a set of uncountable outcomes.
+- <span style="color: purple;">Discrete:</span> it can take on a set of countable outcomes.
+:::
+
+::: {.fragment .fade-left}
+> **Heads-up:** A continuous random variable has a <span style="color: purple;">probability density function (PDF)</span>, whereas a discrete has a <span style="color: purple;">probability mass function (PMF)</span>.
+:::
+
+#### Example of a Discrete and Categorical Random Variable
+
+. . .
+
+$$Y = \text{Item obtained from the box.}$$
+
+:::{style="font-size: 20px;"}
+|Item | $Y$ | Probability|
+|:---:|:-------:|:----------:|
+| ![](images/banana.png){height="40"} | Banana  |     0.12|
+| ![](images/bobomb.png){height="40"} | Bob-omb |     0.05|
+| ![](images/coin.png){height="40"}   | Coin    |     0.75|
+| ![](images/horn.png){height="40"}   | Horn    |     0.03|
+| ![](images/shell.png){height="40"}  | Shell   |     0.05|
+
+> **Attribution:** Images from [pngkey](https://www.pngkey.com/detail/u2w7e6o0i1q8i1y3_randome-clipart-mario-kart-mario-kart-8-deluxe/).
+:::
+
+#### Example of a Discrete and Count Random Variable
+
+. . .
+
+$$C = \text{Length of ship stay in days.}$$
+
+| $C$ | Probability |
+|:---:|:------:|
+| 1 | 0.25 |
+| 2 | 0.50 |
+| 3 | 0.15 |
+| 4 | 0.10 |
+
+## 3. Measures of Central Tendency and Uncertainty
+
+::: incremental
+- These measures summarize the information of a probability distribution.
+- They are subset as:
+  + <span style="color: purple;">Central tendency:</span> a "typical" value in a random variable.
+  + <span style="color: purple;">Uncertainty:</span> a measure of how "spread" the random variable is.
+:::
+
+
+### 3.1. Mode and Entropy in Discrete Random Variables
+
+::: incremental
+- Both measures apply to all classes of discrete random variables.
+- The <span style="color: purple;">mode</span> is a measure of central tendency. It is the outcome having the highest probability.
+:::
+
+#### The Entropy
+
+- It is a measure of uncertainty defined as
+
+$$H(Y) = -\displaystyle \sum_y P(Y = y)\log[P(Y = y)].$$
+
+::: incremental
+- It is a nonnegative measure of uncertainty.
+- <span style="color: purple;"> If its value is equal to zero, then there is no randomness. </span>
+:::
+
+#### Example
+
+- What is the mode for $Y = \text{Item obtained from the box}$?
+
+:::{style="font-size: 22px;"}
+|Item | $Y$ | Probability|
+|:---:|:-------:|:----------:|
+| ![](images/banana.png){height="40"} | Banana  |     0.12|
+| ![](images/bobomb.png){height="40"} | Bob-omb |     0.05|
+| ![](images/coin.png){height="40"}   | Coin    |     0.75|
+| ![](images/horn.png){height="40"}   | Horn    |     0.03|
+| ![](images/shell.png){height="40"}  | Shell   |     0.05|
+
+> **Attribution:** Images from [pngkey](https://www.pngkey.com/detail/u2w7e6o0i1q8i1y3_randome-clipart-mario-kart-mario-kart-8-deluxe/).
+:::
+
+#### How About the Entropy?
+
+. . .
+
+<br>
+
+\begin{align*}
+H(Y) &= -\displaystyle \sum_y P(Y = y)\log[P(Y = y)] \\
+&= -[0.12 \log(0.12) + 0.05 \log(0.05) + \\
+& \qquad \quad 0.75 \log(0.75) + 0.03 \log(0.03) + 0.05 \log(0.05)] \\
+&= 0.87
+\end{align*}
+
+### 3.2. Mean and Variance
+
+. . .
+
+<br>
+
+- Both measures apply to both discrete and continuous random variables (as long as they are <span style="color: purple;">numeric</span>!).
+
+#### The Mean
+
+- It is a measure of central tendency.
+
+. . .
+
+- If $X$ is discrete, with $P(X = x)$ as a PMF, then
+$$\mathbb{E}(X) = \displaystyle \sum_x x \cdot P(X = x).$$
+- If $X$ is continuous, with $f_X(x)$ as a PDF, then 
+$$\mathbb{E}(X) = \displaystyle \int_x x \cdot f_X(x)  \text{d}x.$$
+
+#### The Variance
+
+<br>
+
+- It is a measure of uncertainty.
+
+. . .
+
+$$\text{Var}(X) = \mathbb{E}\{[X - \mathbb{E}(X)]^2\} = \mathbb{E}(X^2) - [\mathbb{E}(X)]^2.$$
+
+- Note it is an expectation (specifically, <span style="color: purple;">the squared deviation from the mean</span>).

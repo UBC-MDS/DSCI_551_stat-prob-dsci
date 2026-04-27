@@ -1,0 +1,933 @@
+---
+title: "Lecture 8"
+subtitle: "Simulation"
+format: 
+  live-revealjs:
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/UBC_MDS_logo.png
+    css: styles.css
+    footer: DSCI 551 - Descriptive Statistics and Probability for Data Science
+    slide-level: 4
+engine: knitr
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# A quick overview before our last lecture!
+
+## How to deal with uncertainty?
+
+![](images/slot-machine.jpg){.absolute .fragment top="300" right="80" width="35%"}
+
+::: incremental
+-   So far, we have seen [different tools]{style="color: purple;"} to communicating an uncertain outcome (i.e., a [random variable]{style="color: purple;"}):
+
+    -   Probability mass or density function.
+    -   Odds.
+    -   Mode.
+    -   Entropy.
+    -   Mean.
+    -   Variance/standard deviation.
+:::
+
+### However...
+
+-   Sometimes, it is [difficult]{style="color: purple;"} to compute them.
+-   In these situations, we can use [simulation]{style="color: purple;"}.
+
+![](images/panda.png){fig-align="center" width="25%"}
+
+![](images/code.png){.absolute .fragment top="200" right="280" width="10%"}
+
+-   Note this lecture will be conducted in `R` and `Python`.
+
+# Today's Learning Goals
+
+## By the end of this lecture, we will be able to...
+
+-   Generate a random sample from a discrete distribution in both `R` and `Python`.
+-   Reproduce the same random sample each time you re-run your code in either `R` or `Python` by setting the seed or random state. 
+-   Evaluate whether or not a set of observations are independent and identically distributed (*iid*).
+
+## And...
+
+-   Use simulation to approximate distribution properties (e.g., mean and variance) using empirical quantities, especially for random variables involving multiple other random variables.
+-   Argue why simulations can approximate true properties of a stochastic quantity.
+
+# Outline
+
+1.  Review on Random Samples
+2.  Seeds
+3.  Generating Random Samples: Code
+4.  Running Simulations
+5.  Multi-Step Simulations
+
+## 1. Review on Random Samples
+
+-   A [random sample]{style="color: purple;"} is a collection of random outcomes/variables.
+-   A random sample of size $n$ is usually depicted as $X_1, \ldots, X_n$.
+
+. . .
+
+-   Some examples of random samples are listed as follows:
+    -   The outcomes of ten dice rolls ([$n = 10$]{style="color: purple;"}).
+    -   The daily high temperature in Vancouver for each day of the year ([$n = 365$]{style="color: purple;"}).
+
+### Heads-up!
+
+![](images/crab.png){.absolute top="-120" right="100" width="20%"}
+
+::: incremental
+-   [Unless we make additional sampling assumptions]{style="color: purple;"}, a [default]{style="color: purple;"} random sample is said to be [independent and identically distributed]{style="color: purple;"} (or [iid]{style="color: purple;"}).
+-   Moreover, the word [stochastic]{style="color: purple;"} refers to having some uncertain outcome.
+-   The opposite of stochastic is [deterministic]{style="color: purple;"}: an outcome that will be known with 100% certainty.
+:::
+
+## 2. Seeds
+
+![](images/farmers.png){.absolute top="20" right="-100" width="20%"}
+
+. . .
+
+-   Computers cannot actually generate truly random outcomes.
+-   Instead, they use something called [[pseudorandom numbers](https://en.wikipedia.org/wiki/Pseudorandom_number_generator)]{style="color: purple;"}.
+
+. . .
+
+-   As an example of a [basic algorithm]{style="color: purple;"} that produces pseudo-random numbers between 0 and 1, [consider starting with your choice of number $x_0$ between 0 and 1]{style="color: purple;"}, and iterating the following equation:
+
+$$x_{i+1} = 4 x_i (1 - x_i).$$
+
+### The output
+
+![](images/code.png){.absolute top="-120" right="100" width="20%"}
+
+-   Random numbers between 0 and 1.
+-   For example, here is the resulting sequence when we start with $x_0 = 0.3$ and iterate $n = 1000$ times:
+
+```{webr}
+#| autorun: true
+n <- 1000
+x <- 0.3
+for (i in 1:n) x[i + 1] <- 4 * x[i] * (1 - x[i])
+head(x)
+```
+
+### Plotting values from vector `x`
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+library(tidyverse)
+
+n <- 1000
+x <- 0.3
+for (i in 1:n) x[i + 1] <- 4 * x[i] * (1 - x[i])
+
+qplot(0:n, x) +
+  labs(
+    x = "Iteration Number",
+    y = "Function Evaluation"
+  ) +
+  theme_bw() +
+  theme(
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 20)
+  )
+```
+
+### Some additional highlights!
+
+![](images/code.png){.absolute top="-70" right="0" width="15%"}
+
+. . .
+
+-   Although the previous sequence is [deterministic]{style="color: purple;"}, it behaves like a random sample.
+-   [But not entirely!]{style="color: purple;"} All pseudorandom number generators have some pitfalls.
+
+. . .
+
+-   In this example, one pitfall is that neighbouring pairs [are not independent of each other]{style="color: purple;"}.
+
+### The seed or random state
+
+![](images/seed.jpg){.absolute top="-70" right="0" width="15%"}
+
+::: incremental
+-   The [seed]{style="color: purple;"} (or [random state]{style="color: purple;"}) in a pseudo-random number generator is some pre-specified initial value that determines the generated sequence.
+-   In `R`, we can set the seed using the [`set.seed()`](https://www.statology.org/set-seed-in-r/) function.
+-   In `Python`, we can use [`numpy.random.seed()`](https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html) from `numpy`.
+-   The seed gives us an added advantage over truly random numbers: it allows our analysis to be [reproducible]{style="color: purple;"}!
+:::
+
+## 3. Generating Random Samples: Code
+
+-   We will look at some `R` and `Python` functions that help us generate a random sample.
+-   Note we are still focusing on discrete distributions here.
+
+![](images/code.png){fig-align="center" width="15%"}
+
+## 3.1. From Finite Number of Categories
+
+-   In `R`, we can generate a random sample from a [discrete distribution]{style="color: purple;"} with a finite number of outcomes using the [[`sample()` function](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sample)]{style="color: purple;"}.
+
+. . .
+
+-   In `Python`, we can generate a random sample from a discrete distribution using the [[`numpy.random.choice()` function](https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html)]{style="color: purple;"}.
+
+> **Heads-up:** Note that both `R` and `Python` have their own algorithms to generate pseudorandom outcomes, **even though we provide the same seed**.
+
+### How does `sample()` work in `R`?
+
+. . .
+
+-   Put the outcomes as a vector in the first argument, `x`.
+-   Put the desired sample size in the argument `size`.
+-   Put `replace = TRUE` [so that sampling can happen with replacement]{style="color: purple;"}.
+-   Put the probabilities of the outcomes as a vector respective to `x` in the argument `prob`.
+
+. . .
+
+> **Heads-up**: If these probabilities do not add up to 1, `R` **will not** throw an error. Instead, `R` automatically adjusts the probabilities so that they add up to 1.
+
+#### `R` Example
+
+-   Here is an example of generating $n = 10$ items using the Mario Kart item distribution from `lecture1`.
+
+```{webr}
+#| autorun: true
+set.seed(551)
+outcomes <- c("banana", "bob-omb", "coin", "horn", "shell")
+probs <- c(0.12, 0.05, 0.75, 0.03, 0.05)
+n <- 10
+sample(outcomes, size = n, replace = TRUE, prob = probs)
+```
+
+### How does `numpy.random.choice()` work in `Python`?
+
+. . .
+
+-   Put the outcomes in the first argument, `a`.
+-   Put the desired sample size in the argument `size`.
+-   Put the probabilities of the outcomes respective to `x` in the argument `p`.
+
+. . .
+
+> **Heads-up:** In `numpy.random.choice()`, it is necessary that the probabilities in `prob` add up to 1.
+
+#### `Python` Example
+
+-   Using the Mario Kart example again, we have the following:
+
+```{pyodide-python}
+#| autorun: true
+import numpy
+
+numpy.random.seed(551)
+outcomes = ["banana", "bob-omb", "coin", "horn", "shell"]
+probs = [0.12, 0.05, 0.75, 0.03, 0.05]
+n = 10
+numpy.random.choice(a = outcomes, size = n, p = probs)
+```
+
+## 3.2. From Distribution Families
+
+::: incremental
+-   In `R`, we can generate data from a distribution belonging to [some parametric family]{style="color: purple;"} using the `rdist()` function, where "`dist`" is replaced with a short form of the distribution family's name.
+-   In `Python`, we can use the `stats` module from the `scipy` library.
+:::
+
+### Function Summary
+
+![](images/code-2.png){.absolute top="-70" right="0" width="12%"}
+
+-   The table below summarizes the functions related to some of the discrete distribution families we have seen.
+
+|      Family       | `R` Function |      `Python` Function      |
+|:-----------------:|:------------:|:---------------------------:|
+|     Binomial      |  `rbinom()`  |  `scipy.stats.binom.rvs()`  |
+|     Geometric     |  `rgeom()`   |  `scipy.stats.geom.rvs()`   |
+| Negative Binomial | `rnbinom()`  | `scipy.stats.nbinom.rvs()`  |
+|      Poisson      |  `rpois()`   | `scipy.stats.poisson.rvs()` |
+
+### How to use these functions?
+
+::: incremental
+-   Sample size:
+    -   For `R`, put this in the argument `n`, which comes first.
+    -   For `Python`, put this in the argument `size`, which comes last.
+-   In both languages, each parameter has its own argument.
+-   Sometimes, like in `R`'s `rnbinom()`, [we have the option for different parameterizations]{style="color: purple;"}.
+-   Be sure only to specify the [exact number of parameters]{style="color: purple;"} required to isolate a member of the distribution family!
+:::
+
+### Binomial Example
+
+-   $n = 10$ random numbers with $p = 0.6$ and 5 trials.
+
+```{webr}
+#| autorun: true
+set.seed(551)
+rbinom_output <- rbinom(n = 10, size = 5, prob = 0.6)
+rbinom_output
+```
+
+```{pyodide-python}
+#| autorun: true
+import scipy
+numpy.random.seed(551)
+scipy.stats.binom.rvs(n = 5, p = 0.6, size = 10)
+```
+
+### Heads-up!
+
+![](images/crab.png){.absolute top="-80" right="-80" width="20%"}
+
+::: incremental
+-   Let us not confuse the [random sample size]{style="color: purple;"} $n$ (i.e., `n` in any `R` function to generate random numbers) with the number of trials $n$ as a parameter of a Binomial random variable (i.e., `size` in `rbinom()`).
+-   For `Python`, the Binomial parameter $n$ is actually depicted as `n` and `size` is the number of Binomial random numbers in our sample.
+:::
+
+### Negative Binomial Example
+
+-   The Negative Binomial family is an example of a function in `R` that allows different parameterizations.
+
+. . .
+
+-   Suppose the following:
+
+$$X \sim \text{Negative Binomial} (k, p).$$
+
+-   $X$ refers to the number of failures in [independent successive Bernoulli trials before experiencing $k$ successes with probability $p$]{style="color: purple;"}.
+
+#### `R` Function `rnbinom()`
+
+<br>
+
+-   This function generates `n` Negative Binomial-distributed random numbers with arguments `size` as $k = 5$ and `prob` as $p = 0.6$:
+
+```{webr}
+#| autorun: true
+set.seed(551)
+rnbinom(n = 10, size = 5, prob = 0.6)
+```
+
+</br>
+
+#### Heads-up!
+
+-   Notice that specifying [too few parameters]{style="color: purple;"} results in an [error]{style="color: purple;"} (recall, we need to specify two parameters):
+
+```{webr}
+#| autorun: true
+set.seed(551)
+rnbinom(n = 10, size = 5)
+```
+
+-   In the case above, we need the argument `prob` (i.e., parameter $p$ in the Negative Binomial distribution). `R` will indicate that `prob` is missing.
+
+#### Another way to use `rnbinom()` in `R`!
+
+<br>
+
+-   Recall the expected value of a Negative Binomial random variable is
+
+$$\mu = \mathbb{E}(X) = \frac{k(1 - p)}{p} = \frac{5(1 - 0.6)}{0.6} = 3.33.$$
+
+. . .
+
+-   From `lecture2`, we know that a distribution [can also be parameterized]{style="color: purple;"} with its corresponding mean.
+
+</br>
+
+#### Therefore...
+
+-   We can use the the argument `mu` in the random number generator `rnbinom()`. Note `mu` refers to $\mu = \mathbb{E}(X)$:
+
+```{webr}
+#| autorun: true
+set.seed(551)
+rnbinom(n = 10, size = 5, mu = 3.33)
+```
+
+```{webr}
+#| autorun: true
+set.seed(551)
+rnbinom(n = 10, size = 5, prob = 0.6)
+```
+
+. . .
+
+-   We get the same random numbers via the same seed!
+
+### iClicker Question
+
+Suppose you want to simulate hourly bank branch queues of customers. **Historically**, hourly queues show an average of 10 people. 
+
+What distribution (including parametrization) and `R` random number generator will you use to simulate 20 random numbers?
+
+#### Select the correct option:
+
+<br>
+
+**A.** $\text{Poisson}(\lambda = 1/10)$ with 
+
+`rpois(n = 20, lambda = 1 / 10)`
+
+**B.** $\text{Binomial}(n = 10, p = 1/10)$ with 
+
+`rbinom(n = 20, size = 10, prob = 1 / 10)`
+
+**C.** $\text{Poisson}(\lambda = 10)$ with 
+
+`rpois(n = 20, lambda = 10)`
+
+**D.** $\text{Geometric}(p = 1/10)$ with 
+
+`rgeom(n = 20, prob = 1 / 10)`
+
+### iClicker Question
+
+During a random foodie tour, suppose you want to simulate the number of non-authentic Mexican restaurants you will try before encountering your very first authentic one in Vancouver. Overall, **it is known that 70% of Mexican restaurants in Vancouver are considered non-authentic** (but you do not have access to this list!).
+
+What distribution (including parametrization) and `R` random number generator will you use to simulate 15 random numbers?
+
+#### Select the correct option:
+
+<br>
+
+**A.** $\text{Binomial}(n = 15, p = 0.7)$ with 
+
+`rbinom(n = 15, size = 15, prob = 0.7)`
+
+**B.** $\text{Geometric}(p = 0.3)$ with 
+
+`rgeom(n = 15, prob = 0.3)`
+
+**C.** $\text{Binomial}(n = 15, p = 0.3)$ with 
+
+`rbinom(n = 15, size = 15, prob = 0.3)`
+
+**D.** $\text{Geometric}(p = 0.7)$ with 
+
+`rgeom(n = 15, prob = 0.7)`
+
+## 4. Running Simulations
+
+![](images/crab.png){.absolute top="-80" right="-80" width="20%"}
+
+. . .
+
+-   So far, we have discussed two ways to calculate quantities that help us communicate uncertainty (like means and probabilities):
+
+. . .
+
+1.  The [distribution-based approach]{style="color: purple;"} (using the distribution), resulting in [true values]{style="color: purple;"}.
+2.  The [empirical approach]{style="color: purple;"} (using data), resulting in [approximate values]{style="color: purple;"} that improve as the sample size increases ([i.e., the frequentist paradigm!]{style="color: purple;"}).
+
+### The Mean
+
+-   The [true]{style="color: purple;"} mean of a discrete random variable $X$ can be calculated as $$\mathbb{E}(X) = \sum_x x \cdot P(X = x).$$
+
+-   Or can be approximated using the [empirical]{style="color: purple;"} approach from a random sample $X_1, \ldots, X_n$ by $$\mathbb{E}(X) \approx \frac{1}{n} \sum_{i=1}^n X_i.$$
+
+### 4.1. Code for Empirical Quantities
+
+-   Here are some `R` functions to calculate empirical quantities:
+    -   `mean()` calculates the [sample average]{style="color: purple;"} $$\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i.$$
+    -   `var()` calculates the [sample variance]{style="color: purple;"} $$S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2.$$
+
+#### Furthermore...
+
+-   `quantile()` calculates the [empirical $p$-quantile]{style="color: purple;"}: the $np$'th largest (rounded up) observation in a sample of size $n$.
+-   For a single probability, calculate the mean of a condition.
+
+. . .
+
+-   For an [entire PMF]{style="color: purple;"}, use the `table()` function, or more conveniently, the `janitor::tabyl()` function.
+-   For the mode, either get it manually using the `table()` or `janitor::tabyl()` function, or you can use `DescTools::Mode()`.
+
+### 4.2. Basic Simulation
+
+-   In Mexico City, consider a [random person]{style="color: purple;"} dating via [some given app]{style="color: purple;"} with a probability of having a successful date of $0.7$.
+
+![[The Angel of Independence](https://en.wikipedia.org/wiki/Angel_of_Independence), one of the most famous landmarks in Mexico City with a [Jacaranda tree](https://mexiconewsdaily.com/news/purple-spring-5-fun-facts-about-jacarandas/) closeup (photo by <a href="https://unsplash.com/@axelgarcia?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Axel García</a> on <a href="https://unsplash.com/photos/yWgIfYgwVfA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>).](images/angel.jpg){height="310"}
+
+#### Also...
+
+-   Suppose we want to evaluate the success of this given app via the [number of failed dates]{style="color: purple;"} before they experience $5$ [successful dates]{style="color: purple;"}.
+
+. . .
+
+-   We can translate the above inquiry as a random variable denoting failed dates has a Negative Binomial distribution: \begin{align*}
+    X &= \text{Number of failed dates before experiencing} \\
+    & \qquad \text{5 successful ones} \\
+    \end{align*} $$X \sim \text{Negative Binomial} (k = 5, p = 0.7) \quad \text{for } x = 0, 1, 2, ...$$
+
+#### Obtaining our random sample...
+
+-   Let us demonstrate both a distribution-based and empirical approach to compute the variance and PMF.
+-   First, let us obtain our random sample (of, say, $n = 10000$ observations).
+
+```{webr}
+#| autorun: true
+set.seed(551)
+k <- 5
+p <- 0.7
+n <- 10000
+random_sample <- rnbinom(n, size = k, prob = p)
+head(random_sample, 30) # Showing the first 30 random numbers in vector random_sample
+```
+
+#### 4.2.1. Mean
+
+-   [Theoretically]{style="color: purple;"}, the mean of $X$ is $\mathbb{E}(X) = \frac{k(1 - p)}{p}$.
+-   We compute it as follows:
+
+```{webr}
+#| autorun: true
+(k * (1 - p)) / p
+```
+
+. . .
+
+-   [Empirically]{style="color: purple;"}, we can approximate $\mathbb{E}(X)$ with the mean of the values in `random_sample`:
+
+```{webr}
+#| autorun: true
+mean(random_sample)
+```
+
+#### 4.2.2. Variance
+
+-   [Theoretically]{style="color: purple;"}, the variance of $X$ is $\text{Var}(X) = \frac{k(1 - p)}{p^2}$.
+-   We compute it as follows:
+
+```{webr}
+#| autorun: true
+(k * (1 - p)) / p^2
+```
+
+. . .
+
+-   [Empirically]{style="color: purple;"}, we can approximate $\text{Var}(X)$ with the sample variance of the values in `random_sample`:
+
+```{webr}
+#| autorun: true
+var(random_sample)
+```
+
+#### 4.2.3. Standard deviation
+
+-   [Theoretically]{style="color: purple;"}, the standard deviation of $X$ is $\text{sd}(X) = \sqrt{\frac{k(1 - p)}{p^2}}$.
+
+```{webr}
+#| autorun: true
+sqrt((1 - p) * k / p^2)
+```
+
+. . .
+
+-   [Empirically]{style="color: purple;"}, we can approximate $\text{sd}(X)$ with the sample standard deviation of the values in `random_sample`:
+
+```{webr}
+#| autorun: true
+sd(random_sample)
+```
+
+#### 4.2.4. Probability of Seeing $0$ Failures (i.e., $0$ failed dates!)
+
+-   [Theoretically]{style="color: purple;"}, this probability can be computed as
+
+$$
+P(X = 0 \mid k, p) = {k - 1 \choose 0} p^k (1 - p)^x.
+$$
+
+. . .
+
+-   We can automatically compute this probability via the density function `dnbinom()` as follows:
+
+```{webr}
+#| autorun: true
+dnbinom(x = 0, size = k, prob = p)
+```
+
+#### [Empirically]{style="color: purple;"}...
+
+-   We can approximate $P(X = 0 \mid k = 5, p = 0.7)$ by [counting the number of random numbers equal to $0$ in `random_sample`]{style="color: purple;"} and dividing this count over the sample size $n = 10000$.
+
+```{webr}
+#| autorun: true
+head(random_sample) # First 6 random numbers out of 10000
+head(random_sample == 0) # First 6 logical values out of 10000
+mean(random_sample == 0) # Using function mean()
+```
+
+#### 4.2.5. Probability Mass Function
+
+-   Just as we did it with $P(X = 0 \mid k = 5, p = 0.7)$, we can also do it for $P(X = i \mid k = 5, p = 0.7)$ with $i = 1, 2, \dots$ (i.e., [the whole PMF!]{style="color: purple;"}).
+
+. . .
+
+```{webr}
+#| autorun: true
+library(tidyverse)
+library(janitor)
+
+PMF <- tabyl(random_sample) |>
+  select(x = random_sample, Empirical = percent) |>
+  mutate(Theoretical = dnbinom(x, size = k, prob = p))
+PMF <- PMF |>
+  mutate(
+    Theoretical = round(Theoretical, 4),
+    Empirical = round(Empirical, 4)
+  )
+```
+
+#### Showing the output `PMF`
+
+```{webr}
+#| autorun: true
+PMF
+```
+
+-   Note that both probability columns are similar!
+
+#### Plotting both PMFs
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+library(janitor)
+
+set.seed(551)
+k <- 5
+p <- 0.7
+n <- 10000
+random_sample <- rnbinom(n, size = k, prob = p)
+
+PMF <- tabyl(random_sample) |>
+  select(x = random_sample, Empirical = percent) |>
+  mutate(Theoretical = dnbinom(x, size = k, prob = p))
+PMF <- PMF |>
+  mutate(
+    Theoretical = round(Theoretical, 4),
+    Empirical = round(Empirical, 4)
+  )
+
+PMF |>
+  gather(key = "method", value = "Probability", Empirical, Theoretical) |>
+  ggplot(aes(x, Probability)) +
+  facet_wrap(~method) +
+  geom_col(fill = "maroon") +
+  theme_bw() +
+  theme(plot.title = element_text(size = 17, face = "bold"),
+    axis.text = element_text(size = 14),
+    axis.title = element_text(size = 16, face = "bold"),
+    strip.text.x = element_text(size = 17, face = "bold")) +
+  ggtitle("Comparison of Empirical and Theoretical PMFs") +
+  scale_x_continuous(breaks = 0:12) +
+  scale_y_continuous(breaks = c(0, 0.05, 0.1, 0.15, 0.2, 0.25))
+```
+
+#### 4.2.6. Mode
+
+-   Recall the mode is the outcome of the random variable with the [largest probability]{style="color: purple;"}.
+-   From our previous plots, we can see that it is $X = 1.$
+
+```{webr}
+#| autorun: true
+## Theoretical
+PMF |> filter(Theoretical == max(Theoretical)) |>
+  pull(x)
+```
+
+```{webr}
+#| autorun: true
+## Empirical
+PMF |> filter(Empirical == max(Empirical)) |>
+  pull(x)
+```
+
+#### 4.2.6. The Law of Large Numbers
+
+-   The Law of Large of Numbers states that, as we increase our sample size $n$, our empirical mean converges to the [true mean]{style="color: purple;"} we want to estimate.
+-   That is, as we increase our $n$, our [sample average]{style="color: purple;"} $\bar{X}$ converges to the true mean $\mu$.
+
+. . .
+
+-   Let us exemplify this: \begin{gather*}
+    X \sim \text{Negative Binomial} (k = 5, p = 0.7) \quad \text{with} \\
+    \mathbb{E}(X) = \frac{k(1 - p)}{p} = 2.14.
+    \end{gather*}
+
+#### Increasing the sample size $n$
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+tibble(
+  i = 1:n,
+  mean = cumsum(random_sample) / i
+) |>
+  ggplot(aes(i, mean)) +
+  geom_hline(
+    yintercept = (1 - p) * k / p,
+    colour = "maroon", linetype = "dashed", size = 0.75
+  ) +
+  geom_line() +
+  labs(
+    x = "Sample Size",
+    y = "Empirical Mean"
+  ) +
+  theme_bw() +
+  theme(plot.title = element_text(size = 17, face = "bold"),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16, face = "bold"),
+    strip.text.x = element_text(size = 17, face = "bold")) +
+  ggtitle("Evolution of Empirical Mean as Sample Size is Increased") +
+  scale_y_continuous(breaks = seq(0, 3, 0.25)) +
+  scale_x_continuous(breaks = seq(0, 10000, 1000))
+```
+
+## 5. Multi-Step Simulations
+
+-   The previous univariate simulation might seem [trivial]{style="color: purple;"}, since we could calculate basically anything (theoretically speaking!).
+-   Where it gets more interesting is [when we want to calculate things for a random variable that transforms and/or combines multiple random variables]{style="color: purple;"}.
+
+![](images/panda.png){fig-align="center" width="20%"}
+
+### For example...
+
+-   Consider a random variable $T$ that we can obtain as follows: \begin{gather*}
+    X \sim \text{Poisson}(\lambda = 5) \\
+    T = \sum_{i = 1}^{X} D_i.
+    \end{gather*}
+
+-   Where each $D_i$ are *iid* with [some specified distribution]{style="color: purple;"}.
+
+-   In this case, you would first need to generate $X$, then generate $X$ values of $D_i$, then sum those up to get $T$.
+
+### The Port of Vancouver
+
+-   Consider an example that a Vancouver port faces with [gang demand]{style="color: purple;"}.
+-   Whenever a ship arrives to the port of Vancouver, they request a certain number of [gangs]{style="color: purple;"} (groups of people) to help unload the ship.
+
+![](images/ship.png){fig-align="center" width="30%"}
+
+#### Looking at the PMF!
+
+![](images/sea-condition.png){.absolute top="-80" right="0" width="30%"}
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+gang <- 1:4
+p <- c(0.2, 0.4, 0.3, 0.1)
+
+tibble(
+  gangs = gang,
+  p     = p
+) |>
+  ggplot(aes(gangs, p)) +
+  geom_col(fill = "palegreen3") +
+  labs(
+    x = "Number of Gangs",
+    y = "Probability"
+  ) +
+  theme_bw() +
+  theme(plot.title = element_text(size = 17, face = "bold"),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16, face = "bold"),
+    strip.text.x = element_text(size = 17, face = "bold")) +
+  ggtitle("PMF of Number of Gangs")
+```
+
+#### Coding up a simulation function!
+
+<br>
+
+-   The following function sums up simulated gangs requested by a certain number of ships with the above probability distribution as a default.
+
+</br>
+
+#### `R` Function
+
+```{webr}
+#| autorun: true
+#' Generate gang demand
+#'
+#' Simulates the GRAND TOTAL number of gangs requested, if each ship
+#' requests a random number of gangs.
+#' 
+#' @param n_ships Number of ships that are making demands.
+#' @param gangs Possible gang demands made by a ship.
+#' @param prob Probabilities of gang demand corresponding to "gangs."
+#' 
+#' @return Number representing the total gang demand 
+demand_gangs <- function(n_ships, gangs = 1:4, prob = c(0.2, 0.4, 0.3, 0.1)) {
+  if (length(gangs) == 1) {
+    gangs <- c(gangs)
+    prob <- c(1)
+  }
+  requests <- sample(
+    gangs,
+    size = n_ships,
+    replace = TRUE,
+    prob = prob
+  )
+  sum(requests)
+}
+```
+
+#### Using `demand_gangs()`
+
+<br>
+
+-   As an example, let us check out the simulated [grand total gang request]{style="color: purple;"} from 10 ships:
+
+```{webr}
+#| autorun: true
+set.seed(551) # Reproducibility
+demand_gangs(n_ships = 10)
+```
+
+. . .
+
+-   Now, suppose that the number of ships arriving on a given day follows a [Poisson distribution with a mean of $\lambda = 5 \text{ ships}$]{style="color: purple;"}.
+
+</br>
+
+# What is the distribution of total gang requests on a given day?
+
+#### Let us simulate the process to find out!
+
+![](images/sea-condition.png){.absolute top="-60" right="0" width="25%"}
+
+<br>
+
+::: incremental
+1.  Generate arrival quantities for $n$ days from the $\text{Poisson}(\lambda = 5 \text{ ships})$ distribution.
+2.  For each day, simulate [the grand total gang request]{style="color: purple;"} for the simulated number of ships.
+3.  You now have your random sample of size $n$; compute things as you normally would.
+:::
+
+. . .
+
+-   Let us try this, obtaining [a sample of $n = 10000$ days]{style="color: purple;"}.
+
+</br>
+
+#### The Code
+
+![](images/code.png){.absolute top="-30" right="0" width="5%"}
+
+```{webr}
+#| autorun: true
+n_days <- 10000
+
+# Setting global seed!
+set.seed(551)
+
+## Step 1: generate a bunch of ships arriving each day.
+arrivals <- rpois(n_days, lambda = 5)
+head(arrivals)
+```
+
+#### Then...
+
+```{webr}
+#| autorun: true
+## Step 2: Simulate the grand total gang request on each day.
+total_requests <- purrr::map_int(arrivals, demand_gangs)
+head(total_requests)
+```
+
+#### Finally
+
+```{webr}
+#| autorun: true
+## Step 3: Compute mean and variance.
+simulation_outputs <- tibble(
+  mean = mean(total_requests),
+  variance = var(total_requests)
+)
+simulation_outputs
+```
+
+. . .
+
+-   From our $n = 10000$ replicates, the summary statistics above indicate that [we typically expect a demand of 11.5 gangs on a given day in the whole port]{style="color: purple;"}.
+
+### Checking the empirical distribution of total gang requests!
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 6
+
+#' Generate gang demand
+#'
+#' Simulates the GRAND TOTAL number of gangs requested, if each ship
+#' requests a random number of gangs.
+#' 
+#' @param n_ships Number of ships that are making demands.
+#' @param gangs Possible gang demands made by a ship.
+#' @param prob Probabilities of gang demand corresponding to "gangs."
+#' 
+#' @return Number representing the total gang demand 
+demand_gangs <- function(n_ships, gangs = gang, prob = p) {
+  if (length(gangs) == 1) {
+    gangs <- c(gangs, gangs)
+    prob <- c(1, 1)
+  }
+  requests <- sample(
+    gangs,
+    size = n_ships,
+    replace = TRUE,
+    prob = prob
+  )
+  sum(requests)
+}
+
+# Simualtion
+n_days <- 10000
+set.seed(551)
+arrivals <- rpois(n_days, lambda = 5)
+total_requests <- purrr::map_int(arrivals, demand_gangs)
+total_requests <- data.frame(sim = total_requests)
+
+# Plotting
+ggplot(total_requests, aes(sim)) +
+  geom_bar(fill = "orange") +
+  labs(
+    x = "Number of Gangs",
+    y = "Counts"
+  ) +
+  theme_bw() +
+  theme(plot.title = element_text(size = 17, face = "bold"),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16, face = "bold"),
+    strip.text.x = element_text(size = 17, face = "bold")) +
+  ggtitle("Simulation Results") +
+  scale_x_continuous(breaks = seq(0, 40, 5)) +
+  geom_vline(xintercept = 11.5393, color = "blue", size = 1.5)
+```
+
+## Final Block Wrap Up
+
+-   Even though probability is an abstract field, we will often use these tools throughout the program.
+-   Having a good knowledge of random variable distributions is an expected asset in data modelling.
+-   As Data Scientists, you need to be able to communicate your findings via adequate summaries.

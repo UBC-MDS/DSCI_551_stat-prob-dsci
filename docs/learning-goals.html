@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Learning Goals by Lecture – DSCI 562: Regression II</title>
+<title>Learning Goals by Lecture – DSCI 551: Descriptive Statistics and Probability for Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./notes/lecture1-glm-link-functions-and-count-regression.html" rel="next">
+<link href="./notes/01_lecture-uncertainty.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -40,8 +40,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,8 +68,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
-<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -114,7 +110,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">DSCI 562: Regression II</span>
+    <span class="navbar-title">DSCI 551: Descriptive Statistics and Probability for Data Science</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -130,7 +126,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_562_regr-2"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -187,50 +183,50 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture1-glm-link-functions-and-count-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 1: Link Functions and Count Regression</span></a>
+  <a href="./notes/01_lecture-uncertainty.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Depicting Uncertainty</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture2_glm_model_selection_multinomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 2: Model Selection and Multinomial Logistic Regression</span></a>
+  <a href="./notes/02_lecture-parametric-families.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Parametric Families</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture3_glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 3: Ordinal Logistic Regression</span></a>
+  <a href="./notes/03_lecture-joint.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Joint Probability</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture4_linear_mixed_effects_models.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 4: Linear Mixed-effects Models</span></a>
+  <a href="./notes/04_lecture-conditional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Conditional Probabilities</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture5_survival_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 5: Survival Analysis</span></a>
+  <a href="./notes/05_lecture-continuous.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Continuous Distributions</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture6_local_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 6: Local Regression</span></a>
+  <a href="./notes/06_lecture-continuous-families.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6: Common Distribution Families and Conditioning</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture7_quantile_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 7: Quantile Regression</span></a>
+  <a href="./notes/07_lecture-maximum-likelihood-estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7: Maximum Likelihood Estimation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/lecture8_missing_data.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8: Missing Data</span></a>
+  <a href="./notes/08_lecture-simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8: Simulation</span></a>
   </div>
 </li>
       </ul>
@@ -238,7 +234,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Warmup Lab Exercises</span></a>
+ <span class="menu-text">Appendices</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -246,73 +242,20 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/warmup-lab1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab 1: Binary Logistic Regression</span></a>
+  <a href="./notes/appendix-prob-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Probability Cheatsheet</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/warmup-lab2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab 2: Ordinal Logistic Regression</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/warmup-lab3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab 3: Cox Proportional Hazards Model</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/warmup-lab4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lab 4: Quantile Regression</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/appendix-binary-log-regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Binary Logistic Regression</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/appendix-binary-multivariate-normal.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Fundamentals of the Multivariate Normal Distribution</span></a>
+  <a href="./notes/appendix-dist-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distribution Cheatsheet</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Greek Alphabet</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/appendix-reg-cheatsheet.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Regression Cheat Sheet</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/appendix-reg-mindmap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Regression Mind Map</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./notes/appendix-faq.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Frequently Asked Questions (FAQs)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -333,16 +276,16 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lecture-1-generalized-linear-models-link-functions-and-count-regression" id="toc-lecture-1-generalized-linear-models-link-functions-and-count-regression" class="nav-link active" data-scroll-target="#lecture-1-generalized-linear-models-link-functions-and-count-regression"><span class="header-section-number">1</span> Lecture 1: Generalized Linear Models: Link Functions and Count Regression</a></li>
-  <li><a href="#lecture-2-generalized-linear-models-model-selection-and-multinomial-logistic-regression" id="toc-lecture-2-generalized-linear-models-model-selection-and-multinomial-logistic-regression" class="nav-link" data-scroll-target="#lecture-2-generalized-linear-models-model-selection-and-multinomial-logistic-regression"><span class="header-section-number">2</span> Lecture 2: Generalized Linear Models: Model Selection and Multinomial Logistic Regression</a></li>
-  <li><a href="#lecture-3-generalized-linear-models-ordinal-logistic-regression" id="toc-lecture-3-generalized-linear-models-ordinal-logistic-regression" class="nav-link" data-scroll-target="#lecture-3-generalized-linear-models-ordinal-logistic-regression"><span class="header-section-number">3</span> Lecture 3: Generalized Linear Models: Ordinal Logistic Regression</a></li>
-  <li><a href="#lecture-4-linear-mixed-effects-models" id="toc-lecture-4-linear-mixed-effects-models" class="nav-link" data-scroll-target="#lecture-4-linear-mixed-effects-models"><span class="header-section-number">4</span> Lecture 4: Linear Mixed-effects Models</a></li>
-  <li><a href="#lecture-5-survival-analysis" id="toc-lecture-5-survival-analysis" class="nav-link" data-scroll-target="#lecture-5-survival-analysis"><span class="header-section-number">5</span> Lecture 5: Survival Analysis</a></li>
-  <li><a href="#lecture-6-local-regression" id="toc-lecture-6-local-regression" class="nav-link" data-scroll-target="#lecture-6-local-regression"><span class="header-section-number">6</span> Lecture 6: Local Regression</a></li>
-  <li><a href="#lecture-7-quantile-regression" id="toc-lecture-7-quantile-regression" class="nav-link" data-scroll-target="#lecture-7-quantile-regression"><span class="header-section-number">7</span> Lecture 7: Quantile Regression</a></li>
-  <li><a href="#lecture-8-missing-data" id="toc-lecture-8-missing-data" class="nav-link" data-scroll-target="#lecture-8-missing-data"><span class="header-section-number">8</span> Lecture 8: Missing Data</a></li>
+  <li><a href="#lecture-1-depicting-uncertainty" id="toc-lecture-1-depicting-uncertainty" class="nav-link active" data-scroll-target="#lecture-1-depicting-uncertainty"><span class="header-section-number">1</span> Lecture 1: Depicting Uncertainty</a></li>
+  <li><a href="#lecture-2-parametric-families" id="toc-lecture-2-parametric-families" class="nav-link" data-scroll-target="#lecture-2-parametric-families"><span class="header-section-number">2</span> Lecture 2: Parametric Families</a></li>
+  <li><a href="#lecture-3-joint-probability" id="toc-lecture-3-joint-probability" class="nav-link" data-scroll-target="#lecture-3-joint-probability"><span class="header-section-number">3</span> Lecture 3: Joint Probability</a></li>
+  <li><a href="#lecture-4-conditional-probabilities" id="toc-lecture-4-conditional-probabilities" class="nav-link" data-scroll-target="#lecture-4-conditional-probabilities"><span class="header-section-number">4</span> Lecture 4: Conditional Probabilities</a></li>
+  <li><a href="#lecture-5-continuous-distributions" id="toc-lecture-5-continuous-distributions" class="nav-link" data-scroll-target="#lecture-5-continuous-distributions"><span class="header-section-number">5</span> Lecture 5: Continuous Distributions</a></li>
+  <li><a href="#lecture-6-common-distribution-families-and-conditioning" id="toc-lecture-6-common-distribution-families-and-conditioning" class="nav-link" data-scroll-target="#lecture-6-common-distribution-families-and-conditioning"><span class="header-section-number">6</span> Lecture 6: Common Distribution Families and Conditioning</a></li>
+  <li><a href="#lecture-7-maximum-likelihood-estimation" id="toc-lecture-7-maximum-likelihood-estimation" class="nav-link" data-scroll-target="#lecture-7-maximum-likelihood-estimation"><span class="header-section-number">7</span> Lecture 7: Maximum Likelihood Estimation</a></li>
+  <li><a href="#lecture-8-simulation" id="toc-lecture-8-simulation" class="nav-link" data-scroll-target="#lecture-8-simulation"><span class="header-section-number">8</span> Lecture 8: Simulation</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -366,132 +309,96 @@ window.Quarto = {
 </header>
 
 
-<section id="lecture-1-generalized-linear-models-link-functions-and-count-regression" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="lecture-1-generalized-linear-models-link-functions-and-count-regression"><span class="header-section-number">1</span> Lecture 1: Generalized Linear Models: Link Functions and Count Regression</h2>
+<section id="lecture-1-depicting-uncertainty" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="lecture-1-depicting-uncertainty"><span class="header-section-number">1</span> Lecture 1: Depicting Uncertainty</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Explain the Data Science workflow in Regression Analysis.</li>
-<li>Recall the basics of Ordinary Least-squares (OLS) regression.</li>
-<li>Identify cases where OLS regression is not suitable.</li>
-<li>Distinguish what makes a regression model “<em>linear</em>.”</li>
-<li>Explain the concept of generalized linear models (GLMs).</li>
-<li>Explore the concept of the link function.</li>
-<li>Outline the modelling framework of count regression.</li>
-<li>Fit and interpret count regression.</li>
-<li>Use count regression for prediction.</li>
-<li>Explain and test overdispersion on count-type data.</li>
+<li>Identify probability as a proportion that converges to the truth as you collect more data.</li>
+<li>Calculate probabilities using the Inclusion-Exclusion Principle, the Law of Total Probability, and probability distributions.</li>
+<li>Convert between and interpret odds and probability.</li>
+<li>Specify the usefulness of odds over probability.</li>
+<li>Be aware that probability has multiple interpretations/philosophies.</li>
+<li>Calculate and interpret mean, mode, entropy, variance, and standard deviation, mainly from a distribution.</li>
 </ul>
 </section>
-<section id="lecture-2-generalized-linear-models-model-selection-and-multinomial-logistic-regression" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="lecture-2-generalized-linear-models-model-selection-and-multinomial-logistic-regression"><span class="header-section-number">2</span> Lecture 2: Generalized Linear Models: Model Selection and Multinomial Logistic Regression</h2>
+<section id="lecture-2-parametric-families" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="lecture-2-parametric-families"><span class="header-section-number">2</span> Lecture 2: Parametric Families</h2>
 <ul>
-<li>Perform likelihood-based model selection through analysis of deviance, Akaike Information Criterion, and Bayesian Information Criterion.</li>
-<li>Extend the link function concept of the generalized linear models (GLMs) to other discrete categorical responses.</li>
-<li>Outline the modelling framework of the Multinomial Logistic regression.</li>
-<li>Fit and interpret the Multinomial Logistic regression.</li>
-<li>Use the Multinomial Logistic regression for prediction.</li>
+<li>Calculate expectations of a linear combination of random variables.</li>
+<li>Match a physical process to a distribution family (Binomial, Geometric, Negative Binomial, Poisson, and Bernoulli).</li>
+<li>Calculate probabilities, mean, and variance of a distribution belonging to a distribution family.</li>
+<li>Find the probability mass function of a random variable transformation, e.g., <span class="math inline">\(X^2\)</span>.</li>
+<li>Distinguish between a family of distributions and a distribution.</li>
+<li>Identify whether a specification of parameters (such as mean and variance) is enough/too little/too much to specify a distribution from a family of distributions.</li>
 </ul>
 </section>
-<section id="lecture-3-generalized-linear-models-ordinal-logistic-regression" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="lecture-3-generalized-linear-models-ordinal-logistic-regression"><span class="header-section-number">3</span> Lecture 3: Generalized Linear Models: Ordinal Logistic Regression</h2>
+<section id="lecture-3-joint-probability" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="lecture-3-joint-probability"><span class="header-section-number">3</span> Lecture 3: Joint Probability</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Outline the modelling framework of the Ordinal Logistic regression.</li>
-<li>Explain the concept of proportional odds.</li>
-<li>Fit and interpret Ordinal Logistic regression.</li>
-<li>Use the Ordinal Logistic regression for prediction.</li>
-<li>Explain the concept of non-proportional odds.</li>
-<li>Assess the assumption of proportional odds via the Brant-Wald test.</li>
-<li>Contrast the Ordinal Logistic regression models under proportional and non-proportional odds assumptions.</li>
+<li>Calculate marginal distributions from a joint distribution of random variables.</li>
+<li>Describe the probabilistic consequences of working with independent random variables.</li>
+<li>Calculate and describe covariance in multivariate cases (i.e., with more than one random variable).</li>
+<li>Calculate and describe two mainstream correlation metrics: Pearson’s correlation and Kendall’s <span class="math inline">\(\tau_K\)</span>.</li>
 </ul>
 </section>
-<section id="lecture-4-linear-mixed-effects-models" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="lecture-4-linear-mixed-effects-models"><span class="header-section-number">4</span> Lecture 4: Linear Mixed-effects Models</h2>
+<section id="lecture-4-conditional-probabilities" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="lecture-4-conditional-probabilities"><span class="header-section-number">4</span> Lecture 4: Conditional Probabilities</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Identify the model assumptions in a linear Mixed-effects model.</li>
-<li>Associate a term (or combination of terms) in a Mixed-effects model with the following quantities:
-<ul>
-<li>Fixed effect estimates.</li>
-<li>Variances of the random effects.</li>
-<li>Regression coefficients for each group and population.</li>
-<li>Predictions on existing groups and a new group.<br>
-</li>
-</ul></li>
-<li>Fit a linear Mixed-effects model in <code>R</code>, and extract estimates of the above quantities.</li>
-<li>Identify the consequences of fitting a fixed-effects linear regression model when there are groups, whether a slope parameter is pooled or fit separately per group.</li>
-<li>Explain the difference between the distributional assumption on the random effects and the fixed effects estimates’ sampling distribution.</li>
+<li>Calculate conditional distributions when given a full distribution.</li>
+<li>Obtain the marginal mean from conditional means and marginal probabilities, using the Law of Total Expectation.</li>
+<li>Use the Law of Total Probability to convert between conditional, marginal distributions, and joint distributions.</li>
+<li>Compare and contrast independence versus conditional independence.</li>
 </ul>
 </section>
-<section id="lecture-5-survival-analysis" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="lecture-5-survival-analysis"><span class="header-section-number">5</span> Lecture 5: Survival Analysis</h2>
+<section id="lecture-5-continuous-distributions" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="lecture-5-continuous-distributions"><span class="header-section-number">5</span> Lecture 5: Continuous Distributions</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Identify when data is censored.</li>
-<li>Understand the consequence of subsetting to uncensored data or ignoring the censored property instead of using Survival Analysis methods.</li>
-<li>Obtain univariate estimates for the mean, median, and survival function in <code>R</code> with a parametric technique.</li>
-<li>Obtain univariate estimates for the mean, median, and survival function in <code>R</code> with the Kaplan-Meier technique.</li>
-<li>Identify when the Kaplan-Meier survival function estimate cannot produce mean and high quantile estimates.</li>
-<li>Outline the modelling framework of a Cox Proportional Hazards model.</li>
-<li>Fit a Cox Proportional Hazards model in <code>R</code>.</li>
-<li>Interpret the regression coefficients of a Cox Proportional Hazards model, and identify the model assumptions.</li>
-<li>Obtain predicted survival functions from a Cox Proportional Hazards model.</li>
+<li>Differentiate between continuous and discrete random variables.</li>
+<li>Interpret probability density functions and calculate probabilities from them.</li>
+<li>Calculate and interpret probabilistic quantities (mean, quantiles, prediction intervals, etc.) for a continuous random variable.</li>
+<li>Explain whether a function is a valid probability density function, cumulative distribution function, quantile function, and survival function.</li>
+<li>Calculate quantiles from a cumulative distribution function, survival function, or quantile function.</li>
 </ul>
 </section>
-<section id="lecture-6-local-regression" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="lecture-6-local-regression"><span class="header-section-number">6</span> Lecture 6: Local Regression</h2>
+<section id="lecture-6-common-distribution-families-and-conditioning" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="lecture-6-common-distribution-families-and-conditioning"><span class="header-section-number">6</span> Lecture 6: Common Distribution Families and Conditioning</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Define the concept of local regression.</li>
-<li>Model and perform piecewise constant, linear, and continuous linear local regressions.</li>
-<li>Extend the concept of <span class="math inline">\(k\)</span>-NN classification to a regression framework.</li>
-<li>Define and apply locally weighted scatterplot smoother regression.</li>
+<li>Identify and apply common continuous distribution families.</li>
+<li>Identify what makes a function a bivariate probability density function.</li>
+<li>Compute probabilities from bivariate probability density functions.</li>
+<li>Compute conditional distributions for continuous random variables.</li>
 </ul>
 </section>
-<section id="lecture-7-quantile-regression" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="lecture-7-quantile-regression"><span class="header-section-number">7</span> Lecture 7: Quantile Regression</h2>
+<section id="lecture-7-maximum-likelihood-estimation" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="lecture-7-maximum-likelihood-estimation"><span class="header-section-number">7</span> Lecture 7: Maximum Likelihood Estimation</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Review what a quantile is.</li>
-<li>Compare the error functions of Ordinary Least-squares (OLS) regression versus Quantile regression.</li>
-<li>Recognize the impacts of parametric and distributional assumptions in Quantile regression.</li>
-<li>Perform non-parametric Quantile regression.</li>
-<li>Perform parametric Quantile regression.</li>
+<li>Explain the concept of a random sample.</li>
+<li>Explain the concept of maximum likelihood estimation.</li>
+<li>Define the likelihood function for a parametric model and recall why we often take its logarithm.</li>
+<li>Apply maximum likelihood estimation for cases with one population parameter (i.e., univariate maximum likelihood estimation).</li>
+<li>Use <code>R</code> to implement maximum likelihood estimation by an empirical approach.</li>
 </ul>
 </section>
-<section id="lecture-8-missing-data" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="lecture-8-missing-data"><span class="header-section-number">8</span> Lecture 8: Missing Data</h2>
+<section id="lecture-8-simulation" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="lecture-8-simulation"><span class="header-section-number">8</span> Lecture 8: Simulation</h2>
+<p>By the end of this lecture, you should be able to:</p>
 <ul>
-<li>Identify and explain the three common types of missing data mechanisms.</li>
-<li>Identify a potential consequence of removing missing data on downstream analyses.</li>
-<li>Identify a potential consequence of a mean imputation method on downstream analyses.</li>
-<li>Identify the four steps involved with a multiple imputation method for handling missing data.</li>
-<li>Use the <code>mice</code> package in <code>R</code> to fit multiple imputed models.</li>
+<li>Generate a random sample from a discrete distribution in both <code>R</code> and <code>Python</code>.</li>
+<li>Reproduce the same random sample each time you re-run your code in either <code>R</code> or <code>Python</code> by setting the seed or random state.</li>
+<li>Evaluate whether or not a set of observations are independent and identically distributed (<em>iid</em>).</li>
+<li>Use simulation to approximate distribution properties (e.g., mean and variance) using empirical quantities, especially for random variables involving multiple other random variables.</li>
+<li>Argue why simulations can approximate true properties of a stochastic quantity.</li>
 </ul>
 
 
-<script type="ojs-module-contents">
-eyJjb250ZW50cyI6W119
-</script>
-<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
-<div id="exercise-loading-status" class="d-flex gap-2">
-
-</div>
-<div class="spinner-grow spinner-grow-sm">
-
-</div>
-</div>
-<script type="vfs-file">
-W10=
-</script>
 </section>
 
 </main> <!-- /main -->
-<script type="ojs-module-contents">
-eyJjb250ZW50cyI6W119
-</script>
-<script type="module">
-if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
-window._ojs.paths.runtimeToDoc = "../..";
-window._ojs.paths.runtimeToRoot = "../..";
-window._ojs.paths.docToRoot = "";
-window._ojs.selfContained = false;
-window._ojs.runtime.interpretFromScriptTags();
-</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -584,7 +491,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_562_regr-2");
+      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_551_stat-prob-dsci\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -923,8 +830,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./notes/lecture1-glm-link-functions-and-count-regression.html" class="pagination-link" aria-label="Lecture 1: Link Functions and Count Regression">
-        <span class="nav-page-text">Lecture 1: Link Functions and Count Regression</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./notes/01_lecture-uncertainty.html" class="pagination-link" aria-label="Lecture 1: Depicting Uncertainty">
+        <span class="nav-page-text">Lecture 1: Depicting Uncertainty</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -933,5 +840,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

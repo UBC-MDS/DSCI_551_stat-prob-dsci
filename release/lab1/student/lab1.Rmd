@@ -1,0 +1,717 @@
+---
+title: "DSCI 551 Lab 1"
+subtitle: Depicting Uncertainty and Parametric Families
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newpage
+
+# Lab Mechanics
+
+`rubric={mechanics:5}`
+
+Check off that you have read and followed each of these instructions:
+
+-   [ ] All files necessary to run your work must be pushed to your
+    `GitHub.ubc.ca` repository for this lab.
+-   [ ] Paste the URL to your GitHub repo here: **INSERT YOUR GITHUB
+    REPO URL HERE**
+-   [ ] You need to have **a minimum of 3 commit messages** associated
+    with your `GitHub.ubc.ca` repository for this lab.
+-   [ ] **You must also submit `.Rmd` file and the rendered `pdf` in
+    this lab to Gradescope.** You are responsible for ensuring all the
+    figures, texts, and equations in the `.pdf` file are appropriately
+    rendered.
+-   [ ] To ensure you do not break the autograder remove all code for
+    installing packages (i.e., DO NOT have `install.packages(...)` or
+    `devtools::install_github(...)` in your homework!
+-   [ ] Follow the [**MDS general lab
+    instructions**](https://ubc-mds.github.io/resources_pages/general_lab_instructions/).
+
+> **Important:** For the assignments, you are permitted to use LLMs only
+> to gather information, review concepts, or brainstorm. You **must
+> cite** these tools if you use them for the assignment. It is not
+> permitted to write any given assignment by copying and pasting
+> AI-generated responses.
+
+All standard rubrics in this lab follow the MDS rubrics that can be
+found [**here**](https://github.com/UBC-MDS/public/tree/master/rubric).
+
+# One-time set-up
+
+If you are using the `testthat` and `digest` packages for the first time
+and have never installed them before, do this:
+
+1.  Uncomment the two lines of code below by deleting the `#` at the
+    start of each line.
+2.  Run the code cell, which will perform the installation.
+3.  Comment the two lines of code again by adding the `#` back to the
+    start of each line.
+
+```{r}
+# install.packages("testthat")
+# install.packages("digest")
+```
+
+# A Note on Challenging Questions
+
+Each lab will have a few challenging questions. **These are usually
+low-risk questions and will contribute to a 5% out of the total lab
+grade of 100%**. The main purpose here is to challenge yourself or dig
+deeper in a particular area. When you start working on labs, attempt all
+other questions before moving to these questions. If you are running out
+of time, please skip these questions.
+
+We will be more strict with the marking of these questions. If you want
+to get full points in these questions, your answers need to
+
+-   be thorough, thoughtful, and well-written (if necessary),
+-   provide convincing justification and appropriate evidence for the
+    claims you make, and
+-   impress the reader of your lab with your understanding of the
+    material, your analytical and critical reasoning skills, and your
+    ability to think on your own.
+
+# Lab Grade Computation
+
+Once lab grades are published on Gradescope, you will see your **raw lab
+mark** $m$. This **raw lab mark** $m$ is the grand total of your granted
+marks throughout the whole lab assignment. Now, if we add up **all the
+marks (non-challenging and challenging)** in the handout corresponding
+to all `rubric={...}`, this sum is what we call the maximum raw lab mark
+$m_{100}$ to get 100% as a percentage lab grade. On the other hand, if
+we add up **the non-challenging marks** in the handout found in
+`rubric={...}`, this sum is what we call the raw lab mark $m_{95}$ to
+get a 95% as a percentage lab grade.
+
+By the end of the block, **once all lab marking is finished on
+Gradescope**, your raw lab grades will be transferred to **Canvas**.
+Then, in your [**Canvas
+gradebook**](https://canvas.ubc.ca/courses/171373/users), you will see
+these raw lab grades (`raw lab1`, `raw lab2`, `raw lab3`, and
+`raw lab4`). Finally, for each of the four labs, you will also see your
+final lab grades (`lab1`, `lab1`, `lab3`, and `lab4`). Let $g$ be the
+final lab grade of a specific lab **as a percentage**; it will be
+computed as follows:
+
+-   If $m > m_{95}$, then
+    $g = 95 + \left( \frac{m - m_{95}}{m_{100} - m_{95}} \times 5 \right)$.
+-   If $m \leq m_{95}$, then
+    $g = \left( \frac{m}{m_{95}} \right) \times 95$.
+
+# A Note on Warmup Exercises
+
+Each lab session will begin with a warmup exercise, which will be
+indicated when introduced in the handout. We will solve this exercise
+altogether during the first 10 minutes of the lab session.
+
+> **Note this warmup part will not count toward the lab grade of 100%.**
+
+\newpage
+
+# (Warmup) Exercise 1: Collective Risk
+
+The BC government is assessing the risk of flu infection in a social
+gathering. As a data scientist, you are tasked with developing a
+probabilistic model to estimate the risk of the gathering. **Assuming
+the total population in BC is 5 million people**, of which 5,000 people
+have flu on a given day:
+
+**1.1.** What is the probability that a randomly chosen person is
+infected with flu on a given day in BC?
+
+**1.2.** What is the probability that a randomly chosen person is
+**not** infected with the flu on a given day in BC?
+
+**1.3.** If we have a gathering of 20 people (e.g., a coffee shop), what
+is the probability that **at least** one person is infected with the
+flu?
+
+**1.4.** Now, if we have a gathering of 200 people (e.g., a large
+lecture hall), what is the probability that **at least** one person is
+infected with the flu?
+
+> **Note:** For **1.3** and **1.4**, we will assume that each person is
+> **independent** from one another. Recall that if two events $A$ and
+> $B$ are independent, then: $$P(A \cap B) = P(A) \cdot P(B).$$
+
+**ANSWERS:**
+
+**1.1.** *Let the event*
+
+$$  I = \text{An individual is infected with the flu on a given day in BC.} $$
+
+> *Then* $$P(I) = \frac{5000}{5000000} = 0.001.$$
+
+**1.2.** *We copute the complement of the previous probability:*
+
+> $$
+> P(I^c) = 1- \frac{5000}{5000000} = 0.999
+> $$
+
+**1.3.** *Let the event*
+
+$$
+X = \text{Number of people being infected with the flu in a gathering of 20 people.}
+$$
+
+> *If we assume each individual as independent from one another, then:*
+>
+> $$
+> P(X \geq 1) = 1 - \{[1 - P(I)]^{20}\}
+> $$
+
+**1.4.** *Let the event*
+
+$$
+Y = \text{Number of people being infected with the flu in a gathering of 200 people.}
+$$
+
+*If we assume each individual as independent from one another, then :*
+
+$$
+P(Y \geq 1) = 1- \{[1 - P(I)]^{200}\}
+$$
+
+\newpage
+
+# Exercise 2: The Slot Machine
+
+Suppose a slot machine costs \$5 to play (call one pull of the lever a
+"game"). You win nothing with a probability of 0.9, \$10 with a
+probability of 0.09, and \$50 with a probability of 0.01. Let $X$ be the
+**net gain** in one game. Then $X$ has the following distribution:
+
+| $X$ (net gain in one game) | -\$5 | \$5  | \$45 |
+|----------------------------|------|------|------|
+| **Probability**            | 0.9  | 0.09 | 0.01 |
+
+## 2.1.
+
+`rubric={autograde:5,reasoning:5}`
+
+Find the following quantities:
+
+**2.1.1.** The expected value $\mathbb{E}(X)$.
+
+**2.1.2.** $P[X = \mathbb{E}(X)]$, i.e., the probability that you
+achieve the average outcome in a single game.
+
+**2.1.3.** $P(X < 0)$, i.e., the probability of losing money in a game.
+
+**2.1.4.** The mode of $X$.
+
+**2.1.5.** The variance $\operatorname{Var}(X)$.
+
+To get full marks on these questions, follow these instructions:
+
+1.  Provide all your procedure and/or reasoning (e.g., equations):
+    a.  You do not need to use
+        [**LaTex**](https://www.latex-project.org) to provide
+        mathematical notation.
+    b.  Instead, you might work on your written answer on a separate
+        piece of paper and take a picture of it.
+    c.  Then, you have to put this image in the folder `img` which is
+        part of your lab GitHub repo.
+    d.  Finally, within this `R` markdown, use the following syntax:
+        `![My caption](img/my_answer_2.jpg)`, where `my_answer_2.jpg` is your
+        image's name in JPEG format. The output is the following:
+
+![My caption](img/my_answer_2.jpg)
+
+2.  Assign your **final numeric answers** to `answer2_1_1`,
+    `answer2_1_2`, `answer2_1_3`, `answer2_1_4`, and `answer2_1_5` in
+    below chunk of code. **Code your computations directly in each
+    answer if necessary.** Moreover, run the test below to validate your
+    answers.
+
+**ANSWERS:**
+
+*Type your answer here, replacing this text.*
+
+```{r}
+answer2_1_1 <- NULL
+answer2_1_2 <- NULL
+answer2_1_3 <- NULL
+answer2_1_4 <- NULL
+answer2_1_5 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q2-1-autograder.R")
+```
+
+## 2.2.
+
+`rubric={autograde:3}`
+
+Now suppose you play the game 100 times. Assuming we have an infinite
+supply of money (so that we can always afford to play the game!), the
+net outcome after 100 games can be written as a new random variable:
+
+$$Z = \sum_{i = 1}^{100} X_i,$$
+
+where all $X_i$s are **identically distributed** random variables with
+the same distribution as $X$ in **question 2.1**.
+
+Find the following quantities:
+
+**2.2.1.** The maximum value of $Z$.
+
+**2.2.2.** The minimum value of $Z$.
+
+**2.2.3.** The expected value $\mathbb{E}(Z)$.
+
+Assign your **numeric answers** to `answer2_2_1`, `answer2_2_2`, and
+`answer2_2_3`. **Code your computations directly in each answer.** You
+do not need to provide all your procedure (i.e., equations!) to get full
+marks. Moreover, run the test below to validate your answers.
+
+```{r}
+answer2_2_1 <- NULL
+answer2_2_2 <- NULL
+answer2_2_3 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q2-2-autograder.R")
+```
+
+\newpage
+
+# Excercise 3: Serendipity
+
+Imagine you are living on the UBC campus with a student population of
+45,000. Assume your MDS cohort has 120 students.
+
+Now, answer the following:
+
+## 3.1.
+
+`rubric={autograde:1,reasoning:2}`
+
+Assume that seeing each person from the population is equally likely and
+independent of seeing anyone else. If you cross paths with 100 people on
+campus every day, what is the probability of you running into at least
+one MDS student?
+
+> **Heads-up:** *Suppose you run into 100 people **with replacement**,
+> which means that you might run into the same person twice.*
+
+To get full marks on these questions, follow these instructions:
+
+1. Provide all your procedure and/or reasoning (e.g., equations):
+    a. You do not need to use [**LaTex**](https://www.latex-project.org) to provide mathematical notation. 
+    b. Instead, you might work on your written answer on a separate piece of paper and take a picture of it. 
+    c. Then, you have to put this image in the folder `img` which is part of your lab GitHub repo.
+    d. Finally, within this `R` markdown, use the following syntax: `![My caption](img/my_answer_3.jpg)`, where `my_answer_3.jpg` is your image's name in JPEG format. The output is the following: 
+    
+![My caption](img/my_answer_3.jpg)
+
+2.  Assign your **numeric answer** to `answer3_1`. **Code your
+    computation directly.** Moreover, run the test below to validate
+    your answer.
+
+**ANSWER:**
+
+*Type your answer here, replacing this text.*
+
+```{r}
+answer3_1 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q3-1-autograder.R")
+```
+
+## 3.2.
+
+`rubric={autograde:1}`
+
+Assume that seeing each person from the population is equally likely and
+independent of seeing anyone else. If you cross paths with 100 people on
+campus every day, what is the probability of you running into at least
+one MDS student?
+
+> **Heads-up:** *Suppose you run into 100 people **without
+> replacement**, or in other words, you run into 100 **different**
+> people. You can use `R` to perform the computation. You may find the
+> `choose(n, k)` function useful. This function calculates how many ways
+> can we choose a* $k$ subset (no repetition) of an $n$ set, or in math,
+> $\binom{n}{k}$. For example, to compute the number of groups of 2 that
+> can be formed among 4 students, you would use `choose(4, 2)`.
+
+Assign your **numeric answer** to `answer3_2`. **Code your computation
+directly.** You do not need to provide all your procedure (i.e.,
+equations!) to get full marks. Moreover, run the test below to validate
+your answer.
+
+```{r}
+answer3_2 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q3-2-autograder.R")
+```
+
+## 3.3.
+
+`rubric={reasoning:2}`
+
+Compare your answers from **3.1** and **3.2**. Are they similar or
+different? Briefly discuss **in one or two sentences**.
+
+**ANSWER:**
+
+*Type your answer here, replacing this text.*
+
+\newpage
+
+# Excercise 4: The Vancouver Whitecaps Football Club
+
+`rubric={autograde:8}`
+
+The odds of a particular event reflect the likelihood that the event
+will take place. Odds can be calculated as:
+
+$$\frac{\text{number of favorable events}}{\text{number of unfavorable events}}$$
+
+or
+
+$$\frac{p}{1 - p},$$
+
+where $p$ is the probability of the event occurring. **In our
+statistical context, note that odds are not probabilities.**
+
+Say that the Vancouver Whitecaps Football Club (a past MDS Capstone
+partner!) won 10 out of 34 games last season. You want to use this
+information to predict their performance in the first game of the
+upcoming season. Let us assume they continue with the same win rate this
+season.
+
+Answer the following:
+
+**4.1.** What is the probability of the Whitecaps winning the game?
+
+**4.2.** What are the odds **in favour** of the Whitecaps winning the
+game? Provide the corresponding ratio.
+
+**4.3.** What are the odds **against** the Whitecaps winning the game?
+Provide the corresponding ratio.
+
+**4.4.** If a sports website states that the odds in favour of the
+Whitecaps winning the game is 3:4, what is the probability they win the
+game (according to the sports website)?
+
+**4.5.** If $P(\text{winning}) \leq 0.5$ what is the maximum odds?
+
+**4.6.** If $P(\text{winning}) > 0.5$ what is the maximum odds?
+
+**4.7.** Questions **4.5** and **4.6** hopefully showed you that odds
+are not symmetrical. This makes it difficult to compare the odds in
+favour of an event to the odds against an event. Instead, we can take
+the natural logarithm of the odds to make them symmetrical. The log of
+the odds is called the **logit function** and allows us to map
+probabilities from the range $[0, 1]$ to the full range of real numbers.
+Therefore, what is the log of the odds 10:24?
+
+> **Heads-up:** The **logit function** is the basis of **logistic
+> regression**, which you will learn about later in the program.
+
+**4.8.** Finally, what is the log of the odds 24:10?
+
+Assign your **numeric answers** to `answer4_1`, `answer4_2`, ...,
+`answer4_7`, and `answer4_8`. **Code your computations directly in each
+answer if necessary.** You do not need to provide all your procedure
+(i.e., equations!) to get full marks. Moreover, run the test below to
+validate your answers.
+
+```{r}
+answer4_1 <- NULL
+answer4_2 <- NULL
+answer4_3 <- NULL
+answer4_4 <- NULL
+answer4_5 <- NULL
+answer4_6 <- NULL
+answer4_7 <- NULL
+answer4_8 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q4.R")
+```
+
+## Challenging Question
+
+`rubric={reasoning:3}`
+
+In **binary logistic regression**, we aim to model a set of regressors
+or features (namely, the $X$s) versus a **binary response** (e.g., win
+or loss) where the event of interest (e.g., win) has a probability $p$.
+If we have a single regressor $X$, we call our model **simple binary
+logistic regression**. In this case, $p$ will be in function of $X$:
+$p(X)$. Moreover, we also include **regression parameters** in a linear
+function: an intercept $\beta_0$ and a coefficient $\beta_1$.
+
+The model is set up as
+
+$$\log \bigg[ \frac{p(X)}{1 - p(X)} \bigg] = \beta_0 + \beta_1 X.$$
+
+Rearrange the equation above with a standalone $p(X)$ on the left-hand
+side.
+
+**To get full marks, show all your work.** Thus, provide all your
+procedure and/or reasoning (e.g., equations):
+
+a. You do not need to use [**LaTex**](https://www.latex-project.org) to provide mathematical notation. 
+b. Instead, you might work on your written answer on a separate piece of paper and take a picture of it. 
+c. Then, you have to put this image in the folder `img` which is part of your lab GitHub repo.
+d. Finally, within this `R` markdown, use the following syntax: `![My caption](img/my_answer_4.jpg)`, where `my_answer_4.jpg` is your image's name in JPEG format. The output is the following: 
+    
+![My caption](img/my_answer_4.jpg)
+
+**ANSWER:**
+
+*Type your answer here, replacing this text.*
+
+\newpage
+
+# Exercise 5: The Die
+
+`rubric={reasoning:4}`
+
+Consider a weighted 6-sided die with probabilities $p_1,\dots, p_6$.
+Answer the following **in two or three sentences per item**:
+
+**5.1.** What values of the $\{p_i\}$ ($i = 1, \dots, 6$) do lead to the
+highest entropy distribution? Is the answer unique? Why or why not?
+
+**5.2.** What values of the $\{p_i\}$ ($i = 1, \dots, 6$) do lead to the
+lowest entropy distribution? Is the answer unique? Why or why not?
+
+**ANSWER:**
+
+*Type your answer here, replacing this text.*
+
+\newpage
+
+# Exercise 6: Choose the Distribution
+
+## 6.1.
+
+`rubric={autograde:5}`
+
+For each of the following definitions of a random variable, select the
+appropriate discrete distribution family from these ones: `"Bernoulli"`,
+`"Binomial"`, `"Poisson"`, or `"Categorical"` (where "categorical" is
+any discrete distribution with a finite amount of outcomes).
+
+> **Heads-up**: We are actually asking for the *smallest* family here.
+> For example, the family of Bernoulli distributions is contained within
+> the family of Binomial distributions (by taking $n = 1$ trials).
+> Still, if a random variable here belongs to the Bernoulli family, we
+> expect you to respond with `"Bernoulli"`.
+
+**6.1.1.** The outcome of a coin flip.
+
+**6.1.2.** The outcome of a 6-sided die roll.
+
+**6.1.3.** The number of heads in 10 coin flips.
+
+**6.1.4.** The number of times we saw a 6 out of 10 die rolls.
+
+**6.1.5.** The number of times a professor says *"um"* in a lecture.
+
+Assign your **answers as strings with the name of the distribution
+between quotation marks** to `answer6_1_1`, `answer6_1_2`,
+`answer6_1_3`, `answer6_1_4`, and `answer6_1_5`. Moreover, run the test
+below to validate your answers.
+
+```{r}
+answer6_1_1 <- NULL
+answer6_1_2 <- NULL
+answer6_1_3 <- NULL
+answer6_1_4 <- NULL
+answer6_1_5 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q6-1.R")
+```
+
+## 6.2.
+
+`rubric={reasoning:2}`
+
+When discussing the binomial distribution, we often use the letters $p$,
+$n$ and $x$. For example, let X be a binomial random variable
+
+$$X \sim \text{Binomial}(n, p).$$
+
+> **Heads-up:** *The symbol "*$\sim$" means "is distributed as."
+
+Its PMF is defined as:
+
+$$P(X = x \mid n, p) = \binom{n}{x} p^x (1 - p)^{n - x}.$$
+
+Are $p$, $n$, and $x$ all parameters of the binomial distribution? Or is
+one of them different from the other two? Explain **in two or three
+sentences**.
+
+**ANSWER:**
+
+*Type your answer here, replacing this text.*
+
+\newpage
+
+# Exercise 7
+
+`rubric={autograde:5}`
+
+Consider three events
+
+$$A, B, \text{and } C.$$
+
+Suppose that
+
+$$P(A) = 0.12,$$ $$P(B) = 0.07,$$ $$P(C)=0.05,$$
+$$P(A \cup B ) = 0.13,$$ $$P(A \cap C ) = 0.04,$$
+$$P(B \cap C ) = 0.01,$$ and $$P(A \cap B \cap C) = 0.01.$$
+
+Compute the following probabilities:
+
+**7.1.** $P(A^c)$.
+
+**7.2.** $P(A \cap B)$.
+
+**7.3.** $P(A \cap B \cap C^c)$.
+
+**7.4.** $P[(A \cup B \cup C)^c]$.
+
+**7.5.** $P(A \cup B \cup C^c)$.
+
+> **Hint:** It may help to draw a Venn diagram of the events. [**Check
+> this
+> resource**](https://seeing-theory.brown.edu/compound-probability/index.html#section1).
+> Suppose you have an event $A$, note that notation $A^c$ is equivalent
+> to $A'$.
+
+Assign your **numeric answers** to `answer7_1`, `answer7_2`,
+`answer7_3`, `answer7_4`, and `answer7_5`. You do not need to provide
+all your procedure (i.e., equations!) to get full marks. Moreover, run
+the test below to validate your answers.
+
+```{r}
+answer7_1 <- NULL
+answer7_2 <- NULL
+answer7_3 <- NULL
+answer7_4 <- NULL
+answer7_5 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q7-autograder.R")
+```
+
+\newpage
+
+# (Challenging) Exercise 8
+
+`rubric={autograde:2,reasoning:2}`
+
+Let $X$ be a discrete random variable defined on the positive integers
+($i = 1, 2, 3,\dots$), with the following PMF:
+
+$$P(X = i) = \frac{C}{i^2} \qquad \text{for some normalizing constant } C.$$
+
+> **Heads-up:** It turns out that $C = \frac{6}{\pi^2} \approx 0.61$. We
+> could have at least reasoned that $C < 1$, since otherwise we would
+> have $P(X = 1) \geq 1$, which does not make sense.
+
+Find the following quantities:
+
+**8.1.** $P(X < 5)$.
+
+**8.2.** $P(X > 2 \cup X < 4)$.
+
+**8.3.** $P(X < 2 \cup X < 4)$.
+
+**8.4.** $P(X > 2 \cup X > 4)$.
+
+**8.5.** $P(X < 2 \cup X > 4)$.
+
+**8.6.** $P(X > 2 \cap X < 4)$.
+
+**8.7.** $P(X < 2 \cap X < 4)$.
+
+**8.8.** $P(X > 2 \cap X > 4)$.
+
+**8.9.** $P(X < 2 \cap X > 4)$.
+
+**8.10.** $\mathbb{E}(X)$.
+
+To get full marks on these questions, follow these instructions:
+
+1. Provide all your procedure and/or reasoning (e.g., equations):
+    a. You do not need to use [**LaTex**](https://www.latex-project.org) to provide mathematical notation. 
+    b. Instead, you might work on your written answer on a separate piece of paper and take a picture of it. 
+    c. Then, you have to put this image in the folder `img` which is part of your lab GitHub repo.
+    d. Finally, within this `R` markdown, use the following syntax: `![My caption](img/my_answer_8.jpg)`, where `my_answer_8.jpg` is your image's name in JPEG format. The output is the following: 
+    
+![My caption](img/my_answer_8.jpg)
+
+\newpage
+
+2.  Assign your **numeric answers** to `answer8_1`, `answer8_2`, ...,
+    `answer8_9`, and `answer8_10`. **Code your computations directly in
+    each answer if necessary.** Moreover, run the test below to validate
+    your answers.
+
+**ANSWERS:**
+
+*Type your answer here, replacing this text.*
+
+```{r}
+C  <- 6 / pi^2 # Where appropriate, write your answers in terms of C.
+
+answer8_1 <- NULL
+answer8_2 <- NULL
+answer8_3 <- NULL
+answer8_4 <- NULL
+answer8_5 <- NULL
+answer8_6 <- NULL
+answer8_7 <- NULL
+answer8_8 <- NULL
+answer8_9 <- NULL
+answer8_10 <- NULL
+
+# YOUR CODE HERE
+```
+
+```{r}
+. = ottr::check("tests/Q8-autograder.R")
+```

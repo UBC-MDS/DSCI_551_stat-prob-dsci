@@ -1,1 +1,1 @@
-Sitemap: https://ubc-mds.github.io/DSCI_562_regr-2/sitemap.xml
+Sitemap: https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/sitemap.xml
