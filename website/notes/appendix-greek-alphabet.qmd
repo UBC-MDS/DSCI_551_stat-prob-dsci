@@ -1,35 +1,37 @@
 ---
-title: Greek Alphabet
-format: html
-execute:
-  enabled: false
+title: "Greek Alphabet"
+format: 
+  live-html:
+    lightbox: true
 ---
 
-Throughout MDS, we will use diverse Greek letters in various statistical topics. Usually, these letters represent distributional parameters. That said, it is not necessary to memorize these letters right away. With practice over time, you will get familiar with this alphabet.
+We will continue using a variety of Greek letters throughout this course. Most of the time, these symbols are just convenient shorthand for **distributional parameters** (for example, a mean, a variance, a rate, a shape parameter, or a regression coefficient).
 
-| Name | Uppercase | Lowercase |
+You **do not** need to memorize every letter or its meaning right away. What matters is that you can recognize what each symbol refers to in the current context (i.e., what it is controlling in the regression model or distribution you are working with). As you see these symbols repeatedly across examples and assignments, the notation will start to feel natural and you will gradually become familiar with the Greek alphabet through practice.
+
+| Name   |      Uppercase      |  Lowercase |
 |:----------:|:-------------:|:------:|
-| Alpha | $\text{A}$ | $\alpha$ |
-| Beta | $\text{B}$ | $\beta$ |
-| Gamma | $\Gamma$ | $\gamma$ |
-| Delta | $\Delta$ | $\delta$ |
-| Epsilon | $\text{E}$ | $\epsilon$ |
-| Zeta | $\text{Z}$ | $\zeta$ |
-| Eta | $\text{H}$ | $\eta$ |
-| Theta | $\Theta$ | $\theta$ |
-| Iota | $\text{I}$ | $\iota$ |
-| Kappa | $\text{K}$ | $\kappa$ |
-| Lambda | $\Lambda$ | $\lambda$ |
-| Mu | $\text{M}$ | $\mu$ |
-| Nu | $\text{N}$ | $\nu$ |
-| Xi | $\Xi$ | $\xi$ |
-| O | $\text{O}$ | $\text{o}$ |
-| Pi | $\Pi$ | $\pi$ |
-| Rho | $\text{P}$ | $\rho$ |
-| Sigma | $\Sigma$ | $\sigma$ |
-| Tau | $\text{T}$ | $\tau$ |
-| Upsilon | $\Upsilon$ | $\upsilon$ |
-| Phi | $\Phi$ | $\phi$ |
-| Chi | $\text{X}$ | $\chi$ |
-| Psi | $\Psi$ | $\psi$ |
-| Omega | $\Omega$ | $\omega$ |
+| Alpha |  $\text{A}$ | $\alpha$ |
+| Beta |    $\text{B}$   |   $\beta$ |
+| Gamma | $\Gamma$ |  $\gamma$ |
+| Delta | $\Delta$ |  $\delta$ |
+| Epsilon | $\text{E}$ |  $\epsilon$ |
+| Zeta | $\text{Z}$ |  $\zeta$ |
+| Eta | $\text{H}$ |  $\eta$ |
+| Theta | $\Theta$ |  $\theta$ |
+| Iota | $\text{I}$ |  $\iota$ |
+| Kappa | $\text{K}$ |  $\kappa$ |
+| Lambda | $\Lambda$ |  $\lambda$ |
+| Mu | $\text{M}$ |  $\mu$ |
+| Nu | $\text{N}$ |  $\nu$ |
+| Xi | $\Xi$ |  $\xi$ |
+| O | $\text{O}$ |  $\text{o}$ |
+| Pi | $\Pi$ |  $\pi$ |
+| Rho | $\text{P}$ |  $\rho$ |
+| Sigma | $\Sigma$ |  $\sigma$ |
+| Tau | $\text{T}$ |  $\tau$ |
+| Upsilon | $\Upsilon$ |  $\upsilon$ |
+| Phi | $\Phi$ |  $\phi$ |
+| Chi | $\text{X}$ |  $\chi$ |
+| Psi | $\Psi$ |  $\psi$ |
+| Omega | $\Omega$ |  $\omega$ |

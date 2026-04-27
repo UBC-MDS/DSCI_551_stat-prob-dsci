@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="lecture1-glm-link-functions-and-count-regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.53">
+
+  <meta name="author" content="(Please, sign in on iClicker)">
+  <title>Lecture 1</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="lecture1-glm-link-functions-and-count-regression_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Lecture 1</h1>
+  <p class="subtitle">GLMs: Link Functions and Count Regression</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+(Please, sign in on iClicker) 
+</div>
+</div>
+</div>
+
+</section>
+<section>
+<section id="hello-and-welcome" class="title-slide slide level1 center">
+<h1>Hello and welcome!</h1>
+<p><br></p>
+<p><strong>Teaching Team</strong></p>
+<p><span style="color: purple;"><strong>Section 1:</strong></span> Payman Nickchi</p>
+<p><span style="color: purple;"><strong>Section 2:</strong></span> G. Alexi Rodríguez-Arelis</p>
+</section>
+<section id="high-level-goals-of-this-course" class="title-slide slide level2 center">
+<h2>High-Level Goals of this Course</h2>
+<ul>
+<li>Describe the risk and value of making <span style="color: purple;">parametric assumptions</span> in regression.</li>
+<li>Fit model functions that represent probabilistic quantities <span style="color: purple;">besides the mean</span>.</li>
+<li>Identify situations <span style="color: purple;">where Ordinary Least-squares (OLS) regression is sub-optimal</span>, and apply <span style="color: purple;">alternative regression methods</span> that better address the situation.</li>
+</ul>
+</section>
+
+<section id="todays-learning-goals" class="title-slide slide level2 center">
+<h2>Today’s Learning Goals</h2>
+<p>By the end of this lecture, you should be able to:</p>
+<ul>
+<li>Explain the <span style="color: purple;">Data Science workflow</span> in Regression Analysis.</li>
+<li>Recall the basics of OLS regression.</li>
+<li>Identify cases <span style="color: purple;">where OLS regression is not suitable</span>.</li>
+<li>Distinguish what makes a regression model “<em>linear</em>.”</li>
+<li>Explain the concept of <span style="color: purple;">generalized linear models (GLMs)</span>.</li>
+<li>Explore the concept of the <span style="color: purple;">link function</span>.</li>
+</ul>
+</section>
+
+<section id="todays-learning-goals-contd" class="title-slide slide level2 center">
+<h2>Today’s Learning Goals (cont’d)</h2>
+<ul>
+<li>Outline the modelling framework of <span style="color: purple;">count regression</span>.</li>
+<li>Fit and interpret count regression.</li>
+<li>Use count regression for prediction.</li>
+<li>Explain and <span style="color: purple;">test overdispersion</span> on count-type data.</li>
+</ul>
+</section>
+</section>
+<section>
+<section id="outline" class="title-slide slide level1 center">
+<h1>Outline</h1>
+<ol type="1">
+<li>A Preamble on our Data Science Workflow</li>
+<li>Review of Ordinary Least-squares Regression</li>
+<li>Link Function</li>
+<li>Poisson Regression</li>
+<li>Overdispersion</li>
+<li>Negative Binomial Regression</li>
+</ol>
+</section>
+<section id="a-preamble-on-our-data-science-workflow" class="title-slide slide level2 center">
+<h2>1. A Preamble on our Data Science Workflow</h2>
+<p>We have structured this regression course in three big pillars:</p>
+<ol type="1">
+<li>The use of an ordered <span style="color: purple;">Data Science workflow</span>,</li>
+<li>Choosing the proper workflow flavour according to either an <span style="color: purple;">inferential</span> or <span style="color: purple;">predictive</span> paradigm.</li>
+<li>The correct use of an <span style="color: purple;">appropriate regression model</span> based on the response of interest.</li>
+</ol>
+</section>
+<section id="what-is-this-workflow" class="title-slide slide level3 center">
+<h3>What is this workflow?</h3>
+<p><br></p>
+<center>
+<img src="images/panda.png" width="400" height="400">
+</center>
+<p><br></p>
+</section>
+
+<section id="stages" class="title-slide slide level3 center">
+<h3>Stages</h3>
+<ol type="1">
+<li>Study design.</li>
+<li>Data collection and wrangling.</li>
+<li>Exploratory data analysis.</li>
+<li>Data modelling.</li>
+<li>Estimation.</li>
+<li>Results.</li>
+<li>Storytelling.</li>
+</ol>
+</section>
+
+<section id="data-modelling" class="title-slide slide level3 center">
+<h3>Data Modelling</h3>
+<blockquote>
+<p><em>In Regression Analysis, we can model an <strong>unbounded continuous response</strong> in terms of their <strong>global conditioned mean</strong> using OLS for inference or prediction.</em></p>
+</blockquote>
+<center>
+<img src="images/reg-mindmap-1.png" width="190" height="380">
+</center>
+</section>
+
+
+<section id="review-of-ordinary-least-squares-regression" class="title-slide slide level2 center">
+<h2>2. Review of Ordinary Least-squares Regression</h2>
+<ul>
+<li>In <span style="color: purple;">DSCI 561</span>, you learned comprehensive material about OLS regression. The term <span style="color: purple;">ordinary</span> refers to a linear model with a <span style="color: purple;">response</span> of <span style="color: purple;">continuous nature</span> : <em>a variable can take on an infinite number of real values in a given range</em>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>This response might be subject to <span style="color: purple;">regressors</span> of a continuous or discrete nature. When the regressors are <span style="color: purple;">discrete</span> and <span style="color: purple;">factor-type</span> (i.e., with different categories), they could be: <span style="color: purple;">nominal</span> or <span style="color: purple;">ordinal</span> .</li>
+</ul>
+</div>
+</section>
+<section id="conceptually" class="title-slide slide level3 center">
+<h3>Conceptually…</h3>
+<ul>
+<li>A linear regression model can be expressed as:</li>
+</ul>
+<p><span class="math display">\[\begin{equation*}
+\mbox{Response} = \mbox{Systematic Component} + \mbox{Random Component}.
+\end{equation*}\]</span></p>
+<div class="fragment">
+<ul>
+<li>For the <span class="math inline">\(i\)</span>th observation in our <span style="color: purple;">sample</span> or <span style="color: purple;">training data</span> <span class="math inline">\((i = 1, \dots, n)\)</span>, the conceptual model is mathematically represented as:</li>
+</ul>
+<p><span class="math display">\[
+\underbrace{Y_i}_\text{Response}  = \underbrace{\beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_k g_k(X_{i,k})}_\text{Systematic Component} + \underbrace{\varepsilon_i}_\text{Random Component}
+\]</span></p>
+</div>
+</section>
+
+<section id="note-the-following" class="title-slide slide level3 center">
+<h3>Note the following!</h3>
+<ul>
+<li>The response <span class="math inline">\(Y_i\)</span> is equal to the sum of <span class="math inline">\(k + 2\)</span> terms.</li>
+<li>The systematic component is the sum of:
+<ul>
+<li>An <span style="color: purple;">unknown intercept</span> <span class="math inline">\(\beta_0\)</span> and</li>
+<li><span class="math inline">\(k\)</span> <span style="color: purple;">regressor functions</span> <span class="math inline">\(g_j(X_{i,j})\)</span> multiplied by their respective <span style="color: purple;">unknown regression coefficient</span> <span class="math inline">\(\beta_j\)</span> <span class="math inline">\((j = 1, \dots, k)\)</span>.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="moreover" class="title-slide slide level3 center">
+<h3>Moreover…</h3>
+<div>
+<ul>
+<li class="fragment"><span class="math inline">\(\varepsilon_i\)</span> is the <span style="color: purple;">random noise</span> under the following assumptions: <span class="math display">\[\begin{gather*}
+\mathbb{E}(\varepsilon_i) = 0 \\
+\text{Var}(\varepsilon_i) = \sigma^2 \\
+\varepsilon_i \sim \mathcal{N}(0, \sigma^2) \\
+\varepsilon_i \perp \!\!\! \perp \varepsilon_k \; \; \; \; \text{for} \; i \neq k  \; \; \; \; \text{(independence)}.
+\end{gather*}\]</span></li>
+<li class="fragment">Hence, <span style="color: purple;">each <span class="math inline">\(Y_i\)</span> is also assumed to be independent and normally distributed</span>: <span class="math display">\[\begin{equation*}
+Y_i \mid X_{i, j} \sim \mathcal{N} \big( \beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_p g_p(X_{i,p}), \sigma^2 \big).
+\end{equation*}\]</span></li>
+</ul>
+</div>
+</section>
+
+<section id="can-we-apply-linear-regression-here" class="title-slide slide level3 center">
+<h3>2.1. Can We Apply Linear Regression Here?</h3>
+<p>Having briefly discussed the components of the OLS model, let us explore three 2-<span class="math inline">\(d\)</span> examples made with <span style="color: purple;">simulated data</span>.</p>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-4-1.png" width="1728" class="r-stretch"></section>
+
+<section id="iclicker-question" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<p><br></p>
+<p>In what example(s) can we apply linear regression?</p>
+<p><strong>A.</strong> Examples 1 and 2.</p>
+<p><strong>B.</strong> Example 1.</p>
+<p><strong>C.</strong> Examples 1 and 3.</p>
+<p><strong>D.</strong> Examples 1, 2, and 3.</p>
+<center>
+<img src="images/panda.png" width="200" height="200">
+</center>
+</section>
+
+<section id="what-makes-a-regression-model-linear" class="title-slide slide level3 center">
+<h3>2.2. What makes a regression model “<em>linear</em>”?</h3>
+<p>Let us retake the <strong>Example 3</strong> from our previous activity.</p>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+
+<section id="data-generation" class="title-slide slide level3 center">
+<h3>Data Generation</h3>
+<ul>
+<li>Each synthetic data point was generated from a <span style="color: purple;">sinusoidal curve</span> plus some <span style="color: purple;">normally distributed random noise</span>: <span class="math display">\[\begin{align*}
+Y_i &amp;= \beta_0 + \beta_1 g(X_i) + \varepsilon_i \\
+&amp;= \beta_0 + \beta_1 \sin(X_i) + \varepsilon_i.
+\end{align*}\]</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Hence, this example can be modeled as an OLS model <span style="color: purple;">if we transform each observed <span class="math inline">\(x_i\)</span> in the training set as <span class="math inline">\(\sin(x_i)\)</span></span>.</li>
+</ul>
+</div>
+</section>
+
+<section id="in-general" class="title-slide slide level3 center">
+<h3>In general…</h3>
+<ul>
+<li>OLS implicates the identity function <span class="math inline">\(g_j(X_{i, j}) = X_{i, j}\)</span>, leading to:</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+Y_i &amp;= \beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_k g_k(X_{i,}) + \varepsilon_i \\
+&amp;= \beta_0 + \beta_1 X_{i,1} + \ldots + \beta_k X_{i,} + \varepsilon_i.
+\end{align*}\]</span></p>
+</section>
+
+
+<section id="link-function" class="title-slide slide level2 center">
+<h2>3. Link Function</h2>
+<ul>
+<li>OLS regression models the following:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+\mu_i &amp;= \mathbb{E}(Y_i \mid X_{i,1}, \ldots, X_{i,k}) \\ &amp;=
+\beta_0 + \beta_1 X_{i,1} + \ldots + \beta_k X_{i,k} \\
+&amp; \qquad \qquad \qquad \qquad \qquad \text{since} \; \; \mathbb{E}(\varepsilon_i) = 0.
+\end{align*}
+\]</span></p>
+</section>
+
+<section id="nonetheless" class="title-slide slide level2 center">
+<h2>Nonetheless…</h2>
+<ul>
+<li>Modelling the mean <span class="math inline">\(\mu_i\)</span> of a discrete-type response is not straightforward.</li>
+<li>Hence, we rely on a <span style="color: purple;">monotonic</span> and <span style="color: purple;">differentiable</span> function <span class="math inline">\(h(\mu_i)\)</span> called the <span style="color: purple;">link function</span>:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+h(\mu_i) &amp;= \eta_i \\
+&amp;= \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \ldots + \beta_k X_{i,k} \\
+&amp; \qquad \qquad \qquad \qquad \qquad \text{for} \; i = 1, \ldots, n.
+\end{align*}
+\]</span></p>
+</section>
+<section id="why-monotonic-and-differentiable" class="title-slide slide level3 center">
+<h3>Why monotonic and differentiable?</h3>
+<ul>
+<li>The link function needs to be monotonic so we can allow putting the <span style="color: purple;">systematic component <span class="math inline">\(\eta_i\)</span></span> in terms of the corresponding mean <span class="math inline">\(\mu_i\)</span>, i.e.:</li>
+</ul>
+<p><span class="math display">\[\mu_i = h^{-1}(\eta_i).\]</span></p>
+<ul>
+<li>It needs to be differentiable since we rely on <span style="color: purple;">maximum likelihood estimation</span> to obtain <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k\)</span>.</li>
+</ul>
+</section>
+
+<section id="here-comes-the-glm" class="title-slide slide level3 center">
+<h3>Here comes the GLM!</h3>
+<ul>
+<li>A GLM has the components of the conceptual regression model in a training set of <span class="math inline">\(n\)</span> elements as:</li>
+</ul>
+<div>
+<ol type="1">
+<li class="fragment"><span style="color: purple;"><strong>Random component:</strong></span> Each <em>response</em> <span class="math inline">\(Y_1,\ldots,Y_n\)</span> is a random variable with mean <span class="math inline">\(\mu_i\)</span>.</li>
+<li class="fragment"><span style="color: purple;"><strong>Systematic component:</strong></span> <span class="math display">\[\eta_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \ldots + \beta_k X_{i,k} \; \; \; \; \text{for} \; i = 1, \ldots, n.\]</span></li>
+<li class="fragment"><span style="color: purple;"><strong>Link function:</strong></span> <span class="math display">\[
+h(\mu_i) = \eta_i.
+\]</span></li>
+</ol>
+</div>
+</section>
+
+
+<section id="poisson-regression" class="title-slide slide level2 center">
+<h2>4. Poisson Regression</h2>
+<center>
+<img src="images/reg-mindmap-2.png" width="445" height="590">
+</center>
+</section>
+<section id="the-crabs-dataset" class="title-slide slide level3 center">
+<h3>4.1. The Crabs Dataset</h3>
+<ul>
+<li>The data frame <code>crabs</code> (<a href="https://ubc.summon.serialssolutions.com/2.0.0/link/0/eLvHCXMwrV3JasMwEBUlpZBLl7Sl6YY_oE4sy5sgFEpICKU9NadcjFYSmtghCyRf0t-tJC_EPhRaepMHS8jSSPM0M3oGALkdx67tCYRyKV0GacCp9CBX60RCySMcYiigy2qpOq_F1ZiMLqL0v-mFYrZvvd4JXXcPEnOUZbU1z6W-fxdoh6eO-XQUvDyGCnXrbK_hxCkDDCHKgs9KH20FelDOR_pzWxXbdYhljTEanoF10e8iC6V2SbDK9Pg_H3gOTnPsar1kynYBjkTSAs1yC923wMkkNaVL8NVbkNXn8wcxjJ8b0euaZysTvyuzVJUYH9i6Kpsl1ijVOSbTtPZ2f6V6nYuectnbbLGdb2tNLNP5fjkVi1J-BcbDwbg_svOfQNhMIRdsu4KHEnIsIiQYJoGQvsKQmAuOsE8lojRnrPEIlZQHHIUEEs8PBVHQjaJr0EjSRNwAS8ebmMNk4DHkRYgQSt2ARoxRnzuhJG2AitmNlxnVR3x4REI41sMf6-GP8-GPd20QmVn7RZV4MB7p0u3fq96BZpY-rn1B96CxWW3FgyGOeDR6_g1rIQSN">Brockmann, 1996</a>) is a dataset detailing the <span style="color: purple;">counts of satellite male crabs</span> residing around a female crab nest.</li>
+</ul>
+<center>
+<img src="images/crab.png" width="500" height="450">
+</center>
+</section>
+
+<section id="let-us-take-a-look-at-the-dataset" class="title-slide slide level3 center">
+<h3>Let us take a look at the dataset!</h3>
+<ul>
+<li>Beforehand, we do <span style="color: purple;">some quick data wrangling</span>.</li>
+<li>Then, we display the first eight rows.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">data</span>(crabs)</span>
+<span id="cb1-2"><a href=""></a>crabs <span class="ot">&lt;-</span> crabs <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href=""></a>  <span class="fu">rename</span>(<span class="at">n_males =</span> satell) <span class="sc">|&gt;</span></span>
+<span id="cb1-4"><a href=""></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>y)</span>
+<span id="cb1-5"><a href=""></a><span class="fu">head</span>(crabs, <span class="at">n =</span> <span class="dv">8</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   color  spine width n_males weight
+1 medium    bad  28.3       8   3050
+2   dark    bad  22.5       0   1550
+3  light   good  26.0       9   2300
+4   dark    bad  24.8       0   2100
+5   dark    bad  26.0       4   2600
+6 medium    bad  23.8       0   2100
+7  light   good  26.5       0   2350
+8   dark middle  24.7       0   1900</code></pre>
+</div>
+</div>
+</section>
+
+<section id="main-statistical-inquiries" class="title-slide slide level3 center">
+<h3>Main Statistical Inquiries</h3>
+<p>Let us suppose we want to assess the following:</p>
+<ul>
+<li>Whether <code>n_males</code> and <span style="color: purple;">female</span> carapace <code>width</code> are <span style="color: purple;">statistically associated</span> and by <span style="color: purple;">how much</span>.</li>
+<li>Whether <code>n_males</code> and <span style="color: purple;">female</span> <code>color</code> of the prosoma are <span style="color: purple;">statistically associated</span> and by <span style="color: purple;">how much</span>.</li>
+</ul>
+<center>
+<img src="images/panda.png" width="200" height="200">
+</center>
+</section>
+
+<section id="exploratory-data-analysis" class="title-slide slide level3 center">
+<h3>4.2. Exploratory Data Analysis</h3>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-8-1.png" width="1728" class="r-stretch"></section>
+
+<section id="iclicker-question-1" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<p><br></p>
+<p>By checking the below plot, do you think <code>n_males</code> increases with the <span style="color: purple;">female</span> carapace <code>width</code>?</p>
+<p><strong>A.</strong> Of course!</p>
+<p><strong>B.</strong> Not really.</p>
+<p><strong>C.</strong> I am pretty uncertain about an increasing or decreasing pattern.</p>
+<center>
+<img src="images/panda.png" width="150" height="150">
+</center>
+</section>
+
+<section id="let-us-proceed-with-the-data-wrangling" class="title-slide slide level3 center">
+<h3>Let us proceed with the data wrangling!</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>group_avg_width <span class="ot">&lt;-</span> crabs<span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">intervals =</span> <span class="fu">cut</span>(crabs<span class="sc">$</span>width, <span class="at">breaks =</span> <span class="dv">10</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href=""></a>  <span class="fu">group_by</span>(intervals) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href=""></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(n_males), <span class="at">n =</span> <span class="fu">n</span>()) </span>
+<span id="cb3-5"><a href=""></a>group_avg_width</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   intervals    mean     n
+   &lt;fct&gt;       &lt;dbl&gt; &lt;int&gt;
+ 1 (21,22.2]    0        2
+ 2 (22.2,23.5]  1       14
+ 3 (23.5,24.8]  1.77    26
+ 4 (24.8,26]    2.98    43
+ 5 (26,27.2]    2.53    32
+ 6 (27.2,28.5]  4.15    33
+ 7 (28.5,29.8]  4       13
+ 8 (29.8,31]    4.86     7
+ 9 (31,32.2]    3        2
+10 (32.2,33.5]  7        1</code></pre>
+</div>
+</div>
+</section>
+
+<section id="then-some-plotting" class="title-slide slide level3 center">
+<h3>Then, some plotting…</h3>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-10-1.png" width="1728" class="r-stretch"></section>
+
+<section id="more-plotting" class="title-slide slide level3 center">
+<h3>More plotting…</h3>
+<ul>
+<li>Response <code>n_males</code> is count-type. So, a more appropriate standalone plot is a <span style="color: purple;">bar chart</span>.</li>
+<li>Note the <span style="color: purple;">right-skewness</span>.</li>
+</ul>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-11-1.png" width="2400" class="r-stretch"></section>
+
+<section id="data-modelling-framework" class="title-slide slide level3 center">
+<h3>4.3. Data Modelling Framework</h3>
+<ul>
+<li>Poisson regression is the <span style="color: purple;">primary resource</span> when it comes to <span style="color: purple;">modelling counts</span>.</li>
+<li>This model also fits into the <span style="color: purple;">GLM class.</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>A Poisson random variable refers to discrete data with <span style="color: purple;">non-negative integer values that count something</span>.</li>
+</ul>
+<blockquote>
+<p><strong>These counts could happen during a given timeframe or even a space such as a geographic unit!</strong></p>
+</blockquote>
+</div>
+</section>
+
+<section id="distributional-insights" class="title-slide slide level3 center">
+<h3>Distributional Insights</h3>
+<ul>
+<li>A Poisson regression model assumes a random sample of <span class="math inline">\(n\)</span> count observations <span class="math inline">\(Y_i\)</span>s, hence <span style="color: purple;">independent</span> (<strong>but not identically distributed!</strong>).</li>
+</ul>
+<p><span class="math display">\[Y_i \sim \text{Poisson}(\lambda_i)\]</span></p>
+<div class="fragment">
+<ul>
+<li>Note <span class="math inline">\(\mathbb{E}(Y_i) = \lambda_i &gt; 0\)</span> and <span class="math inline">\(\text{Var}(Y_i) = \lambda_i &gt; 0\)</span>.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> Given that <span class="math inline">\(\mathbb{E}(Y_i) = \text{Var}(Y_i) = \lambda_i\)</span>, we also assume <strong>equidispersion</strong>. Furthermore, <span class="math inline">\(\lambda_i\)</span> is continuous!</p>
+</blockquote>
+</div>
+</section>
+
+<section id="going-back-to-the-crabs-dataset" class="title-slide slide level3 center">
+<h3>Going back to the <code>crabs</code> dataset…</h3>
+<ul>
+<li>The events are the number of male crabs (<code>n_males</code>) around a space: <span style="color: purple;">the female breeding nest</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Let <span class="math inline">\(X_{\texttt{width}_i}\)</span> be the <span class="math inline">\(i\)</span>th value for the regressor <code>width</code> in our dataset. We could use <span style="color: purple;">identity link function</span> as in <span class="math display">\[
+h(\lambda_i) = \lambda_i = \beta_0 + \beta_1 X_{\texttt{width}_i}.
+\]</span></li>
+</ul>
+</div>
+</section>
+
+<section id="however" class="title-slide slide level3 center">
+<h3>However…</h3>
+<ul>
+<li><p><strong>We have a response range issue!</strong></p></li>
+<li><p>Instead, <strong>we will use the natural logarithm of the mean</strong> <span class="math inline">\(\log(\lambda_i)\)</span>.</p></li>
+<li><p>In the <code>crabs</code> dataset with <code>width</code> as a regressor, the model is depicted via this <span style="color: purple;">systematic component</span>: <span class="math display">\[
+h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i}.
+\]</span></p></li>
+<li><p>The <span style="color: purple;">random component</span> is implicitly contained in <span class="math display">\[Y_i \sim \text{Poisson}(\lambda_i).\]</span></p></li>
+</ul>
+</section>
+
+<section id="estimation" class="title-slide slide level3 center">
+<h3>4.4. Estimation</h3>
+<ul>
+<li>Under a general framework with <span class="math inline">\(k\)</span> regressors, the <span style="color: purple;">regression parameters</span> <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> in the model are unknown.</li>
+<li>We will use <code>glm()</code> to get the estimates <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots \hat{\beta}_k\)</span>.</li>
+<li>These estimates are obtained through <span style="color: purple;">maximum likelihood</span> where we assume a <span style="color: purple;">Poisson joint probability mass function</span> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJjb2RlIjoiZGF0YShjcmFicylcbmNyYWJzIDwtIGNyYWJzIHw+IHJlbmFtZShuX21hbGVzID0gc2F0ZWxsKVxucG9pc3Nvbl9tb2RlbF8xIDwtIGdsbShmb3JtdWxhID0gbl9tYWxlcyB+IHdpZHRoLCBmYW1pbHkgPSBwb2lzc29uLCBkYXRhID0gY3JhYnMpIiwiYXR0ciI6eyJldmFsIjp0cnVlLCJhdXRvcnVuIjp0cnVlLCJlZGl0Ijp0cnVlfX0=
+</script>
+</div>
+</div>
+</section>
+
+<section id="inference" class="title-slide slide level3 center">
+<h3>4.5. Inference</h3>
+<ul>
+<li>We can determine <span style="color: purple;">whether a regressor is statistically associated with the logarithm of the response’s mean</span> through <span style="color: purple;">hypothesis testing</span> for <span class="math inline">\(\beta_j\)</span>.</li>
+<li>We use <span class="math inline">\(\hat{\beta}_j\)</span> and its <span style="color: purple;">standard error</span>, <span class="math inline">\(\mbox{se}\left(\hat{\beta}_j\right)\)</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Then, we test the below hypotheses via the <span style="color: purple;">Wald statistic</span> <span class="math inline">\(z _j= \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}\)</span> as in: <span class="math display">\[\begin{align*}
+H_0: \beta_j &amp;= 0 \\
+H_a: \beta_j &amp;\neq 0.        
+\end{align*}\]</span></li>
+</ul>
+</div>
+</section>
+<section id="solving-one-part-of-our-initial-inquiries" class="slide level4">
+<h4>Solving one part of our initial inquiries!</h4>
+<blockquote>
+<p><strong>Is female caparace width statistically associated to the logarithm of mean of the counts of satellite male crabs residing around a female crab nest?</strong></p>
+</blockquote>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJjb2RlIjoidGlkeShwb2lzc29uX21vZGVsXzEsIGNvbmYuaW50ID0gVFJVRSkgfD4gbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAzKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>We have evidence to state that <span style="color: purple;">female</span> carapace <code>width</code> is statistically associated to the logarithm of the mean of <code>n_males</code>.</li>
+</ul>
+</div>
+</section>
+
+<section id="plotting-our-estimated-regression-function" class="title-slide slide level3 center">
+<h3>Plotting our estimated regression function!</h3>
+<p>Is there a positive relationship between carapace <code>width</code> and the <span style="color: purple;">original scale</span> of the response <code>n_males</code>?</p>
+
+<img data-src="lecture1-glm-link-functions-and-count-regression_files/figure-revealjs/unnamed-chunk-14-1.png" width="2400" class="r-stretch"></section>
+
+<section id="coefficient-interpretation" class="title-slide slide level3 center">
+<h3>4.6. Coefficient Interpretation</h3>
+<ul>
+<li>Let us fit a second model with two regressors: <code>width</code> (<span class="math inline">\(X_{\texttt{width}_i}\)</span>) and <code>color</code> (<span class="math inline">\(X_{\texttt{color_darker}_i}\)</span>, <span class="math inline">\(X_{\texttt{color_light}_i}\)</span>, and <span class="math inline">\(X_{\texttt{color_medium}_i}\)</span>): <span class="math display">\[
+h(\lambda_i) = \log (\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i} + \beta_2 X_{\texttt{color_darker}_i} + \\ \beta_3 X_{\texttt{color_light}_i} + \beta_4 X_{\texttt{color_medium}_i}.
+\]</span></li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJjb2RlIjoibGV2ZWxzKGNyYWJzJGNvbG9yKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+</section>
+<section id="using-glmand-tidy" class="slide level4">
+<h4>Using <code>glm()</code>and <code>tidy()</code></h4>
+<p><br></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJjb2RlIjoicG9pc3Nvbl9tb2RlbF8yIDwtIGdsbShcbiAgZm9ybXVsYSA9IG5fbWFsZXMgfiB3aWR0aCArIGNvbG9yLFxuICBmYW1pbHkgPSBwb2lzc29uLCBkYXRhID0gY3JhYnNcbilcbnRpZHkocG9pc3Nvbl9tb2RlbF8yLCBjb25mLmludCA9IFRSVUUpIHw+IG11dGF0ZV9pZihpcy5udW1lcmljLCByb3VuZCwgMykiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+<section id="firstly" class="slide level4">
+<h4>Firstly…</h4>
+<p><br></p>
+<ul>
+<li>Let us focus on the coefficient corresponding to carapace <code>width</code>, <span style="color: purple;">while keeping <code>color</code> constant</span>.</li>
+<li>Consider an observation with a given value <span class="math inline">\(X_{\texttt{width}} = \texttt{w}\)</span> cm, then:</li>
+</ul>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\log \left( \lambda_{\texttt{width}} \right) &amp;= \beta_0 + \beta_1 \overbrace{\texttt{w}}^{X_{\texttt{width}}} + \\
+&amp; \qquad \underbrace{\beta_2 X_{\texttt{color_darker}} + \beta_3 X_{\texttt{color_light}} + \beta_4 X_{\texttt{color_medium}}}_{\text{Constant}}.
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="now" class="slide level4">
+<h4>Now…</h4>
+<p><br></p>
+<ul>
+<li>For another observation with a given <span class="math inline">\(X_{\texttt{width + 1}} = \texttt{w} + 1\)</span> cm, we have that:</li>
+</ul>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\log \left( \lambda_{\texttt{width + 1}} \right) &amp;= \beta_0 + \beta_1 \overbrace{\texttt{w} + 1}^{X_{\texttt{width + 1}}} + \\
+&amp; \qquad \underbrace{\beta_2 X_{\texttt{color_darker}} + \beta_3 X_{\texttt{color_light}} + \beta_4 X_{\texttt{color_medium}}}_{\text{Constant}}.
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="playing-around-with-the-math" class="slide level4">
+<h4>Playing around with the math!</h4>
+<p><br></p>
+<ul>
+<li><p>If we set up the difference <span class="math inline">\(\log \left( \lambda_{\texttt{width}} \right) - \log \left( \lambda_{\texttt{width + 1}} \right)\)</span>, <span style="color: purple;">along with some logarithm properties and exponentiation</span>, we end up with the following expression: <span class="math display">\[\frac{\lambda_{\texttt{width + 1}} }{\lambda_{\texttt{width}}} = e^{\beta_1}.\]</span></p></li>
+<li><p>This expression indicates that the response varies in a <span style="color: purple;">multiplicative way</span> when increased 1 cm in carapace <code>width</code>.</p></li>
+</ul>
+</section>
+<section id="solving-another-part-of-our-initial-inquiries" class="slide level4">
+<h4>Solving another part of our initial inquiries!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJjb2RlIjoidGlkeShwb2lzc29uX21vZGVsXzIsIGV4cG9uZW50aWF0ZSA9IFRSVUUsIGNvbmYuaW50ID0gVFJVRSkgfD4gbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAyKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+<div class="fragment">
+<blockquote>
+<p><span class="math inline">\(\frac{\hat{\lambda}_{\texttt{width + 1}} }{\hat{\lambda}_{\texttt{width}}} = e^{\hat{\beta}_1} = 1.16\)</span> indicates <strong>the mean count of male crabs (<code>n_males</code>) around a female breeding nest</strong> increases by <span class="math inline">\(16\%\)</span> when increasing the female carapace <code>width</code> by <span class="math inline">\(1\)</span> cm, <strong>while keeping <code>color</code> constant</strong>.</p>
+</blockquote>
+</div>
+</section>
+<section id="then" class="slide level4">
+<h4>Then…</h4>
+<ul>
+<li>Consider two observations: one <span class="math inline">\(\lambda_{\texttt{D}}\)</span> with <code>dark</code> <code>color</code> of the prosoma (<strong>the baseline</strong>) and another <span class="math inline">\(\lambda_{\texttt{L}}\)</span> with <code>light</code> <code>color</code>:</li>
+</ul>
+<div class="fragment">
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\log \left( \lambda_{\texttt{D}} \right) = \beta_0 + \overbrace{\beta_1 X_{\texttt{width}}}^{\text{Constant}} + \beta_2 \overbrace{X_{\texttt{color_darker}_{\texttt{D}}}}^0 + \\ \beta_3 \underbrace{X_{\texttt{color_light}_{\texttt{D}}}}_0 + \beta_4 \underbrace{X_{\texttt{color_medium}_{\texttt{D}}}}_0
+\end{align*}\]</span> <span class="math display">\[\begin{align*}
+\log \left( \lambda_{\texttt{L}} \right) = \beta_0 + \overbrace{\beta_1 X_{\texttt{width}}}^{\text{Constant}} + \beta_2 \overbrace{X_{\texttt{color_darker}_{\texttt{L}}}}^0 + \\ \beta_3 \underbrace{X_{\texttt{color_light}_{\texttt{L}}}}_1 + \beta_4 \underbrace{X_{\texttt{color_medium}_{\texttt{L}}}}_0.
+\end{align*}\]</span></p>
+</div>
+</div>
+</section>
+<section id="playing-around-with-the-math-1" class="slide level4">
+<h4>Playing around with the math!</h4>
+<ul>
+<li>If we set up the difference <span class="math inline">\(\log \left( \lambda_{\texttt{L}} \right)  - \log \left( \lambda_{\texttt{D}} \right)\)</span>, <span style="color: purple;">along with some logarithm properties and exponentiation</span>, we end up with the following expression:</li>
+</ul>
+<p><span class="math display">\[
+\frac{\lambda_{\texttt{L}} }{\lambda_{\texttt{D}}} = e^{\beta_3}.
+\]</span></p>
+<ul>
+<li>This expression indicates that the response varies in a <span style="color: purple;">multiplicative way</span> when the <code>color</code> of the prosoma changes from <code>dark</code> to <code>light</code>.</li>
+</ul>
+</section>
+<section id="solving-another-part-of-our-initial-inquiries-1" class="slide level4">
+<h4>Solving another part of our initial inquiries!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJjb2RlIjoidGlkeShwb2lzc29uX21vZGVsXzIsIGV4cG9uZW50aWF0ZSA9IFRSVUUsIGNvbmYuaW50ID0gVFJVRSkgfD4gbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAyKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+<div class="fragment">
+<blockquote>
+<p><span class="math inline">\(\frac{\hat{\lambda}_{\texttt{L}} }{\hat{\lambda}_{\texttt{D}}} = e^{\hat{\beta}_3} = 1.55\)</span> indicates that <strong>the mean count of male crabs (<code>n_males</code>) around a female breeding nest</strong> increases by <span class="math inline">\(55\%\)</span> when the <code>color</code> of the prosoma changes from <code>dark</code> to <code>light</code>, <strong>while keeping the female carapace <code>width</code> constant</strong>.</p>
+</blockquote>
+</div>
+</section>
+
+<section id="predictions" class="title-slide slide level3 center">
+<h3>4.7. Predictions</h3>
+<ul>
+<li>Suppose we want to predict <strong>the mean count of male crabs (<code>n_males</code>) around a female breeding nest</strong> with a female carapace <code>width</code> of <span class="math inline">\(27.5\)</span> cm and <code>light</code> <code>color</code> of the female prosoma.</li>
+<li>We could use the model <code>poisson_model_2</code> as follows:</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJjb2RlIjoicHJkY3QgPC0gcHJlZGljdChwb2lzc29uX21vZGVsXzIsIHRpYmJsZSh3aWR0aCA9IDI3LjUsIGNvbG9yID0gXCJsaWdodFwiKSwgdHlwZSA9IFwicmVzcG9uc2VcIilcbnJvdW5kKHByZGN0LCAyKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+</section>
+<section id="interpretation" class="slide level4">
+<h4>Interpretation</h4>
+<p><br></p>
+<ul>
+<li>The previous prediction can be interpreted in plain words as follows:</li>
+</ul>
+<blockquote>
+<p>Given a female carapace <code>width</code> of <span class="math inline">\(27.5\)</span> cm and <code>light</code> <code>color</code> of the female prosoma, we predict <span class="math inline">\(4.29\)</span> male crabs around that female crab nest <strong>on average</strong>.</p>
+</blockquote>
+</section>
+
+
+<section id="overdispersion" class="title-slide slide level2 center">
+<h2>5. Overdispersion</h2>
+<ul>
+<li>Population variances of some random variables could be <span style="color: purple;">a function of their respective means</span>:
+<ul>
+<li>If <span class="math inline">\(X \sim \text{Exponential}(\lambda)\)</span>, then <span class="math inline">\(\mathbb{E}(X) = \lambda\)</span> and <span class="math inline">\(\text{Var}(X) = \lambda^2\)</span>.</li>
+<li>If <span class="math inline">\(X \sim \text{Binomial}(n , p)\)</span>, then <span class="math inline">\(\mathbb{E}(X) = n p\)</span> and <span class="math inline">\(\text{Var}(X) = n p (1 - p)\)</span>.</li>
+<li>If <span class="math inline">\(X \sim \text{Poisson}(\lambda)\)</span>, then <span class="math inline">\(\mathbb{E}(X) = \lambda\)</span> and <span class="math inline">\(\text{Var}(X) = \lambda\)</span>.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><strong>How does equidispersion affect our Poisson regression model?</strong></p>
+</blockquote>
+</section>
+<section id="heteroscedasticity" class="title-slide slide level3 center">
+<h3>Heteroscedasticity</h3>
+<ul>
+<li>We must clarify that GLMs naturally deal with some types of <span style="color: purple;">heteroscedasticity</span>.</li>
+<li>For example, note that each observation <span class="math inline">\(i = 1, \dots, n\)</span> in our training set (used to estimate a Poisson regression model) is assumed as: <span class="math display">\[Y_i \sim \text{Poisson}(\lambda_i).\]</span></li>
+</ul>
+</section>
+
+<section id="in-many-cases" class="title-slide slide level3 center">
+<h3>In many cases…</h3>
+<ul>
+<li>The variance of our data is sometimes larger than the variance considered by our model <span style="color: purple;">as in the basic Poisson regression</span>.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> When the variance is larger than the mean in a random variable, we have <strong>overdispersion</strong>.</p>
+</blockquote>
+</section>
+
+<section id="going-back-to-poisson_model_2" class="title-slide slide level3 center">
+<h3>Going back to <code>poisson_model_2</code>!</h3>
+<ul>
+<li>Let us go back to our <code>poisson_model_2</code> with the log link function from the <code>crabs</code> dataset with two regressors: <code>width</code> (<span class="math inline">\(X_{\texttt{width}_i}\)</span>) and <code>color</code> (<span class="math inline">\(X_{\texttt{color_darker}_i}\)</span>, <span class="math inline">\(X_{\texttt{color_light}_i}\)</span>, and <span class="math inline">\(X_{\texttt{color_medium}_i}\)</span>) for the <span class="math inline">\(i\)</span>th observation:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+h(\lambda_i) &amp;= \log (\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i} + \\
+&amp; \qquad \beta_2 X_{\texttt{color_darker}_i} + \beta_3 X_{\texttt{color_light}_i} + \beta_4 X_{\texttt{color_medium}_i}.
+\end{align*}
+\]</span></p>
+</section>
+
+<section id="testing-for-overdispersion" class="title-slide slide level3 center">
+<h3>Testing for overdispersion!</h3>
+<ul>
+<li>We will test whether there is overdispersion in this Poisson regression model via function <code>dispersiontest()</code>, (from package <code>{AER}</code>).</li>
+<li>Let <span class="math inline">\(Y_i\)</span> be the <span class="math inline">\(i\)</span>th Poisson response in the count regression model.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><span style="color: purple;">Ideally in the presence of equidispersion</span>, <span class="math inline">\(Y_i\)</span> has the following parameters: <span class="math display">\[\begin{gather*}
+\mathbb{E}(Y_i) = \lambda_i \\
+\text{Var}(Y_i) = \lambda_i.
+\end{gather*}\]</span></li>
+</ul>
+</div>
+</section>
+<section id="test-specifics" class="slide level4">
+<h4>Test Specifics</h4>
+<ul>
+<li>The test uses the following mathematical expression: <span class="math display">\[
+\text{Var}(Y_i) = \overbrace{(1 + \gamma)}^\text{Dispersion Factor} \lambda_i,
+\]</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Moreover, we have the following hypotheses: <span class="math display">\[\begin{gather*}
+H_0: 1 + \gamma = 1 \\
+H_a: 1 + \gamma &gt; 1.
+\end{gather*}\]</span></li>
+<li>When there is evidence of overdispersion in our data, <span style="color: purple;">we will reject <span class="math inline">\(H_0\)</span></span> under a pre-specified significance level <span class="math inline">\(\alpha\)</span>.</li>
+</ul>
+</div>
+</section>
+<section id="running-the-test-on-poisson_model_2" class="slide level4">
+<h4>Running the test on <code>poisson_model_2</code></h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJjb2RlIjoiZGlzcGVyc2lvbnRlc3QocG9pc3Nvbl9tb2RlbF8yKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+<blockquote>
+<p>With <span class="math inline">\(\alpha = 0.05\)</span>, we reject <span class="math inline">\(H_0\)</span> since the <span class="math inline">\(p\text{-value} &lt; .001\)</span>. Hence, the <code>poisson_model_2</code> has overdispersion.</p>
+</blockquote>
+<div class="fragment">
+<ul>
+<li><strong>Therefore, what modelling alternative do we have?</strong></li>
+</ul>
+</div>
+</section>
+
+
+<section id="negative-binomial-regression" class="title-slide slide level2 center">
+<h2>6. Negative Binomial Regression</h2>
+<ul>
+<li>Let <span class="math display">\[Y_i \sim \text{Negative Binomial} (m, p_i) \quad \text{for} \quad i = 1, \dots, n.\]</span></li>
+<li>This distribution has the following <span style="color: purple;">mean</span> and <span style="color: purple;">variance</span>: <span class="math display">\[\begin{gather*}
+\mathbb{E}(Y_i) = \frac{m(1 - p_i)}{p_i} \\
+\text{Var}(Y_i) = \frac{m(1 - p_i)}{p_i^2}
+\end{gather*}\]</span></li>
+</ul>
+</section>
+<section id="reparametrization" class="title-slide slide level3 center">
+<h3>6.1. Reparametrization</h3>
+<ul>
+<li>Let us reparametrize the previous mean and variance: <span class="math display">\[\begin{equation*}
+\lambda_i = \frac{m (1 - p_i)}{p_i} \qquad \Rightarrow \qquad p_i = \frac{m}{m + \lambda_i},
+\end{equation*}\]</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Hence:</li>
+</ul>
+<p><span class="math display">\[\begin{gather*}
+\mathbb{E}(Y_i) = \lambda_i \\
+\text{Var}(Y_i) = \lambda_i \left( 1 + \frac{\lambda_i}{m} \right).
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="general-modelling-framework" class="title-slide slide level3 center">
+<h3>6.2. General Modelling Framework</h3>
+<ul>
+<li><span style="color: purple;">As in the case of Poisson regression</span>, the Negative Binomial case is a GLM with the following link function: <span class="math display">\[\begin{equation*}
+h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{i,1} + \dots + \beta_k X_{i,k}.
+\end{equation*}\]</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Let <span class="math inline">\(\theta = \frac{1}{m}\)</span>. Then, Negative Binomial regression will assume the following variance: <span class="math display">\[\begin{align*}
+\text{Var}(Y_i) = \lambda_i \left( 1 + \frac{\lambda_i}{m} \right) = \lambda_i + \theta \lambda_i^2.
+\end{align*}\]</span></li>
+</ul>
+</div>
+</section>
+
+<section id="estimation-1" class="title-slide slide level3 center">
+<h3>6.3. Estimation</h3>
+<ul>
+<li>Via a training set of size <span class="math inline">\(n\)</span> whose responses are <span style="color: purple;">independent counts</span> <span class="math inline">\(Y_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>), we use <span style="color: purple;">maximum likelihood estimation</span> to obtain <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k, \hat{\theta}\)</span>.</li>
+<li>To fit a Negative Binomial regression via <code>R</code>, we can use the function <code>glm.nb()</code> from package <code>{MASS}</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJjb2RlIjoibGlicmFyeShNQVNTKVxuXG5uZWdhdGl2ZV9iaW5vbWlhbF9tb2RlbCA8LSBnbG0ubmIoZm9ybXVsYSA9IG5fbWFsZXMgfiB3aWR0aCArIGNvbG9yLCBkYXRhID0gY3JhYnMpIiwiYXR0ciI6eyJldmFsIjp0cnVlLCJhdXRvcnVuIjp0cnVlLCJ3YXJuaW5nIjpmYWxzZSwibWVzc2FnZSI6ZmFsc2UsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+<section id="checking-summaries" class="slide level4">
+<h4>Checking summaries!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJjb2RlIjoiXG5zdW1tYXJ5KG5lZ2F0aXZlX2Jpbm9taWFsX21vZGVsKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2UsImVkaXQiOnRydWUsImF1dG9ydW4iOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+<section class="slide level4">
+
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJjb2RlIjoic3VtbWFyeShwb2lzc29uX21vZGVsXzIpIiwiYXR0ciI6eyJldmFsIjp0cnVlLCJhdXRvcnVuIjp0cnVlLCJlZGl0Ijp0cnVlfX0=
+</script>
+</div>
+</div>
+</section>
+
+<section id="iclicker-question-2" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<div class="small-text">
+<ul>
+<li>Under the context of this crab problem with overdispersion as assessed by the <span style="color: purple;">overdispersion test</span>, suppose we use <code>poisson_model_2</code> to perform inference on the response and regressors.</li>
+<li>What is the consequence of using these <span style="color: purple;">underestimated</span> standard errors compared to the ones from <code>negative_binomial_model</code>?</li>
+</ul>
+<p><strong>A.</strong> We are more prone to commit Type I errors (i.e., rejecting <span class="math inline">\(H_a\)</span> when in fact it is true).</p>
+<p><strong>B.</strong> We are more prone to commit Type I errors (i.e., rejecting <span class="math inline">\(H_0\)</span> when in fact it is true).</p>
+<p><strong>C.</strong> We are more prone to commit Type II errors (i.e., rejecting <span class="math inline">\(H_a\)</span> when in fact it is true).</p>
+<p><strong>D.</strong> We are more prone to commit Type II errors (i.e., rejecting <span class="math inline">\(H_0\)</span> when in fact it is true).</p>
+</div>
+<div class="quarto-auto-generated-content">
+<p><img src="images/UBC_MDS_logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>DSCI 562 - Regression II</p>
+</div>
+</div>
+<script type="webr-data">
+eyJyZW5kZXJfZGYiOiJkZWZhdWx0Iiwib3B0aW9ucyI6eyJiYXNlVXJsIjoiaHR0cHM6Ly93ZWJyLnItd2FzbS5vcmcvdjAuNC4yLyJ9LCJwYWNrYWdlcyI6eyJyZXBvcyI6W10sInBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsInRpZHl2ZXJzZSIsImRwbHlyIiwibWxiZW5jaCIsIkFFUiIsImNvd3Bsb3QiLCJicm9vbSIsInBlcmZvcm1hbmNlIiwicXFwbG90ciIsImdsbWJiIl19fQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTEifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzExID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTEsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTAifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTAsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMCJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05In0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl85ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItOS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTktY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfOSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOSwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTkifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfOCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTgtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici04LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzggPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzgsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici04In0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTcifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzcgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici03LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV83ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl83LCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItNyJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02In0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl82ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTYtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNiwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTYifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici01LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzUgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzUsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici01In0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzQgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici00LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV80ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl80LCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItNCJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8zID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTMtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMywge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTMifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0yLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzIgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzIsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0yIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xLCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItMSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIFVzZSBQb3N0TWVzc2FnZSBjaGFubmVsIGZvciBhc3luYyBjb21tdW5pY2F0aW9uXG4gIC8vIFdlIGRvIG5vdCBleHBlY3QgdG8gdGFrZSBuZXN0ZWQgcHJvbXB0IGlucHV0IGluIFF1YXJ0byBMaXZlIGNlbGxzXG4gIGRhdGEub3B0aW9ucy5jaGFubmVsVHlwZSA9IENoYW5uZWxUeXBlLlBvc3RNZXNzYWdlO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKCFlLm1lc3NhZ2UuaW5jbHVkZXMoXCJGUyBlcnJvclwiKSkge1xuICAgICAgICAgICAgdGhyb3cgZTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="lecture1-glm-link-functions-and-count-regression_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

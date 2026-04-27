@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="lecture2_glm_model_selection_multinomial_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lecture2_glm_model_selection_multinomial_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.53">
+
+  <meta name="author" content="(Please, sign in on iClicker)">
+  <title>Lecture 2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="lecture2_glm_model_selection_multinomial_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="lecture2_glm_model_selection_multinomial_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Lecture 2</h1>
+  <p class="subtitle">GLMs: Model Selection and Multinomial Logistic Regression</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+(Please, sign in on iClicker) 
+</div>
+</div>
+</div>
+
+</section>
+<section id="todays-learning-goals" class="title-slide slide level2 center">
+<h2>Today’s Learning Goals</h2>
+<div class="small-text">
+<p>By the end of this lecture, you should be able to:</p>
+<ul>
+<li>Perform <span style="color: purple;">likelihood-based model selection</span> through analysis of deviance, Akaike Information Criterion, and Bayesian Information Criterion.</li>
+<li>Extend the link function concept of the generalized linear models (GLMs) to other discrete <span style="color: purple;">categorical responses</span>.</li>
+<li>Outline the modelling framework of the <span style="color: purple;">Multinomial Logistic regression</span>.</li>
+<li>Fit and interpret the Multinomial Logistic regression.</li>
+<li>Use the Multinomial Logistic regression for prediction.</li>
+</ul>
+</div>
+</section>
+
+<section id="outline" class="title-slide slide level2 center">
+<h2>Outline</h2>
+<ol type="1">
+<li>Likelihood-based Model Selection</li>
+<li>Categorical Type Responses</li>
+<li>Multinomial Logistic Regression</li>
+</ol>
+</section>
+
+<section>
+<section id="likelihood-based-model-selection" class="title-slide slide level2 center">
+<h2>1. Likelihood-based Model Selection</h2>
+<p><br></p>
+<ul>
+<li>In <span style="color: purple;">DSCI 561</span>, you learned about <span style="color: purple;">model selection</span> in Ordinary Least-squares (OLS) via Mallow’s <span class="math inline">\(C_p\)</span>, Akaike information criterion (AIC), and Bayesian information criterion (BIC).</li>
+<li>These metrics are also helpful tools to perform <span style="color: purple;">model selection</span> in GLMs. Additionally, it is essential to highlight that <span style="color: purple;">many</span> GLMs are estimated via <span style="color: purple;">maximum likelihood</span>.</li>
+</ul>
+</section>
+<section id="the-crabs-dataset" class="title-slide slide level3 center">
+<h3>1.1. The Crabs Dataset</h3>
+<center>
+<img src="images/crab.png" width="350" height="350">
+</center>
+<ul>
+<li>The data frame <code>crabs</code> (<a href="https://ubc.summon.serialssolutions.com/2.0.0/link/0/eLvHCXMwrV3JasMwEBUlpZBLl7Sl6YY_oE4sy5sgFEpICKU9NadcjFYSmtghCyRf0t-tJC_EPhRaepMHS8jSSPM0M3oGALkdx67tCYRyKV0GacCp9CBX60RCySMcYiigy2qpOq_F1ZiMLqL0v-mFYrZvvd4JXXcPEnOUZbU1z6W-fxdoh6eO-XQUvDyGCnXrbK_hxCkDDCHKgs9KH20FelDOR_pzWxXbdYhljTEanoF10e8iC6V2SbDK9Pg_H3gOTnPsar1kynYBjkTSAs1yC923wMkkNaVL8NVbkNXn8wcxjJ8b0euaZysTvyuzVJUYH9i6Kpsl1ijVOSbTtPZ2f6V6nYuectnbbLGdb2tNLNP5fjkVi1J-BcbDwbg_svOfQNhMIRdsu4KHEnIsIiQYJoGQvsKQmAuOsE8lojRnrPEIlZQHHIUEEs8PBVHQjaJr0EjSRNwAS8ebmMNk4DHkRYgQSt2ARoxRnzuhJG2AitmNlxnVR3x4REI41sMf6-GP8-GPd20QmVn7RZV4MB7p0u3fq96BZpY-rn1B96CxWW3FgyGOeDR6_g1rIQSN">Brockmann, 1996</a>) is a dataset detailing the <span style="color: purple;">counts of satellite male crabs</span> residing around a female crab nest.</li>
+</ul>
+</section>
+<section class="slide level4">
+
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibGlicmFyeShnbG1iYilcblxuZGF0YShjcmFicylcbmNyYWJzIDwtIGNyYWJzIHw+XG4gIHJlbmFtZShuX21hbGVzID0gc2F0ZWxsKSB8PlxuICBkcGx5cjo6c2VsZWN0KC15KVxuaGVhZChjcmFicywgbiA9IDE1KSJ9
+</script>
+</div>
+</div>
+</section>
+
+<section id="estimation" class="title-slide slide level3 center">
+<h3>1.2. Estimation</h3>
+<p><span style="color: purple;">To perform model selection</span>, let us estimate two Poisson regression models with <code>n_males</code> as a response:</p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\textbf{Model 1:} &amp; \\
+&amp; h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i}. \\
+\textbf{Model 2:} &amp; \\
+&amp; h(\lambda_i) = \log (\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i} + \beta_2 X_{\texttt{color_darker}_i} +  \\ &amp; \qquad \qquad \qquad \quad \beta_3 X_{\texttt{color_light}_i} + \beta_4 X_{\texttt{color_medium}_i}.
+\end{align*}\]</span></p>
+</div>
+</section>
+
+<section id="main-statistical-inquiry" class="title-slide slide level3 center">
+<h3>Main Statistical Inquiry</h3>
+<ul>
+<li>We want to determine which Poisson regression model fits the data better: <span style="color: purple;">Model 1</span> or <span style="color: purple;">Model 2</span>.</li>
+<li>Then, via <code>glm()</code> and <code>crabs</code>, we obtain our regression estimates.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoicG9pc3Nvbl9tb2RlbCA8LSBnbG0oXG4gIGZvcm11bGEgPSBuX21hbGVzIH4gd2lkdGgsXG4gIGZhbWlseSA9IHBvaXNzb24sIGRhdGEgPSBjcmFic1xuKVxucG9pc3Nvbl9tb2RlbF8yIDwtIGdsbShcbiAgZm9ybXVsYSA9IG5fbWFsZXMgfiB3aWR0aCArIGNvbG9yLFxuICBmYW1pbHkgPSBwb2lzc29uLCBkYXRhID0gY3JhYnNcbikifQ==
+</script>
+</div>
+</div>
+</section>
+
+<section id="goodness-of-fit-test" class="title-slide slide level3 center">
+<h3>1.3. Goodness of Fit Test</h3>
+<div class="small-text">
+<ul>
+<li>The <span style="color: purple;">deviance</span> (<span class="math inline">\(D_k\)</span>) criterion can be used to compare a given model with <span class="math inline">\(k\)</span> regressors with that of a <span style="color: purple;">baseline model</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="small-text">
+<blockquote>
+<p><strong>Heads-up:</strong> The usual <span style="color: purple;">baseline model</span> is the <span style="color: purple;">saturated</span> or <span style="color: purple;">full model</span>, which perfectly fits the data because it allows a distinct Poisson mean <span class="math inline">\(\lambda_i\)</span> for the <span class="math inline">\(i\)</span>th observation in the training dataset (<span class="math inline">\(i = 1, \dots, n\)</span>), <span style="color: purple;">unrelated to the <span class="math inline">\(k\)</span> regressors</span>.</p>
+</blockquote>
+</div>
+</div>
+<div class="fragment">
+<div class="small-text">
+<ul>
+<li>The <span style="color: purple;">maximized likelihood</span> of this full model is denoted as <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>.</li>
+<li>Let <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> be the value of the maximized likelihood computed from our dataset of <span class="math inline">\(n\)</span> observations with <span class="math inline">\(k\)</span> regressors.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="comparing-the-fits" class="slide level4">
+<h4>Comparing the fits</h4>
+<div class="small-text">
+<ul>
+<li>We can compare the fits provided by these two models by the deviance <span class="math inline">\(D_k\)</span> given by</li>
+</ul>
+<p><span class="math display">\[D_k = -2 \log \left( \frac{\hat{\mathscr{l}}_k}{\hat{\mathscr{l}}_f} \right) =  -2 \left[ \log \left( \hat{\mathscr{l}}_k \right) - \log \left( \hat{\mathscr{l}}_f \right) \right].\]</span></p>
+<div>
+<p><span class="math inline">\(D_k\)</span> expresses <span style="color: purple;">how much our given model deviates from the full model on log-likelihood scale</span>:</p>
+<ul>
+<li class="fragment"><span style="color: purple;">Large values</span> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is small relative to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <span style="color: purple;">our given model fits the data poorly compared to the baseline model</span>.</li>
+<li class="fragment"><span style="color: purple;">Small values</span> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is similar to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <span style="color: purple;">our given model provides a good fit to the data compared to the baseline model</span>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="formula-for-d_k-in-poisson-regression" class="slide level4">
+<h4>Formula for <span class="math inline">\(D_k\)</span> in Poisson regression</h4>
+<p><br></p>
+<div class="small-text">
+<ul>
+<li><span style="color: purple;">Specifically for Poisson regression with <span class="math inline">\(k\)</span> regressors</span>, it can be shown that <span class="math inline">\(D_k\)</span> is:</li>
+</ul>
+<p><span class="math display">\[\begin{gather}
+\hat{\lambda}_i = \exp{\left( \hat{\beta_0} + \hat{\beta}_1 x_{i,1} + \dots + \hat{\beta}_k x_{i,k} \right)} \\
+D_k = 2 \sum_{i = 1}^n \left[ y_i \log \left( \frac{y_i}{\hat{\lambda}_i} \right) - \left( y_i - \hat{\lambda}_i \right) \right]
+\end{gather}\]</span></p>
+<ul>
+<li>Note <span class="math inline">\(y_i\)</span> is the <span class="math inline">\(i\)</span>th observed response in the training set of size <span class="math inline">\(n\)</span>.</li>
+<li>When <span class="math inline">\(y_i = 0\)</span> counts, then <span class="math inline">\(\log \left( \frac{y_i}{\hat{\lambda}_i} \right)\)</span> is assumed as <span class="math inline">\(0\)</span>.</li>
+</ul>
+</div>
+</section>
+<section id="intuition-behind-d_k" class="slide level4">
+<h4>Intuition behind <span class="math inline">\(D_k\)</span></h4>
+<ul>
+<li><span class="math inline">\(D_k\)</span> depicts the agreement of our model with <span class="math inline">\(k\)</span> regressors to the observed data.</li>
+<li>Hence, it can be used to test the goodness of fit; i.e., <span style="color: purple;">whether our fitted model fits the data better than the saturated model, which makes it correctly specified (with a level of significance <span class="math inline">\(\alpha\)</span>!)</span>:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\begin{gather*}
+H_0: \text{Our}\textbf{ Model with $k$ regressors} \\ \text{ fits the data better than the } \textbf{Saturated Model.} \\
+H_a: \text{Otherwise.}
+\end{gather*}\]</span></p>
+</div>
+</section>
+<section id="testing-poisson_model_2" class="slide level4">
+<h4>Testing <code>poisson_model_2</code>!</h4>
+<p><span class="math display">\[\begin{align*}
+\textbf{Model 2:} &amp; \\
+h(\lambda_i) &amp;= \log (\lambda_i) \\
+&amp;= \beta_0 + \beta_1 X_{\texttt{width}_i} + \beta_2 X_{\texttt{color_darker}_i} +  \\ &amp; \qquad \beta_3 X_{\texttt{color_light}_i} + \beta_4 X_{\texttt{color_medium}_i}.
+\end{align*}\]</span></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3VtbWFyeV9wb2lzc29uX21vZGVsXzIgPC0gZ2xhbmNlKHBvaXNzb25fbW9kZWxfMilcbnN1bW1hcnlfcG9pc3Nvbl9tb2RlbF8yIn0=
+</script>
+</div>
+</div>
+</section>
+<section id="asymptotic-distribution-of-d_k" class="slide level4">
+<h4>Asymptotic distribution of <span class="math inline">\(D_k\)</span></h4>
+<ul>
+<li>Column <code>deviance</code> provides <span class="math inline">\(D_k\)</span> (<span style="color: purple;">residual deviance</span>), which is the <span style="color: purple;">test statistic</span>. <span style="color: purple;">Asymptotically</span>, we have the following <span style="color: purple;">null distribution</span>: <span class="math display">\[
+D_k \sim \chi^2_{n - (k + 1)}.
+\]</span></li>
+<li>The degrees of freedom (column <code>df.residual</code> in our <code>glance()</code> output) are the <span style="color: purple;">difference between the training set size <span class="math inline">\(n\)</span> and the number of regression parameters in our model (including the intercept <span class="math inline">\(\beta_0\)</span>).</span></li>
+</ul>
+</section>
+<section id="computing-p-value-via-r" class="slide level4">
+<h4>Computing <span class="math inline">\(p\)</span>-value via <code>R</code></h4>
+<ul>
+<li>Let us obtain the corresponding <span class="math inline">\(p\text{-value}\)</span> for this test. We can do it using <code>pchisq()</code>:</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoicGNoaXNxKHN1bW1hcnlfcG9pc3Nvbl9tb2RlbF8yJGRldmlhbmNlLFxuICBkZiA9IHN1bW1hcnlfcG9pc3Nvbl9tb2RlbF8yJGRmLnJlc2lkdWFsLFxuICBsb3dlci50YWlsID0gRkFMU0VcbikifQ==
+</script>
+</div>
+</div>
+<ul>
+<li>We obtain a <span class="math inline">\(p\text{-value} &lt; .001\)</span>, which gives statistical evidence to state that our <code>poisson_model_2</code> is <span style="color: purple;">not</span> correctly specified when compared to the saturated model.</li>
+</ul>
+</section>
+
+<section id="analysis-of-deviance-for-nested-models" class="title-slide slide level3 center">
+<h3>1.4. Analysis of Deviance for Nested Models</h3>
+<div class="small-text">
+<ul>
+<li>We can use analysis of deviance for model selection when two models are <span style="color: purple;">nested</span>.</li>
+<li>Hence, we will test our two Poisson models:</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\textbf{Model 1:} &amp; \\
+&amp; h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i}. \\
+\textbf{Model 2:} &amp; \\
+&amp; h(\lambda_i) = \log (\lambda_i) = \beta_0 + \beta_1 X_{\texttt{width}_i} + \beta_2 X_{\texttt{color_darker}_i} +  \\ &amp; \qquad \qquad \qquad \quad \beta_3 X_{\texttt{color_light}_i} + \beta_4 X_{\texttt{color_medium}_i}.
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="hypothesis-testing" class="slide level4">
+<h4>Hypothesis testing</h4>
+<div class="small-text">
+<ul>
+<li>This specific model selection will involve a hypothesis testing. The hypotheses are:</li>
+</ul>
+<p><span class="math display">\[\begin{gather*}
+H_0: \textbf{Model 1} \text{ fits the data better than } \textbf{Model 2} \\
+H_a: \textbf{Model 2} \text{ fits the data better than } \textbf{Model 1}.
+\end{gather*}\]</span></p>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiYW5vdmEocG9pc3Nvbl9tb2RlbCwgcG9pc3Nvbl9tb2RlbF8yLCB0ZXN0ID0gXCJDaGlcIikifQ==
+</script>
+</div>
+</div>
+</section>
+<section id="analysis-of-deviance" class="slide level4">
+<h4>Analysis of deviance</h4>
+<p><br></p>
+<ul>
+<li>Let <span class="math inline">\(D_2\)</span> be the deviance (column <code>Resid. Dev</code>) for <span style="color: purple;">Model 2</span> (<code>poisson_model_2</code>) in row 2 and <span class="math inline">\(D_1\)</span> (column <code>Resid. Dev</code>) the deviance for <span style="color: purple;">Model 1</span> (<code>poisson_model</code>) in row 1.</li>
+<li>The <span style="color: purple;">test statistic</span> <span class="math inline">\(\Delta_D\)</span> (column <code>Deviance</code>) for the analysis of deviance is given by <span class="math inline">\(\Delta_D = D_1 - D_2 \sim \chi^2_{3}\)</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\(\Delta_D\)</span> is <span style="color: purple;">asymptotically</span> (i.e., <span class="math inline">\(n \rightarrow \infty\)</span>) is <a href="https://www.math.wm.edu/~leemis/chart/UDR/PDFs/Chisquare.pdf"><strong>Chi-squared distributed</strong></a> with <span class="math inline">\(3\)</span> degrees of freedom (column <code>Df</code>) under <span class="math inline">\(H_0\)</span> <span style="color: purple;">for this specific case</span>.</li>
+</ul>
+</div>
+</section>
+<section id="what-is-the-conclusion" class="slide level4">
+<h4>What is the conclusion?</h4>
+<p><br></p>
+<ul>
+<li><span style="color: purple;">In the context of model selection</span>, we would choose <code>poisson_model_2</code>, that also includes the <code>color</code> of the female prosoma.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> The degrees of freedom are the <span style="color: purple;">regression parameters of difference between both models</span>. Formally, this nested hypothesis testing is called the <span style="color: purple;">likelihood-ratio test</span>.</p>
+</blockquote>
+</section>
+
+<section id="akaike-information-criterion-aic" class="title-slide slide level3 center">
+<h3>1.5. Akaike Information Criterion (AIC)</h3>
+<ul>
+<li><span style="color: purple;">Analysis of deviance</span> only allows to test <span style="color: purple;">nested</span> regression models.</li>
+<li>Thus, we need alternatives for model selection.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><span style="color: purple;">AIC makes possible to compare models that are either nested or not.</span></li>
+<li>For a model with <span class="math inline">\(k\)</span> terms and a deviance <span class="math inline">\(D_k\)</span>, AIC is defined as: <span class="math display">\[
+\mbox{AIC}_k = D_k + 2k.
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="what-are-the-aic-rules" class="slide level4">
+<h4>What are the AIC rules?</h4>
+<ul>
+<li>Models with <span style="color: purple;">smaller</span> values of <span class="math inline">\(\mbox{AIC}_k\)</span> are preferred.</li>
+<li>That said, <span class="math inline">\(\mbox{AIC}_k\)</span> favours models with small values of <span class="math inline">\(D_k\)</span>.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> <span class="math inline">\(\mbox{AIC}_k\)</span> penalizes for including more regressors in the model. Hence, it discourages overfitting. This is why we select that model with the smallest <span class="math inline">\(\mbox{AIC}_k\)</span>.</p>
+</blockquote>
+<center>
+<img src="images/panda.png" width="150" height="150">
+</center>
+</section>
+<section id="aic-in-r" class="slide level4">
+<h4>AIC in <code>R</code>!</h4>
+<div class="small-text">
+<ul>
+<li>The function <code>glance()</code> shows us the <span class="math inline">\(\mbox{AIC}_k\)</span> by model.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiZ2xhbmNlKHBvaXNzb25fbW9kZWwpIHw+IG11dGF0ZV9pZihpcy5udW1lcmljLCByb3VuZCwgMykifQ==
+</script>
+</div>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiZ2xhbmNlKHBvaXNzb25fbW9kZWxfMikgfD4gbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAzKSJ9
+</script>
+</div>
+</div>
+<blockquote>
+<p>Following the results of the <code>AIC</code> column, we choose <code>poisson_model_2</code> over <code>poisson_model</code>.</p>
+</blockquote>
+</div>
+</section>
+
+<section id="bayesian-information-criterion" class="title-slide slide level3 center">
+<h3>1.6. Bayesian Information Criterion</h3>
+<ul>
+<li>An alternative to AIC is the Bayesian Information Criterion (BIC).</li>
+<li><span style="color: purple;">The BIC also makes possible to compare models that are either nested or not.</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>For a model with <span class="math inline">\(k\)</span> terms, a deviance <span class="math inline">\(D_k\)</span>, and fitted via a training set of size <span class="math inline">\(n\)</span>; BIC is defined as: <span class="math display">\[
+\mbox{BIC}_k = D_k + k \log (n).
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="what-are-the-bic-rules" class="slide level4">
+<h4>What are the BIC rules?</h4>
+<ul>
+<li>Models with <span style="color: purple;">smaller</span> values of <span class="math inline">\(\mbox{BIC}_k\)</span> are preferred.</li>
+<li>That said, <span class="math inline">\(\mbox{BIC}_k\)</span> also favours models with small values of <span class="math inline">\(D_k.\)</span></li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p><strong>Heads-up:</strong> The differences between AIC and BIC will be more pronounced in datasets with large sample sizes <span class="math inline">\(n\)</span>. As the BIC penalty of <span class="math inline">\(k \log (n)\)</span> will always be larger than the AIC penalty of <span class="math inline">\(2k\)</span> when <span class="math inline">\(n &gt; 7\)</span>, <span style="color: purple;">BIC tends to select models with fewer regressors than AIC</span>.</p>
+</blockquote>
+</div>
+</section>
+<section id="bic-in-r" class="slide level4">
+<h4>BIC in <code>R</code>!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiZ2xhbmNlKHBvaXNzb25fbW9kZWwpIHw+IG11dGF0ZV9pZihpcy5udW1lcmljLCByb3VuZCwgMykifQ==
+</script>
+</div>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiZ2xhbmNlKHBvaXNzb25fbW9kZWxfMikgfD4gbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAzKSJ9
+</script>
+</div>
+</div>
+<div class="fragment">
+<div class="small-text-v2">
+<blockquote>
+<p>Following the results of the <code>AIC</code> column, we already chose <code>poisson_model_2</code> over <code>poisson_model</code>. Nonetheless, the <code>BIC</code> is penalizing the <code>poisson_model_2</code> for having more model parameters, so <code>poisson_model</code> would be chosen under this criterion.</p>
+</blockquote>
+</div>
+</div>
+</section>
+<section id="what-is-the-statistical-rationale-behind-both-metrics" class="slide level4">
+<h4>What is the statistical rationale behind both metrics?</h4>
+<ul>
+<li><strong>AIC:</strong> From a given set of models (either nested or non-nested) fitted via a common training dataset, this metric aims to select the model with <span style="color: purple;">the best predictive performance</span> even though <span style="color: purple;">this model chosen might not be the true one that generates the training data</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><strong>BIC:</strong> From a given set of models (either nested or non-nested) fitted via a common training dataset, this metric will tend to select <span style="color: purple;">the true model that is generating the training data as <span class="math inline">\(n\)</span> approaches infinity</span> and <span style="color: purple;">as long as the true model is within this given set of models</span>.</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="categorical-type-responses" class="title-slide slide level2 center">
+<h2>2. Categorical Type Responses</h2>
+<ul>
+<li>Now, we will cover those <span style="color: purple;">discrete responses with more than two categories</span>:</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p><span style="color: purple;">Nominal:</span> We have categories that do not follow any specific order.</p>
+<p><span style="color: purple;">Ordinal:</span> The categories, in this case, follow a specific order.</p>
+</blockquote>
+</div>
+<div class="fragment">
+<ul>
+<li>Let us pave the way to two new GLMs to address this matter: <span style="color: purple;">Multinomial and Ordinal Logistic regressions</span>.</li>
+</ul>
+</div>
+</section>
+
+<section>
+<section id="multinomial-logistic-regression" class="title-slide slide level2 center">
+<h2>3. Multinomial Logistic Regression</h2>
+<p><br></p>
+<blockquote>
+<p><em>Let us check the mind map in the lecture notes</em></p>
+</blockquote>
+<ul>
+<li><span style="color: purple;">Multinomial Logistic regression</span> is a maximum likelihood-based GLM that addresses inferential (and predictive!) inquiries where the response is <span style="color: purple;">categorical</span> and <span style="color: purple;">nominal</span>.</li>
+</ul>
+</section>
+<section id="the-spotify-dataset" class="title-slide slide level3 center">
+<h3>3.1. The Spotify Dataset</h3>
+<blockquote>
+<p><em>A sub-sample of the Spotify song data originally collected by Kaylin Pavlik (kaylinquest) and distributed through the <code>R</code> for Data Science TidyTuesday project.</em></p>
+</blockquote>
+<center>
+<img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_Green.png" width="540" height="162">
+</center>
+<blockquote>
+<p>Copyright © 2025 Spotify AB. Spotify is a registered trademark of the Spotify Group.</p>
+</blockquote>
+</section>
+<section id="let-us-take-a-look-at-the-data" class="slide level4">
+<h4>Let us take a look at the data!</h4>
+<ul>
+<li>The <code>spotify</code> dataset is a sample of <span class="math inline">\(n = 350\)</span> songs with different variables by column.</li>
+<li>This dataset has 23 variables in total.</li>
+<li>The <span class="math inline">\(n = 350\)</span> songs belong to 44 different artists.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3BvdGlmeSA8LSByZWFkX2NzdihmaWxlID0gJ2RhdGEvc3BvdGlmeS5jc3YnLCBzaG93X2NvbF90eXBlcyA9IEZBTFNFKVxuc3BvdGlmeSJ9
+</script>
+</div>
+</div>
+</section>
+
+<section id="iclicker-question" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<ul>
+<li>Having checked the description of the <code>spotify</code> dataset, suppose we want to conduct an inferential study.</li>
+<li>What would be the primary nature of our conclusions?</li>
+</ul>
+<div class="small-text">
+<p><strong>A.</strong> We could draw causation conclusions across all music platforms.</p>
+<p><strong>B.</strong> We could draw association conclusions on the Spotify platform.</p>
+<p><strong>C.</strong> We could draw association conclusions across all music platforms.</p>
+<p><strong>D.</strong> We could draw causation conclusions on the Spotify platform.</p>
+</div>
+</section>
+
+<section id="main-statistical-inquiries" class="title-slide slide level3 center">
+<h3>Main Statistical Inquiries</h3>
+<ul>
+<li>I am <span style="color: purple;">big fan</span> of the electronic dance music (<code>edm</code>) catalogue on Spotify. Nevertheless, I do not have access to their whole song database.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p>Still, I would like to:</p>
+<ul>
+<li>Statistically quantify how <span style="color: purple;">how danceable</span> <code>edm</code> is <strong>compared to other genres on the platform</strong>, and by how much.</li>
+<li>Statistically quantify <span style="color: purple;">how euphoric</span> <code>edm</code> is <strong>compared to other genres on the platform</strong>, and by how much.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+
+<section id="data-wrangling-and-summary" class="title-slide slide level3 center">
+<h3>3.2. Data Wrangling and Summary</h3>
+<ul>
+<li>We will extract these <span style="color: purple;">key variables by song</span> from the <code>spotify</code> dataset:
+<ol type="1">
+<li><code>genre</code>: genre of the playlist where the song belongs (a <span style="color: purple;">categorical</span> and <span style="color: purple;">nominal</span> variable).</li>
+<li><code>danceability</code>: a <span style="color: purple;">numerical</span> score from 0 (not danceable) to 100 (danceable) based on features such as tempo, rhythm, etc.</li>
+<li><code>valence</code>: a <span style="color: purple;">numerical</span> score from 0 (the song is more negative, sad, angry) to 100 (the song is more positive, happy, <span style="color: purple;">euphoric</span>).</li>
+</ol></li>
+</ul>
+</section>
+<section id="preparing-our-training-dataset" class="slide level4">
+<h4>Preparing our training dataset!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3BvdGlmeV90cmFpbmluZyA8LSBzcG90aWZ5IHw+XG4gIHNlbGVjdCh0aXRsZSwgYXJ0aXN0LCBhbGJ1bV9uYW1lLCBnZW5yZSwgZGFuY2VhYmlsaXR5LCB2YWxlbmNlKSB8PlxuICBtdXRhdGUoZ2VucmUgPSBhcy5mYWN0b3IoZ2VucmUpKVxuc3BvdGlmeV90cmFpbmluZyJ9
+</script>
+</div>
+</div>
+</section>
+<section id="checking-all-different-genres" class="slide level4">
+<h4>Checking all different genres!</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibGV2ZWxzKHNwb3RpZnlfdHJhaW5pbmckZ2VucmUpIn0=
+</script>
+</div>
+</div>
+<p><br></p>
+<blockquote>
+<p><strong>Heads-up:</strong> Note that factor-type <code>genre</code> has six levels (<code>edm</code> refers to <span style="color: purple;">electronic dance music</span> and <code>r&amp;b</code> to <span style="color: purple;">rhythm and blues</span>). Moreover, <span style="color: purple;">from a coding perspective</span>, <code>edm</code> is the <span style="color: purple;">baseline</span> level (it is located on the <span style="color: purple;">left-hand side</span> in the <code>levels()</code> output).</p>
+</blockquote>
+</section>
+<section id="creating-a-dataset-summary" class="slide level4">
+<h4>Creating a dataset summary!</h4>
+<div class="small-text">
+<ul>
+<li>Let us summarize the data by <code>genre</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-13" class="exercise-cell">
+
+</div>
+<script type="webr-13-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3BvdGlmeV90cmFpbmluZyB8PiB0YWJ5bChnZW5yZSkgfD5cbiAgYWRvcm5fdG90YWxzKFwicm93XCIpIHw+XG4gIGFkb3JuX3BjdF9mb3JtYXR0aW5nKCkifQ==
+</script>
+</div>
+</div>
+<ul>
+<li>Having checked this <code>genre</code> composition, we have an acceptable number of songs to draw inference from.</li>
+<li>Moreover, an imbalanced classification will be dealt with the <span style="color: purple;">distributional assumption</span> of the Multinomial Logistic regression.</li>
+</ul>
+</div>
+</section>
+
+<section id="exploratory-data-analysis" class="title-slide slide level3 center">
+<h3>3.3. Exploratory Data Analysis</h3>
+<ul>
+<li>As done in our previous lecture, let us take a look at the data first.</li>
+<li>Note that <code>genre</code> is a <span style="color: purple;">discrete nominal response</span>.</li>
+<li>Hence, we could use the following side-by-side plots for both <code>danceability</code> and <code>valence</code>:
+<ul>
+<li><span style="color: purple;">Boxplots.</span></li>
+<li><span style="color: purple;">Violin plots.</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="plots" class="slide level4">
+<h4>Plots!</h4>
+
+<img data-src="lecture2_glm_model_selection_multinomial_files/figure-revealjs/unnamed-chunk-17-1.png" width="4320" class="r-stretch"></section>
+
+<section id="in-class-question" class="title-slide slide level3 center">
+<h3>In-class Question</h3>
+<ul>
+<li>What can we see <span style="color: purple;">descriptively</span> from the above plots?</li>
+</ul>
+<center>
+<img src="images/panda.png" width="400" height="400">
+</center>
+</section>
+
+<section id="data-modelling-framework" class="title-slide slide level3 center">
+<h3>3.4. Data Modelling Framework</h3>
+<ul>
+<li>A <span style="color: purple;">Multinomial Logistic Regression model</span> is a suitable approach to our statistical inquiries given that <code>genre</code> is <span style="color: purple;">categorical</span> and <span style="color: purple;">nominal</span> (our response of interest) subject to the <span style="color: purple;">numerical</span> regressors <code>danceability</code> and <code>valence</code>.</li>
+<li>Moreover, its corresponding regression estimates will allow us <span style="color: purple;">to measure variable association</span>.</li>
+</ul>
+<center>
+<img src="images/panda.png" width="200" height="200">
+</center>
+</section>
+<section id="primary-intuition-of-the-multinomial-logistic-regression-model" class="slide level4">
+<h4>3.4.1. Primary Intuition of the Multinomial Logistic Regression Model</h4>
+<ul>
+<li>Digging into the Multinomial regression model will require checking <span style="color: purple;">Binary Logistic regression</span> first.</li>
+<li>Thus, suppose we are initially interested in two genres: <code>edm</code> and <code>latin</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-14" class="exercise-cell">
+
+</div>
+<script type="webr-14-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoiYmluX3Nwb3RpZnlfdHJhaW5pbmcgPC0gc3BvdGlmeV90cmFpbmluZyB8PiBmaWx0ZXIoZ2VucmUgJWluJSBjKFwiZWRtXCIsIFwibGF0aW5cIikpIHw+IG11dGF0ZShnZW5yZSA9IGRyb3BsZXZlbHMoZ2VucmUpKVxuaGVhZChiaW5fc3BvdGlmeV90cmFpbmluZywgbiA9IDMpIn0=
+</script>
+</div>
+</div>
+</section>
+<section id="a-note-on-the-baseline-level" class="slide level4">
+<h4>A note on the baseline level!</h4>
+<p><br></p>
+<ul>
+<li><code>edm</code> is the baseline level (i.e., it appears on the left-hand side in the <code>levels()</code> output).</li>
+</ul>
+<p><br></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-15" class="exercise-cell">
+
+</div>
+<script type="webr-15-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibGV2ZWxzKGJpbl9zcG90aWZ5X3RyYWluaW5nJGdlbnJlKSJ9
+</script>
+</div>
+</div>
+</section>
+<section id="reminder-on-binary-logistic-modelling" class="slide level4">
+<h4>Reminder on Binary Logistic Modelling</h4>
+<p><br></p>
+<ul>
+<li>Assuming we have a <span style="color: purple;">training set</span> of <span class="math inline">\(n\)</span> elements, recall that the <span class="math inline">\(i\)</span>th response (for <span class="math inline">\(i = 1, \dots, n\)</span>) in a <span style="color: purple;">Binary Logistic regression</span> is</li>
+</ul>
+<p><span class="math display">\[
+Y_i =
+\begin{cases}
+1 \; \; \; \; \mbox{if the genre is } \texttt{latin},\\
+0 \; \; \; \; \mbox{if the baseline genre is } \texttt{edm}.
+\end{cases}
+\]</span></p>
+<ul>
+<li>Therefore, <span class="math inline">\(Y_i \sim \text{Bernoulli}(p_i)\)</span>, whose probability of success is <span class="math inline">\(p_i\)</span>.</li>
+</ul>
+</section>
+<section id="link-function-in-binary-logistic-regression" class="slide level4">
+<h4>Link Function in Binary Logistic Regression</h4>
+<ul>
+<li>We will use the following <span style="color: purple;">link function</span> (where <span class="math inline">\(X_{i,\texttt{dance}}\)</span> and <span class="math inline">\(X_{i,\texttt{val}}\)</span> are the <code>danceability</code> and <code>valence</code> scores for the <span class="math inline">\(i\)</span>th song, respectively):</li>
+</ul>
+<p><span class="math display">\[\begin{align*}
+\mbox{logit}(p_i) &amp;= \log\left(\frac{p_i}{1 - p_i}\right) \nonumber \\
+&amp;= \log \left[ \frac{P(Y_i = \texttt{latin}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}) \right] \nonumber \\
+&amp;= \beta_0 + \beta_1 X_{i,\texttt{dance}} + \beta_2 X_{i,\texttt{val}}.
+\end{align*}\]</span></p>
+</section>
+<section id="binary-logistic-regression-estimation-via-r" class="slide level4">
+<h4>Binary Logistic Regression Estimation via <code>R</code></h4>
+<ul>
+<li>Recall that this model can be fitted as follows:</li>
+</ul>
+<p><br></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-16" class="exercise-cell">
+
+</div>
+<script type="webr-16-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3BvdGlmeV9iaW5fbG9nX21vZGVsIDwtIGdsbShmb3JtdWxhID0gZ2VucmUgfiBkYW5jZWFiaWxpdHkgKyB2YWxlbmNlLFxuICBkYXRhID0gYmluX3Nwb3RpZnlfdHJhaW5pbmcsXG4gIGZhbWlseSA9IGJpbm9taWFsXG4pIn0=
+</script>
+</div>
+</div>
+</section>
+<section id="inference-in-binary-logistic-regression" class="slide level4">
+<h4>Inference in Binary Logistic Regression</h4>
+<ul>
+<li>Note that only <code>valence</code> is statistically significant for the response <code>genre</code> (<span class="math inline">\(p\text{-value} &lt; .01\)</span>).</li>
+</ul>
+<p><br></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-17" class="exercise-cell">
+
+</div>
+<script type="webr-17-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoidGlkeShzcG90aWZ5X2Jpbl9sb2dfbW9kZWwsIGNvbmYuaW50ID0gVFJVRSwgZXhwb25lbnRpYXRlID0gVFJVRSkgfD5cbiAgbXV0YXRlX2lmKGlzLm51bWVyaWMsIHJvdW5kLCAzKSJ9
+</script>
+</div>
+</div>
+</section>
+<section id="coefficient-interpretation-in-binary-logistic-regression" class="slide level4">
+<h4>Coefficient Interpretation in Binary Logistic Regression</h4>
+<ul>
+<li>Then, we make the corresponding coefficient interpretations (the previous output already provides the estimate on the odds scale via <code>exponentiate = TRUE</code>):</li>
+</ul>
+<p><br></p>
+<blockquote>
+<p>For each unit increase in the <code>valence</code> score in the Spotify catalogue, the song is 1.05 times more probable to be <code>latin</code> than <code>edm</code>.</p>
+</blockquote>
+</section>
+<section id="more-than-one-logit-function" class="slide level4">
+<h4>3.4.2. More than One Logit Function</h4>
+<div class="small-text-v2">
+<blockquote>
+<p><span style="color: purple;">What if our response is nominal and has more than two categories?</span></p>
+</blockquote>
+<ul>
+<li>In that case, let us suppose that a given <span style="color: purple;">discrete nominal response <span class="math inline">\(Y_i\)</span> has categories <span class="math inline">\(1, 2, \dots, m\)</span></span>.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> Categories <span class="math inline">\(1, 2, \dots, m\)</span> <span style="color: purple;">are merely labels here</span>. Thus, they <span style="color: purple;">do not</span> implicate an ordinal scale.</p>
+</blockquote>
+<ul>
+<li>This regression approach assumes a <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.05%3A_The_Multinomial_Distribution"><strong>Multinomial distribution</strong></a> where <span class="math inline">\(p_{i,1}, p_{i,2}, \dots, p_{i,m}\)</span> are the probabilities that <span class="math inline">\(Y_i\)</span> will belong to categories <span class="math inline">\(1, 2, \dots, m\)</span> respectively; i.e.,</li>
+</ul>
+<p><span class="math display">\[
+P(Y_i = 1) = p_{i,1} \;\;\;\; P(Y_i = 2) = p_{i,2} \;\; \dots \;\; P(Y_i = m) = p_{i,m} \quad \text{where}
+\]</span></p>
+<p><span class="math display">\[
+\sum_{j = 1}^m p_{i,j} = p_{i,1} + p_{i,2} + \dots + p_{i,m} = 1.
+\]</span></p>
+</div>
+</section>
+<section id="is-one-logarithm-of-the-odds-enough" class="slide level4">
+<h4>Is one logarithm of the odds enough?</h4>
+<ul>
+<li>The Multinomial Logistic regression <span style="color: purple;">also models the logarithm of the odds</span>.</li>
+<li>However, only one logarithm of the odds (or <span style="color: purple;">logit</span>) will not be enough anymore.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Here is what we can do:
+<ol type="1">
+<li>Pick one of the categories to be the <span style="color: purple;">baseline</span>. For example, the category “<span class="math inline">\(1\)</span>” (or <code>edm</code> in our context).</li>
+<li>For each of the <span style="color: purple;">other</span> categories, we model the logarithm of the odds to the baseline category.</li>
+</ol></li>
+</ul>
+</div>
+</section>
+<section id="checking-response-levels" class="slide level4">
+<h4>Checking response levels!</h4>
+<ul>
+<li>Let us set the Multinomial Logistic regression model with <code>genre</code> as a response subject to <code>danceability</code> and <code>valence</code> as continuous regressors.</li>
+<li>Level <code>edm</code> will be the baseline:</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-18" class="exercise-cell">
+
+</div>
+<script type="webr-18-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibGV2ZWxzKHNwb3RpZnlfdHJhaW5pbmckZ2VucmUpIn0=
+</script>
+</div>
+</div>
+</section>
+<section id="log-odds-and-odds-ratio" class="slide level4">
+<h4>Log-odds and odds ratio</h4>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{latin},\texttt{edm})} &amp;= \log\left[\frac{P(Y_i = \texttt{latin} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}\right] \\
+&amp;= \beta_0^{(\texttt{latin},\texttt{edm})} + \beta_1^{(\texttt{latin},\texttt{edm})} X_{i, \texttt{dance}} + \beta_2^{(\texttt{latin},\texttt{edm})} X_{i, \texttt{val}}
+\end{align*}\]</span></p>
+</div>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\frac{P(Y_i = \texttt{latin}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})} &amp;= \exp\left[\beta_0^{(\texttt{latin},\texttt{edm})}\right] \times \exp\left[\beta_1^{(\texttt{latin},\texttt{edm})} X_{i,\texttt{dance}}\right] \times \\
+&amp; \qquad \exp\left[\beta_2^{(\texttt{latin},\texttt{edm})} X_{i,\texttt{val}}\right]
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="probability" class="slide level4">
+<h4>Probability</h4>
+<p><br></p>
+<div class="small-text-v2">
+<p><span class="math display">\[\begin{gather*}
+p_{i,\texttt{edm}} = P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\
+\frac{1}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)}
+\end{gather*}\]</span></p>
+</div>
+</section>
+<section id="similarly" class="slide level4">
+<h4>Similarly …</h4>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{pop},\texttt{edm})} &amp;= \log\left[\frac{P(Y_i = \texttt{pop} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}\right] \\
+&amp;= \beta_0^{(\texttt{pop},\texttt{edm})} + \beta_1^{(\texttt{pop},\texttt{edm})} X_{i, \texttt{dance}} + \beta_2^{(\texttt{pop},\texttt{edm})} X_{i, \texttt{val}} \\
+\eta_i^{(\texttt{r&amp;b},\texttt{edm})} &amp;= \log\left[\frac{P(Y_i = \texttt{r&amp;b} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}\right] \\
+&amp;= \beta_0^{(\texttt{r&amp;b},\texttt{edm})} + \beta_1^{(\texttt{r&amp;b},\texttt{edm})} X_{i, \texttt{dance}} + \beta_2^{(\texttt{r&amp;b},\texttt{edm})} X_{i, \texttt{val}} \\
+\eta_i^{(\texttt{rap},\texttt{edm})} &amp;= \log\left[\frac{P(Y_i = \texttt{rap} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}\right] \\
+&amp;= \beta_0^{(\texttt{rap},\texttt{edm})} + \beta_1^{(\texttt{rap},\texttt{edm})} X_{i, \texttt{dance}} + \beta_2^{(\texttt{rap},\texttt{edm})} X_{i, \texttt{val}}
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="similarly-contd" class="slide level4">
+<h4>Similarly (cont’d)</h4>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{rock},\texttt{edm})} &amp;= \log\left[\frac{P(Y_i = \texttt{rock} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i, \texttt{dance}}, X_{i, \texttt{val}})}\right] \\
+&amp;= \beta_0^{(\texttt{rock},\texttt{edm})} + \beta_1^{(\texttt{rock},\texttt{edm})} X_{i, \texttt{dance}} + \beta_2^{(\texttt{rock},\texttt{edm})} X_{i, \texttt{val}}.
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="odds" class="slide level4">
+<h4>Odds</h4>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\frac{P(Y_i = \texttt{pop}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}&amp; = \exp\left[\beta_0^{(\texttt{pop},\texttt{edm})}\right] \times \exp\left[\beta_1^{(\texttt{pop},\texttt{edm})} X_{i,\texttt{dance}}\right] \times \\ &amp; \qquad \exp\left[\beta_2^{(\texttt{pop},\texttt{edm})} X_{i,\texttt{val}}\right] \\
+\frac{P(Y_i = \texttt{r&amp;b}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})} &amp;= \exp\left[\beta_0^{(\texttt{r&amp;b},\texttt{edm})}\right] \times \exp\left[\beta_1^{(\texttt{r&amp;b},\texttt{edm})} X_{i,\texttt{dance}}\right] \times \\
+&amp; \qquad \exp\left[\beta_2^{(\texttt{r&amp;b},\texttt{edm})} X_{i,\texttt{val}}\right]
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="odds-contd" class="slide level4">
+<h4>Odds (cont’d)</h4>
+<p><br></p>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\frac{P(Y_i = \texttt{rap}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})} &amp;=  \exp\left[\beta_0^{(\texttt{rap},\texttt{edm})}\right] \times \exp\left[\beta_1^{(\texttt{rap},\texttt{edm})} X_{i,\texttt{dance}}\right] \times \\
+&amp; \qquad \exp\left[\beta_2^{(\texttt{rap},\texttt{edm})} X_{i,\texttt{val}}\right] \\
+\frac{P(Y_i = \texttt{rock}\mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})}{P(Y_i = \texttt{edm} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}})} &amp;= \exp\left[\beta_0^{(\texttt{rock},\texttt{edm})}\right] \times \exp\left[\beta_1^{(\texttt{rock},\texttt{edm})} X_{i,\texttt{dance}}\right] \times \\
+&amp; \qquad \exp\left[\beta_2^{(\texttt{rock},\texttt{edm})} X_{i,\texttt{val}}\right].
+\end{align*}\]</span></p>
+</div>
+</section>
+<section id="probabilities" class="slide level4">
+<h4>Probabilities</h4>
+<div class="small-text-v2">
+<p><span class="math display">\[\begin{gather*}
+p_{i,\texttt{latin}} = P(Y_i = \texttt{latin} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\ \frac{\exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big)}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)} \\
+p_{i,\texttt{pop}} = P(Y_i = \texttt{pop} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\ \frac{\exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big)}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)}
+\end{gather*}\]</span></p>
+</div>
+<div class="fragment">
+<div class="small-text-v2">
+<p><span class="math display">\[\begin{gather*}
+p_{i,\texttt{r&amp;b}} = P(Y_i = \texttt{r&amp;b} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\ \frac{\exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big)}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)} \\
+p_{i,\texttt{rap}} = P(Y_i = \texttt{rap} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\ \frac{\exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big)}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)}
+\end{gather*}\]</span></p>
+</div>
+</div>
+</section>
+<section id="probabilities-contd" class="slide level4">
+<h4>Probabilities (cont’d)</h4>
+<p><br></p>
+<div class="small-text-v2">
+<p><span class="math display">\[\begin{gather*}
+p_{i,\texttt{rock}} = P(Y_i = \texttt{rock} \mid X_{i,\texttt{dance}}, X_{i,\texttt{val}}) = \\ \frac{\exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)}{1 + \exp\big(\eta_i^{(\texttt{latin},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{pop},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{r&amp;b},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rap},\texttt{edm})}\big) + \exp\big(\eta_i^{(\texttt{rock},\texttt{edm})}\big)}.
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="iclicker-question-1" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<ul>
+<li>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</li>
+</ul>
+<blockquote>
+<p>Now that we removed the restriction of only one link function, we also removed the distributional assumption for <span class="math inline">\(Y_i\)</span>. Hence, our model has no distributional assumption.</p>
+</blockquote>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+
+<section id="iclicker-question-2" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<ul>
+<li>Answer <strong>TRUE</strong> or <strong>FALSE</strong>:</li>
+</ul>
+<blockquote>
+<p>From the statistical point of view, the model is now non-parametric.</p>
+</blockquote>
+<p><strong>A.</strong> TRUE</p>
+<p><strong>B.</strong> FALSE</p>
+</section>
+
+<section id="in-class-question-1" class="title-slide slide level3 center">
+<h3>In-class Question</h3>
+<ul>
+<li>Suppose that, given our inquiries, a peer suggests we fit two separate OLS with <code>genre</code> as a regressor and <code>danceability</code> <span style="color: purple;">OR</span> <code>valence</code> as the responses.</li>
+<li>Can you think of some drawbacks of this suggested approach?</li>
+</ul>
+<center>
+<img src="images/panda.png" width="250" height="250">
+</center>
+</section>
+
+<section id="estimation-1" class="title-slide slide level3 center">
+<h3>3.5. Estimation</h3>
+<ul>
+<li>To fit the model with the package <code>nnet</code>, we use the function <code>multinom()</code>, which obtains the corresponding estimates.</li>
+<li>The estimates are obtained through <span style="color: purple;">maximum likelihood</span>, where we assume a <span style="color: purple;">Multinomial joint probability mass function</span> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span>.</li>
+</ul>
+</section>
+<section id="the-code" class="slide level4">
+<h4>The code!</h4>
+<p><br></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-19" class="exercise-cell">
+
+</div>
+<script type="webr-19-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3BvdGlmeV9tdWx0X2xvZ19tb2RlbCA8LSBtdWx0aW5vbShcbiAgZm9ybXVsYSA9IGdlbnJlIH4gZGFuY2VhYmlsaXR5ICsgdmFsZW5jZSxcbiAgZGF0YSA9IHNwb3RpZnlfdHJhaW5pbmdcbikifQ==
+</script>
+</div>
+</div>
+</section>
+
+<section id="inference" class="title-slide slide level3 center">
+<h3>3.6. Inference</h3>
+<ul>
+<li>We also use the <span style="color: purple;">Wald statistic</span> <span class="math inline">\(z_j^{(u, v)} = \frac{\hat{\beta}_j^{(u, v)}}{\mbox{se}\left(\hat{\beta}_j^{(u, v)}\right)}\)</span> to test the hypotheses <span class="math display">\[\begin{gather*}
+H_0: \beta_j^{(u, v)} = 0\\
+H_a: \beta_j^{(u, v)} \neq 0.
+\end{gather*}\]</span></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j\)</span> has an <span style="color: purple;">approximately Standard Normal distribution</span> under <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+</div>
+</section>
+<section id="confidence-intervals-cis-for-odds" class="slide level4">
+<h4>Confidence Intervals (CIs) for Odds</h4>
+<ul>
+<li>We can also use the function <code>tidy()</code> from the <code>broom</code> package along with argument <code>conf.int = TRUE</code> to get the 95% CIs <span style="color: purple;">by default</span>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-20" class="exercise-cell">
+
+</div>
+<script type="webr-20-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibXVsdF9vdXRwdXQgPC0gdGlkeShzcG90aWZ5X211bHRfbG9nX21vZGVsLCBjb25mLmludCA9IFRSVUUsIGV4cG9uZW50aWF0ZSA9IFRSVUUpXG5tdWx0X291dHB1dCB8PlxuICBtdXRhdGVfaWYoaXMubnVtZXJpYywgcm91bmQsIDMpIn0=
+</script>
+</div>
+</div>
+</section>
+<section id="filtering-those-significant-estimates" class="slide level4">
+<h4>Filtering those significant estimates…</h4>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-21" class="exercise-cell">
+
+</div>
+<script type="webr-21-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoibXVsdF9vdXRwdXQgfD5cbiAgZHBseXI6OmZpbHRlcihwLnZhbHVlIDwgMC4wNSkifQ==
+</script>
+</div>
+</div>
+</section>
+<section id="what-can-we-conclude" class="slide level4">
+<h4>What can we conclude?</h4>
+<p><br></p>
+<ul>
+<li>Since our baseline response is <code>edm</code>, we can conclude the following with <span class="math inline">\(\alpha = 0.05\)</span> <span style="color: purple;">on the Spotify platform</span>:
+<ul>
+<li>There is a statistical difference in <code>danceability</code> in <code>edm</code> versus <code>r&amp;b</code> and <code>rock</code>.</li>
+<li>There is a statistical difference in <code>valence</code> in <code>edm</code> versus <code>latin</code>.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="coefficient-interpretation" class="title-slide slide level3 center">
+<h3>3.7. Coefficient Interpretation</h3>
+<div class="small-text">
+<blockquote>
+<p><span class="math inline">\(\beta_2^{(\texttt{latin},\texttt{edm})}\)</span>: for each unit increase in the <code>valence</code> score in the Spotify catalogue, the song is <span class="math inline">\(1.05\)</span> times more likely to be <code>latin</code> than <code>edm</code>.</p>
+</blockquote>
+<blockquote>
+<p><span class="math inline">\(\beta_1^{(\texttt{r&amp;b},\texttt{edm})}\)</span>: for each unit increase in the <code>danceability</code> score in the Spotify catalogue, the odds for a song for being <code>r&amp;b</code> decrease by <span class="math inline">\((1 - 0.963) \times 100\% = 3.7\%\)</span> compared to <code>edm</code>.</p>
+</blockquote>
+<blockquote>
+<p><span class="math inline">\(\beta_1^{(\texttt{rock},\texttt{edm})}\)</span>: for each unit increase in the <code>danceability</code> score in the Spotify catalogue, the odds for a song for being <code>rock</code> decrease by <span class="math inline">\((1 - 0.918) \times 100\% = 8.2\%\)</span> compared to <code>edm</code>.</p>
+</blockquote>
+</div>
+</section>
+
+<section id="predictions" class="title-slide slide level3 center">
+<h3>3.8. Predictions</h3>
+<ul>
+<li>Suppose we want to predict the genre probabilities for a given song with a <code>danceability</code> score of <code>27.5</code> and <code>valence</code> of <code>30</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-22" class="exercise-cell">
+
+</div>
+<script type="webr-22-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoicHJlZF9wcm9icyA8LSByb3VuZChwcmVkaWN0KHNwb3RpZnlfbXVsdF9sb2dfbW9kZWwsIHRpYmJsZShkYW5jZWFiaWxpdHkgPSAyNy41LCB2YWxlbmNlID0gMzApLCB0eXBlID0gXCJwcm9ic1wiKSwgMilcbnByZWRfcHJvYnMifQ==
+</script>
+</div>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-23" class="exercise-cell">
+
+</div>
+<script type="webr-23-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImV2YWwiOnRydWUsImVkaXQiOnRydWV9LCJjb2RlIjoic3VtKHByZWRfcHJvYnMpICMgRHVlIHRvIHJvdW5kaW5nLCBzdW0gaXMgMC45OSBhbmQgbm90IDEuIn0=
+</script>
+</div>
+</div>
+</section>
+
+<section id="model-selection" class="title-slide slide level3 center">
+<h3>3.9. Model Selection</h3>
+<ul>
+<li><span style="color: purple;">To perform model selection</span>, we can use the same techniques from the Binary Logistic regression model.</li>
+<li>That said, some <code>R</code> coding functions might not be entirely available for the <code>multinom()</code> models.</li>
+<li>Still, these statistical techniques and metrics can be manually coded.</li>
+</ul>
+<div class="quarto-auto-generated-content">
+<p><img src="images/UBC_MDS_logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>DSCI 562 - Regression II</p>
+</div>
+</div>
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC40LjIvIn0sInBhY2thZ2VzIjp7InJlcG9zIjpbXSwicGtncyI6WyJldmFsdWF0ZSIsImtuaXRyIiwiaHRtbHRvb2xzIiwidGlkeXZlcnNlIiwiYnJvb20iLCJnbG1iYiIsIkFFUiIsImNvd3Bsb3QiLCJqYW5pdG9yIiwibm5ldCJdfSwicmVuZGVyX2RmIjoiZGVmYXVsdCJ9
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMyIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0yMyIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMjMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yMy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTIzLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzIzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yMywge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMiIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0yMiIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMjIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTIyLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzIyID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yMiwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMSIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0yMSIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMjEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTIxLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzIxID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yMSwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yMCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0yMCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMjAgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yMC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTIwLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzIwID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yMCwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOSIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTk7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xOSIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xOS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE5LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE5ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xOSwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xOCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTg7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xOCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTggPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE4LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE4ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xOCwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNyIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xNyIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTcgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE3LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE3ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNywge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNiIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xNiIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE2LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE2ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNiwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNSIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xNSIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTUgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE1LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE1ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNSwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xNCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xNCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTQgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE0LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE0ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNCwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMyIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMyIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEzLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMywge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMiIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMiIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEyLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEyID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMiwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMSIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMSIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTExLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzExID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMSwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xMCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTAgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEwLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEwID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMCwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItOSIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfOSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTktY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici05LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzkgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzksIHt9KTtcbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTgiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzggPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici04LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV84ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl84LCB7fSk7XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTciLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici03Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl83ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTctY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNywge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItNiIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici02LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzYgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzYsIHt9KTtcbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzUgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici01LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV81ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl81LCB7fSk7XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici00Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTQtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNCwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItMyIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzMgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzMsIHt9KTtcbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7ImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xIiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8xID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMSwge30pO1xuIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gVXNlIFBvc3RNZXNzYWdlIGNoYW5uZWwgZm9yIGFzeW5jIGNvbW11bmljYXRpb25cbiAgLy8gV2UgZG8gbm90IGV4cGVjdCB0byB0YWtlIG5lc3RlZCBwcm9tcHQgaW5wdXQgaW4gUXVhcnRvIExpdmUgY2VsbHNcbiAgZGF0YS5vcHRpb25zLmNoYW5uZWxUeXBlID0gQ2hhbm5lbFR5cGUuUG9zdE1lc3NhZ2U7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICB0cnkge1xuICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICBpZiAoIWUubWVzc2FnZS5pbmNsdWRlcyhcIkZTIGVycm9yXCIpKSB7XG4gICAgICAgICAgICB0aHJvdyBlO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL3Nwb3RpZnkuY3N2Il0=
+</script>
+</section>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="lecture2_glm_model_selection_multinomial_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

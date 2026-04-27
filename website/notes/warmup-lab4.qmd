@@ -1,0 +1,979 @@
+---
+title: "Lab 4: Quantile Regression"
+format:
+  live-html:
+    toc: true
+    toc-depth: 4
+    number-sections: true
+webr:
+  packages:
+    - tidyverse
+    - lubridate
+    - modelr
+    - quantreg
+    - broom
+  resources: 
+    - datasets/doordash.csv
+---
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+## Setup {.unnumbered}
+
+We will need to load the following packages before proceeding:
+
+```{webr}
+library(tidyverse)
+library(lubridate)
+library(modelr)
+library(quantreg)
+```
+
+## DoorDash ETAs — Thinking Like the ETA Team! {.unnumbered}
+
+![Copyright © 2026 DoorDash, Inc.](img/doordash-logo.png){width=70%}
+
+Imagine you have just joined the **DoorDash ETA (Estimated Time of Arrival) team** as a Data Scientist. Your manager does not care about “*average delivery time*” in the abstract; they care about **customer promises**:
+
+- *“Most orders should arrive around ___ minutes.”*  
+- *“But we should warn customers that it could take as long as ___ minutes.”*  
+- *“And we need to understand how staffing and congestion shift those numbers.”*
+
+This warmup is about learning the tool that matches that reality: **Quantile regression**.
+
+::: {.callout-important}
+## Important Key Mindset Shift
+In this setting, focusing only on the Ordinary Least-squares (OLS) conditional mean $\mathbb{E}(Y \mid X)$ is often *not the right target*. Let us suppose that DoorDash lives and dies by **the median** (typical experience), **upper quantiles** (late orders, disappointed customers), and **lower quantiles** (early orders and possibly happier customers).
+
+:::
+
+## About the Dataset {.unnumbered}
+
+The **DoorDash ETA** dataset contains historical delivery records from early 2015, where each observation corresponds to a single food delivery order. The response of interest is the total delivery duration, defined as the time between when an order is placed (`created_at`) and when it is delivered (`actual_delivery_time`). 
+
+The dataset includes a mix of order characteristics, marketplace conditions at order time (e.g., number of active and busy dashers nearby), and predictions from internal models (e.g., estimated driving time). Because delivery times are typically right-skewed and heterogeneous, this dataset is well-suited for Quantile regression, which allows us to model different parts of the conditional distribution of delivery time rather than just the mean. You can find the dataset in [**this Kaggle website**](https://www.kaggle.com/datasets/dharun4772/doordash-eta-prediction?resource=download). **Suppose this dataset is representative enough for a given city of interest**.
+
+## Setup: Load the Dataset {.unnumbered}
+
+The raw dataset `doordash.csv` includes timestamps for when an order is placed and when it is delivered, plus features describing **market conditions** and **order/store characteristics**. We have 12969 raw data points.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+doordash_raw <- read_csv("datasets/doordash.csv", show_col_types = FALSE)
+glimpse(doordash_raw)
+```
+
+## Data Wrangling: Define the response we actually model! {.unnumbered}
+
+In the raw data `doordash_raw`, columns `created_at` and `actual_delivery_time` are timestamps. For modelling and interpretation, we will convert these into an **actual delivery duration in minutes**. Note that we will overwrite `actual_delivery_time` to be the duration in min (suppose DoorDash people often casually call this “*actual delivery time*” anyway). The original delivery timestamp will be stored as `actual_delivery_timestamp`. The below chunk of code results in a data frame of $n = 12700$ rows, which is enough data.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# We select the necessary columns for our inquiries.
+# Then, we create actual_delivery_time using {lubridate} functions.
+training_doordash <- doordash_raw |>
+  dplyr::select(
+    created_at,
+    actual_delivery_time,
+    total_onshift_dashers,
+    total_busy_dashers,
+    store_primary_category
+  ) |>
+  drop_na() |>
+  mutate(
+    created_at = ymd_hms(created_at, tz = "UTC"),
+    actual_delivery_timestamp = ymd_hms(actual_delivery_time, tz = "UTC"),
+    actual_delivery_time = as.numeric(difftime(actual_delivery_timestamp,
+      created_at,
+      units = "mins"
+    ))
+  ) |>
+  drop_na() # Dropping final rows with NAs due to incorrect raw timestamp records.
+```
+
+Let us now check summary of `actual_delivery_time`.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+summary(training_doordash$actual_delivery_time)
+```
+
+Now, let us plot the histogram of `actual_delivery_time` via `training_doordash`.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+hist_actual_delivery_time <- ggplot(
+  training_doordash,
+  aes(x = actual_delivery_time)
+) +
+  geom_histogram(
+    bins = 60,
+    fill = "lightblue",
+    color = "black",
+    linewidth = 0.3
+  ) +
+  geom_vline(aes(xintercept = mean(actual_delivery_time)),
+    linetype = "dashed", linewidth = 0.5, color = "red"
+  ) +
+  geom_vline(aes(xintercept = median(actual_delivery_time)),
+    linetype = "solid", linewidth = 0.5, color = "red"
+  ) +
+  labs(
+    x = "Actual Delivery Time (min)",
+    y = "Number of Orders",
+    title = "Histogram of DoorDash Actual Delivery Times",
+    subtitle = "Solid vertical line = median, dashed vertical line = mean"
+  ) +
+  theme(
+    plot.title = element_text(size = 24, face = "bold"),
+    plot.subtitle = element_text(size = 22),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 21)
+  )
+hist_actual_delivery_time
+```
+
+## Q1.1. Initial Food for Thought {.unnumbered}
+
+As a DoorDash Data Scientist, your manager asks about the above `summary()` and histogram for actual delivery times in minutes to report **descriptive ETAs** to customers:
+
+> “*Should we report a single ‘typical ETA’ using the mean or the median?*”
+
+**Q1.1.1.**	Based on the above descriptive statistics and histogram, which is the better “*typical ETA*” and why?
+
+**Q1.1.2.**	What does the fact that the mean exceeds the median suggest about the shape of the distribution?
+
+**Q1.1.3.**	Which statistic (mean or median) would be more robust to the maximum value 166.050 minutes, and how does that motivate using median ($\tau = 0.5$) Quantile regression instead of OLS for a central-tendency model?
+
+::: {.callout-note collapse="true"}
+## Answers
+
+Available for MDS students.
+:::
+
+## First Statistical Inquiry: “What’s ‘typical’ delivery time, and how do staffing plus congestion move it?” {.unnumbered}
+
+Your manager asks:
+
+> “*I don’t want the average — I want typical delivery time. Use staffing within 10 miles (`total_onshift_dashers`, $X_1$) and congestion (`total_busy_dashers`, $X_2$) to explain what shifts that typical time.*”
+
+We will compare:
+
+-	**OLS**: models the conditional mean $\mathbb{E}(Y \mid X_1, X_2)$.
+- **Parametric median Quantile regression ($\tau = 0.5$):** models the conditional median $Q_{Y \mid X_1, X_2}(\tau = 0.5 \mid X_1, X_2)$.
+
+The exact regressor descriptions are the following:
+
+- `total_onshift_dashers`: Number of available dashers who are within 10 miles of the store at the time of order creation.
+- `total_busy_dashers`: Subset of the above `total_onshift_dashers` who are currently working on an order.
+
+## Q1.2. Exploratory Data Analysis: Why the median matters here! {.unnumbered}
+
+Let us recheck the histogram of actual delivery times from `training_doordash`:
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+hist_actual_delivery_time
+```
+
+Based on the above histogram, why might the median be a more appropriate “*typical ETA*” than the mean?
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Q1.3. Estimation: Fit OLS and Parametric Median Quantile Regressions {.unnumbered}
+
+::: {.callout-important}
+## Important
+We are intentionally skipping the data modelling stage in this inquiry; we will leave the equations for the next one with a more complex regressor arrangement.
+:::
+
+Fit **two models** with the same response and regressors:
+
+- **Response:** `actual_delivery_time` (min).
+- **Regressors:** `total_onshift_dashers` and `total_busy_dashers`.
+
+First, fit an **OLS** model (`ETA_OLS`) to study how the regressors affect the **mean** `actual_delivery_time` $\mathbb{E}(Y \mid X_1, X_2)$. Then, fit a **parametric median Quantile regression** model ($\tau = 0.5$, called `ETA_param_qr_50`) to study how the regressors affect the **median** delivery time $Q_{Y|X_1, X_2}(\tau = 0.5 \mid X_1, X_2)$, which is more robust to unusually late deliveries.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+:::
+
+## Q1.4. Inference {.unnumbered}
+
+Using your fitted models `ETA_OLS` and `ETA_param_qr_50`, are `total_onshift_dashers` and `total_busy_dashers` statistically associated with `actual_delivery_time`? State your conclusions with a significance level $\alpha = 0.05$.
+
+::: {.callout-important}
+## Important
+For parametric median Quantile regression, ensure to use the pairwise bootstrapping method to obtain the corresponding empirical values. Use 100 replicates and the simulation seed `562`.
+:::
+
+::: {.callout-note collapse="true"}
+## Answers
+
+Available for MDS students.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+:::
+
+## Q1.5. Coefficient Interpretation {.unnumbered}
+
+Now, let us interpret those significant estimated regression coefficients coming from both OLS and parametric median Quantile regression.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Q1.6. Graphical comparison: OLS Fitted Line versus Parametric Median Quantile Fitted Line {.unnumbered}
+
+To make a clean comparison against one regressor at a time between OLS and parametric median Quantile regression, we will:
+
+- Vary one (either `total_onshift_dashers` or `total_busy_dashers`) across its range.
+- Hold the other regressor fixed at its median.
+- Plot predicted mean (OLS) versus predicted median ($\tau=0.5$).
+
+**Plot A: Vary on-shift dashers and hold busy dashers fixed**
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+grid_onshift <- tibble(
+  total_onshift_dashers = seq(
+    min(training_doordash$total_onshift_dashers),
+    max(training_doordash$total_onshift_dashers),
+    length.out = 200
+  ),
+  total_busy_dashers = median(training_doordash$total_busy_dashers)
+) |>
+  mutate(
+    pred_OLS = predict(ETA_OLS, newdata = cur_data()),
+    pred_qr_50 = predict(ETA_param_qr_50, newdata = cur_data())
+  )
+
+plot_delivery_time_vs_onshift <- ggplot(
+  training_doordash,
+  aes(x = total_onshift_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.15, color = "darkblue") +
+  geom_line(
+    data = grid_onshift, aes(y = pred_OLS),
+    linewidth = 0.6, linetype = "dashed", color = "chocolate"
+  ) +
+  geom_line(
+    data = grid_onshift, aes(y = pred_qr_50),
+    linewidth = 0.6, color = "chocolate"
+  ) +
+  labs(
+    x = "Total On-shift Dashers (within 10 miles)",
+    y = "Actual Delivery Time (min)",
+    title = "Mean (OLS, dashed) versus Parametric Median (0.5-quantile, solid)",
+    subtitle = "Total busy dashers held constant at its median"
+  ) +
+  theme(
+    plot.title = element_text(size = 19, face = "bold"),
+    plot.subtitle = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18)
+  )
+plot_delivery_time_vs_onshift
+```
+
+**Plot B: Vary busy dashers, hold on-shift dashers fixed**
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+grid_busy <- tibble(
+  total_busy_dashers = seq(
+    min(training_doordash$total_busy_dashers),
+    max(training_doordash$total_busy_dashers),
+    length.out = 200
+  ),
+  total_onshift_dashers = median(training_doordash$total_onshift_dashers)
+) |>
+  mutate(
+    pred_OLS = predict(ETA_OLS, newdata = cur_data()),
+    pred_qr_50 = predict(ETA_param_qr_50, newdata = cur_data())
+  )
+
+plot_delivery_time_vs_busy <- ggplot(
+  training_doordash,
+  aes(x = total_busy_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.15, color = "darkgreen") +
+  geom_line(
+    data = grid_busy, aes(y = pred_OLS),
+    linewidth = 0.6, linetype = "dashed", color = "chocolate"
+  ) +
+  geom_line(
+    data = grid_busy, aes(y = pred_qr_50),
+    linewidth = 0.6, color = "chocolate"
+  ) +
+  labs(
+    x = "Total Busy Dashers",
+    y = "Actual Delivery Time (min)",
+    title = "Mean (OLS, dashed) versus Parametric Median (0.5-quantile, solid)",
+    subtitle = "Total on-shift dashers held constant at its median"
+  ) +
+  theme(
+    plot.title = element_text(size = 19, face = "bold"),
+    plot.subtitle = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18)
+  )
+plot_delivery_time_vs_busy
+```
+
+In these two plots, why might the fitted OLS and parametric median-quantile lines differ? What is the “*business meaning*” of that gap?
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Second Statistical Inquiry: Where do ETA ranges like the ones in the app come from? {.unnumbered}
+
+Below, you can see a DoorDash checkout screenshot from a Chipotle order by Alexi -- *yes, Chipotle isn’t real Mexican food... but he was hungry and desperate.* The blue circled range (i.e., 25–40 minutes) is the key product question:
+
+> *How could a range like 25–40 min be produced using regression ideas, without pretending that all customers experience the “**mean**”?*
+
+![Screenshot from Alexi's phone.](img/doordash.png){width=45%}
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+::: {.callout-important}
+## Important
+The above range-related matter is related to a predictive task, which will be the main scope of the third inquiry of this exercise. That said, for this second inquiry, we must understand the inferential facts related to estimating different Quantile regression models **via the same training set**.
+:::
+
+### What the Manager Wants! {.unnumbered}
+
+The manager wants to assess whether there is a statistical association between the
+$\tau = 0.1, 0.5, 0.9$ conditional quantiles of `actual_delivery_time` versus:
+
+- `total_onshift_dashers`: Number of available dashers who are within 10 miles of the store at the time of order creation.
+- `total_busy_dashers`: Subset of the above `total_onshift_dashers` who are currently working on an order.
+- `store_primary_category`: Cuisine category of the restaurant, e.g., Italian, Mexican, Chinese, Indian, etc.
+
+... and by how much, if significant.
+
+::: {.callout-important}
+## Important
+Quantile regression will let us answer it across the distribution of actual delivery times. Moreover, there will be three fitted parametric Quantile regression models: $\tau = 0.1$ (say, early deliveries, and possibly, happier customers), $\tau = 0.5$ (say, typical experience), and $\tau = 0.9$ (say, late orders with possible disappointed customers).
+:::
+
+### Data Wrangling {.unnumbered}
+
+`store_primary_category` has many categories, which can be noisy for a warmup exercise. Thus, we will keep the most common categories and drop the rest into a factor level called "`Other`". This will result in a factor-type column `store_primary_category` with nine categories only.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+training_doordash_2 <- training_doordash |>
+  mutate(
+    store_primary_category = fct_lump_n(store_primary_category,
+      n = 8, other_level = "Other"
+    )
+  )
+count(training_doordash_2, store_primary_category, sort = TRUE)
+```
+
+### Q1.7. Exploratory Data Analysis: Quantile thinking! {.unnumbered}
+
+Before we fit any model, we want to **see** how delivery times behave under different marketplace conditions and order characteristics. But here is the key DoorDash insight:
+
+- The **mean** can be a misleading summary because late deliveries create a long right tail.
+- What we really care about operationally is how regressors move:
+
+  + **early deliveries** ($\tau = 0.1$).
+  + **typical deliveries** (the median, $\tau = 0.5$).
+  + **slow deliveries** ($\tau = 0.9$).
+
+So, in this exploratory data analysis (EDA), we will look at scatterplots and category comparisons, but instead of drawing a “*best-fit mean line*,” we will overlay **fitted parametric Quantile regression lines** for $\tau = 0.1, 0.5, 0.9$. Think of these three lines as a first-pass picture of the ETA system:
+
+- The $\tau = 0.1$ fitted line is an **early-delivery curve** (ideal to have happier customers).
+- The $\tau = 0.5$ fitted line is a **typical ETA curve** (robust to late outliers).
+- The $\tau = 0.9$ fitted line is a **late-delivery risk curve** (what customers complain about).
+- The gap between $\tau = 0.1$ and $\tau = 0.9$ fitted lines is a preview of an **ETA interval**.
+
+With that mindset, let us visualize how staffing (`total_onshift_dashers`) and congestion (`total_busy_dashers`) relate to the lower, middle, and upper parts of delivery time. We will illustrate these fitted Quantile regression lines per regressor with respect to `actual_delivery_time` (**just for EDA purposes**, a more complete model fitting for inferential purposes will be explained later on).
+
+::: {.callout-important}
+## Important
+The usual `geom_quantile(y ~ x)` fits *marginal* quantile curves that only condition on the $x$-axis variable. Here, we would prefer *conditional* quantile curves from a model that takes into account both `total_onshift_dashers` and `total_busy_dashers`. So, we fit parametric Quantile regressions using both regressors, then plot predictions while varying one regressor and holding the other fixed (at its median). This makes the visual comparison meaningful.
+:::
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+# 1) Fit parametric Quantile regressions just for EDA.
+qr10 <- rq(actual_delivery_time ~ total_onshift_dashers + total_busy_dashers,
+  tau = 0.1, data = training_doordash_2
+)
+qr50 <- rq(actual_delivery_time ~ total_onshift_dashers + total_busy_dashers,
+  tau = 0.5, data = training_doordash_2
+)
+qr90 <- rq(actual_delivery_time ~ total_onshift_dashers + total_busy_dashers,
+  tau = 0.9, data = training_doordash_2
+)
+
+# Constants to "hold fixed."
+busy_const  <- median(training_doordash_2$total_busy_dashers, na.rm = TRUE)
+onshift_const <- median(training_doordash_2$total_onshift_dashers, na.rm = TRUE)
+
+# 2) Prediction grid: vary on-shift, hold busy fixed.
+grid_onshift <- tibble(
+  total_onshift_dashers = seq(
+    min(training_doordash_2$total_onshift_dashers,
+      na.rm = TRUE
+    ),
+    max(training_doordash_2$total_onshift_dashers,
+      na.rm = TRUE
+    ),
+    length.out = 200
+  ),
+  total_busy_dashers = busy_const
+) |>
+  mutate(
+    q10 = predict(qr10, newdata = cur_data()),
+    q50 = predict(qr50, newdata = cur_data()),
+    q90 = predict(qr90, newdata = cur_data())
+  ) |>
+  pivot_longer(cols = c(q10, q50, q90), names_to = "quantile", values_to = "pred") |>
+  mutate(quantile = recode(quantile, q10 = "0.1", q50 = "0.5", q90 = "0.9"))
+
+# 3) Prediction grid: vary busy, hold on-shift fixed.
+grid_busy <- tibble(
+  total_busy_dashers = seq(min(training_doordash_2$total_busy_dashers, na.rm = TRUE),
+    max(training_doordash_2$total_busy_dashers, na.rm = TRUE),
+    length.out = 200
+  ),
+  total_onshift_dashers = onshift_const
+) |>
+  mutate(
+    q10 = predict(qr10, newdata = cur_data()),
+    q50 = predict(qr50, newdata = cur_data()),
+    q90 = predict(qr90, newdata = cur_data())
+  ) |>
+  pivot_longer(cols = c(q10, q50, q90), names_to = "quantile", values_to = "pred") |>
+  mutate(quantile = recode(quantile, q10 = "0.1", q50 = "0.5", q90 = "0.9"))
+
+# Plot: vary on-shift, busy held constant.
+second_plot_delivery_time_vs_onshift <- ggplot(
+  training_doordash_2,
+  aes(x = total_onshift_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.15) +
+  geom_line(
+    data = grid_onshift,
+    aes(y = pred, colour = quantile),
+    linewidth = 0.7
+  ) +
+  labs(
+    x = "Total On-shift Dashers",
+    y = "Actual Delivery Time (min)",
+    title = "Conditional Quantile Lines (0.1, 0.5, and 0.9-quantiles) 
+    versus Total On-shift Dashers",
+    subtitle = paste0(
+      "Holding total busy dashers constant at its median of ",
+      round(busy_const, 1), " dashers"
+    )
+  ) +
+  theme(
+    plot.title = element_text(size = 24, face = "bold"),
+    plot.subtitle = element_text(size = 22),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 22),
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  ) +
+  guides(colour = guide_legend(title = "Quantile", reverse = TRUE))
+
+# Plot: vary busy, on-shift held constant.
+second_plot_delivery_time_vs_busy <- ggplot(
+  training_doordash_2,
+  aes(x = total_busy_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.15) +
+  geom_line(
+    data = grid_busy,
+    aes(y = pred, colour = quantile),
+    linewidth = 0.7
+  ) +
+  labs(
+    x = "Total Busy Dashers",
+    y = "Actual Delivery Time (min)",
+    title = "Conditional Quantile Lines (0.1, 0.5, and 0.9-quantiles) 
+    versus Total Busy Dashers",
+    subtitle = paste0(
+      "Holding total onshift dashers constant at its median of ",
+      round(onshift_const, 1),
+      " dashers"
+    )
+  ) +
+  theme(
+    plot.title = element_text(size = 24, face = "bold"),
+    plot.subtitle = element_text(size = 22),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 22),
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  ) +
+  guides(colour = guide_legend(title = "Quantile", reverse = TRUE))
+
+second_plot_delivery_time_vs_onshift
+second_plot_delivery_time_vs_busy
+```
+
+Now, let us deliver a suitable plot for `store_primary_category` versus `actual_delivery_time`.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+boxplots_delivery_time_vs_store <- ggplot(
+  training_doordash_2,
+  aes(
+    x = store_primary_category,
+    y = actual_delivery_time,
+    fill = store_primary_category
+  )
+) +
+  geom_boxplot(outlier.alpha = 0.15) +
+  coord_flip() +
+  labs(
+    x = "Store Primary Category",
+    y = "Actual Delivery Time (min)",
+    title = "Store Category Differences: look beyond means \n(spread plus tail risk!)"
+  ) +
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    plot.subtitle = element_text(size = 18),
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 18),
+    legend.position = "none"
+  )
+boxplots_delivery_time_vs_store
+```
+
+In the scatterplots with **fitted parametric quantile lines** ($\tau = 0.1, 0.5, 0.9$), which regressor seems to change the upper tail (slow deliveries, i.e., longer `actual_delivery_time`) more strongly: `total_busy_dashers` or `total_onshift_dashers`? Then use the store-type boxplots to identify one `store_primary_category` with especially high tail risk, and briefly explain how that store type might amplify or dampen the upper-tail effect you identified (in operational terms).
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Q1.8. Data Modelling {.unnumbered}
+
+Why is parametric Quantile regression especially attractive for DoorDash to solve this second inquiry?
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Q1.9. Estimation {.unnumbered}
+
+Fit the corresponding **three parametric Quantile regression models** of `actual_delivery_time` versus `total_onshift_dashers`, `total_busy_dashers`, and `store_primary_category` via `training_doordash_2`.
+
+> **Heads-up:** Ensure that `Other` is the baseline level in the factor-type column `store_primary_category`.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+:::
+
+## Q1.10. Inference {.unnumbered}
+
+Using your fitted models `second_param_qr_10`, `second_param_qr_50`, and `second_param_qr_90`, are the regressors statistically associated to `actual_delivery_time`? State your conclusions with a significance level $\alpha = 0.05$.
+
+::: {.callout-important}
+## Important
+Ensure to use the pairwise bootstrapping method to obtain the corresponding empirical $p$-values. Use 100 replicates and the simulation seed `562`.
+:::
+
+::: {.callout-note collapse="true"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+
+**$\tau = 0.1$ (early deliveries):**
+
+**Significant:**  
+
+- `total_onshift_dashers`.
+- `total_busy_dashers`.
+- `japanese` cuisine when compared to `Other` cuisine.
+- `mexican` cuisine when compared to `Other` cuisine.
+- `pizza` cuisine when compared to `Other` cuisine.
+- `sandwich` cuisine when compared to `Other` cuisine.
+
+**Not significant:**  
+
+- `american`, `burger`, `chinese`, and `dessert` cuisines when compared to `Other` cuisine.
+
+**$\tau = 0.5$ (typical deliveries):**
+
+**Significant:**  
+
+- `total_onshift_dashers`.
+- `total_busy_dashers`.
+- `japanese` cuisine when compared to `Other` cuisine.
+- `mexican` cuisine when compared to `Other` cuisine.
+- `pizza` cuisine when compared to `Other` cuisine.
+- `sandwich` cuisine when compared to `Other` cuisine.
+
+**Not significant:** 
+
+- `american`, `burger`, `chinese`, and `dessert` cuisines when compared to `Other` cuisine.
+
+**$\tau = 0.9$ (late deliveries / upper tail):**
+
+**Significant:**  
+
+- `total_onshift_dashers`.
+- `total_busy_dashers`.
+- `chinese` cuisine when compared to `Other` cuisine.
+- `japanese` cuisine when compared to `Other` cuisine.
+- `mexican` cuisine when compared to `Other` cuisine.
+- `pizza` cuisine when compared to `Other` cuisine.
+
+**Not significant:** 
+
+- `american`, `burger`, `dessert`, and `sandwich` cuisines when compared to `Other` cuisine.
+:::
+
+## Q1.11. Coefficient Interpretation {.unnumbered}
+
+Your manager wants a clear explanation of what the second statistical inquiry found for **early**, **typical**, and **late** orders. Using the parametric Quantile regression results at $\tau = 0.1, 0.5, 0.9$ (and the statistically significant coefficients you identified in **Q1.10**, with `Other` as the baseline cuisine):
+
+1. **Staffing + congestion (dasher regressors):**  For each $\tau = 0.1, 0.5, 0.9$, interpret the significant coefficients for:
+
+  - `total_busy_dashers` (congestion).
+  - `total_onshift_dashers` (available supply).
+  
+::: {.callout-important}
+## Important
+Write each interpretation as a manager-ready sentence of the form: “*Holding everything else constant, $+1$ ___ changes the **$\tau$-quantile delivery time** by ___ minutes ($\approx$ ___ seconds)*.”
+:::
+
+2. **Cuisine / store type (relative to `Other`):** At each quantile where cuisine effects are significant, interpret the significant `store_primary_category` coefficients as differences from `Other`.
+
+::: {.callout-important}
+## Important
+Write each interpretation as: “*Compared to **`Other`**, this cuisine shifts the **$\tau$-quantile delivery time** by ___ minutes while holding everything else constant*.”
+:::
+
+3. **Connect to the customer-facing ETA band:** DoorDash often displays a range that can be viewed as
+
+$$
+\left[\widehat{Q}_{Y|X_1, \dots, X_{10}}(\tau = 0.1 \mid X_1, \dots, X_{10}), \widehat{Q}_{Y|X_1, \dots, X_{10}}(\tau = 0.9 \mid X_1, \dots, X_{10})\right]
+$$
+
+Based on your interpretations above, explain in two or three sentences how the regressors:
+- move the **lower bound** ($\tau = 0.1$, “*early*”),
+- move the **median** ($\tau = 0.5$, “*typical*”),
+- move the **upper bound** ($\tau = 0.9$, “*conservative*”),
+and whether they make the ETA range **wider or narrower**.
+
+::: {.callout-note collapse="true"}
+## Answers
+
+Available for MDS students.
+:::
+
+## Third Statistical Inquiry: Build a conservative ETA range for a specific order (probabilistic prediction) {.unnumbered}
+
+Let us go back to the Chipotle screenshot (see below) to get the corresponding context:
+
+![Screenshot from Alexi's phone.](img/doordash.png){width=45%}
+
+Now, your manager says:
+
+> “*We also need an actual ETA range for a specific order via Quantile regression, such as the one from the Chipotle screenshot. And I want it conservative so we don’t underestimate late deliveries.*”
+
+Here, we focus on **prediction** and its **probabilistic interpretation**. That said, instead of focusing on parametric modelling, let us switch to the non-parametric counterpart to capture local behaviours in our regressors with greater predictive accuracy.
+
+::: {.callout-important}
+## Important
+
+**Why should we use $\tau = 0.1$ and $\tau = 0.9$?**
+
+Because DoorDash would want an interval that roughly captures the middle 80% of outcomes. Suppose we have $k$ regressors in our Quantile regression model:
+
+$$
+P\left[\widehat{Q}_{Y|X_1, \dots, X_k}(\tau = 0.1 \mid X_1, \dots, X_k) \le Y \le \widehat{Q}_{Y|X_1, \dots, X_k}(\tau = 0.9 \mid X_1, \dots, X_k)\right] \approx 0.8.
+$$
+
+Using the word **probability** is valid here because quantiles correspond to probabilistic statements about the conditional distribution.
+:::
+
+## Q1.12.  Exploratory Data Analysis with Estimated Non-parametric Quantile Regressions ($\tau = 0.1, 0.9$) {.unnumbered}
+
+This inquiry will involve EDA and estimation, all combined, since we need to both estimate and visualize our modelling approaches for predictions. We will use `rqss()` with smooth terms `qss()` (i.e., quantile smoothing splines). 
+
+> **Choosing the smoothing strength $\lambda$:** Here we pick $\lambda$ using visual inspection (a practical "*sanity check*" to avoid obvious under/overfitting). In a more formal workflow, we can tune $\lambda$ via $K$-fold cross-validation by minimizing [the pinball loss](https://pages.github.ubc.ca/mds-2025-26/DSCI_562_regr-2_students/notes/lecture7_quantile_regression.html#eq-fidelity-function) (a.k.a. the fidelity function we saw in class), which measures how well the model predicts the target conditional quantile.
+
+> **Smoothing tip:**
+>
+> - Smaller `lambda` = wigglier fitted curve (risk overfit).
+>
+> - Larger `lambda` = smoother fitted curve (risk underfit).
+>
+> We want a “*Goldilocks*” fit (i.e., a regression model that is flexible enough to capture the true pattern in the data while balancing bias and variance).
+
+Before visualizing the non-parametric fitted curves for the $0.1$ and $0.9$-quantiles, we need to fit our two non-parametric Quantile regressions for `actual_delivery_time` versus `total_onshift_dashers`, `total_busy_dashers`, `store_primary_category`. **Note that we cannot use `qss()` on `store_primary_category` given it is a categorical regressor, and this function is only meant for numerical regressors.** 
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# Choose a moderate smoothing strength (you can adjust after visual inspection)
+lambda_choice <- 10
+
+qrss_10 <- rqss(
+  actual_delivery_time ~
+    qss(total_onshift_dashers, lambda = lambda_choice) +
+    qss(total_busy_dashers, lambda = lambda_choice) + store_primary_category,
+  tau = 0.10,
+  data = training_doordash_2
+)
+
+qrss_90 <- rqss(
+  actual_delivery_time ~
+    qss(total_onshift_dashers, lambda = lambda_choice) +
+    qss(total_busy_dashers, lambda = lambda_choice) + store_primary_category,
+  tau = 0.90,
+  data = training_doordash_2
+)
+```
+
+Then, we will visualize the non-parametric quantile fits of `actual_delivery_time` versus `total_onshift_dashers` and `total_busy_dashers` (*we vary one regressor and hold others fixed*).
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-width: 10
+#| fig-height: 9
+# Hold these regressors at typical values for plotting
+fixed_busy <- median(training_doordash_2$total_busy_dashers)
+fixed_onshift <- median(training_doordash_2$total_onshift_dashers)
+
+# On-shift dashers plot grid
+# Let us put mexican in store_primary_category since that is
+# the ETA predictive band we are aiming for (the Chipotle screenshot!)
+grid_onshift_np <- tibble(
+  total_onshift_dashers = seq(
+    min(training_doordash_2$total_onshift_dashers),
+    max(training_doordash_2$total_onshift_dashers),
+    length.out = 200
+  ),
+  total_busy_dashers = fixed_busy,
+  store_primary_category = "mexican"
+) |>
+  mutate(
+    store_primary_category = factor(store_primary_category,
+      levels = levels(training_doordash_2$store_primary_category)
+    ),
+    pred_q10 = predict(qrss_10, newdata = cur_data()),
+    pred_q90 = predict(qrss_90, newdata = cur_data())
+  )
+
+# Actual delivery versus on-shift dashers 
+# while keeping cuisine at Mexican and busy dashers at its median
+third_plot_delivery_time_vs_onshift <- ggplot(
+  training_doordash_2,
+  aes(x = total_onshift_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.12) +
+  geom_line(
+    data = grid_onshift_np,
+    aes(y = pred_q10, colour = "0.1"),
+    linewidth = 0.6
+  ) +
+  geom_line(
+    data = grid_onshift_np,
+    aes(y = pred_q90, colour = "0.9"),
+    linewidth = 0.6
+  ) +
+  scale_colour_manual(
+    name = "Quantile",
+    values = c("0.1" = "red", "0.9" = "blue"),
+    breaks = c("0.9", "0.1")
+  ) +
+  labs(
+    x = "Total On-shift Dashers",
+    y = "Actual Delivery time (min)",
+    title = "Non-parametric quantile curves (0.1 and 0.9-quantiles)",
+    subtitle = "Total busy dashers and cuisine type held constant (median and Mexican,
+    respectively)"
+  ) +
+  theme(
+    plot.title = element_text(size = 23, face = "bold"),
+    plot.subtitle = element_text(size = 20),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 22),
+    legend.position = "right",
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  )
+
+# Busy dashers plot grid
+# Let us put mexican in store_primary_category since that is
+# the ETA predictive band we are aiming for (the Chipotle screenshot!)
+grid_busy_np <- tibble(
+  total_busy_dashers = seq(
+    min(training_doordash_2$total_busy_dashers),
+    max(training_doordash_2$total_busy_dashers),
+    length.out = 200
+  ),
+  total_onshift_dashers = fixed_onshift,
+  store_primary_category = "mexican"
+) |>
+  mutate(
+    store_primary_category = factor(store_primary_category,
+      levels = levels(training_doordash_2$store_primary_category)
+    ),
+    pred_q10 = predict(qrss_10, newdata = cur_data()),
+    pred_q90 = predict(qrss_90, newdata = cur_data())
+  )
+
+# Actual delivery versus busy dashers 
+# while keeping cuisine at Mexican and on-shift dashers at its median
+third_plot_delivery_time_vs_busy <- ggplot(
+  training_doordash_2,
+  aes(x = total_busy_dashers, y = actual_delivery_time)
+) +
+  geom_point(alpha = 0.12) +
+  geom_line(
+    data = grid_busy_np,
+    aes(y = pred_q10, colour = "0.1"),
+    linewidth = 0.6
+  ) +
+  geom_line(
+    data = grid_busy_np,
+    aes(y = pred_q90, colour = "0.9"),
+    linewidth = 0.6
+  ) +
+  scale_colour_manual(
+    name = "Quantile",
+    values = c("0.1" = "red", "0.9" = "blue"),
+    breaks = c("0.9", "0.1")
+  ) +
+  labs(
+    x = "Total Busy Dashers",
+    y = "Actual Delivery time (min)",
+    title = "Non-parametric quantile curves (0.1 and 0.9-quantiles)",
+    subtitle = "Total on-shift dashers and cuisine type held constant (median and Mexican, 
+    respectively)"
+  ) +
+  theme(
+    plot.title = element_text(size = 23, face = "bold"),
+    plot.subtitle = element_text(size = 20),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 22),
+    legend.position = "right",
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  )
+
+third_plot_delivery_time_vs_onshift
+third_plot_delivery_time_vs_busy
+```
+
+Check the above `third_plot_delivery_time_vs_onshift` and `third_plot_delivery_time_vs_busy`. If your $\tau = 0.1$ and $\tau = 0.9$ non-parametric curves look extremely wiggly, what should you change? If they look almost perfectly straight, what should you change?
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::
+
+## Q1.13. Prediction: Build an ETA interval for a specific order (with probabilistic meaning) {.unnumbered}
+
+Let us create a “*Chipotle-like*” example order — *again: not real Mexican food, but we move*. Let us recall what the numeric regressors are:
+
+- `total_onshift_dashers`: Number of available dashers who are within 10 miles of the store at the time of order creation.
+- `total_busy_dashers`: Subset of the above `total_onshift_dashers` who are currently working on an order.
+
+Suppose it is dinner time, and there are 25 on-shift dashers within 10 miles of the UBC campus. Nevertheless, 15 of those dashers are already busy. Alexi just ordered his dinner from the Chipotle branch on campus. Compute the probabilistic prediction interval (i.e., the band) for the ETA using the already fitted non-parametric $0.1$ and $0.9$-quantile regression models.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+:::
+
+Write the final ETA interval and interpret it probabilistically.
+
+::: {.callout-note collapse="true"}
+## Answer
+
+Available for MDS students.
+:::

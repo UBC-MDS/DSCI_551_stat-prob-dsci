@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="lecture3_glm_ordinal_regression_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lecture3_glm_ordinal_regression_files/libs/quarto-html/tabby.min.js"></script>
+<script src="lecture3_glm_ordinal_regression_files/libs/quarto-html/popper.min.js"></script>
+<script src="lecture3_glm_ordinal_regression_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="lecture3_glm_ordinal_regression_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lecture3_glm_ordinal_regression_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="lecture3_glm_ordinal_regression_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="lecture3_glm_ordinal_regression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lecture3_glm_ordinal_regression_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="lecture3_glm_ordinal_regression_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.53">
+
+  <meta name="author" content="(Please, sign in on iClicker)">
+  <title>Lecture 3</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="lecture3_glm_ordinal_regression_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="lecture3_glm_ordinal_regression_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="lecture3_glm_ordinal_regression_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="lecture3_glm_ordinal_regression_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="lecture3_glm_ordinal_regression_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Lecture 3</h1>
+  <p class="subtitle">GLMs: Ordinal Logistic Regression</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+(Please, sign in on iClicker) 
+</div>
+</div>
+</div>
+
+</section>
+<section id="todays-learning-goals" class="title-slide slide level2 center">
+<h2>Today’s Learning Goals</h2>
+<div class="small-text">
+<p>By the end of this lecture, you should be able to:</p>
+<ul>
+<li>Outline the modelling framework of the <span style="color: purple;">Ordinal Logistic regression</span>.</li>
+<li>Explain the concept of <span style="color: purple;">proportional odds</span>.</li>
+<li>Fit and interpret Ordinal Logistic regression.</li>
+<li>Use the Ordinal Logistic regression for prediction.</li>
+<li>Assess the assumption of proportional odds via the <span style="color: purple;">Brant-Wald test</span>.</li>
+<li>Contrast the Ordinal Logistic regression models under <span style="color: purple;">proportional and non-proportional odds assumptions</span>.</li>
+</ul>
+</div>
+</section>
+
+<section id="outline" class="title-slide slide level2 center">
+<h2>Outline</h2>
+<div class="small-text">
+<ol type="1">
+<li>The Need for an Ordinal Model</li>
+<li>College Juniors Dataset</li>
+<li>Exploratory Data Analysis</li>
+<li>Data Modelling Framework</li>
+<li>Estimation</li>
+<li>Inference</li>
+<li>Coefficient Interpretation</li>
+<li>Predictions</li>
+<li>Model Selection</li>
+<li>Non-proportional Odds</li>
+</ol>
+</div>
+</section>
+
+<section>
+<section id="the-need-for-an-ordinal-model" class="title-slide slide level2 center">
+<h2>1. The Need for an Ordinal Model</h2>
+<ul>
+<li>We will continue with Regression Analysis on <span style="color: purple;">categorical responses</span>.</li>
+</ul>
+<center>
+<img src="images/panda.png" width="400" height="400">
+</center>
+<p><br></p>
+</section>
+<section id="reminder" class="title-slide slide level3 center">
+<h3>1.1. Reminder</h3>
+<ul>
+<li>Recall that a <span style="color: purple;">discrete response</span> is considered as categorical if it is of factor-type with more than two categories:</li>
+</ul>
+<div class="fragment">
+<ol type="1">
+<li><span style="color: purple;">Nominal.</span> We have categories that do not follow any specific order—for example, the <strong>type of dwelling</strong> according to the Canadian census: <em>single-detached house</em>, <em>semi-detached house</em>, <em>row house</em>, <em>apartment</em>, and <em>mobile home</em>.</li>
+</ol>
+</div>
+<div class="fragment">
+<ol start="2" type="1">
+<li><span style="color: purple;">Ordinal.</span> The categories, in this case, follow a specific order—for example, a <strong>Likert scale</strong> of survey items: <em>strongly disagree</em>, <em>disagree</em>, <em>neutral</em>, <em>agree</em>, and <em>strongly agree</em>.</li>
+</ol>
+</div>
+</section>
+
+<section id="a-question-to-start-with" class="title-slide slide level3 center">
+<h3>1.2. A question to start with …</h3>
+<ul>
+<li>Why not just using Mutinomial Logistic regression in the case of an ordinal response?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>The previous Multinomial Logistic model is <span style="color: purple;">suboptimal</span> for ordinal responses.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Suppose one does not consider the order in the response levels when necessary. In that case, <span style="color: purple;">we might risk losing valuable information when making inference or predictions</span>.</li>
+<li>This valuable information is in the ordinal scale, which could be set up via <span style="color: purple;">cumulative probabilities</span>.</li>
+</ul>
+</div>
+</section>
+
+<section id="what-to-do-then" class="title-slide slide level3 center">
+<h3>1.3. What to do then?</h3>
+<ul>
+<li>An alternative logistic regression that suits <span style="color: purple;">ordinal</span> responses.</li>
+<li>Hence, the existence of the <span style="color: purple;">Ordinal Logistic regression model</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>We will expand the regression mindmap to include this new model.</li>
+<li>Note there is a key characteristic called <span style="color: purple;">proportional odds</span> which is reflected on the <span style="color: purple;">data modelling framework</span>.</li>
+</ul>
+</div>
+</section>
+</section>
+<section>
+<section id="college-juniors-dataset" class="title-slide slide level2 center">
+<h2>2. College Juniors Dataset</h2>
+<ul>
+<li>To illustrate the use of this <span style="color: purple;">generalized linear model (GLM)</span>, let us introduce an adequate dataset.</li>
+<li>The data frame <code>college_data</code> was obtained from the webpage of the <a href="https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/">UCLA Statistical Consulting Group</a>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>It contains the results of a <span style="color: purple;">survey</span> applied to <span class="math inline">\(n = 400\)</span> college juniors regarding the factors that influence their <strong>decision to apply to graduate school</strong>.</li>
+</ul>
+</div>
+</section>
+<section id="read-data-in-r" class="title-slide slide level3 center">
+<h3>2.1. Read data in <code>R</code></h3>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJjb2RlIjoiY29sbGVnZV9kYXRhIDwtIHN1cHByZXNzTWVzc2FnZXMocmVhZF9jc3YoXCJkYXRhL2NvbGxlZ2VfZGF0YS5jc3ZcIikpXG5jb2xsZWdlX2RhdGEiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+
+<section id="a-quick-look-at-data" class="title-slide slide level3 center">
+<h3>2.2. A quick look at data!</h3>
+<ul>
+<li>The dataset contains the following variables:
+<ul>
+<li><code>decision</code>: how likely the student will apply to graduate school, <span style="color: purple;">a discrete and ordinal response with three increasing categories</span> (<code>unlikely</code>, <code>somewhat likely</code>, and <code>very likely</code>).</li>
+<li><code>parent_ed</code>: whether at least one parent has a graduate degree, <span style="color: purple;">a discrete and binary explanatory variable</span> (<code>Yes</code> and <code>No</code>).</li>
+<li><code>GPA</code>: the student’s current GPA, <span style="color: purple;">a continuous explanatory variable</span>.</li>
+</ul></li>
+</ul>
+</section>
+
+<section id="a-quick-data-wrangling" class="title-slide slide level3 center">
+<h3>2.3. A quick data wrangling!</h3>
+<ul>
+<li>Variable <code>decision</code> will be our response of interest.</li>
+<li>Before proceeding with our regression analysis, let us set it up as an <span style="color: purple;">ordered factor</span> via function <code>as.ordered()</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJjb2RlIjoiY29sbGVnZV9kYXRhJGRlY2lzaW9uIDwtIGFzLm9yZGVyZWQoY29sbGVnZV9kYXRhJGRlY2lzaW9uKVxuY29sbGVnZV9kYXRhJGRlY2lzaW9uIDwtIGZjdF9yZWxldmVsKGNvbGxlZ2VfZGF0YSRkZWNpc2lvbixcbiAgYyhcInVubGlrZWx5XCIsIFwic29tZXdoYXQgbGlrZWx5XCIsIFwidmVyeSBsaWtlbHlcIilcbilcbmxldmVscyhjb2xsZWdlX2RhdGEkZGVjaXNpb24pIiwiYXR0ciI6eyJldmFsIjp0cnVlLCJhdXRvcnVuIjp0cnVlLCJlZGl0Ijp0cnVlfX0=
+</script>
+</div>
+</div>
+</section>
+
+<section id="main-statistical-inquiries" class="title-slide slide level3 center">
+<h3>2.4. Main Statistical Inquiries</h3>
+<ul>
+<li>Let us suppose we want to assess the following:
+<ul>
+<li>Is <code>decision</code> statistically related to <code>parent_ed</code> and <code>GPA</code>?</li>
+<li>How can we interpret these statistical relationships (<span style="color: purple;">if there are any!</span>)?</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section>
+<section id="exploratory-data-analysis-eda" class="title-slide slide level2 center">
+<h2>3. Exploratory Data Analysis (EDA)</h2>
+<ul>
+<li>Since <code>decision</code> is a <span style="color: purple;">discrete ordinal response</span>, we have to be careful about the plots to be used in the EDA.</li>
+<li>To explore the relationship between <code>decision</code> and <code>GPA</code> , we will use these side-by-side plots: <span style="color: purple;">boxplots</span> and/or <span style="color: purple;">violin plots</span>.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li><code>GPA</code> is on the <span class="math inline">\(y\)</span>-axis, and all categories of <code>decision</code> are on the <span class="math inline">\(x\)</span>-axis.</li>
+<li>The side-by-side violin plots show the mean of <code>GPA</code> by <code>decision</code> category in red points.</li>
+</ul>
+</div>
+</section>
+<section id="plots" class="title-slide slide level3 center">
+<h3>Plots!</h3>
+
+<img data-src="lecture3_glm_ordinal_regression_files/figure-revealjs/unnamed-chunk-6-1.png" width="4320" class="r-stretch"></section>
+
+<section id="how-can-we-visually-explore-the-relationship-between-decision-and-parent_ed" class="title-slide slide level3 center">
+<h3>How can we visually explore the relationship between <code>decision</code> and <code>parent_ed</code>?</h3>
+<ul>
+<li>In the case of two categorical explanatory variables, <span style="color: purple;">we can use stacked bar charts.</span></li>
+<li>Each bar will show the percentages (depicted on the <span class="math inline">\(y\)</span>-axis) of college students falling on each ordered category of <code>decision</code> with the categories found in <code>parent_ed</code> on the <span class="math inline">\(x\)</span>-axis.</li>
+</ul>
+</section>
+
+<section id="plots-1" class="title-slide slide level3 center">
+<h3>Plots!</h3>
+
+<img data-src="lecture3_glm_ordinal_regression_files/figure-revealjs/unnamed-chunk-8-1.png" width="4320" class="r-stretch"></section>
+
+<section id="in-class-question" class="title-slide slide level3 center">
+<h3>In-class Question</h3>
+<ul>
+<li>What can we see <span style="color: purple;">descriptively</span> from the previous plots?</li>
+</ul>
+<center>
+<img src="images/panda.png" width="400" height="400">
+</center>
+</section>
+</section>
+<section>
+<section id="data-modelling-framework" class="title-slide slide level2 center">
+<h2>4. Data Modelling Framework</h2>
+<ul>
+<li>Let us suppose that a given <span style="color: purple;">discrete ordinal response</span> <span class="math inline">\(Y_i\)</span> (for <span class="math inline">\(i = 1, \dots, n\)</span>) has categories <span class="math inline">\(1, 2, \dots, m\)</span> in a training set of size <span class="math inline">\(n\)</span>.</li>
+</ul>
+<blockquote>
+<p><strong>Heads-up:</strong> Categories <span class="math inline">\(1, 2, \dots, m\)</span> <span style="color: purple;">implicate an ordinal scale here</span>, i.e., <span class="math inline">\(1 &lt; 2 &lt; \dots &lt; m\)</span>.</p>
+</blockquote>
+<div class="fragment">
+<ul>
+<li>Also, note there is more than one class of Ordinal Logistic regression.</li>
+<li>We will review the <span style="color: purple;">proportional odds</span> model (a <span style="color: purple;">cumulative logit model</span>).</li>
+</ul>
+</div>
+</section>
+<section id="when-m-3" class="title-slide slide level3 center">
+<h3>When <span class="math inline">\(m = 3\)</span></h3>
+<ul>
+<li>We will set up an Ordinal Logistical regression model for this specific dataset <span style="color: purple;">with <span class="math inline">\(m = 3\)</span> for the levels of <span class="math inline">\(Y_i\)</span></span>, i.e.,</li>
+</ul>
+<p><span class="math display">\[\begin{gather*}
+1 = \texttt{unlikely} \\
+2 = \texttt{somewhat likely} \\
+3 = \texttt{very likely}
+\end{gather*}\]</span></p>
+</section>
+
+<section id="the-regressors" class="title-slide slide level3 center">
+<h3>The Regressors</h3>
+<p><br></p>
+<ul>
+<li>For the <span class="math inline">\(i\)</span>th observation, we have the continuous <span class="math inline">\(X_{i, \texttt{GPA}}\)</span> and the dummy variable</li>
+</ul>
+<div class="small-text">
+<p><span class="math display">\[
+X_{i, \texttt{parent_ed}} =
+\begin{cases}
+1 \; \; \; \; \mbox{at least one parent has a graduate degree},\\
+0 \; \; \; \;   \mbox{neither of the parents has a graduate degree.}
+\end{cases}
+\]</span></p>
+</div>
+</section>
+
+<section id="then" class="title-slide slide level3 center">
+<h3>Then…</h3>
+<p><br></p>
+<ul>
+<li>The model will indicate how each one of the regressors affects the <span style="color: purple;">cumulative logarithm of the odds</span> in <code>decision</code> for the following <span class="math inline">\(2\)</span> situations:</li>
+</ul>
+<div class="small-text">
+<p><span class="math display">\[\begin{gather*}
+\text{Level } \texttt{somewhat likely}  \text{ or any lesser degree versus level } \texttt{very likely} \\
+\text{Level } \texttt{unlikely} \text{ versus level } \texttt{somewhat likely} \text{ or any higher degree}
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="these-are-our-cumulative-log-odds" class="title-slide slide level3 center">
+<h3>These are our cumulative log-odds!</h3>
+<ul>
+<li>We have the following system of <span class="math inline">\(2\)</span> equations:</li>
+</ul>
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{somewhat likely})} &amp;= \log\left[\frac{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}}, X_{i, \texttt{parent_ed}})}\right] \\ &amp;= \beta_0^{(\texttt{somewhat likely})} - \beta_1 X_{i, \texttt{GPA}} - \beta_2 X_{i, \texttt{parent_ed}}
+\end{align*}\]</span> <span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{unlikely})} &amp;= \log\left[\frac{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}\right] \\ &amp;= \beta_0^{(\texttt{unlikely})} - \beta_1 X_{i, \texttt{GPA}} - \beta_2 X_{i, \texttt{parent_ed}}.
+\end{align*}\]</span></p>
+</div>
+</section>
+
+<section id="note-the-following" class="title-slide slide level3 center">
+<h3>Note the following…</h3>
+<ul>
+<li>The system has <span class="math inline">\(2\)</span> intercepts but <span style="color: purple;">only <span class="math inline">\(2\)</span> regression coefficients</span>.</li>
+<li>Check the signs of the <span style="color: purple;">common</span> <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>, which are minuses. This is a fundamental parameterization of the <span style="color: purple;">proportional odds</span> model.</li>
+</ul>
+</section>
+
+<section id="some-algebraic-manipulation" class="title-slide slide level3 center">
+<h3>Some algebraic manipulation…</h3>
+<ul>
+<li>To make coefficient intepretation easier, we could re-expresss the equations of <span class="math inline">\(\eta_i^{(\texttt{somewhat likely})}\)</span> and <span class="math inline">\(\eta_i^{(\texttt{unlikely})}\)</span> as follows:</li>
+</ul>
+<div class="fragment">
+<div class="small-text">
+<p><span class="math display">\[\begin{gather*}
+\frac{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\
+\exp\big(-\beta_0^{(\texttt{somewhat likely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big)
+\end{gather*}\]</span> <span class="math display">\[\begin{gather*}
+\frac{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\
+\exp\big(-\beta_0^{(\texttt{unlikely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).
+\end{gather*}\]</span></p>
+</div>
+</div>
+</section>
+<section id="further-insights" class="slide level4">
+<h4>Further Insights</h4>
+<ul>
+<li>Both regression coefficients (<span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>) have a multiplicative effect on the odds that we have on the left-hand side.</li>
+<li>Moreover, <span style="color: purple;">given the proportional odds assumptions</span>, the regressor effects are the same for both cumulative odds.</li>
+</ul>
+<center>
+<img src="images/panda.png" width="250" height="250">
+</center>
+<p><br></p>
+</section>
+
+<section id="what-is-the-math-for-the-general-case-with-m-response-categories-and-k-regressors" class="title-slide slide level3 center">
+<h3>What is the math for the general case with <span class="math inline">\(m\)</span> response categories and <span class="math inline">\(k\)</span> regressors?</h3>
+<div class="small-text">
+<ul>
+<li>This model will indicate how each one of the <span class="math inline">\(k\)</span> regressors <span class="math inline">\(X_{i,1}, \dots, X_{i,k}\)</span> affects the <span style="color: purple;">cumulative logarithm of the odds</span> in the ordinal response (with <span class="math inline">\(m\)</span> levels) for the following <span class="math inline">\(m - 1\)</span> situations:</li>
+</ul>
+<p><span class="math display">\[\begin{gather*}
+\text{Level } m - 1 \text{ or any lesser degree versus level } m\\
+\text{Level } m - 2 \text{ or any lesser degree versus level } m - 1 \text{ or any higher degree}\\
+\vdots \\
+\text{Level } 2 \text{ or any lesser degree versus level } 3 \text{ or any higher degree}\\
+\text{Level } 1 \text{ versus level } 2 \text{ or any higher degree}\\
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="link-functions" class="title-slide slide level3 center">
+<h3>Link Functions</h3>
+<p><br></p>
+<div class="small-text-v2">
+<p><span class="math display">\[\begin{gather*}
+\eta_i^{(m - 1)} = \log\left[\frac{P(Y_i \leq m - 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = m \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(m - 2)} = \log\left[\frac{P(Y_i \leq m - 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; m - 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\vdots \\
+\eta_i^{(2)} = \log\left[\frac{P(Y_i \leq 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(1)} = \log\left[\frac{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}.
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="cumulative-probabilities" class="title-slide slide level3 center">
+<h3>Cumulative Probabilities</h3>
+<ul>
+<li>Note that the previous system has <span class="math inline">\(m - 1\)</span> intercepts but <span style="color: purple;">only <span class="math inline">\(k\)</span> regression coefficients</span>.</li>
+<li>In general, the previous <span class="math inline">\(m - 1\)</span> equations can be generalized for levels <span class="math inline">\(j = m - 1, \dots, 1\)</span> as follows:</li>
+</ul>
+<div class="fragment">
+<div class="small-text">
+<p><span class="math display">\[\begin{gather*}
+\eta_i^{(j)} = \log\left[\frac{P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; j \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\; \; \; \; \; \; \; \; \Rightarrow \; P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) = \frac{\exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}\right)}{1 + \exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}\right)}.
+\end{gather*}\]</span></p>
+</div>
+</div>
+</section>
+
+<section id="standalone-probabilities" class="title-slide slide level3 center">
+<h3>Standalone Probabilities</h3>
+<div class="small-text">
+<ul>
+<li><p>The <span style="color: purple;">standalone probability</span> that <span class="math inline">\(Y_i\)</span> will fall in the category <span class="math inline">\(j\)</span> is computed as follows: <span class="math display">\[
+p_{i,j} = P(Y_i = j \mid X_{i,1}, \ldots, X_{i,k}) \\
+= P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) - P(Y_i \leq j - 1 \mid X_{i,1}, \ldots, X_{i,k}),
+\]</span></p></li>
+<li><p>Hence: <span class="math display">\[
+P(Y_i = 1) = p_{i,1} \;\;\;\; P(Y_i = 2) = p_{i,2} \;\; \dots \;\; P(Y_i = m) = p_{i,m},
+\]</span></p></li>
+<li><p>Where: <span class="math display">\[
+\sum_{j = 1}^m p_{i,j} = p_{i,1} + p_{i,2} + \dots + p_{i,m} = 1.
+\]</span></p></li>
+</ul>
+</div>
+</section>
+
+<section id="iclicker-question" class="title-slide slide level3 center">
+<h3>iClicker Question</h3>
+<div class="small-text">
+<ul>
+<li>Suppose we have a case with an ordered response of <strong>five levels</strong> and <strong>four continuous regressors</strong>.</li>
+<li>How many link functions, intercepts, and coefficients will our Ordinal Logistic regression model have under a <strong>proportional odds assumption</strong>?</li>
+</ul>
+<p><strong>A.</strong> Four link functions, four intercepts, and sixteen regression coefficients.</p>
+<p><strong>B.</strong> Five link functions, five intercepts, and five regression coefficients.</p>
+<p><strong>C.</strong> Five link functions, five intercepts, and twenty regression coefficients.</p>
+<p><strong>D.</strong> Four link functions, four intercepts, and four regression coefficients.</p>
+</div>
+<center>
+<img src="images/panda.png" width="160" height="160">
+</center>
+<p><br></p>
+</section>
+
+<section id="a-graphical-intuition-of-the-proportional-odds-assumption" class="title-slide slide level3 center">
+<h3>A Graphical Intuition of the Proportional Odds Assumption</h3>
+<ul>
+<li>There is an <span style="color: purple;">optional section</span> in the notes that shows mathematically what the proportional odds assumption stands for in the Ordinal Logistic regression model with <span class="math inline">\(k\)</span> regressors and a training set size of <span class="math inline">\(n\)</span>, using a response of <span class="math inline">\(m\)</span> levels in general.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>That said, let us check the graphical intuition with an example of an ordinal response of <span class="math inline">\(5\)</span> levels and a single continuous regressor <span class="math inline">\(X_{i , 1}\)</span> (<span style="color: purple;">which is unbounded!</span>).</li>
+</ul>
+</div>
+</section>
+
+<section id="system-of-cumulative-logit-equations" class="title-slide slide level3 center">
+<h3>System of Cumulative Logit Equations</h3>
+<p><span class="math display">\[\begin{gather*}
+\eta_i^{(4)} = \log\left[\frac{P(Y_i \leq 4 \mid X_{i,1})}{P(Y_i = 5 \mid X_{i,1})}\right] = \beta_0^{(4)} - \beta_1 X_{i, 1} \\
+\eta_i^{(3)} = \log\left[\frac{P(Y_i \leq 3 \mid X_{i,1})}{P(Y_i &gt; 3 \mid X_{i,1})}\right] = \beta_0^{(3)} - \beta_1 X_{i, 1} \\
+\eta_i^{(2)} = \log\left[\frac{P(Y_i \leq 2 \mid X_{i,1})}{P(Y_i &gt; 2 \mid X_{i,1})}\right] = \beta_0^{(2)} - \beta_1 X_{i, 1} \\
+\eta_i^{(1)} = \log\left[\frac{P(Y_i = 1 \mid X_{i,1})}{P(Y_i &gt; 1 \mid X_{i,1})}\right] = \beta_0^{(1)} - \beta_1 X_{i, 1}.
+\end{gather*}\]</span></p>
+</section>
+
+<section id="some-algebraic-manipulation-1" class="title-slide slide level3 center">
+<h3>Some algebraic manipulation…</h3>
+<div class="small-text">
+<p><span class="math display">\[\begin{gather*}
+P(Y_i \leq 4 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(4)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(4)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 3 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(3)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(3)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 2 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(2)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(2)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 1 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(1)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(1)} - \beta_1 X_{i, 1}\right)}. \\
+\end{gather*}\]</span></p>
+</div>
+</section>
+
+<section id="note-following" class="title-slide slide level3 center">
+<h3>Note following…</h3>
+<ul>
+<li>There are four intercepts <span class="math inline">\(\left( \beta_0^{(1)}, \beta_0^{(2)}, \beta_0^{(3)}, \beta_0^{(4)} \right)\)</span> and a single coefficient <span class="math inline">\(\beta_1\)</span>.</li>
+<li>Let us assume we estimate these five parameters to be the following: <span class="math display">\[\begin{gather*}
+\hat{\beta_0}^{(1)} = 4 \quad \quad \hat{\beta_0}^{(2)} = 5.5 \\
+\hat{\beta_0}^{(3)} = 6.3 \quad \quad \hat{\beta_0}^{(4)} = 10 \\
+\hat{\beta_1} = 12.
+\end{gather*}\]</span></li>
+</ul>
+</section>
+
+<section id="the-sigmoid-functions" class="title-slide slide level3 center">
+<h3>The sigmoid functions!</h3>
+
+<img data-src="lecture3_glm_ordinal_regression_files/figure-revealjs/unnamed-chunk-9-1.png" width="1200" class="r-stretch"></section>
+</section>
+<section id="estimation" class="title-slide slide level2 center">
+<h2>5. Estimation</h2>
+<div class="small-text">
+<ul>
+<li>Estimates are obtained through <span style="color: purple;">maximum likelihood</span>, where we also assume a <span style="color: purple;">Multinomial joint probability mass function</span> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span> via cumulative probabilities in the joint likelihood function.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="small-text">
+<ul>
+<li>To fit the model with the package <code>MASS</code>, we use <code>polr()</code>. The argument <code>Hess = TRUE</code> is required to compute the <a href="https://mathworld.wolfram.com/Hessian.html">Hessian matrix</a> of the <span style="color: purple;">log-likelihood function</span>, which is used to obtain the standard errors of the estimates.</li>
+</ul>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJjb2RlIjoib3JkaW5hbF9tb2RlbCA8LSBwb2xyKGZvcm11bGEgPSBkZWNpc2lvbiB+IHBhcmVudF9lZCArIEdQQSxcbiAgZGF0YSA9IGNvbGxlZ2VfZGF0YSwgSGVzcyA9IFRSVUVcbikiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<section id="inference" class="title-slide slide level2 center">
+<h2>6. Inference</h2>
+<ul>
+<li><p>We also use the <span style="color: purple;">Wald statistic</span> <span class="math inline">\(z_j = \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}\)</span> to test the hypotheses: <span class="math display">\[\begin{gather*}
+H_0: \beta_j = 0\\
+H_a: \beta_j \neq 0.
+\end{gather*}\]</span></p></li>
+<li><p>Provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j\)</span> has an <span style="color: purple;">approximately Standard Normal distribution</span> under <span class="math inline">\(H_0\)</span>.</p></li>
+</ul>
+</section>
+<section id="code-in-r" class="title-slide slide level3 center">
+<h3>Code in <code>R</code>!</h3>
+<div class="small-text">
+<ul>
+<li>Terms <code>unlikely|somewhat likely</code> and <code>somewhat likely|very likely</code> refer to <span class="math inline">\(\hat{\beta_0}^{(\texttt{unlikely})}\)</span> and <span class="math inline">\(\hat{\beta_0}^{(\texttt{somewhat likely})}\)</span>, respectively.</li>
+</ul>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJjb2RlIjoic3VtbWFyeV9vcmRpbmFsX21vZGVsIDwtIGNiaW5kKHRpZHkob3JkaW5hbF9tb2RlbCksIHAudmFsdWUgPSBwbm9ybShhYnModGlkeShvcmRpbmFsX21vZGVsKSRzdGF0aXN0aWMpLCBsb3dlci50YWlsID0gRkFMU0UpICogMlxuKSB8PlxuICBtdXRhdGVfaWYoaXMubnVtZXJpYywgcm91bmQsIDIpXG5zdW1tYXJ5X29yZGluYWxfbW9kZWwiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+
+<section id="using-alpha-0.05" class="title-slide slide level3 center">
+<h3>Using <span class="math inline">\(\alpha = 0.05\)</span></h3>
+<ul>
+<li>We see that those coefficients associated with <code>GPA</code> and <code>parent_ed</code> are statistically significant with <span class="math inline">\(\alpha = 0.05\)</span>.</li>
+<li>Function <code>confint()</code> can provide the 95% confidence intervals for the estimates contained in <code>ordinal_model</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJjb2RlIjoicm91bmQoY29uZmludChvcmRpbmFsX21vZGVsKSwgMikiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="coefficient-interpretation" class="title-slide slide level2 center">
+<h2>7. Coefficient Interpretation</h2>
+<ul>
+<li>The interpretation of the Ordinal Logistic regression coefficients will change since we are modelling cumulative probabilities.</li>
+<li>Let us interpret the association of <code>decision</code> with <code>GPA</code> and <code>parent_ed</code>.</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJjb2RlIjoidGliYmxlKHN1bW1hcnlfb3JkaW5hbF9tb2RlbFsxOjIsIDE6Ml0sIGV4cC5lc3RpbWF0ZSA9IHJvdW5kKGV4cChzdW1tYXJ5X29yZGluYWxfbW9kZWxbMToyLCAyXSksIDIpKSIsImF0dHIiOnsiZXZhbCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwiZWRpdCI6dHJ1ZX19
+</script>
+</div>
+</div>
+</section>
+<section id="interpretations" class="title-slide slide level3 center">
+<h3>Interpretations</h3>
+<ul>
+<li>By using the column <code>exp.estimate</code>, <span style="color: purple;">along with the model equations on the original scale of the cumulative odds</span>, we interpret the two regression coefficients above <span style="color: purple;">by each odds</span> as follows:</li>
+<li>For the odds:</li>
+</ul>
+<p><span class="math display">\[\frac{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\ \exp\big(-\beta_0^{(\texttt{somewhat likely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).\]</span></p>
+</section>
+
+<section id="we-have" class="title-slide slide level3 center">
+<h3>We have …</h3>
+<div class="small-text">
+<blockquote>
+<p><span class="math inline">\(\beta_1\)</span>: “for each one-unit increase in the <code>GPA</code>, the odds that the student is <code>very likely</code> versus <code>somewhat likely</code> or <code>unlikely</code> to apply to graduate school increase by <span class="math inline">\(\exp \left( \hat{\beta}_1 \right) = 1.82\)</span> times (while holding <code>parent_ed</code> constant).”</p>
+</blockquote>
+</div>
+<div class="fragment">
+<div class="small-text">
+<blockquote>
+<p><span class="math inline">\(\beta_2\)</span>: “for those respondents whose parents attended to graduate school, the odds that the student is <code>very likely</code> versus <code>somewhat likely</code> or <code>unlikely</code> to apply to graduate school increase by <span class="math inline">\(\exp \left( \hat{\beta}_2 \right) = 2.86\)</span> times (when compared to those respondents whose parents did not attend to graduate school and holding <code>GPA</code> constant).”</p>
+</blockquote>
+</div>
+</div>
+</section>
+
+<section id="and" class="title-slide slide level3 center">
+<h3>And…</h3>
+<ul>
+<li>For the odds:</li>
+</ul>
+<p><span class="math display">\[\frac{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\ \exp\big(-\beta_0^{(\texttt{unlikely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).\]</span></p>
+</section>
+
+<section id="we-have-1" class="title-slide slide level3 center">
+<h3>We have …</h3>
+<div class="small-text">
+<blockquote>
+<p><span class="math inline">\(\beta_1\)</span>: “for each one-unit increase in the <code>GPA</code>, the odds that the student is <code>very likely</code> or <code>somewhat likely</code> versus <code>unlikely</code> to apply to graduate school increase by <span class="math inline">\(\exp \left( \hat{\beta}_1 \right) = 1.82\)</span> times (while holding <code>parent_ed</code> constant).”</p>
+</blockquote>
+</div>
+<div class="fragment">
+<div class="small-text">
+<blockquote>
+<p><span class="math inline">\(\beta_2\)</span>: “for those respondents whose parents attended to graduate school, the odds that the student is <code>very likely</code> or <code>somewhat likely</code> versus <code>unlikely</code> to apply to graduate school increase by <span class="math inline">\(\exp \left( \hat{\beta}_2 \right) = 2.86\)</span> times (when compared to those respondents whose parents did not attend to graduate school and holding <code>GPA</code> constant).”</p>
+</blockquote>
+</div>
+</div>
+</section>
+</section>
+<section>
+<section id="predictions" class="title-slide slide level2 center">
+<h2>8. Predictions</h2>
+<ul>
+<li><span style="color: purple;">Aside from our main statistical inquiries</span>, using the function <code>predict()</code> with the object <code>ordinal_model</code>, we can obtain the estimated probabilities to apply to graduate school (associated to <code>unlikely</code>, <code>somewhat likely</code>, and <code>very likely</code>) for a student with a <code>GPA</code> of 3.5 whose parents attended to graduate school.</li>
+</ul>
+<div class="fragment">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJjb2RlIjoicm91bmQocHJlZGljdChvcmRpbmFsX21vZGVsLCB0aWJibGUoR1BBID0gMy41LCBwYXJlbnRfZWQgPSBcIlllc1wiKSwgdHlwZSA9IFwicHJvYnNcIiksIDIpIiwiYXR0ciI6eyJldmFsIjp0cnVlLCJhdXRvcnVuIjp0cnVlLCJlZGl0Ijp0cnVlfX0=
+</script>
+</div>
+</div>
+</div>
+</section>
+<section id="thus" class="title-slide slide level3 center">
+<h3>Thus…</h3>
+<ul>
+<li>We can see that it is <code>somewhat likely</code> to apply to graduate school with a probability of 0.48.</li>
+<li><span style="color: purple;">Thus, we could classify the student in this ordinal category.</span></li>
+</ul>
+</section>
+</section>
+<section id="model-selection" class="title-slide slide level2 center">
+<h2>9. Model Selection</h2>
+<ul>
+<li><span style="color: purple;">To perform model selection</span>, we can use the same techniques from <code>lecture2</code>. That said, some <code>R</code> coding functions might not be entirely available for the <code>polr()</code> models.</li>
+<li>Still, these statistical techniques and metrics can be manually coded.</li>
+</ul>
+</section>
+
+<section>
+<section id="non-proportional-odds" class="title-slide slide level2 center">
+<h2>10. Non-proportional Odds</h2>
+<ul>
+<li>Now, we might wonder:</li>
+</ul>
+<blockquote>
+<p><em>What happens if we do not fulfil the proportional odds assumption in our Ordinal Logistic regression model?</em></p>
+</blockquote>
+<center>
+<img src="images/panda.png" width="300" height="300">
+</center>
+<p><br></p>
+</section>
+<section id="the-brant-wald-test" class="title-slide slide level3 center">
+<h3>10.1. The Brant-Wald Test</h3>
+<div class="small-text">
+<ul>
+<li>The Ordinal Logistic model under the proportional odds assumption is <span style="color: purple;">the first step</span> when performing Regression Analysis on an ordinal response.</li>
+<li>Once this model has been fitted, <span style="color: purple;">it is possible to assess whether it fulfils this strong assumption statistically</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="small-text">
+<ul>
+<li>We can do it via the <strong>Brant-Wald test</strong>.</li>
+<li>This tool performs statistically assesses whether our model globally fulfils this assumption: <span class="math display">\[\begin{gather*}
+H_0: \text{Our Ordinal Logistic regression model globally} \\ \text{fulfils the proportional odds assumption.} \\
+H_a: \text{Otherwise}.
+\end{gather*}\]</span></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="regressor-specifc-tests" class="slide level4">
+<h4>Regressor-specifc Tests</h4>
+<p><br></p>
+<ul>
+<li>It also performs further hypothesis testing on each regressor.</li>
+<li>With <span class="math inline">\(k\)</span> regressors for <span class="math inline">\(j = 1, \dots, k\)</span>; we have the following hypotheses: <span class="math display">\[\begin{gather*}
+H_0: \text{The } j \text{th regressor in our Ordinal Logistic regression} \\ \text{model fulfils the proportional odds assumption.} \\
+H_a: \text{Otherwise}.
+\end{gather*}\]</span></li>
+</ul>
+</section>
+
+<section id="code-in-r-1" class="title-slide slide level3 center">
+<h3>10.2. Code in <code>R</code>!</h3>
+<ul>
+<li>Function <code>brant()</code> from package <code>brant</code> implements this tool, which can be used in our <code>polr()</code> object <code>ordinal_model</code>:</li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJjb2RlIjoiYnJhbnQob3JkaW5hbF9tb2RlbCkiLCJhdHRyIjp7ImV2YWwiOnRydWUsImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section>
+<section id="notes-on-output" class="slide level4">
+<h4>Notes on Output</h4>
+<ul>
+<li>The row <code>Omnibus</code> represents the global model, while the other two rows correspond to our two regressors: <code>parent_ed</code> and <code>GPA</code>.</li>
+<li>With <span class="math inline">\(\alpha = 0.05\)</span>, <strong>we are completely fulfilling the proportional odds assumption</strong> (the column <code>probability</code> delivers the corresponding <span class="math inline">\(p\)</span>-values).</li>
+</ul>
+<div class="fragment">
+<blockquote>
+<p><strong>Heads-up:</strong> The Brant Wald test essentially compares this basic Ordinal Logistic regression model of <span class="math inline">\(m - 1\)</span> cumulative logit functions (i.e., the ordinal response has <span class="math inline">\(m\)</span> categories) versus a set of <span class="math inline">\(m − 1\)</span> correlated Binary Logistic regressions.</p>
+</blockquote>
+</div>
+</section>
+
+<section id="a-non-proportional-odds-model" class="title-slide slide level3 center">
+<h3>10.3. A Non-proportional Odds Model</h3>
+<div class="small-text">
+<ul>
+<li>Suppose that our example case <span style="color: purple;">does not fulfil</span> the proportional odds assumption according to the Brant Wald test.</li>
+<li>It is possible to have a model under a <span style="color: purple;">non-proportional odds assumption</span>:</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="small-text">
+<p><span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{somewhat likely})} &amp;= \log\left[\frac{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}}, X_{i, \texttt{parent_ed}})}\right] \\ &amp;= \beta_0^{(\texttt{somewhat likely})} - \beta_1^{(\texttt{somewhat likely})} X_{i, \texttt{GPA}} - \\ &amp; \qquad \beta_2^{(\texttt{somewhat likely})} X_{i, \texttt{parent_ed}}
+\end{align*}\]</span> <span class="math display">\[\begin{align*}
+\eta_i^{(\texttt{unlikely})} &amp;= \log\left[\frac{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}\right] \\ &amp;= \beta_0^{(\texttt{unlikely})} - \beta_1^{(\texttt{unlikely})} X_{i, \texttt{GPA}} - \beta_2^{(\texttt{unlikely})} X_{i, \texttt{parent_ed}}.
+\end{align*}\]</span></p>
+</div>
+</div>
+</section>
+<section id="generalized-ordinal-logistic-regression-model" class="slide level4">
+<h4>Generalized Ordinal Logistic Regression Model</h4>
+<p><br></p>
+<ul>
+<li>This class of models can be fit via <a href="https://search.r-project.org/CRAN/refmans/VGAM/html/cumulative.html"><strong>the function <code>cumulative()</code></strong></a> from package <code>VGAM</code>.</li>
+<li>Note that estimation, inference, coefficient interpretation, and predictions are conducted in a similar way <span style="color: purple;">compared to the proportional odds model</span>.</li>
+</ul>
+</section>
+
+<section id="in-class-question-1" class="title-slide slide level3 center">
+<h3>In-class Question</h3>
+<ul>
+<li>Why would we have to be cautious when fitting a non-proportional odds model in the context of a response with a considerable number of ordinal levels and regressors?</li>
+</ul>
+<center>
+<img src="images/panda.png" width="350" height="350">
+</center>
+<p><br></p>
+</section>
+</section>
+<section id="wrapping-up-on-categorical-regression-models" class="title-slide slide level2 center">
+<h2>11. Wrapping Up on Categorical Regression Models</h2>
+<div class="small-text-v2">
+<ul>
+<li>Multinomial and Ordinal Logistic regression models address cases where our response is <span style="color: purple;">discrete and categorical</span>.</li>
+<li>These models are <span style="color: purple;">another class GLMs</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="small-text-v2">
+<ul>
+<li><span style="color: purple;">Multinomial Logistic regression</span> approaches <span style="color: purple;">nominal responses</span>. It heavily relies on a baseline response level and the odds’ natural logarithm.</li>
+<li><span style="color: purple;">Ordinal Logistic regression</span> approaches <span style="color: purple;">ordinal responses</span>. It relies on cumulative odds on an ordinal scale.</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div class="small-text-v2">
+<ul>
+<li>We have to be careful with <span style="color: purple;">coefficient interpretations</span> in these models, especially with the cumulative odds. This will imply an <span style="color: purple;">effective communication</span> of these estimated models for inferential matters.</li>
+</ul>
+</div>
+<div class="quarto-auto-generated-content">
+<p><img src="images/UBC_MDS_logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+<p>DSCI 562 - Regression II</p>
+</div>
+</div>
+<script type="webr-data">
+eyJwYWNrYWdlcyI6eyJwa2dzIjpbImV2YWx1YXRlIiwia25pdHIiLCJodG1sdG9vbHMiLCJWR0FNIiwiY293cGxvdCIsInRpZHl2ZXJzZSIsImJyb29tIiwic2NhbGVzIiwiZm9yZWlnbiIsIk1BU1MiLCJicmFudCJdLCJyZXBvcyI6W119LCJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC40LjIvIn0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV84O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC04IiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzggPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici04LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV84ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl84LCB7fSk7XG4iLCJjZWxsTmFtZSI6IndlYnItOCIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJpbmxpbmUiOmZhbHNlfSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImNlbGxOYW1lIjoid2Vici13aWRnZXQtNyIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsImlubGluZSI6ZmFsc2V9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl83ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTctY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNyA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNywge30pO1xuIiwiY2VsbE5hbWUiOiJ3ZWJyLTciLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzY7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTYiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJpbmxpbmUiOmZhbHNlfSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNiA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTYtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici02LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzYgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzYsIHt9KTtcbiIsImNlbGxOYW1lIjoid2Vici02IiwibWV0aG9kTmFtZSI6ImludGVycHJldCIsImlubGluZSI6ZmFsc2V9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV81O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC01IiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzUgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici01LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV81ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl81LCB7fSk7XG4iLCJjZWxsTmFtZSI6IndlYnItNSIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJpbmxpbmUiOmZhbHNlfSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImNlbGxOYW1lIjoid2Vici13aWRnZXQtNCIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsImlubGluZSI6ZmFsc2V9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTQtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNCwge30pO1xuIiwiY2VsbE5hbWUiOiJ3ZWJyLTQiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzM7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTMiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJpbmxpbmUiOmZhbHNlfSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTMtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0zLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzMgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzMsIHt9KTtcbiIsImNlbGxOYW1lIjoid2Vici0zIiwibWV0aG9kTmFtZSI6ImludGVycHJldCIsImlubGluZSI6ZmFsc2V9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8yO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0yIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0yLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG4iLCJjZWxsTmFtZSI6IndlYnItMiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJpbmxpbmUiOmZhbHNlfSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMSIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsImlubGluZSI6ZmFsc2V9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8xID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMSwge30pO1xuIiwiY2VsbE5hbWUiOiJ3ZWJyLTEiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiaW5saW5lIjpmYWxzZX0seyJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gVXNlIFBvc3RNZXNzYWdlIGNoYW5uZWwgZm9yIGFzeW5jIGNvbW11bmljYXRpb25cbiAgLy8gV2UgZG8gbm90IGV4cGVjdCB0byB0YWtlIG5lc3RlZCBwcm9tcHQgaW5wdXQgaW4gUXVhcnRvIExpdmUgY2VsbHNcbiAgZGF0YS5vcHRpb25zLmNoYW5uZWxUeXBlID0gQ2hhbm5lbFR5cGUuUG9zdE1lc3NhZ2U7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICB0cnkge1xuICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICBpZiAoIWUubWVzc2FnZS5pbmNsdWRlcyhcIkZTIGVycm9yXCIpKSB7XG4gICAgICAgICAgICB0aHJvdyBlO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIiwiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJpbmxpbmUiOmZhbHNlfV19
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhL2NvbGxlZ2VfZGF0YS5jc3YiXQ==
+</script>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="lecture3_glm_ordinal_regression_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":false},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../..";
+    window._ojs.paths.docToRoot = "";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Greek Alphabet – DSCI 551: Descriptive Statistics and Probability for Data Science</title>
+<title>Greek Alphabet – DSCI 562: Regression II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../LICENSE.html" rel="next">
-<link href="../notes/appendix-dist-cheatsheet.html" rel="prev">
+<link href="../notes/appendix-reg-cheatsheet.html" rel="next">
+<link href="../notes/appendix-binary-multivariate-normal.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -41,6 +41,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -69,6 +71,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -111,7 +115,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">DSCI 551: Descriptive Statistics and Probability for Data Science</span>
+    <span class="navbar-title">DSCI 562: Regression II</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -127,7 +131,7 @@ window.Quarto = {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci"> <i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_562_regr-2"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -142,7 +146,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-prob-cheatsheet.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-greek-alphabet.html">Greek Alphabet</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-greek-alphabet.html">Greek Alphabet</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -184,50 +188,50 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/01_lecture-uncertainty.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 1: Depicting Uncertainty</span></a>
+  <a href="../notes/lecture1-glm-link-functions-and-count-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Link Functions and Count Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/02_lecture-parametric-families.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 2: Parametric Families</span></a>
+  <a href="../notes/lecture2_glm_model_selection_multinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Model Selection and Multinomial Logistic Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/03_lecture-joint.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 3: Joint Probability</span></a>
+  <a href="../notes/lecture3_glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Ordinal Logistic Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/04_lecture-conditional.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 4: Conditional Probabilities</span></a>
+  <a href="../notes/lecture4_linear_mixed_effects_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Linear Mixed-effects Models</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/05_lecture-continuous.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 5: Continuous Distributions</span></a>
+  <a href="../notes/lecture5_survival_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Survival Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/06_lecture-continuous-families.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 6: Common Distribution Families and Conditioning</span></a>
+  <a href="../notes/lecture6_local_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6: Local Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/07_lecture-maximum-likelihood-estimation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 7: Maximum Likelihood Estimation</span></a>
+  <a href="../notes/lecture7_quantile_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7: Quantile Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/08_lecture-simulation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8: Simulation</span></a>
+  <a href="../notes/lecture8_missing_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8: Missing Data</span></a>
   </div>
 </li>
       </ul>
@@ -235,7 +239,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">Warmup Lab Exercises</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -243,20 +247,73 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/appendix-prob-cheatsheet.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Probability Cheatsheet</span></a>
+  <a href="../notes/warmup-lab1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Binary Logistic Regression</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/appendix-dist-cheatsheet.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Distribution Cheatsheet</span></a>
+  <a href="../notes/warmup-lab2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Cox Proportional Hazards Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4: Quantile Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-log-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-multivariate-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentals of the Multivariate Normal Distribution</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Greek Alphabet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Cheat Sheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-mindmap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Mind Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-faq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Frequently Asked Questions (FAQs)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -278,7 +335,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-prob-cheatsheet.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-greek-alphabet.html">Greek Alphabet</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-greek-alphabet.html">Greek Alphabet</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Greek Alphabet</h1>
 </div>
@@ -297,7 +354,8 @@ window.Quarto = {
 </header>
 
 
-<p>Throughout MDS, we will use diverse Greek letters in various statistical topics. Usually, these letters represent distributional parameters. That said, it is not necessary to memorize these letters right away. With practice over time, you will get familiar with this alphabet.</p>
+<p>We will continue using a variety of Greek letters throughout this course. Most of the time, these symbols are just convenient shorthand for <strong>distributional parameters</strong> (for example, a mean, a variance, a rate, a shape parameter, or a regression coefficient).</p>
+<p>You <strong>do not</strong> need to memorize every letter or its meaning right away. What matters is that you can recognize what each symbol refers to in the current context (i.e., what it is controlling in the regression model or distribution you are working with). As you see these symbols repeatedly across examples and assignments, the notation will start to feel natural and you will gradually become familiar with the Greek alphabet through practice.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -431,8 +489,33 @@ window.Quarto = {
 </table>
 
 
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../notes";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -525,7 +608,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_551_stat-prob-dsci\/");
+      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_562_regr-2");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -862,13 +945,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../notes/appendix-dist-cheatsheet.html" class="pagination-link" aria-label="Distribution Cheatsheet">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Distribution Cheatsheet</span>
+      <a href="../notes/appendix-binary-multivariate-normal.html" class="pagination-link" aria-label="Fundamentals of the Multivariate Normal Distribution">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Fundamentals of the Multivariate Normal Distribution</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../LICENSE.html" class="pagination-link" aria-label="License">
-        <span class="nav-page-text">License</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../notes/appendix-reg-cheatsheet.html" class="pagination-link" aria-label="Regression Cheat Sheet">
+        <span class="nav-page-text">Regression Cheat Sheet</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -877,5 +960,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_551_stat-prob-dsci/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

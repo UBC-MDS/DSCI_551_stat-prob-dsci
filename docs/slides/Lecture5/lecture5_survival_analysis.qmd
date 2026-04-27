@@ -1,0 +1,901 @@
+---
+title: "Lecture 5"
+subtitle: "Survival Analysis"
+author: "(Please, sign in on iClicker)"
+format:
+  live-revealjs: 
+    webr:
+      packages:
+        - tidyverse
+        - broom
+        - ggfortify
+        - survival
+        - survminer
+        - cowplot
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/UBC_MDS_logo.png
+    css: styles.css
+    footer: DSCI 562 - Regression II
+    slide-level: 4
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{r echo=FALSE}
+# Load required packages
+library(tidyverse)
+library(broom)
+library(ggfortify)
+library(survival)
+library(survminer)
+library(cowplot)
+```
+
+## Today's Learning Goals
+
+By the end of this lecture, you should be able to:
+
+- Identify when data is <span style="color: purple;">censored</span>.
+- Understand the <span style="color: purple;">consequence</span> of <span style="color: purple;">subsetting to uncensored data</span> or <span style="color: purple;">ignoring the censored property</span> instead of using Survival Analysis methods.
+- Obtain univariate estimates for the mean, median, and survival function in `R` with a <span style="color: purple;">parametric</span> technique.
+
+## Today's Learning Goals (cont’d)
+
+- Obtain univariate estimates for the mean, median, and survival function in `R` with the <span style="color: purple;">Kaplan-Meier technique</span>.
+- Identify when the Kaplan-Meier survival function estimate <span style="color: purple;">cannot</span> produce mean and high quantile estimates.
+
+## Today's Learning Goals (cont’d)
+
+- Outline the modelling framework of a <span style="color: purple;">Cox Proportional Hazards model</span>.
+- Fit a Cox Proportional Hazards model in `R`.
+- Interpret the regression coefficients of a Cox Proportional Hazards model, and identify the model assumptions.
+- Obtain <span style="color: purple;">predicted survival functions</span> from a Cox Proportional Hazards model.
+
+## Outline
+
+0. What have we covered so far?
+1. Time to Event and Censoring
+2. Censoring Examples
+3. Key Concepts
+4. Estimating the Survival Function
+5. Cox Proportional Hazards Model
+
+## 0. What have we covered so far?
+
+- In terms of a <span style="color: purple;">conditioned mean response on its respective regressors</span>, the classical Ordinary Least-squares (OLS) model is not enough when we encounter the following:
+    1. Restricted continuous response range.
+    2. <span style="color: purple;">Discrete responses.</span>
+
+<center>        
+<img src="images/panda.png" width="200" height="200"/>
+</center>
+
+### And...
+
+::: {.incremental}
+- Discrete responses need a different approach, i.e., <span style="color: purple;">generalized linear models (GLMs)</span> via different <span style="color: purple;">link functions</span> as follows:
+  + <span style="color: purple;">Binary Logistic regression</span> for binary responses.
+  + <span style="color: purple;">Poisson</span> or <span style="color: purple;">Negative Binominal</span> regressions for count-type responses.
+  + <span style="color: purple;">Multinomial Logistic regression</span> for categorical and nominal responses.
+  + <span style="color: purple;">Ordinal Logistic regression</span> for categorical and ordinal responses.
+:::
+
+### Furthermore
+
+- We can extend the OLS and GLM approaches to a <span style="color: purple;">mixed-effects</span> framework. Therefore, we will be able to incorporate <span style="color: purple;">complex correlated data structures</span> in our training sets.
+
+. . .
+
+- However, what happens when we encounter <span style="color: purple;">censored data</span> in a continuous response framework?
+
+<center>        
+<img src="images/bulb.png" width="180" height="225"/>
+</center>
+
+### A new class of data!
+
+- Let us dig into this new class of data we have not seen so far. 
+- Modelling survival times can involve three statistical approaches: <span style="color: purple;">parametric</span>, <span style="color: purple;">semiparametric</span>, and <span style="color: purple;">non-parametric</span>.
+
+<center>        
+<img src="images/time.jpg" width="400" height="250"/>
+</center>
+
+## 1. Time to Event and Censoring
+
+- Suppose that we want to analyze <span style="color: purple;">the time until an event occurs</span>. 
+- For example:
+  + The time <span style="color: purple;">until some equipment breaks</span>.
+  + The time that <span style="color: purple;">unemployed people will take to land a new job</span>.
+
+## Heads-up!
+
+- Although this field in Statistics is usually referred to as <span style="color: purple;">Survival Analysis</span>, the event in question does not need to be related to actual "survival."
+
+> The important thing is to understand that we are interested in <span style="color: purple;">the time until something happens</span>.
+
+<center>        
+<img src="images/stop.jpg" width="300" height="187.5"/>
+</center>
+
+### In-class Question
+
+- Nevertheless, <span style="color: purple;">why is this different?</span> Cannot we just use the techniques we have learned so far (e.g., a Binary Logistic regression model)?
+
+<center>        
+<img src="images/panda.png" width="300" height="300"/>
+</center>
+
+### Now...
+
+- What are the implications of <span style="color: purple;">not taking into account censoring in data</span>?
+
+. . .
+
+- Removing censored data will result in <span style="color: purple;">estimate uncertainty to be larger than it could be if we were to include the censored data</span>.
+
+- Removing censored data could also result in <span style="color: purple;">biased estimates</span> if data have only been collected for a short time.
+
+## 2. Censoring Examples
+
+<br>
+
+<center>        
+<img src="images/stop.jpg" width="600" height="375"/>
+</center>
+
+### 2.1. Constant Right-censoring
+
+::: {.incremental}
+- Suppose we want to study <span style="color: purple;">the time until patients with a specific type of cancer die</span>. 
+- The study will be funded for ten years, i.e., <span style="color: purple;">after the 10th year, the study will end</span>. 
+- So, we will only observe the exact time some patients died within ten years. 
+- If an individual did not die due to cancer at the end of the study, then <span style="color: purple;">all we know is that the time of occurrence for that individual is higher than ten years</span>. We do not know the exact time that person will die from cancer.
+:::
+
+### Graphical representation!
+
+<br>
+
+<center>
+<img src="images/survival_study.png" width="900" height="400"/>
+</center>
+
+### 2.2. Random Right-censoring
+
+- We can have other types of censoring as well.
+
+. . .
+
+- Using the previous example, if a patient were hit by a bus and died in the accident, the death would be unrelated to cancer. Hence, <span style="color: purple;">all we know is that the patient did not die due to cancer until that moment</span>. 
+
+. . .
+
+- Or, in a less "dark" example, what if a patient you were following moves out of the country? It is an analogous situation. 
+- <span style="color: purple;">All we know is that the patient was alive until they moved.</span>
+
+
+### What is the difference between constant and random right-censoring?
+
+. . . 
+
+::: {.small-text}
+- The most significant difference is that we could have a single and <span style="color: purple;">constant</span> censoring time point, or a non-defined <span style="color: purple;">random</span> censoring time point.
+
+- However, <span style="color: purple;">as long as the censoring is independent of the time of the event of interest</span>, we can deal with both situations quite similarly.
+
+- There are other types of censoring besides right-censoring, but right-censoring is the most common one, and <span style="color: purple;">it will be the focus of this lecture</span>.
+:::
+
+<center>        
+<img src="images/time.jpg" width="300" height="187.5"/>
+</center>
+
+### 2.3. Left-Censoring
+
+. . .
+
+- <span style="color: purple;">Suppose you want to know when kids learn how to ski.
+- </span> One of the kids participating in your study already knows how to ski. So, <span style="color: purple;">the event already happened in a past time, but you cannot know precisely when it was</span>. 
+- All you know is that it was before the current time.
+
+<center>        
+<img src="images/ski.jpg" width="400" height="250"/>
+</center>
+
+## 3. Key Concepts
+
+- We learned in <span style="color: purple;">DSCI 551</span> that a random variable is characterized by its <span style="color: purple;">probability distribution</span> (either density if continuous, or mass if discrete). 
+- In <span style="color: purple;">Survival Analysis</span>, however, we frequently do not try to model the distribution directly. Instead, the focus is on modelling the <span style="color: purple;">survival</span> or <span style="color: purple;">hazard functions</span>.
+
+<center>        
+<img src="images/random.png" width="200" height="200"/>
+</center>
+
+### Survival and Hazard Functions
+
+- These two functions are quite crucial in Survival Analysis because they have special interpretations. 
+- <span style="color: purple;">If we know either of them, we can obtain the probability distribution for the time until an event occurs.
+- </span> They are just alternative ways to represent a probability distribution.
+
+### 3.1. Survival Function
+
+- For this function, let us consider a <span style="color: purple;">continuous</span> random variable 
+
+$$Y = \text{Time when an event of interest occurs.}$$
+
+- We know that the cumulative distribution function (CDF) of $Y$ tells us the probability that the event of interest occurs <span style="color: purple;">before a certain point in time $t$</span>:
+
+$$
+F_Y(t) = P(Y \leq t).
+$$
+
+### Probability of an Event
+
+- However, as the name suggests, in Survival Analysis, we are more interested in the probability that the event <span style="color: purple;">WILL NOT</span> occur before a certain point in time $t$ (i.e., <span style="color: purple;">the subject survives at least at point $t$</span>):
+
+$$
+S_Y(t) = P(Y > t) = 1 - F_Y(t).
+$$
+
+- $S_Y(t)$ is called the <span style="color: purple;">survival function</span>.
+
+<center>        
+<img src="images/panda.png" width="120" height="120"/>
+</center>
+
+### For example...
+
+- Suppose that $Y$ is being measured in `days`. So, we can measure the probability that the event of interest will not occur before $t = 10$ days by
+
+$$
+S_Y(10) = P(Y > 10) = 1 - F_Y(10).
+$$
+
+. . .
+
+- Furthermore, as we can see in the next plot, note that any survival function (measured as a probability on the $y$-axis with time on the $x$-axis) <span style="color: purple;">WILL ALWAYS be monotonically decreasing as time goes by</span>.
+
+### An example of survival function!
+
+<center>
+<img src="images/Example_Survival_Function.png" width=700/>
+</center>
+
+> *Source: [Kleinbaum and Klein (2005)](https://gw2jh3xr2c.search.serialssolutions.com/?sid=sersol&SS_jc=TC0000320278&title=Survival%20analysis%20%3A%20a%20self-learning%20text).* 
+
+
+#### Is the Survival Function Enough?
+
+- Note that the survival function $S_Y(t)$ fully characterizes $Y$. In other words, <span style="color: purple;">if we know the survival function, we have everything we need about $Y$</span>.
+- For instance, we can get the CDF $F_Y(t)$ as follows:
+$$
+F_Y(t) = 1 - S_Y(t).
+$$
+
+. . .
+
+- We could also get the probability density function (PDF):
+\begin{align*}
+f_Y(t) = \frac{dF_Y(t)}{dt} = -\frac{dS_Y(t)}{dt}.
+\end{align*}
+
+### 3.2. Hazard Function
+
+- The hazard function $\lambda(t)$, the <span style="color: purple;">instantaneous rate of event occurrence per unit of time</span>, is given by
+
+$$
+\lambda(t) = \lim_{\Delta t\rightarrow 0} \frac{P(t\leq Y < t+\Delta t | Y\geq t)}{\Delta t} = \frac{f_Y(t)}{S_Y(t)}.
+$$
+
+> **Heads-up:** One can interpret $\lambda(t)\Delta t$ as the approximate probability of the event occurring immediately, given that the event has not occurred up until time $t$.
+
+#### Example
+
+- Since we know how to calculate the survival function $S_Y(t)$ from the cumulative distribution $F_Y(t)$, we can obtain the survival function for <span style="color: purple;">any positive random variable</span>.
+
+. . .
+
+> <span style="color: purple;">Why positive?</span> 
+
+. . .
+
+- Because it measures the time until the event happens, and time cannot be negative in this context. 
+- Let us check an example of the Weibull distribution case to model $S_Y(t)$.
+
+### The Weibull Case
+
+::: {.small-text}
+- The Weibull distribution is one of the most popular <span style="color: purple;">parametric</span> modelling choices in Survival Analysis to model $S_Y(t)$.
+- Let 
+$$Y \sim \text{Weibull}(\alpha, \beta).$$
+:::
+
+. . .
+
+::: {.small-text}
+- Its PDF is given by:
+$$
+f_Y(t) = \frac{\alpha}{\beta^\alpha}t^{\alpha - 1}\exp\left[-\left(\frac{t}{\beta}\right)^{\alpha}\right] \quad \text{for} \quad t, \alpha, \beta > 0.
+$$
+- Note $\alpha$ is called the <span style="color: purple;">shape parameter</span> and $\beta$ is the <span style="color: purple;">scale parameter</span>.
+:::
+
+### Some notes 
+
+::: {.small-text}
+- If $\alpha = 1$ we get the exponential distribution with parameter $\beta$.
+- Generally speaking, the terms <span style="color: purple;">shape</span> and <span style="color: purple;">scale</span> along with <span style="color: purple;">location</span>, are broadly used in statistical distributions for the following:
+:::
+
+. . .
+
+::: {.small-text}
+- <span style="color: purple;">Location:</span> A parameter of this class shifts the distribution of interest to the left or right of the $x$-axis.
+- <span style="color: purple;">Scale:</span> A parameter of this class stretches out (if it is large) of squeezes (if it is small) the distribution of interest.
+- <span style="color: purple;">Shape:</span> This parameter is more tricky to define since it affects the form of the distribution rather than just stretching out or squeezing.
+:::
+
+### Weibull's CDF and Survival Functions
+
+::: {.small-text}
+- Weibull's CDF is given by
+
+$$
+F_Y(t) = 1 - \exp\left[-\left(\frac{t}{\beta}\right)^{\alpha}\right] \quad \text{for} \quad t > 0.
+$$
+
+- Therefore, the survival function of the Weibull distribution is:
+$$
+S_Y(t) = \exp\left[-\left(\frac{t}{\beta}\right)^{\alpha}\right] \quad \text{for} \quad t > 0.
+$$
+- Now let us check <span style="color: purple;">how the survival function behaves under different scale and shape parameters</span>.
+:::
+
+### Plots!
+
+```{r}
+#| echo: false
+#| fig.width: 20
+#| fig.height: 10
+
+weibull_param <- tibble(shape = c(0.5, 1, 2, 3), scale = c(5, 1, 2, 3))
+
+weibull_data <- tibble(t = seq(0.01, 5, 0.01)) |>
+  merge(weibull_param) |>
+  mutate(surv = exp(-(t / scale)^shape))
+
+weibull_plot <- weibull_data |>
+  ggplot(aes(t, surv, color = interaction(shape, scale))) +
+  ggtitle("Examples of Weibull's Survival Functions") +
+  labs(x = "Time (Years)", y = "Survival Probability") +
+  annotate("text", x = 1.5, y = 0.93, label = "Type A", size = 9.5, angle = -35) +
+  annotate("text", x = 1, y = 0.84, label = "Type B", size = 9.5, angle = -50) +
+  annotate("text", x = 3.5, y = 0.47, label = "Type C", size = 9.5, angle = -10) +
+  annotate("text", x = 1.2, y = 0.37, label = "Type D", size = 9.5, angle = -50) +
+  geom_line() +
+  theme(
+    plot.title = element_text(size = 32, face = "bold"),
+    axis.text = element_text(size = 23),
+    axis.title = element_text(size = 29),
+    legend.text = element_text(size = 29, margin = margin(r = 1, unit = "cm")), 
+    legend.title = element_text(size = 29, face = "bold"),
+    legend.key.size = unit(2, 'cm')
+  ) +
+  scale_color_manual(values = c("blue", "red", "green", "purple"), 
+                     labels = c("1, 1", "2, 2", "3, 3", "0.5, 5")) +
+  guides(color = guide_legend(title = "Shape and \n Scale Parameters"))
+
+weibull_plot
+```
+
+#### iClicker Question
+
+- Suppose that the previous curves are <span style="color: purple;">the survival functions of cancer patients for different types of cancer</span>. 
+- Interpret the *Type D* in comparison to the *Type A* and **select the correct option below**.
+
+**A.** *Type A* is a more agressive type of cancer than *Type D*.
+
+**B.** Both types of cancer are equally agressive.
+
+**C.** *Type D* is a more agressive type of cancer than *Type A*.
+
+<center>        
+<img src="images/panda.png" width="150" height="150"/>
+</center>
+
+### Now...
+
+- The hazard function for the Weibull distribution is given by:
+$$
+\lambda(t) = \frac{f_Y(t)}{S_Y(t)} = \frac{\alpha}{\beta^\alpha}t^{\alpha - 1}.
+$$
+
+<center>        
+<img src="images/time.jpg" width="400" height="250"/>
+</center>
+
+#### iClicker Question
+
+- What happens if $\alpha = 1$? **Select the correct option below.**
+
+**A.** The Weibull's hazard function increases over time.
+
+**B.** The Weibull's hazard function is constant (does not depend on the time).
+
+**C.** The Weibull's hazard function decreases over time.
+
+<center>        
+<img src="images/panda.png" width="250" height="250"/>
+</center>
+
+### Plots!
+
+```{r}
+#| echo: false
+#| fig.width: 20
+#| fig.height: 10
+
+weibull_data <- weibull_data |> mutate(hazard = shape * t^(shape - 1)/(scale^shape))
+
+weibull_hazard <- weibull_data |>
+  ggplot(aes(t, hazard, color = interaction(shape, scale))) + 
+  ggtitle("Examples of Weibull's Hazard Function") +
+  labs(x = "Time (Years)", y = "Hazard") +
+  theme(
+    plot.title = element_text(size = 32, face = "bold"),
+    axis.text = element_text(size = 23),
+    axis.title = element_text(size = 29),
+    legend.text = element_text(size = 29, margin = margin(r = 1, unit = "cm")), 
+    legend.title = element_text(size = 29, face = "bold"),
+    legend.key.size = unit(2, 'cm')
+  ) +
+  geom_line() +
+  scale_color_manual(values = c("blue", "red", "green", "purple"), 
+                     labels = c("1, 1", "2, 2", "3, 3", "0.5, 5")) +
+  guides(color = guide_legend(title = "Shape and \n Scale Parameters")) +
+  guides(color = guide_legend(title = "Shape and \nScale \nParameters")) +
+  annotate("text", x = 2.7, y = 0.5, label = "Type A", size = 9.5, angle = 0) +
+  annotate("text", x = 2.4, y = 1.5, label = "Type B", size = 9.5, angle = 0) +
+  annotate("text", x = 4, y = 0.2, label = "Type C", size = 9.5, angle = 0) +
+  annotate("text", x = 4, y = 1.1, label = "Type D", size = 9.5, angle = 0) +
+  scale_y_continuous(breaks = seq(0, 3, 0.5), limits = c(0, 3))
+
+weibull_hazard
+```
+
+#### In-class Question
+
+- Suppose that these curves are the hazard functions of cancer patients for different types of cancer. 
+- Let us compare the *blue* (*Type D*) and *green* (*Type A*) curves.
+
+```{r}
+#| echo: false
+#| fig.width: 35
+#| fig.height: 12
+
+plot_grid(weibull_plot + guides(color = guide_legend(title = "Shape and \nScale \nParameters")), 
+  weibull_hazard, ncol = 2)
+```
+
+### Note 
+
+- Other heavy-tailed distributions can also be used to model the survival function, such as:
+
+  - [Log-normal](http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Lognormal.pdf).
+  - [Generalized Gamma](http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Generalizedgamma.pdf).
+  - [Rayleigh](http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Rayleigh.pdf).
+  - [Pareto](http://www.math.wm.edu/~leemis/chart/UDR/PDFs/Pareto.pdf).
+
+## 4. Estimating the Survival Function
+
+- We will not know the probability distribution to be used in our survival and hazard functions in practice.
+- <span style="color: purple;">We will only have a dataset from which we are interested in the survival time.</span>
+
+. . .
+
+- It is up to you <span style="color: purple;">to make modelling decisions</span> before estimating the corresponding survival parameter (in the case of a parametric approach). 
+- Moreover, there is also a quite popular non-parametric approach.
+
+### 4.1. The Ovarian Dataset
+
+::: {.small-text}
+- For this section, we will use the dataset `ovarian` from the package `{survival}`.
+
+> The `ovarian` dataset contains 26 survival records of a <span style="color: purple;">randomized trial</span> that compares two ($k = 2$) treatments for ovarian cancer.
+
+- We will use the following columns:
+  - `futime`: The <span style="color: purple;">continuous survival or censoring time</span> in days.
+  - `fustat`: A <span style="color: purple;">binary factor</span> indicating if the patient died (`1` if true and `0` otherwise).
+  - `rx`: A <span style="color: purple;">binary factor</span> indicating the treatment group (`1` or `2`).
+:::
+
+### Data in `R`!
+
+```{webr} 
+#| autorun: true
+ovarian <- ovarian |> select(futime, fustat, rx) |>
+  mutate(rx = as.factor(rx))
+head(ovarian, n = 15)
+```
+
+### Main Statistical Inquiries
+
+- We are interested in the following:
+
+1. <span style="color: purple;">Regardless of the cancer treatment used</span>, is it possible to estimate the overall survival function for this population of cancer patients?
+2. Now, <span style="color: purple;">in terms of the specific cancer treatments</span>, is there a statistical difference between both treatments? If so, can we quantify it? How would this be possible? Moreover, can we obtain the corresponding <span style="color: purple;">estimated survival functions</span> per cancer treatment?
+
+### 4.2. The `Surv` Function
+
+::: {.small-text}
+- One of the key functions of the `{survival}` package is `Surv()` which receives two parameters. 
+  - The first one is <span style="color: purple;">the survival or censoring time</span>, and the second one if <span style="color: purple;">the recorded time was censored (`0`) or whether the actual event happened (`1`)</span>.
+  - The plus signs mean the `futime` was censored (<span style="color: purple;">we only know that the time is higher than that!</span>).
+:::
+
+```{webr}
+#| autorun: true
+Surv(ovarian$futime, ovarian$fustat)
+```
+
+### What would happen if we discard the censored observations?
+
+::: {.small-text}
+- **This would be a serious mistake.** 
+- In this case, we will probably underestimate the mean survival `time` because we are only considering the people that already died <span style="color: purple;">before the study ended</span>. 
+- Let us compute the mean survival time for those <span style="color: purple;">non-censored</span> observations.
+:::
+
+```{webr}
+#| autorun: true
+ovarian |> filter(fustat == 1) %>%
+  .[["futime"]] |> mean() |>
+  round()
+```
+
+
+### Mean Time!
+
+- Now, let us compute the mean time using <span style="color: purple;">all observations</span>.
+
+```{webr}
+#| autorun: true
+round(mean(ovarian$futime))
+```
+
+. . .
+
+- By looking at these two figures, it seems there are problems with ignoring censored data. <span style="color: purple;">What should we do then?</span>
+
+### Options
+
+- There are two options for estimating quantities by incorporating the <span style="color: purple;">partial information contained in censored observations</span> in the form of an <span style="color: purple;">estimated survival function</span> of the population of interest:
+  - **Non-parametric.**
+  - **Parametric.**
+  
+<center>        
+<img src="images/bulb.png" width="180" height="225"/>
+</center>
+
+### Non-parametric
+
+- <span style="color: purple;">If we do not make any distributional assumption</span>, the Kaplan-Meier (KM) method can be used to estimate the survival function. 
+- This option will implicate the following:
+  - <span style="color: purple;">RESTRICTED mean:</span> it can be estimated as the area under an estimate of the survival function. **Mathematically, this can be proved via integrals.**
+  - <span style="color: purple;">Quantiles:</span> they can be estimated by inverting an estimate of the survival function.
+
+### Parametric
+
+- <span style="color: purple;">If a distributional assumption is made</span>, we can use <span style="color: purple;">censored likelihood-based</span> methods to estimate the parameters of the chosen heavy-tailed PDF for the <span style="color: purple;">observed survival times</span> (e.g., **Weibull**).
+
+<center>        
+<img src="images/bulb.png" width="180" height="225"/>
+</center>
+
+### 4.3. Non-parametric Estimation and Inference of the Survival Function with Kaplan-Meier 
+
+::: {.small-text}
+- Non-parametric estimation is handy when we have a training dataset of survival times, but we have no idea how the survival function looks! 
+- Furthermore, we want to err on the side of caution <span style="color: purple;">by no assuming any random variable distribution</span>.
+:::
+
+. . .
+
+::: {.small-text}
+- KM is a non-parametric method to estimate the survival function. Its estimated survival curve has the form of a <span style="color: purple;">step function</span> computed with conditional probabilities.
+- This method is incredibly popular, and it is one of the most cited papers in Statistics (<span style="color: purple;">over 68,000 citations!</span>). You can find the original 1958 paper [here](https://web.stanford.edu/~lutian/coursepdf/KMpaper.pdf).
+:::
+
+### Estimation
+
+- Since the survival function <span style="color: purple;">fully characterizes</span> the random variable, if we know the survival function, we can estimate different statistics such as the mean, quantiles, etc.
+- Let us estimate the survival function, obtain the <span style="color: purple;">mean survival time</span>, and compare it with the two mean estimates we previously obtained: the <span style="color: purple;">mean survival time for those non-censored observations</span> ($351$ days) and the <span style="color: purple;">mean time of all observations</span> ($600$ days).
+
+### KM Estimation
+
+- The KM estimate of the survival function can be obtained with `survfit()` from the package `{survival}`. 
+- It expects a formula, but we are still working with the <span style="color: purple;">null model</span> (i.e., we consider all observations by not subsetting them by `rx` in the dataset `ovarian`).
+
+<center>        
+<img src="images/bulb.png" width="180" height="225"/>
+</center>
+
+### Code in `R`!
+
+- The KM estimate of the survival function can be obtained with `survfit()` from the package `{survival}`. 
+- It expects a `formula`, but we are still working with the <span style="color: purple;">null model</span> (i.e., <span style="color: purple;">we consider all observations by not subsetting them by `rx` in the dataset `ovarian`</span>).
+
+```{webr}
+#| autorun: true
+fit_km <- survfit(formula = Surv(futime, fustat) ~ 1, data = ovarian)
+fit_km
+```
+
+### Tidying the output!
+
+```{webr}
+#| autorun: true
+tidy(fit_km) |>
+  mutate_if(is.numeric, round, 2)
+```
+
+### Plotting via `autoplot()`
+
+- To plot `fit_km` we can use `autoplot()` from package `ggfortify` for a `ggplot2` style. Notice the <span style="color: purple;">“notches”</span> where there is a censored observation.
+
+```{webr}
+#| autorun: true
+fit_km_plot <- autoplot(fit_km) + theme_bw() +
+  ylab("Survival Probability") + xlab("Survival Time (days)") +
+  ylim(0, 1) +
+  theme(
+    axis.title = element_text(size = 18),
+    axis.text = element_text(size = 18)
+  )
+```
+
+### KM Survival Function Estimate
+
+```{webr}
+#| autorun: true
+fit_km_plot
+```
+
+### Mean Survival Time
+
+::: {.small-text}
+- Now that we have our <span style="color: purple;">estimated survival function</span>, we could calculate the mean survival time and compare it with our previous "raw" mean estimates: 
+  - the mean survival time for those non-censored observations ($351$ days), and 
+  - the mean time of all observations ($600$ days).
+
+```{webr}
+#| autorun: true
+glance(fit_km) |>
+  mutate_if(is.numeric, round, 3)
+```
+
+- The `r` in `rmean` means <span style="color: purple;">restricted</span>. <span style="color: purple;">Why restricted?</span>
+:::
+
+### Because...
+
+- The Kaplan-Meier estimate of the survival function <span style="color: purple;">does not always drop to zero (when the largest observation is censored)</span>.
+- A common "fix" is to force the survival function to drop to zero at the largest observation. The mean estimate that results is called the <span style="color: purple;">restricted mean</span>.
+
+<center>        
+<img src="images/panda.png" width="200" height="200"/>
+</center>
+
+### Median Survival Time
+
+- We can find the <span style="color: purple;">median survival time</span> on the printout of `glance(fit_km)`.
+- However, in general, we can use the `quantile()` S3 generic function from the package `survival`.
+
+```{webr}
+#| autorun: true
+quantile(fit_km, probs = 0.5, conf.int = FALSE)
+```
+
+### 4.4. Parametric Estimation and Inference of the Survival Function with a Distributional Assumption
+
+- As we discussed in the Weibull example above, if we know the distribution family of the survival time $Y$, we can get its survival function of 
+$$S_Y(t) = 1 - F_Y(t).$$
+- Nonetheless, just knowing the family is not enough. <span style="color: purple;">What else do we need?</span>
+
+### We need...
+
+- The corresponding <span style="color: purple;">parameters of the distribution</span>.
+- If we assume that the data follows a specific distribution, say Weibull, all there is left for us to do is <span style="color: purple;">estimate the parameters of the Weibull</span>. 
+- Nevertheless, we need to consider the censored data.
+- We can do this using the `survreg()` function.
+
+<center>        
+<img src="images/stop.jpg" width="300" height="187.5"/>
+</center>
+
+### The `survreg()` Function
+
+- Now, it is time to work with the `survreg()` function. 
+- This function corresponds to a parametric regression for a  Survival Model.
+- **We will try another distribution.** Let us fit the Log-normal distribution under one survival <span style="color: purple;">null</span> regression model using dataset `ovarian`.
+
+```{webr}
+#| autorun: true
+model_lognormal <- survreg(
+  formula = Surv(futime, fustat) ~ 1,
+  dist = "lognormal", data = ovarian
+)
+```
+
+### Comparing In-sample Fitted Values 
+
+- Now, let us compute the <span style="color: purple;">in-sample fitted values</span> for both models. 
+- These fitted lines will appear on top of our previous estimated KM survival function.
+
+```{webr}
+#| autorun: true
+surv_fitted <- tibble(
+  x = seq(0, max(ovarian$futime), 0.1),
+  Log_Normal = plnorm(x,
+    meanlog = model_lognormal$coefficients[1],
+    sdlog = model_lognormal$scale, lower.tail = FALSE
+  ))
+
+surv_fitted <- surv_fitted |>
+  pivot_longer(cols = c("Log_Normal"), names_to = "Model", values_to = "Survival")
+
+fit_km_and_param_plot <- fit_km_plot +
+  geom_line(aes(x, Survival, color = Model), data = surv_fitted, linewidth = 1.5) +
+  ylim(0, 1) +
+  theme(
+    axis.text = element_text(size = 16),
+    axis.title = element_text(size = 16),
+    legend.text = element_text(size = 16, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 16, face = "bold")
+  ) +
+  ylab("Survival Probability") +
+  xlab("Survival Time (days)") +
+  theme(legend.position="bottom")
+```
+
+### Plot in `R`!
+
+```{webr}
+#| autorun: true
+fit_km_and_param_plot
+```
+
+#### In-class Question
+
+- What is the advantage or disadvantage of making a distributional assumption?
+
+<center>        
+<img src="images/panda.png" width="400" height="400"/>
+</center>
+
+## 5. Cox Proportional Hazards Model
+
+- The Cox Proportional Hazards model is a commonly used <span style="color: purple;">semiparametric regression model</span> that allows us to interpret how regressors influence a censored response.
+
+<center>        
+<img src="images/stop.jpg" width="400" height="250"/>
+</center>
+
+### 5.1. Exploratory Data Analysis (EDA)
+
+- Our EDA gives us descriptive evidence to state that the survival times for treatment 1 might be slightly higher than the ones for treatment 2 (`Ongoing` status in `censor`). 
+- However, <span style="color: purple;">some considerable overlap</span> still needs to be addressed with proper statistical inference via regression analysis.
+
+### Side-by-side Boxplots!
+
+```{r}
+#| fig.width: 20
+#| fig.height: 10
+
+ovarian <- ovarian |> mutate(rx = as_factor(rx))
+
+side_by_side_boxplots_ovarian <- ovarian |>
+  mutate(censor = if_else(fustat == 1, "Died", "Ongoing")) %>%
+  ggplot(aes(rx, futime)) +
+  geom_boxplot(aes(colour = censor)) +
+  theme_bw() +
+  labs(
+    x = "Treatment",
+    y = "Survival Time (Days)"
+  ) +
+  theme(
+    axis.text = element_text(size = 24),
+    axis.title = element_text(size = 30),
+    legend.text = element_text(size = 24, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 24, face = "bold")
+  )
+
+side_by_side_boxplots_ovarian
+```
+
+### 5.2. Data Modelling Framework
+
+- The idea is to model the hazard function directly for the $i$th observation ($i = 1, \dots, n$) subject to $k$ regressors $X_{i,j}$ $(j = 1, \dots, k)$:
+$$\lambda_i \left( t | X_{i,1}, \dots, X_{i,k} \right) = \lambda_0(t)\exp\left(\beta_1 X_{i,1} + \ldots + \beta_k X_{i, k}\right).$$
+
+. . .
+
+- Note that we model the $i$th individual hazard function $\lambda_i \left( t | X_{i,1}, \dots, X_{i,k} \right)$ along with a <span style="color: purple;">baseline hazard $\lambda_0(t)$</span>, which is equal for all the $n$ observations, multiplied by $\exp\left(\beta_1 X_{i,1} + \ldots + \beta_k X_{i, k}\right)$.
+
+### 5.3. Estimation
+
+- Parameter estimation in Cox regression is done through another special maximum likelihood technique using a <span style="color: purple;">partial likelihood</span>. 
+- To fit a Cox Proportional Hazards model using `R`, we can use `coxph()` from the `survival` package.
+
+```{webr}
+#| autorun: true
+fit_ph <- coxph(formula = Surv(futime, fustat) ~ rx, data = ovarian)
+```
+
+### 5.4. Inference
+
+- We can determine <span style="color: purple;">whether a regressor is statistically associated with the response's hazard function</span> through <span style="color: purple;">hypothesis testing</span> for $\beta_j$. 
+
+. . .
+
+- You can test the below hypotheses via the <span style="color: purple;">Wald statistic</span> $z _j= \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}$:
+
+\begin{align*}
+H_0: \beta_j &= 0 \\
+H_a: \beta_j &\neq 0.        
+\end{align*}
+
+
+### Tidying output!
+
+- Modelling output can be obtained via `tidy()`:
+
+```{webr}
+#| autorun: true
+tidy(fit_ph, conf.int = TRUE) |> mutate_if(is.numeric, round, 3)
+```
+
+- Our sample gives us evidence to fail to reject $H_0$ $(p\text{-value} > .05)$. 
+
+### 5.5. Coefficient Interpretation
+
+::: {.small-text}
+```{webr}
+#| autorun: true
+tidy(fit_ph, exponentiate = TRUE, conf.int = TRUE) |> mutate_if(is.numeric, round, 3)
+```
+
+- <span style="color: purple;">If the regression coefficient were significant</span>, we would interpret the hazard function under treatment `2` to be $\exp(-0.596) = 0.551$ times as much as the hazard function under treatment `1`.
+:::
+
+. . .
+
+::: {.small-text}
+- <span style="color: purple;">Alternatively</span>, we would interpret the hazard function under treatment `1` as $1/0.551 = 1.81$ times as much as the hazard function under treatment `2`. <span style="color: purple;">In plain words, for this alternative interpretation, treatment `2` would increase the survival times compared to treatment `1` if there were a statistically significant difference.</span>
+:::
+
+### 5.6. Prediction
+
+::: {.small-text}
+
+- Even though the Cox regression models the hazard function $\lambda_i(t)$, it is possible to obtain <span style="color: purple;">a given estimated survival function</span> via the following equation:
+
+$$S\left( t | X_1, \dots X_k \right) = S_0(t)^{\exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right)}.$$
+
+- $S_0(t) = \exp \left[ - \Lambda_0(t) \right]$ is the <span style="color: purple;">baseline survival function</span>. 
+- Note that $\Lambda_0(t)$ is the cumulative baseline hazard function:
+
+$$\Lambda_0(t) = \int_0^{t} \lambda_0(u)du.$$
+:::
+
+## 6. Wrapping Up
+
+- Survival analysis allows modelling data <span style="color: purple;">when censorship is present</span>.
+- A key characteristic of this field is how we treat the <span style="color: purple;">randomness</span> associated with those censored observations.
+- Fundamental concepts involve the use of <span style="color: purple;">probability</span> statements on survival times.
+- We can extend the regression paradigm to survival times using parametric and non-parametric approaches.

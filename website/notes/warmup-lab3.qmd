@@ -1,0 +1,329 @@
+---
+title: "Lab 3: Cox Proportional Hazards Model"
+format:
+  live-html:
+    toc: true
+    toc-depth: 4
+    number-sections: true
+webr:
+  packages:
+    - survival
+    - tidyverse
+    - broom
+    - ggfortify
+    - survminer
+---
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+## Setup {.unnumbered}
+
+We will need to load the following packages before proceeding:
+
+```{webr}
+library(survival)
+library(tidyverse)
+library(broom)
+library(ggfortify)
+library(survminer)
+```
+
+## The Veterans' Administration Lung Cancer Study {.unnumbered}
+
+This time, we will work with the Veterans' Administration Lung Cancer study (`veteran`) dataset from package `{survival}`.
+
+According to [**Amaka and Etikan (2022)**](https://www.medrxiv.org/content/10.1101/2022.05.22.22275430v1.full), we have the following background information:
+
+> *This study will be using the Veterans’ Administrative Lung Cancer dataset (`R` Dataset) of 137 patients having advanced inoperable Lung cancer, carried out by the US Veterans Administration. Out of 137 male patients, 69 patients received the Standard test while 68 patients received Chemotherapy test and 64 patients died in each treatment group while only 9 patients were alive (censored) at the end of the study.*
+
+Let us load the dataset.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+data(veteran)
+
+# Transforming a variable of interest as a factor.
+veteran <- veteran |>
+  mutate(trt = as.factor(trt))
+head(veteran)
+tail(veteran)
+nrow(veteran)
+```
+
+We have a **training set size $n = 137$** subjects. That said, we will specifically work with these columns:
+
+- **`trt`:** The type of treatment received by the patient, `1` for `Standard` test and `2` for `Chemotherapy` test. It is of factor-type.
+- **`celltype`:** Cell types of the tumor (cell type(1)-`squamous` cancer, cell type(2)-`smallcell` cancer, cell type(3)-`adeno`carcinoma, and cell type (4)-`large` cell carcinoma). It is of factor-type.
+- **Survival `time`** in days.
+- **Censoring `status`:** `0` for censored patient and `1` for dead patient.
+- **`karno`:** Karnofsky performance score. **This numerical variable tells us patients' overall status at the start of the study**, with `100` being a good status.
+
+We will select our variables of interest. Then, we will rename `trt` levels `1` and `2` as `Standard` and `Chemotherapy` levels respectively.
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+veteran <- veteran |>
+  dplyr::select(trt, celltype, time, status, karno) |>
+  mutate(trt = as.factor(if_else(trt == "1", "Standard", "Chemotherapy")))
+
+veteran$trt <- fct_relevel(
+  veteran$trt,
+  c("Standard", "Chemotherapy")
+)
+
+head(veteran)
+tail(veteran)
+```
+
+::: {.callout-caution}
+## Main Statistical Inquiries
+We are mainly interested in the following:
+
+1. **In terms of the specific cancer treatments**, is there a statistical difference between the `Standard` and `Chemotherapy` treatments? If so, can we quantify it? Moreover, can we obtain the corresponding **estimated survival functions**?
+2. Does the Karnofsky performance score have a statistical impact on our hazard function? I.e., does a **higher score** lead to a statistically significant **decrease in hazard**? If so, by how much?
+3. **According to a consultation I had with a surgical oncologist (just to know more about this type of cancer)**, cell type(1)-`squamous` cancer is not "that life-threatening." Is that the case in this population (i.e., male patients having advanced inoperable Lung cancer) **when compared to other cancer cell types**? If so, by how much?  Moreover, can we obtain the corresponding **estimated survival functions** by cancer cell type?
+:::
+
+## Q1.1. Exploratory Data Analysis {.unnumbered}
+
+Based on our main statistical inquiries, let us answer the following:
+
+**Q1.1.1.** What is our **primary** response of interest? What is its nature?
+
+::: {.callout-note collapse="false"}
+## Answer
+Available for MDS students.
+:::
+
+Now, let us create a suitable side-by-side plots comparing survival `time` on the $y$-axis by each level in `trt` on the $x$-axis **while controlling by censorship `status`**. Run the following chunk of code to create the side-by-side plots for comparison:
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-height: 10
+#| fig-width: 12.5
+side_by_side_boxplots_veteran_trt <- veteran |>
+  mutate(status = if_else(status == 1, "Died", "Censored")) |>
+  ggplot(aes(trt, time)) +
+  geom_boxplot(aes(colour = status)) +
+  theme_bw() +
+  labs(
+    x = "Treatment",
+    y = "Survival Time (Days)"
+  ) +
+  theme(
+    plot.title = element_text(size = 24, face = "bold"),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 21),
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  ) +
+  ggtitle("Survival by Cancer Treatment")
+side_by_side_boxplots_veteran_trt
+```
+
+Also note the following absolute frequencies by `status` (`1` indicates a dead patient and `0` a censored one):
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+table(veteran$trt, veteran$status)
+```
+
+**Q1.1.2.** What do you observe about the relationship of survival times between treatments when controlling for censorship status? 
+
+::: {.callout-note collapse="false"}
+## Answer
+Available for MDS students.
+:::
+
+Now, let us create a suitable side-by-side plots comparing survival `time` on the $y$-axis by each level in `celltype` on the $x$-axis **while controlling by censorship `status`** with the following code:
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-height: 10
+#| fig-width: 12.5
+side_by_side_boxplots_veteran_celltype <- veteran |>
+  mutate(status = if_else(status == 1, "Died", "Censored")) |>
+  ggplot(aes(celltype, time)) +
+  geom_boxplot(aes(colour = status)) +
+  theme_bw() +
+  labs(
+    x = "Cancer Cell Type",
+    y = "Survival Time (Days)"
+  ) +
+  theme(
+    plot.title = element_text(size = 24, face = "bold"),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 21),
+    legend.text = element_text(size = 21, margin = margin(r = 1, unit = "cm")),
+    legend.title = element_text(size = 21, face = "bold")
+  ) +
+  ggtitle("Survival by Cancer Cell Type")
+side_by_side_boxplots_veteran_celltype
+```
+
+**Q1.1.3.** What do you observe about the relationship of survival times between cancer cell type when controlling for censorship status? Note the following absolute frequencies by `status` (`1` indicates a dead patient and `0` a censored one):
+
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+table(veteran$celltype, veteran$status)
+```
+
+::: {.callout-note collapse="false"}
+## Answer
+Available for MDS students.
+:::
+
+## Q1.2. Data Modelling Framework {.unnumbered}
+
+Having defined the primary response and explanatory variables in this case, **what is a suitable modelling framework?**
+
+::: {.callout-note collapse="false"}
+## Answer
+Available for MDS students.
+:::
+
+We will model the hazard function directly for the $i$th observation ($i = 1, \dots, n$) subject to the numerical regressor $X_{i, \texttt{karno}}$ and the following dummy variables:
+
+$$
+X_{i, \texttt{chemotherapy}} =
+\begin{cases}
+1 \; \; \; \; \text{if the patient was randomized to Chemotherapy},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+$$
+
+$$
+X_{i, \texttt{small}} =
+\begin{cases}
+1 \; \; \; \; \text{cancer cell type(2)-small cell cancer},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+$$
+
+$$
+X_{i, \texttt{adeno}} =
+\begin{cases}
+1 \; \; \; \; \text{cancer cell type(3)-adeno carcinoma},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+$$
+
+$$
+X_{i, \texttt{large}} =
+\begin{cases}
+1 \; \; \; \; \text{cancer cell type(4)-large cell carcinoma},\\
+0 \; \; \; \; \mbox{otherwise}.
+\end{cases}
+$$
+
+Note that `Standard` treatment and cell type(1)-`squamous` cancer are the respective baseline categories.
+
+We will model the hazard function as follows:
+
+$$
+\begin{align*}
+\lambda_i \left( t | X_{i, \texttt{karno}}, \dots, X_{i, \texttt{large}} \right) &= \lambda_0(t)\exp\big(\beta_1 X_{i, \texttt{karno}} + \beta_2 X_{i, \texttt{chemotherapy}} + \\
+& \qquad \beta_3 X_{i, \texttt{small}} + \beta_4 X_{i, \texttt{adeno}} + \beta_5 X_{i, \texttt{large}}\big).
+\end{align*}
+$$
+
+::: {.callout-important}
+## Important
+Note that we model the $i$th individual hazard function $\lambda_i \left( t | X_{i, \texttt{karno}}, \dots, X_{i, \texttt{large}} \right)$ along with a baseline hazard $\lambda_0(t)$, which is equal for all the $n$ observations, multiplied by $\exp\left(\beta_1 X_{i, \texttt{karno}} + \ldots + \beta_5 X_{i, \texttt{large}}\right)$.
+:::
+
+## Q1.3. Estimation {.unnumbered}
+
+Using the corresponding fitting function, estimate the corresponding regression model of `time` (including censoring `status`) versus `trt`, `celltype`, and `karno`.
+
+::: {.callout-note collapse="false"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+:::
+
+## Q1.4. Inference {.unnumbered}
+
+Using your fitted model, are the explanatory variables statistically associated to the survival `time` via the hazard function? State your conclusion with a significance level $\alpha = 0.05$.
+
+::: {.callout-note collapse="false"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+
+Available for MDS students.
+:::
+
+## Q1.5. Coefficient Interpretation {.unnumbered}
+
+**So far, we have solved our three inquiries in terms of inferential conclusions.** Let us proceed to coefficient interpretation for those significant regressors. Obtain the estimates **on the escale of the hazard function**.
+
+::: {.callout-note collapse="false"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+# YOUR CODE GOES HERE
+```
+
+Available for MDS students.
+:::
+
+## Q1.6. Prediction {.unnumbered}
+
+We still need to provide **estimated survival function curves**. Therefore, even though we already concluded that there is no difference between both cancer treatments, let us obtain their estimated survival functions. 
+
+Then, explain what you see in these plots.
+
+::: {.callout-note collapse="false"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-height: 10
+#| fig-width: 12.5
+# YOUR CODE GOES HERE
+```
+
+Available for MDS students.
+:::
+
+Now, let us do it for `celltype`. In this case, for our three estimated survival functions (note from our inferential conclusions, one `celltype` is not statistically significant with respect to the baseline level), we choose the baseline level `Standard` for `trt` and the mean value for `karno`. 
+
+Then, explain what you see in these plots.
+
+::: {.callout-note collapse="false"}
+## Answer
+```{webr}
+#| autorun: true
+#| message: false
+#| warning: false
+#| fig-height: 10
+#| fig-width: 12.5
+# YOUR CODE GOES HERE
+```
+
+Available for MDS students.
+:::

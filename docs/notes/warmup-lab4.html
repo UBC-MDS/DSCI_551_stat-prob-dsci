@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Lab 4: Quantile Regression – DSCI 562: Regression II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notes/appendix-binary-log-regression.html" rel="next">
+<link href="../notes/warmup-lab3.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": true,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script><link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../styles.css">
+</head>
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DSCI 562: Regression II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_562_regr-2"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/warmup-lab1.html">Warmup Lab Exercises</a></li><li class="breadcrumb-item"><a href="../notes/warmup-lab4.html">Lab 4: Quantile Regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../notes/img/UBC_MDS_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none"></a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lectures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../learning-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Learning Goals by Lecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture1-glm-link-functions-and-count-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Link Functions and Count Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture2_glm_model_selection_multinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Model Selection and Multinomial Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture3_glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture4_linear_mixed_effects_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Linear Mixed-effects Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture5_survival_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Survival Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture6_local_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6: Local Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture7_quantile_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7: Quantile Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture8_missing_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8: Missing Data</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Warmup Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Cox Proportional Hazards Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab4.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab 4: Quantile Regression</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-log-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-multivariate-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentals of the Multivariate Normal Distribution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Greek Alphabet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Cheat Sheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-mindmap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Mind Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-faq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Frequently Asked Questions (FAQs)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../LICENSE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">License</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#doordash-etas-thinking-like-the-eta-team" id="toc-doordash-etas-thinking-like-the-eta-team" class="nav-link" data-scroll-target="#doordash-etas-thinking-like-the-eta-team">DoorDash ETAs — Thinking Like the ETA Team!</a></li>
+  <li><a href="#about-the-dataset" id="toc-about-the-dataset" class="nav-link" data-scroll-target="#about-the-dataset">About the Dataset</a></li>
+  <li><a href="#setup-load-the-dataset" id="toc-setup-load-the-dataset" class="nav-link" data-scroll-target="#setup-load-the-dataset">Setup: Load the Dataset</a></li>
+  <li><a href="#data-wrangling-define-the-response-we-actually-model" id="toc-data-wrangling-define-the-response-we-actually-model" class="nav-link" data-scroll-target="#data-wrangling-define-the-response-we-actually-model">Data Wrangling: Define the response we actually model!</a></li>
+  <li><a href="#q1.1.-initial-food-for-thought" id="toc-q1.1.-initial-food-for-thought" class="nav-link" data-scroll-target="#q1.1.-initial-food-for-thought">Q1.1. Initial Food for Thought</a></li>
+  <li><a href="#first-statistical-inquiry-whats-typical-delivery-time-and-how-do-staffing-plus-congestion-move-it" id="toc-first-statistical-inquiry-whats-typical-delivery-time-and-how-do-staffing-plus-congestion-move-it" class="nav-link" data-scroll-target="#first-statistical-inquiry-whats-typical-delivery-time-and-how-do-staffing-plus-congestion-move-it">First Statistical Inquiry: “What’s ‘typical’ delivery time, and how do staffing plus congestion move it?”</a></li>
+  <li><a href="#q1.2.-exploratory-data-analysis-why-the-median-matters-here" id="toc-q1.2.-exploratory-data-analysis-why-the-median-matters-here" class="nav-link" data-scroll-target="#q1.2.-exploratory-data-analysis-why-the-median-matters-here">Q1.2. Exploratory Data Analysis: Why the median matters here!</a></li>
+  <li><a href="#q1.3.-estimation-fit-ols-and-parametric-median-quantile-regressions" id="toc-q1.3.-estimation-fit-ols-and-parametric-median-quantile-regressions" class="nav-link" data-scroll-target="#q1.3.-estimation-fit-ols-and-parametric-median-quantile-regressions">Q1.3. Estimation: Fit OLS and Parametric Median Quantile Regressions</a></li>
+  <li><a href="#q1.4.-inference" id="toc-q1.4.-inference" class="nav-link" data-scroll-target="#q1.4.-inference">Q1.4. Inference</a></li>
+  <li><a href="#q1.5.-coefficient-interpretation" id="toc-q1.5.-coefficient-interpretation" class="nav-link" data-scroll-target="#q1.5.-coefficient-interpretation">Q1.5. Coefficient Interpretation</a></li>
+  <li><a href="#q1.6.-graphical-comparison-ols-fitted-line-versus-parametric-median-quantile-fitted-line" id="toc-q1.6.-graphical-comparison-ols-fitted-line-versus-parametric-median-quantile-fitted-line" class="nav-link" data-scroll-target="#q1.6.-graphical-comparison-ols-fitted-line-versus-parametric-median-quantile-fitted-line">Q1.6. Graphical comparison: OLS Fitted Line versus Parametric Median Quantile Fitted Line</a></li>
+  <li>
+<a href="#second-statistical-inquiry-where-do-eta-ranges-like-the-ones-in-the-app-come-from" id="toc-second-statistical-inquiry-where-do-eta-ranges-like-the-ones-in-the-app-come-from" class="nav-link" data-scroll-target="#second-statistical-inquiry-where-do-eta-ranges-like-the-ones-in-the-app-come-from">Second Statistical Inquiry: Where do ETA ranges like the ones in the app come from?</a>
+  <ul>
+<li><a href="#what-the-manager-wants" id="toc-what-the-manager-wants" class="nav-link" data-scroll-target="#what-the-manager-wants">What the Manager Wants!</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a></li>
+  <li><a href="#q1.7.-exploratory-data-analysis-quantile-thinking" id="toc-q1.7.-exploratory-data-analysis-quantile-thinking" class="nav-link" data-scroll-target="#q1.7.-exploratory-data-analysis-quantile-thinking">Q1.7. Exploratory Data Analysis: Quantile thinking!</a></li>
+  </ul>
+</li>
+  <li><a href="#q1.8.-data-modelling" id="toc-q1.8.-data-modelling" class="nav-link" data-scroll-target="#q1.8.-data-modelling">Q1.8. Data Modelling</a></li>
+  <li><a href="#q1.9.-estimation" id="toc-q1.9.-estimation" class="nav-link" data-scroll-target="#q1.9.-estimation">Q1.9. Estimation</a></li>
+  <li><a href="#q1.10.-inference" id="toc-q1.10.-inference" class="nav-link" data-scroll-target="#q1.10.-inference">Q1.10. Inference</a></li>
+  <li><a href="#q1.11.-coefficient-interpretation" id="toc-q1.11.-coefficient-interpretation" class="nav-link" data-scroll-target="#q1.11.-coefficient-interpretation">Q1.11. Coefficient Interpretation</a></li>
+  <li><a href="#third-statistical-inquiry-build-a-conservative-eta-range-for-a-specific-order-probabilistic-prediction" id="toc-third-statistical-inquiry-build-a-conservative-eta-range-for-a-specific-order-probabilistic-prediction" class="nav-link" data-scroll-target="#third-statistical-inquiry-build-a-conservative-eta-range-for-a-specific-order-probabilistic-prediction">Third Statistical Inquiry: Build a conservative ETA range for a specific order (probabilistic prediction)</a></li>
+  <li><a href="#q1.12.-exploratory-data-analysis-with-estimated-non-parametric-quantile-regressions-tau-0.1-0.9" id="toc-q1.12.-exploratory-data-analysis-with-estimated-non-parametric-quantile-regressions-tau-0.1-0.9" class="nav-link" data-scroll-target="#q1.12.-exploratory-data-analysis-with-estimated-non-parametric-quantile-regressions-tau-0.1-0.9">Q1.12. Exploratory Data Analysis with Estimated Non-parametric Quantile Regressions (<span class="math inline">\(\tau = 0.1, 0.9\)</span>)</a></li>
+  <li><a href="#q1.13.-prediction-build-an-eta-interval-for-a-specific-order-with-probabilistic-meaning" id="toc-q1.13.-prediction-build-an-eta-interval-for-a-specific-order-with-probabilistic-meaning" class="nav-link" data-scroll-target="#q1.13.-prediction-build-an-eta-interval-for-a-specific-order-with-probabilistic-meaning">Q1.13. Prediction: Build an ETA interval for a specific order (with probabilistic meaning)</a></li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/warmup-lab1.html">Warmup Lab Exercises</a></li><li class="breadcrumb-item"><a href="../notes/warmup-lab4.html">Lab 4: Quantile Regression</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Lab 4: Quantile Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><section id="setup" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="setup">Setup</h2>
+<p>We will need to load the following packages before proceeding:</p>
+<div class="cell">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJjb2RlIjoibGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGx1YnJpZGF0ZSlcbmxpYnJhcnkobW9kZWxyKVxubGlicmFyeShxdWFudHJlZykiLCJhdHRyIjp7ImV2YWwiOnRydWUsImVkaXQiOnRydWV9fQ==
+</script>
+</div>
+</div>
+</section><section id="doordash-etas-thinking-like-the-eta-team" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="doordash-etas-thinking-like-the-eta-team">DoorDash ETAs — Thinking Like the ETA Team!</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="img/doordash-logo.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption>Copyright © 2026 DoorDash, Inc.</figcaption></figure>
+</div>
+<p>Imagine you have just joined the <strong>DoorDash ETA (Estimated Time of Arrival) team</strong> as a Data Scientist. Your manager does not care about “<em>average delivery time</em>” in the abstract; they care about <strong>customer promises</strong>:</p>
+<ul>
+<li>
+<em>“Most orders should arrive around ___ minutes.”</em><br>
+</li>
+<li>
+<em>“But we should warn customers that it could take as long as ___ minutes.”</em><br>
+</li>
+<li><em>“And we need to understand how staffing and congestion shift those numbers.”</em></li>
+</ul>
+<p>This warmup is about learning the tool that matches that reality: <strong>Quantile regression</strong>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important Key Mindset Shift
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this setting, focusing only on the Ordinary Least-squares (OLS) conditional mean <span class="math inline">\(\mathbb{E}(Y \mid X)\)</span> is often <em>not the right target</em>. Let us suppose that DoorDash lives and dies by <strong>the median</strong> (typical experience), <strong>upper quantiles</strong> (late orders, disappointed customers), and <strong>lower quantiles</strong> (early orders and possibly happier customers).</p>
+</div>
+</div>
+</section><section id="about-the-dataset" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="about-the-dataset">About the Dataset</h2>
+<p>The <strong>DoorDash ETA</strong> dataset contains historical delivery records from early 2015, where each observation corresponds to a single food delivery order. The response of interest is the total delivery duration, defined as the time between when an order is placed (<code>created_at</code>) and when it is delivered (<code>actual_delivery_time</code>).</p>
+<p>The dataset includes a mix of order characteristics, marketplace conditions at order time (e.g., number of active and busy dashers nearby), and predictions from internal models (e.g., estimated driving time). Because delivery times are typically right-skewed and heterogeneous, this dataset is well-suited for Quantile regression, which allows us to model different parts of the conditional distribution of delivery time rather than just the mean. You can find the dataset in <a href="https://www.kaggle.com/datasets/dharun4772/doordash-eta-prediction?resource=download"><strong>this Kaggle website</strong></a>. <strong>Suppose this dataset is representative enough for a given city of interest</strong>.</p>
+</section><section id="setup-load-the-dataset" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="setup-load-the-dataset">Setup: Load the Dataset</h2>
+<p>The raw dataset <code>doordash.csv</code> includes timestamps for when an order is placed and when it is delivered, plus features describing <strong>market conditions</strong> and <strong>order/store characteristics</strong>. We have 12969 raw data points.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJjb2RlIjoiZG9vcmRhc2hfcmF3IDwtIHJlYWRfY3N2KFwiZGF0YXNldHMvZG9vcmRhc2guY3N2XCIsIHNob3dfY29sX3R5cGVzID0gRkFMU0UpXG5nbGltcHNlKGRvb3JkYXNoX3JhdykiLCJhdHRyIjp7Indhcm5pbmciOmZhbHNlLCJldmFsIjp0cnVlLCJlZGl0Ijp0cnVlLCJhdXRvcnVuIjp0cnVlLCJtZXNzYWdlIjpmYWxzZX19
+</script>
+</div>
+</div>
+</section><section id="data-wrangling-define-the-response-we-actually-model" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="data-wrangling-define-the-response-we-actually-model">Data Wrangling: Define the response we actually model!</h2>
+<p>In the raw data <code>doordash_raw</code>, columns <code>created_at</code> and <code>actual_delivery_time</code> are timestamps. For modelling and interpretation, we will convert these into an <strong>actual delivery duration in minutes</strong>. Note that we will overwrite <code>actual_delivery_time</code> to be the duration in min (suppose DoorDash people often casually call this “<em>actual delivery time</em>” anyway). The original delivery timestamp will be stored as <code>actual_delivery_timestamp</code>. The below chunk of code results in a data frame of <span class="math inline">\(n = 12700\)</span> rows, which is enough data.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJjb2RlIjoiIyBXZSBzZWxlY3QgdGhlIG5lY2Vzc2FyeSBjb2x1bW5zIGZvciBvdXIgaW5xdWlyaWVzLlxuIyBUaGVuLCB3ZSBjcmVhdGUgYWN0dWFsX2RlbGl2ZXJ5X3RpbWUgdXNpbmcge2x1YnJpZGF0ZX0gZnVuY3Rpb25zLlxudHJhaW5pbmdfZG9vcmRhc2ggPC0gZG9vcmRhc2hfcmF3IHw+XG4gIGRwbHlyOjpzZWxlY3QoXG4gICAgY3JlYXRlZF9hdCxcbiAgICBhY3R1YWxfZGVsaXZlcnlfdGltZSxcbiAgICB0b3RhbF9vbnNoaWZ0X2Rhc2hlcnMsXG4gICAgdG90YWxfYnVzeV9kYXNoZXJzLFxuICAgIHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnlcbiAgKSB8PlxuICBkcm9wX25hKCkgfD5cbiAgbXV0YXRlKFxuICAgIGNyZWF0ZWRfYXQgPSB5bWRfaG1zKGNyZWF0ZWRfYXQsIHR6ID0gXCJVVENcIiksXG4gICAgYWN0dWFsX2RlbGl2ZXJ5X3RpbWVzdGFtcCA9IHltZF9obXMoYWN0dWFsX2RlbGl2ZXJ5X3RpbWUsIHR6ID0gXCJVVENcIiksXG4gICAgYWN0dWFsX2RlbGl2ZXJ5X3RpbWUgPSBhcy5udW1lcmljKGRpZmZ0aW1lKGFjdHVhbF9kZWxpdmVyeV90aW1lc3RhbXAsXG4gICAgICBjcmVhdGVkX2F0LFxuICAgICAgdW5pdHMgPSBcIm1pbnNcIlxuICAgICkpXG4gICkgfD5cbiAgZHJvcF9uYSgpICMgRHJvcHBpbmcgZmluYWwgcm93cyB3aXRoIE5BcyBkdWUgdG8gaW5jb3JyZWN0IHJhdyB0aW1lc3RhbXAgcmVjb3Jkcy4iLCJhdHRyIjp7Indhcm5pbmciOmZhbHNlLCJldmFsIjp0cnVlLCJlZGl0Ijp0cnVlLCJhdXRvcnVuIjp0cnVlLCJtZXNzYWdlIjpmYWxzZX19
+</script>
+</div>
+</div>
+<p>Let us now check summary of <code>actual_delivery_time</code>.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJjb2RlIjoic3VtbWFyeSh0cmFpbmluZ19kb29yZGFzaCRhY3R1YWxfZGVsaXZlcnlfdGltZSkiLCJhdHRyIjp7Indhcm5pbmciOmZhbHNlLCJldmFsIjp0cnVlLCJlZGl0Ijp0cnVlLCJhdXRvcnVuIjp0cnVlLCJtZXNzYWdlIjpmYWxzZX19
+</script>
+</div>
+</div>
+<p>Now, let us plot the histogram of <code>actual_delivery_time</code> via <code>training_doordash</code>.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJjb2RlIjoiaGlzdF9hY3R1YWxfZGVsaXZlcnlfdGltZSA8LSBnZ3Bsb3QoXG4gIHRyYWluaW5nX2Rvb3JkYXNoLFxuICBhZXMoeCA9IGFjdHVhbF9kZWxpdmVyeV90aW1lKVxuKSArXG4gIGdlb21faGlzdG9ncmFtKFxuICAgIGJpbnMgPSA2MCxcbiAgICBmaWxsID0gXCJsaWdodGJsdWVcIixcbiAgICBjb2xvciA9IFwiYmxhY2tcIixcbiAgICBsaW5ld2lkdGggPSAwLjNcbiAgKSArXG4gIGdlb21fdmxpbmUoYWVzKHhpbnRlcmNlcHQgPSBtZWFuKGFjdHVhbF9kZWxpdmVyeV90aW1lKSksXG4gICAgbGluZXR5cGUgPSBcImRhc2hlZFwiLCBsaW5ld2lkdGggPSAwLjUsIGNvbG9yID0gXCJyZWRcIlxuICApICtcbiAgZ2VvbV92bGluZShhZXMoeGludGVyY2VwdCA9IG1lZGlhbihhY3R1YWxfZGVsaXZlcnlfdGltZSkpLFxuICAgIGxpbmV0eXBlID0gXCJzb2xpZFwiLCBsaW5ld2lkdGggPSAwLjUsIGNvbG9yID0gXCJyZWRcIlxuICApICtcbiAgbGFicyhcbiAgICB4ID0gXCJBY3R1YWwgRGVsaXZlcnkgVGltZSAobWluKVwiLFxuICAgIHkgPSBcIk51bWJlciBvZiBPcmRlcnNcIixcbiAgICB0aXRsZSA9IFwiSGlzdG9ncmFtIG9mIERvb3JEYXNoIEFjdHVhbCBEZWxpdmVyeSBUaW1lc1wiLFxuICAgIHN1YnRpdGxlID0gXCJTb2xpZCB2ZXJ0aWNhbCBsaW5lID0gbWVkaWFuLCBkYXNoZWQgdmVydGljYWwgbGluZSA9IG1lYW5cIlxuICApICtcbiAgdGhlbWUoXG4gICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjQsIGZhY2UgPSBcImJvbGRcIiksXG4gICAgcGxvdC5zdWJ0aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjIpLFxuICAgIGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMTcpLFxuICAgIGF4aXMudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIxKVxuICApXG5oaXN0X2FjdHVhbF9kZWxpdmVyeV90aW1lIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZWRpdCI6dHJ1ZSwiZmlnLWhlaWdodCI6OSwiZXZhbCI6dHJ1ZSwiZmlnLXdpZHRoIjoxMCwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</section><section id="q1.1.-initial-food-for-thought" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.1.-initial-food-for-thought">Q1.1. Initial Food for Thought</h2>
+<p>As a DoorDash Data Scientist, your manager asks about the above <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and histogram for actual delivery times in minutes to report <strong>descriptive ETAs</strong> to customers:</p>
+<blockquote class="blockquote">
+<p>“<em>Should we report a single ‘typical ETA’ using the mean or the median?</em>”</p>
+</blockquote>
+<p><strong>Q1.1.1.</strong> Based on the above descriptive statistics and histogram, which is the better “<em>typical ETA</em>” and why?</p>
+<p><strong>Q1.1.2.</strong> What does the fact that the mean exceeds the median suggest about the shape of the distribution?</p>
+<p><strong>Q1.1.3.</strong> Which statistic (mean or median) would be more robust to the maximum value 166.050 minutes, and how does that motivate using median (<span class="math inline">\(\tau = 0.5\)</span>) Quantile regression instead of OLS for a central-tendency model?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="first-statistical-inquiry-whats-typical-delivery-time-and-how-do-staffing-plus-congestion-move-it" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="first-statistical-inquiry-whats-typical-delivery-time-and-how-do-staffing-plus-congestion-move-it">First Statistical Inquiry: “What’s ‘typical’ delivery time, and how do staffing plus congestion move it?”</h2>
+<p>Your manager asks:</p>
+<blockquote class="blockquote">
+<p>“<em>I don’t want the average — I want typical delivery time. Use staffing within 10 miles (<code>total_onshift_dashers</code>, <span class="math inline">\(X_1\)</span>) and congestion (<code>total_busy_dashers</code>, <span class="math inline">\(X_2\)</span>) to explain what shifts that typical time.</em>”</p>
+</blockquote>
+<p>We will compare:</p>
+<ul>
+<li>
+<strong>OLS</strong>: models the conditional mean <span class="math inline">\(\mathbb{E}(Y \mid X_1, X_2)\)</span>.</li>
+<li>
+<strong>Parametric median Quantile regression (<span class="math inline">\(\tau = 0.5\)</span>):</strong> models the conditional median <span class="math inline">\(Q_{Y \mid X_1, X_2}(\tau = 0.5 \mid X_1, X_2)\)</span>.</li>
+</ul>
+<p>The exact regressor descriptions are the following:</p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>: Number of available dashers who are within 10 miles of the store at the time of order creation.</li>
+<li>
+<code>total_busy_dashers</code>: Subset of the above <code>total_onshift_dashers</code> who are currently working on an order.</li>
+</ul></section><section id="q1.2.-exploratory-data-analysis-why-the-median-matters-here" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.2.-exploratory-data-analysis-why-the-median-matters-here">Q1.2. Exploratory Data Analysis: Why the median matters here!</h2>
+<p>Let us recheck the histogram of actual delivery times from <code>training_doordash</code>:</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJjb2RlIjoiaGlzdF9hY3R1YWxfZGVsaXZlcnlfdGltZSIsImF0dHIiOnsid2FybmluZyI6ZmFsc2UsImVkaXQiOnRydWUsImZpZy1oZWlnaHQiOjksImV2YWwiOnRydWUsImZpZy13aWR0aCI6MTAsImF1dG9ydW4iOnRydWUsIm1lc3NhZ2UiOmZhbHNlfX0=
+</script>
+</div>
+</div>
+<p>Based on the above histogram, why might the median be a more appropriate “<em>typical ETA</em>” than the mean?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="q1.3.-estimation-fit-ols-and-parametric-median-quantile-regressions" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.3.-estimation-fit-ols-and-parametric-median-quantile-regressions">Q1.3. Estimation: Fit OLS and Parametric Median Quantile Regressions</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are intentionally skipping the data modelling stage in this inquiry; we will leave the equations for the next one with a more complex regressor arrangement.</p>
+</div>
+</div>
+<p>Fit <strong>two models</strong> with the same response and regressors:</p>
+<ul>
+<li>
+<strong>Response:</strong> <code>actual_delivery_time</code> (min).</li>
+<li>
+<strong>Regressors:</strong> <code>total_onshift_dashers</code> and <code>total_busy_dashers</code>.</li>
+</ul>
+<p>First, fit an <strong>OLS</strong> model (<code>ETA_OLS</code>) to study how the regressors affect the <strong>mean</strong> <code>actual_delivery_time</code> <span class="math inline">\(\mathbb{E}(Y \mid X_1, X_2)\)</span>. Then, fit a <strong>parametric median Quantile regression</strong> model (<span class="math inline">\(\tau = 0.5\)</span>, called <code>ETA_param_qr_50</code>) to study how the regressors affect the <strong>median</strong> delivery time <span class="math inline">\(Q_{Y|X_1, X_2}(\tau = 0.5 \mid X_1, X_2)\)</span>, which is more robust to unusually late deliveries.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJjb2RlIjoiIyBZT1VSIENPREUgR09FUyBIRVJFIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="q1.4.-inference" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.4.-inference">Q1.4. Inference</h2>
+<p>Using your fitted models <code>ETA_OLS</code> and <code>ETA_param_qr_50</code>, are <code>total_onshift_dashers</code> and <code>total_busy_dashers</code> statistically associated with <code>actual_delivery_time</code>? State your conclusions with a significance level <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For parametric median Quantile regression, ensure to use the pairwise bootstrapping method to obtain the corresponding empirical values. Use 100 replicates and the simulation seed <code>562</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJjb2RlIjoiIyBZT1VSIENPREUgR09FUyBIRVJFIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="q1.5.-coefficient-interpretation" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.5.-coefficient-interpretation">Q1.5. Coefficient Interpretation</h2>
+<p>Now, let us interpret those significant estimated regression coefficients coming from both OLS and parametric median Quantile regression.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="q1.6.-graphical-comparison-ols-fitted-line-versus-parametric-median-quantile-fitted-line" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.6.-graphical-comparison-ols-fitted-line-versus-parametric-median-quantile-fitted-line">Q1.6. Graphical comparison: OLS Fitted Line versus Parametric Median Quantile Fitted Line</h2>
+<p>To make a clean comparison against one regressor at a time between OLS and parametric median Quantile regression, we will:</p>
+<ul>
+<li>Vary one (either <code>total_onshift_dashers</code> or <code>total_busy_dashers</code>) across its range.</li>
+<li>Hold the other regressor fixed at its median.</li>
+<li>Plot predicted mean (OLS) versus predicted median (<span class="math inline">\(\tau=0.5\)</span>).</li>
+</ul>
+<p><strong>Plot A: Vary on-shift dashers and hold busy dashers fixed</strong></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJjb2RlIjoiZ3JpZF9vbnNoaWZ0IDwtIHRpYmJsZShcbiAgdG90YWxfb25zaGlmdF9kYXNoZXJzID0gc2VxKFxuICAgIG1pbih0cmFpbmluZ19kb29yZGFzaCR0b3RhbF9vbnNoaWZ0X2Rhc2hlcnMpLFxuICAgIG1heCh0cmFpbmluZ19kb29yZGFzaCR0b3RhbF9vbnNoaWZ0X2Rhc2hlcnMpLFxuICAgIGxlbmd0aC5vdXQgPSAyMDBcbiAgKSxcbiAgdG90YWxfYnVzeV9kYXNoZXJzID0gbWVkaWFuKHRyYWluaW5nX2Rvb3JkYXNoJHRvdGFsX2J1c3lfZGFzaGVycylcbikgfD5cbiAgbXV0YXRlKFxuICAgIHByZWRfT0xTID0gcHJlZGljdChFVEFfT0xTLCBuZXdkYXRhID0gY3VyX2RhdGEoKSksXG4gICAgcHJlZF9xcl81MCA9IHByZWRpY3QoRVRBX3BhcmFtX3FyXzUwLCBuZXdkYXRhID0gY3VyX2RhdGEoKSlcbiAgKVxuXG5wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfb25zaGlmdCA8LSBnZ3Bsb3QoXG4gIHRyYWluaW5nX2Rvb3JkYXNoLFxuICBhZXMoeCA9IHRvdGFsX29uc2hpZnRfZGFzaGVycywgeSA9IGFjdHVhbF9kZWxpdmVyeV90aW1lKVxuKSArXG4gIGdlb21fcG9pbnQoYWxwaGEgPSAwLjE1LCBjb2xvciA9IFwiZGFya2JsdWVcIikgK1xuICBnZW9tX2xpbmUoXG4gICAgZGF0YSA9IGdyaWRfb25zaGlmdCwgYWVzKHkgPSBwcmVkX09MUyksXG4gICAgbGluZXdpZHRoID0gMC42LCBsaW5ldHlwZSA9IFwiZGFzaGVkXCIsIGNvbG9yID0gXCJjaG9jb2xhdGVcIlxuICApICtcbiAgZ2VvbV9saW5lKFxuICAgIGRhdGEgPSBncmlkX29uc2hpZnQsIGFlcyh5ID0gcHJlZF9xcl81MCksXG4gICAgbGluZXdpZHRoID0gMC42LCBjb2xvciA9IFwiY2hvY29sYXRlXCJcbiAgKSArXG4gIGxhYnMoXG4gICAgeCA9IFwiVG90YWwgT24tc2hpZnQgRGFzaGVycyAod2l0aGluIDEwIG1pbGVzKVwiLFxuICAgIHkgPSBcIkFjdHVhbCBEZWxpdmVyeSBUaW1lIChtaW4pXCIsXG4gICAgdGl0bGUgPSBcIk1lYW4gKE9MUywgZGFzaGVkKSB2ZXJzdXMgUGFyYW1ldHJpYyBNZWRpYW4gKDAuNS1xdWFudGlsZSwgc29saWQpXCIsXG4gICAgc3VidGl0bGUgPSBcIlRvdGFsIGJ1c3kgZGFzaGVycyBoZWxkIGNvbnN0YW50IGF0IGl0cyBtZWRpYW5cIlxuICApICtcbiAgdGhlbWUoXG4gICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMTksIGZhY2UgPSBcImJvbGRcIiksXG4gICAgcGxvdC5zdWJ0aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMTgpLFxuICAgIGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMTYpLFxuICAgIGF4aXMudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE4KVxuICApXG5wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfb25zaGlmdCIsImF0dHIiOnsid2FybmluZyI6ZmFsc2UsImVkaXQiOnRydWUsImZpZy1oZWlnaHQiOjksImV2YWwiOnRydWUsImZpZy13aWR0aCI6MTAsImF1dG9ydW4iOnRydWUsIm1lc3NhZ2UiOmZhbHNlfX0=
+</script>
+</div>
+</div>
+<p><strong>Plot B: Vary busy dashers, hold on-shift dashers fixed</strong></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJjb2RlIjoiZ3JpZF9idXN5IDwtIHRpYmJsZShcbiAgdG90YWxfYnVzeV9kYXNoZXJzID0gc2VxKFxuICAgIG1pbih0cmFpbmluZ19kb29yZGFzaCR0b3RhbF9idXN5X2Rhc2hlcnMpLFxuICAgIG1heCh0cmFpbmluZ19kb29yZGFzaCR0b3RhbF9idXN5X2Rhc2hlcnMpLFxuICAgIGxlbmd0aC5vdXQgPSAyMDBcbiAgKSxcbiAgdG90YWxfb25zaGlmdF9kYXNoZXJzID0gbWVkaWFuKHRyYWluaW5nX2Rvb3JkYXNoJHRvdGFsX29uc2hpZnRfZGFzaGVycylcbikgfD5cbiAgbXV0YXRlKFxuICAgIHByZWRfT0xTID0gcHJlZGljdChFVEFfT0xTLCBuZXdkYXRhID0gY3VyX2RhdGEoKSksXG4gICAgcHJlZF9xcl81MCA9IHByZWRpY3QoRVRBX3BhcmFtX3FyXzUwLCBuZXdkYXRhID0gY3VyX2RhdGEoKSlcbiAgKVxuXG5wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfYnVzeSA8LSBnZ3Bsb3QoXG4gIHRyYWluaW5nX2Rvb3JkYXNoLFxuICBhZXMoeCA9IHRvdGFsX2J1c3lfZGFzaGVycywgeSA9IGFjdHVhbF9kZWxpdmVyeV90aW1lKVxuKSArXG4gIGdlb21fcG9pbnQoYWxwaGEgPSAwLjE1LCBjb2xvciA9IFwiZGFya2dyZWVuXCIpICtcbiAgZ2VvbV9saW5lKFxuICAgIGRhdGEgPSBncmlkX2J1c3ksIGFlcyh5ID0gcHJlZF9PTFMpLFxuICAgIGxpbmV3aWR0aCA9IDAuNiwgbGluZXR5cGUgPSBcImRhc2hlZFwiLCBjb2xvciA9IFwiY2hvY29sYXRlXCJcbiAgKSArXG4gIGdlb21fbGluZShcbiAgICBkYXRhID0gZ3JpZF9idXN5LCBhZXMoeSA9IHByZWRfcXJfNTApLFxuICAgIGxpbmV3aWR0aCA9IDAuNiwgY29sb3IgPSBcImNob2NvbGF0ZVwiXG4gICkgK1xuICBsYWJzKFxuICAgIHggPSBcIlRvdGFsIEJ1c3kgRGFzaGVyc1wiLFxuICAgIHkgPSBcIkFjdHVhbCBEZWxpdmVyeSBUaW1lIChtaW4pXCIsXG4gICAgdGl0bGUgPSBcIk1lYW4gKE9MUywgZGFzaGVkKSB2ZXJzdXMgUGFyYW1ldHJpYyBNZWRpYW4gKDAuNS1xdWFudGlsZSwgc29saWQpXCIsXG4gICAgc3VidGl0bGUgPSBcIlRvdGFsIG9uLXNoaWZ0IGRhc2hlcnMgaGVsZCBjb25zdGFudCBhdCBpdHMgbWVkaWFuXCJcbiAgKSArXG4gIHRoZW1lKFxuICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE5LCBmYWNlID0gXCJib2xkXCIpLFxuICAgIHBsb3Quc3VidGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE4KSxcbiAgICBheGlzLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE2KSxcbiAgICBheGlzLnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAxOClcbiAgKVxucGxvdF9kZWxpdmVyeV90aW1lX3ZzX2J1c3kiLCJhdHRyIjp7Indhcm5pbmciOmZhbHNlLCJlZGl0Ijp0cnVlLCJmaWctaGVpZ2h0Ijo5LCJldmFsIjp0cnVlLCJmaWctd2lkdGgiOjEwLCJhdXRvcnVuIjp0cnVlLCJtZXNzYWdlIjpmYWxzZX19
+</script>
+</div>
+</div>
+<p>In these two plots, why might the fitted OLS and parametric median-quantile lines differ? What is the “<em>business meaning</em>” of that gap?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="second-statistical-inquiry-where-do-eta-ranges-like-the-ones-in-the-app-come-from" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="second-statistical-inquiry-where-do-eta-ranges-like-the-ones-in-the-app-come-from">Second Statistical Inquiry: Where do ETA ranges like the ones in the app come from?</h2>
+<p>Below, you can see a DoorDash checkout screenshot from a Chipotle order by Alexi – <em>yes, Chipotle isn’t real Mexican food… but he was hungry and desperate.</em> The blue circled range (i.e., 25–40 minutes) is the key product question:</p>
+<blockquote class="blockquote">
+<p><em>How could a range like 25–40 min be produced using regression ideas, without pretending that all customers experience the “<strong>mean</strong>”?</em></p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="img/doordash.png" class="img-fluid figure-img" style="width:45.0%"></p>
+<figcaption>Screenshot from Alexi’s phone.</figcaption></figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The above range-related matter is related to a predictive task, which will be the main scope of the third inquiry of this exercise. That said, for this second inquiry, we must understand the inferential facts related to estimating different Quantile regression models <strong>via the same training set</strong>.</p>
+</div>
+</div>
+<section id="what-the-manager-wants" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="what-the-manager-wants">What the Manager Wants!</h3>
+<p>The manager wants to assess whether there is a statistical association between the <span class="math inline">\(\tau = 0.1, 0.5, 0.9\)</span> conditional quantiles of <code>actual_delivery_time</code> versus:</p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>: Number of available dashers who are within 10 miles of the store at the time of order creation.</li>
+<li>
+<code>total_busy_dashers</code>: Subset of the above <code>total_onshift_dashers</code> who are currently working on an order.</li>
+<li>
+<code>store_primary_category</code>: Cuisine category of the restaurant, e.g., Italian, Mexican, Chinese, Indian, etc.</li>
+</ul>
+<p>… and by how much, if significant.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Quantile regression will let us answer it across the distribution of actual delivery times. Moreover, there will be three fitted parametric Quantile regression models: <span class="math inline">\(\tau = 0.1\)</span> (say, early deliveries, and possibly, happier customers), <span class="math inline">\(\tau = 0.5\)</span> (say, typical experience), and <span class="math inline">\(\tau = 0.9\)</span> (say, late orders with possible disappointed customers).</p>
+</div>
+</div>
+</section><section id="data-wrangling" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="data-wrangling">Data Wrangling</h3>
+<p><code>store_primary_category</code> has many categories, which can be noisy for a warmup exercise. Thus, we will keep the most common categories and drop the rest into a factor level called “<code>Other</code>”. This will result in a factor-type column <code>store_primary_category</code> with nine categories only.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJjb2RlIjoidHJhaW5pbmdfZG9vcmRhc2hfMiA8LSB0cmFpbmluZ19kb29yZGFzaCB8PlxuICBtdXRhdGUoXG4gICAgc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSA9IGZjdF9sdW1wX24oc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSxcbiAgICAgIG4gPSA4LCBvdGhlcl9sZXZlbCA9IFwiT3RoZXJcIlxuICAgIClcbiAgKVxuY291bnQodHJhaW5pbmdfZG9vcmRhc2hfMiwgc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSwgc29ydCA9IFRSVUUpIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</section><section id="q1.7.-exploratory-data-analysis-quantile-thinking" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="q1.7.-exploratory-data-analysis-quantile-thinking">Q1.7. Exploratory Data Analysis: Quantile thinking!</h3>
+<p>Before we fit any model, we want to <strong>see</strong> how delivery times behave under different marketplace conditions and order characteristics. But here is the key DoorDash insight:</p>
+<ul>
+<li><p>The <strong>mean</strong> can be a misleading summary because late deliveries create a long right tail.</p></li>
+<li>
+<p>What we really care about operationally is how regressors move:</p>
+<ul>
+<li>
+<strong>early deliveries</strong> (<span class="math inline">\(\tau = 0.1\)</span>).</li>
+<li>
+<strong>typical deliveries</strong> (the median, <span class="math inline">\(\tau = 0.5\)</span>).</li>
+<li>
+<strong>slow deliveries</strong> (<span class="math inline">\(\tau = 0.9\)</span>).</li>
+</ul>
+</li>
+</ul>
+<p>So, in this exploratory data analysis (EDA), we will look at scatterplots and category comparisons, but instead of drawing a “<em>best-fit mean line</em>,” we will overlay <strong>fitted parametric Quantile regression lines</strong> for <span class="math inline">\(\tau = 0.1, 0.5, 0.9\)</span>. Think of these three lines as a first-pass picture of the ETA system:</p>
+<ul>
+<li>The <span class="math inline">\(\tau = 0.1\)</span> fitted line is an <strong>early-delivery curve</strong> (ideal to have happier customers).</li>
+<li>The <span class="math inline">\(\tau = 0.5\)</span> fitted line is a <strong>typical ETA curve</strong> (robust to late outliers).</li>
+<li>The <span class="math inline">\(\tau = 0.9\)</span> fitted line is a <strong>late-delivery risk curve</strong> (what customers complain about).</li>
+<li>The gap between <span class="math inline">\(\tau = 0.1\)</span> and <span class="math inline">\(\tau = 0.9\)</span> fitted lines is a preview of an <strong>ETA interval</strong>.</li>
+</ul>
+<p>With that mindset, let us visualize how staffing (<code>total_onshift_dashers</code>) and congestion (<code>total_busy_dashers</code>) relate to the lower, middle, and upper parts of delivery time. We will illustrate these fitted Quantile regression lines per regressor with respect to <code>actual_delivery_time</code> (<strong>just for EDA purposes</strong>, a more complete model fitting for inferential purposes will be explained later on).</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The usual <code>geom_quantile(y ~ x)</code> fits <em>marginal</em> quantile curves that only condition on the <span class="math inline">\(x\)</span>-axis variable. Here, we would prefer <em>conditional</em> quantile curves from a model that takes into account both <code>total_onshift_dashers</code> and <code>total_busy_dashers</code>. So, we fit parametric Quantile regressions using both regressors, then plot predictions while varying one regressor and holding the other fixed (at its median). This makes the visual comparison meaningful.</p>
+</div>
+</div>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJjb2RlIjoiIyAxKSBGaXQgcGFyYW1ldHJpYyBRdWFudGlsZSByZWdyZXNzaW9ucyBqdXN0IGZvciBFREEuXG5xcjEwIDwtIHJxKGFjdHVhbF9kZWxpdmVyeV90aW1lIH4gdG90YWxfb25zaGlmdF9kYXNoZXJzICsgdG90YWxfYnVzeV9kYXNoZXJzLFxuICB0YXUgPSAwLjEsIGRhdGEgPSB0cmFpbmluZ19kb29yZGFzaF8yXG4pXG5xcjUwIDwtIHJxKGFjdHVhbF9kZWxpdmVyeV90aW1lIH4gdG90YWxfb25zaGlmdF9kYXNoZXJzICsgdG90YWxfYnVzeV9kYXNoZXJzLFxuICB0YXUgPSAwLjUsIGRhdGEgPSB0cmFpbmluZ19kb29yZGFzaF8yXG4pXG5xcjkwIDwtIHJxKGFjdHVhbF9kZWxpdmVyeV90aW1lIH4gdG90YWxfb25zaGlmdF9kYXNoZXJzICsgdG90YWxfYnVzeV9kYXNoZXJzLFxuICB0YXUgPSAwLjksIGRhdGEgPSB0cmFpbmluZ19kb29yZGFzaF8yXG4pXG5cbiMgQ29uc3RhbnRzIHRvIFwiaG9sZCBmaXhlZC5cIlxuYnVzeV9jb25zdCAgPC0gbWVkaWFuKHRyYWluaW5nX2Rvb3JkYXNoXzIkdG90YWxfYnVzeV9kYXNoZXJzLCBuYS5ybSA9IFRSVUUpXG5vbnNoaWZ0X2NvbnN0IDwtIG1lZGlhbih0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX29uc2hpZnRfZGFzaGVycywgbmEucm0gPSBUUlVFKVxuXG4jIDIpIFByZWRpY3Rpb24gZ3JpZDogdmFyeSBvbi1zaGlmdCwgaG9sZCBidXN5IGZpeGVkLlxuZ3JpZF9vbnNoaWZ0IDwtIHRpYmJsZShcbiAgdG90YWxfb25zaGlmdF9kYXNoZXJzID0gc2VxKFxuICAgIG1pbih0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX29uc2hpZnRfZGFzaGVycyxcbiAgICAgIG5hLnJtID0gVFJVRVxuICAgICksXG4gICAgbWF4KHRyYWluaW5nX2Rvb3JkYXNoXzIkdG90YWxfb25zaGlmdF9kYXNoZXJzLFxuICAgICAgbmEucm0gPSBUUlVFXG4gICAgKSxcbiAgICBsZW5ndGgub3V0ID0gMjAwXG4gICksXG4gIHRvdGFsX2J1c3lfZGFzaGVycyA9IGJ1c3lfY29uc3RcbikgfD5cbiAgbXV0YXRlKFxuICAgIHExMCA9IHByZWRpY3QocXIxMCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpLFxuICAgIHE1MCA9IHByZWRpY3QocXI1MCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpLFxuICAgIHE5MCA9IHByZWRpY3QocXI5MCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpXG4gICkgfD5cbiAgcGl2b3RfbG9uZ2VyKGNvbHMgPSBjKHExMCwgcTUwLCBxOTApLCBuYW1lc190byA9IFwicXVhbnRpbGVcIiwgdmFsdWVzX3RvID0gXCJwcmVkXCIpIHw+XG4gIG11dGF0ZShxdWFudGlsZSA9IHJlY29kZShxdWFudGlsZSwgcTEwID0gXCIwLjFcIiwgcTUwID0gXCIwLjVcIiwgcTkwID0gXCIwLjlcIikpXG5cbiMgMykgUHJlZGljdGlvbiBncmlkOiB2YXJ5IGJ1c3ksIGhvbGQgb24tc2hpZnQgZml4ZWQuXG5ncmlkX2J1c3kgPC0gdGliYmxlKFxuICB0b3RhbF9idXN5X2Rhc2hlcnMgPSBzZXEobWluKHRyYWluaW5nX2Rvb3JkYXNoXzIkdG90YWxfYnVzeV9kYXNoZXJzLCBuYS5ybSA9IFRSVUUpLFxuICAgIG1heCh0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX2J1c3lfZGFzaGVycywgbmEucm0gPSBUUlVFKSxcbiAgICBsZW5ndGgub3V0ID0gMjAwXG4gICksXG4gIHRvdGFsX29uc2hpZnRfZGFzaGVycyA9IG9uc2hpZnRfY29uc3RcbikgfD5cbiAgbXV0YXRlKFxuICAgIHExMCA9IHByZWRpY3QocXIxMCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpLFxuICAgIHE1MCA9IHByZWRpY3QocXI1MCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpLFxuICAgIHE5MCA9IHByZWRpY3QocXI5MCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpXG4gICkgfD5cbiAgcGl2b3RfbG9uZ2VyKGNvbHMgPSBjKHExMCwgcTUwLCBxOTApLCBuYW1lc190byA9IFwicXVhbnRpbGVcIiwgdmFsdWVzX3RvID0gXCJwcmVkXCIpIHw+XG4gIG11dGF0ZShxdWFudGlsZSA9IHJlY29kZShxdWFudGlsZSwgcTEwID0gXCIwLjFcIiwgcTUwID0gXCIwLjVcIiwgcTkwID0gXCIwLjlcIikpXG5cbiMgUGxvdDogdmFyeSBvbi1zaGlmdCwgYnVzeSBoZWxkIGNvbnN0YW50Llxuc2Vjb25kX3Bsb3RfZGVsaXZlcnlfdGltZV92c19vbnNoaWZ0IDwtIGdncGxvdChcbiAgdHJhaW5pbmdfZG9vcmRhc2hfMixcbiAgYWVzKHggPSB0b3RhbF9vbnNoaWZ0X2Rhc2hlcnMsIHkgPSBhY3R1YWxfZGVsaXZlcnlfdGltZSlcbikgK1xuICBnZW9tX3BvaW50KGFscGhhID0gMC4xNSkgK1xuICBnZW9tX2xpbmUoXG4gICAgZGF0YSA9IGdyaWRfb25zaGlmdCxcbiAgICBhZXMoeSA9IHByZWQsIGNvbG91ciA9IHF1YW50aWxlKSxcbiAgICBsaW5ld2lkdGggPSAwLjdcbiAgKSArXG4gIGxhYnMoXG4gICAgeCA9IFwiVG90YWwgT24tc2hpZnQgRGFzaGVyc1wiLFxuICAgIHkgPSBcIkFjdHVhbCBEZWxpdmVyeSBUaW1lIChtaW4pXCIsXG4gICAgdGl0bGUgPSBcIkNvbmRpdGlvbmFsIFF1YW50aWxlIExpbmVzICgwLjEsIDAuNSwgYW5kIDAuOS1xdWFudGlsZXMpIFxuICAgIHZlcnN1cyBUb3RhbCBPbi1zaGlmdCBEYXNoZXJzXCIsXG4gICAgc3VidGl0bGUgPSBwYXN0ZTAoXG4gICAgICBcIkhvbGRpbmcgdG90YWwgYnVzeSBkYXNoZXJzIGNvbnN0YW50IGF0IGl0cyBtZWRpYW4gb2YgXCIsXG4gICAgICByb3VuZChidXN5X2NvbnN0LCAxKSwgXCIgZGFzaGVyc1wiXG4gICAgKVxuICApICtcbiAgdGhlbWUoXG4gICAgcGxvdC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjQsIGZhY2UgPSBcImJvbGRcIiksXG4gICAgcGxvdC5zdWJ0aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjIpLFxuICAgIGF4aXMudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMTcpLFxuICAgIGF4aXMudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIyKSxcbiAgICBsZWdlbmQudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIG1hcmdpbiA9IG1hcmdpbihyID0gMSwgdW5pdCA9IFwiY21cIikpLFxuICAgIGxlZ2VuZC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIGZhY2UgPSBcImJvbGRcIilcbiAgKSArXG4gIGd1aWRlcyhjb2xvdXIgPSBndWlkZV9sZWdlbmQodGl0bGUgPSBcIlF1YW50aWxlXCIsIHJldmVyc2UgPSBUUlVFKSlcblxuIyBQbG90OiB2YXJ5IGJ1c3ksIG9uLXNoaWZ0IGhlbGQgY29uc3RhbnQuXG5zZWNvbmRfcGxvdF9kZWxpdmVyeV90aW1lX3ZzX2J1c3kgPC0gZ2dwbG90KFxuICB0cmFpbmluZ19kb29yZGFzaF8yLFxuICBhZXMoeCA9IHRvdGFsX2J1c3lfZGFzaGVycywgeSA9IGFjdHVhbF9kZWxpdmVyeV90aW1lKVxuKSArXG4gIGdlb21fcG9pbnQoYWxwaGEgPSAwLjE1KSArXG4gIGdlb21fbGluZShcbiAgICBkYXRhID0gZ3JpZF9idXN5LFxuICAgIGFlcyh5ID0gcHJlZCwgY29sb3VyID0gcXVhbnRpbGUpLFxuICAgIGxpbmV3aWR0aCA9IDAuN1xuICApICtcbiAgbGFicyhcbiAgICB4ID0gXCJUb3RhbCBCdXN5IERhc2hlcnNcIixcbiAgICB5ID0gXCJBY3R1YWwgRGVsaXZlcnkgVGltZSAobWluKVwiLFxuICAgIHRpdGxlID0gXCJDb25kaXRpb25hbCBRdWFudGlsZSBMaW5lcyAoMC4xLCAwLjUsIGFuZCAwLjktcXVhbnRpbGVzKSBcbiAgICB2ZXJzdXMgVG90YWwgQnVzeSBEYXNoZXJzXCIsXG4gICAgc3VidGl0bGUgPSBwYXN0ZTAoXG4gICAgICBcIkhvbGRpbmcgdG90YWwgb25zaGlmdCBkYXNoZXJzIGNvbnN0YW50IGF0IGl0cyBtZWRpYW4gb2YgXCIsXG4gICAgICByb3VuZChvbnNoaWZ0X2NvbnN0LCAxKSxcbiAgICAgIFwiIGRhc2hlcnNcIlxuICAgIClcbiAgKSArXG4gIHRoZW1lKFxuICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDI0LCBmYWNlID0gXCJib2xkXCIpLFxuICAgIHBsb3Quc3VidGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIyKSxcbiAgICBheGlzLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE3KSxcbiAgICBheGlzLnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMiksXG4gICAgbGVnZW5kLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIxLCBtYXJnaW4gPSBtYXJnaW4ociA9IDEsIHVuaXQgPSBcImNtXCIpKSxcbiAgICBsZWdlbmQudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIxLCBmYWNlID0gXCJib2xkXCIpXG4gICkgK1xuICBndWlkZXMoY29sb3VyID0gZ3VpZGVfbGVnZW5kKHRpdGxlID0gXCJRdWFudGlsZVwiLCByZXZlcnNlID0gVFJVRSkpXG5cbnNlY29uZF9wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfb25zaGlmdFxuc2Vjb25kX3Bsb3RfZGVsaXZlcnlfdGltZV92c19idXN5IiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZWRpdCI6dHJ1ZSwiZmlnLWhlaWdodCI6OSwiZXZhbCI6dHJ1ZSwiZmlnLXdpZHRoIjoxMCwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+<p>Now, let us deliver a suitable plot for <code>store_primary_category</code> versus <code>actual_delivery_time</code>.</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-13" class="exercise-cell">
+
+</div>
+<script type="webr-13-contents">
+eyJjb2RlIjoiYm94cGxvdHNfZGVsaXZlcnlfdGltZV92c19zdG9yZSA8LSBnZ3Bsb3QoXG4gIHRyYWluaW5nX2Rvb3JkYXNoXzIsXG4gIGFlcyhcbiAgICB4ID0gc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSxcbiAgICB5ID0gYWN0dWFsX2RlbGl2ZXJ5X3RpbWUsXG4gICAgZmlsbCA9IHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnlcbiAgKVxuKSArXG4gIGdlb21fYm94cGxvdChvdXRsaWVyLmFscGhhID0gMC4xNSkgK1xuICBjb29yZF9mbGlwKCkgK1xuICBsYWJzKFxuICAgIHggPSBcIlN0b3JlIFByaW1hcnkgQ2F0ZWdvcnlcIixcbiAgICB5ID0gXCJBY3R1YWwgRGVsaXZlcnkgVGltZSAobWluKVwiLFxuICAgIHRpdGxlID0gXCJTdG9yZSBDYXRlZ29yeSBEaWZmZXJlbmNlczogbG9vayBiZXlvbmQgbWVhbnMgXFxuKHNwcmVhZCBwbHVzIHRhaWwgcmlzayEpXCJcbiAgKSArXG4gIHRoZW1lKFxuICAgIHBsb3QudGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDIwLCBmYWNlID0gXCJib2xkXCIpLFxuICAgIHBsb3Quc3VidGl0bGUgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE4KSxcbiAgICBheGlzLnRleHQgPSBlbGVtZW50X3RleHQoc2l6ZSA9IDE2KSxcbiAgICBheGlzLnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAxOCksXG4gICAgbGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCJcbiAgKVxuYm94cGxvdHNfZGVsaXZlcnlfdGltZV92c19zdG9yZSIsImF0dHIiOnsid2FybmluZyI6ZmFsc2UsImVkaXQiOnRydWUsImZpZy1oZWlnaHQiOjksImV2YWwiOnRydWUsImZpZy13aWR0aCI6MTAsImF1dG9ydW4iOnRydWUsIm1lc3NhZ2UiOmZhbHNlfX0=
+</script>
+</div>
+</div>
+<p>In the scatterplots with <strong>fitted parametric quantile lines</strong> (<span class="math inline">\(\tau = 0.1, 0.5, 0.9\)</span>), which regressor seems to change the upper tail (slow deliveries, i.e., longer <code>actual_delivery_time</code>) more strongly: <code>total_busy_dashers</code> or <code>total_onshift_dashers</code>? Then use the store-type boxplots to identify one <code>store_primary_category</code> with especially high tail risk, and briefly explain how that store type might amplify or dampen the upper-tail effect you identified (in operational terms).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section></section><section id="q1.8.-data-modelling" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.8.-data-modelling">Q1.8. Data Modelling</h2>
+<p>Why is parametric Quantile regression especially attractive for DoorDash to solve this second inquiry?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="q1.9.-estimation" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.9.-estimation">Q1.9. Estimation</h2>
+<p>Fit the corresponding <strong>three parametric Quantile regression models</strong> of <code>actual_delivery_time</code> versus <code>total_onshift_dashers</code>, <code>total_busy_dashers</code>, and <code>store_primary_category</code> via <code>training_doordash_2</code>.</p>
+<blockquote class="blockquote">
+<p><strong>Heads-up:</strong> Ensure that <code>Other</code> is the baseline level in the factor-type column <code>store_primary_category</code>.</p>
+</blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-14" class="exercise-cell">
+
+</div>
+<script type="webr-14-contents">
+eyJjb2RlIjoiIyBZT1VSIENPREUgR09FUyBIRVJFIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="q1.10.-inference" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.10.-inference">Q1.10. Inference</h2>
+<p>Using your fitted models <code>second_param_qr_10</code>, <code>second_param_qr_50</code>, and <code>second_param_qr_90</code>, are the regressors statistically associated to <code>actual_delivery_time</code>? State your conclusions with a significance level <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ensure to use the pairwise bootstrapping method to obtain the corresponding empirical <span class="math inline">\(p\)</span>-values. Use 100 replicates and the simulation seed <code>562</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-15" class="exercise-cell">
+
+</div>
+<script type="webr-15-contents">
+eyJjb2RlIjoiIyBZT1VSIENPREUgR09FUyBIRVJFIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+<p><strong><span class="math inline">\(\tau = 0.1\)</span> (early deliveries):</strong></p>
+<p><strong>Significant:</strong></p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>.</li>
+<li>
+<code>total_busy_dashers</code>.</li>
+<li>
+<code>japanese</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>mexican</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>pizza</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>sandwich</code> cuisine when compared to <code>Other</code> cuisine.</li>
+</ul>
+<p><strong>Not significant:</strong></p>
+<ul>
+<li>
+<code>american</code>, <code>burger</code>, <code>chinese</code>, and <code>dessert</code> cuisines when compared to <code>Other</code> cuisine.</li>
+</ul>
+<p><strong><span class="math inline">\(\tau = 0.5\)</span> (typical deliveries):</strong></p>
+<p><strong>Significant:</strong></p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>.</li>
+<li>
+<code>total_busy_dashers</code>.</li>
+<li>
+<code>japanese</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>mexican</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>pizza</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>sandwich</code> cuisine when compared to <code>Other</code> cuisine.</li>
+</ul>
+<p><strong>Not significant:</strong></p>
+<ul>
+<li>
+<code>american</code>, <code>burger</code>, <code>chinese</code>, and <code>dessert</code> cuisines when compared to <code>Other</code> cuisine.</li>
+</ul>
+<p><strong><span class="math inline">\(\tau = 0.9\)</span> (late deliveries / upper tail):</strong></p>
+<p><strong>Significant:</strong></p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>.</li>
+<li>
+<code>total_busy_dashers</code>.</li>
+<li>
+<code>chinese</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>japanese</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>mexican</code> cuisine when compared to <code>Other</code> cuisine.</li>
+<li>
+<code>pizza</code> cuisine when compared to <code>Other</code> cuisine.</li>
+</ul>
+<p><strong>Not significant:</strong></p>
+<ul>
+<li>
+<code>american</code>, <code>burger</code>, <code>dessert</code>, and <code>sandwich</code> cuisines when compared to <code>Other</code> cuisine.</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="q1.11.-coefficient-interpretation" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.11.-coefficient-interpretation">Q1.11. Coefficient Interpretation</h2>
+<p>Your manager wants a clear explanation of what the second statistical inquiry found for <strong>early</strong>, <strong>typical</strong>, and <strong>late</strong> orders. Using the parametric Quantile regression results at <span class="math inline">\(\tau = 0.1, 0.5, 0.9\)</span> (and the statistically significant coefficients you identified in <strong>Q1.10</strong>, with <code>Other</code> as the baseline cuisine):</p>
+<ol type="1">
+<li>
+<strong>Staffing + congestion (dasher regressors):</strong> For each <span class="math inline">\(\tau = 0.1, 0.5, 0.9\)</span>, interpret the significant coefficients for:</li>
+</ol>
+<ul>
+<li>
+<code>total_busy_dashers</code> (congestion).</li>
+<li>
+<code>total_onshift_dashers</code> (available supply).</li>
+</ul>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write each interpretation as a manager-ready sentence of the form: “<em>Holding everything else constant, <span class="math inline">\(+1\)</span> ___ changes the <strong><span class="math inline">\(\tau\)</span>-quantile delivery time</strong> by ___ minutes (<span class="math inline">\(\approx\)</span> ___ seconds)</em>.”</p>
+</div>
+</div>
+<ol start="2" type="1">
+<li>
+<strong>Cuisine / store type (relative to <code>Other</code>):</strong> At each quantile where cuisine effects are significant, interpret the significant <code>store_primary_category</code> coefficients as differences from <code>Other</code>.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write each interpretation as: “<em>Compared to <strong><code>Other</code></strong>, this cuisine shifts the <strong><span class="math inline">\(\tau\)</span>-quantile delivery time</strong> by ___ minutes while holding everything else constant</em>.”</p>
+</div>
+</div>
+<ol start="3" type="1">
+<li>
+<strong>Connect to the customer-facing ETA band:</strong> DoorDash often displays a range that can be viewed as</li>
+</ol>
+<p><span class="math display">\[
+\left[\widehat{Q}_{Y|X_1, \dots, X_{10}}(\tau = 0.1 \mid X_1, \dots, X_{10}), \widehat{Q}_{Y|X_1, \dots, X_{10}}(\tau = 0.9 \mid X_1, \dots, X_{10})\right]
+\]</span></p>
+<p>Based on your interpretations above, explain in two or three sentences how the regressors: - move the <strong>lower bound</strong> (<span class="math inline">\(\tau = 0.1\)</span>, “<em>early</em>”), - move the <strong>median</strong> (<span class="math inline">\(\tau = 0.5\)</span>, “<em>typical</em>”), - move the <strong>upper bound</strong> (<span class="math inline">\(\tau = 0.9\)</span>, “<em>conservative</em>”), and whether they make the ETA range <strong>wider or narrower</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answers
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="third-statistical-inquiry-build-a-conservative-eta-range-for-a-specific-order-probabilistic-prediction" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="third-statistical-inquiry-build-a-conservative-eta-range-for-a-specific-order-probabilistic-prediction">Third Statistical Inquiry: Build a conservative ETA range for a specific order (probabilistic prediction)</h2>
+<p>Let us go back to the Chipotle screenshot (see below) to get the corresponding context:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="img/doordash.png" class="img-fluid figure-img" style="width:45.0%"></p>
+<figcaption>Screenshot from Alexi’s phone.</figcaption></figure>
+</div>
+<p>Now, your manager says:</p>
+<blockquote class="blockquote">
+<p>“<em>We also need an actual ETA range for a specific order via Quantile regression, such as the one from the Chipotle screenshot. And I want it conservative so we don’t underestimate late deliveries.</em>”</p>
+</blockquote>
+<p>Here, we focus on <strong>prediction</strong> and its <strong>probabilistic interpretation</strong>. That said, instead of focusing on parametric modelling, let us switch to the non-parametric counterpart to capture local behaviours in our regressors with greater predictive accuracy.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Why should we use <span class="math inline">\(\tau = 0.1\)</span> and <span class="math inline">\(\tau = 0.9\)</span>?</strong></p>
+<p>Because DoorDash would want an interval that roughly captures the middle 80% of outcomes. Suppose we have <span class="math inline">\(k\)</span> regressors in our Quantile regression model:</p>
+<p><span class="math display">\[
+P\left[\widehat{Q}_{Y|X_1, \dots, X_k}(\tau = 0.1 \mid X_1, \dots, X_k) \le Y \le \widehat{Q}_{Y|X_1, \dots, X_k}(\tau = 0.9 \mid X_1, \dots, X_k)\right] \approx 0.8.
+\]</span></p>
+<p>Using the word <strong>probability</strong> is valid here because quantiles correspond to probabilistic statements about the conditional distribution.</p>
+</div>
+</div>
+</section><section id="q1.12.-exploratory-data-analysis-with-estimated-non-parametric-quantile-regressions-tau-0.1-0.9" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.12.-exploratory-data-analysis-with-estimated-non-parametric-quantile-regressions-tau-0.1-0.9">Q1.12. Exploratory Data Analysis with Estimated Non-parametric Quantile Regressions (<span class="math inline">\(\tau = 0.1, 0.9\)</span>)</h2>
+<p>This inquiry will involve EDA and estimation, all combined, since we need to both estimate and visualize our modelling approaches for predictions. We will use <code>rqss()</code> with smooth terms <code>qss()</code> (i.e., quantile smoothing splines).</p>
+<blockquote class="blockquote">
+<p><strong>Choosing the smoothing strength <span class="math inline">\(\lambda\)</span>:</strong> Here we pick <span class="math inline">\(\lambda\)</span> using visual inspection (a practical “<em>sanity check</em>” to avoid obvious under/overfitting). In a more formal workflow, we can tune <span class="math inline">\(\lambda\)</span> via <span class="math inline">\(K\)</span>-fold cross-validation by minimizing <a href="https://pages.github.ubc.ca/mds-2025-26/DSCI_562_regr-2_students/notes/lecture7_quantile_regression.html#eq-fidelity-function">the pinball loss</a> (a.k.a. the fidelity function we saw in class), which measures how well the model predicts the target conditional quantile.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p><strong>Smoothing tip:</strong></p>
+<ul>
+<li><p>Smaller <code>lambda</code> = wigglier fitted curve (risk overfit).</p></li>
+<li><p>Larger <code>lambda</code> = smoother fitted curve (risk underfit).</p></li>
+</ul>
+<p>We want a “<em>Goldilocks</em>” fit (i.e., a regression model that is flexible enough to capture the true pattern in the data while balancing bias and variance).</p>
+</blockquote>
+<p>Before visualizing the non-parametric fitted curves for the <span class="math inline">\(0.1\)</span> and <span class="math inline">\(0.9\)</span>-quantiles, we need to fit our two non-parametric Quantile regressions for <code>actual_delivery_time</code> versus <code>total_onshift_dashers</code>, <code>total_busy_dashers</code>, <code>store_primary_category</code>. <strong>Note that we cannot use <code>qss()</code> on <code>store_primary_category</code> given it is a categorical regressor, and this function is only meant for numerical regressors.</strong></p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-16" class="exercise-cell">
+
+</div>
+<script type="webr-16-contents">
+eyJjb2RlIjoiIyBDaG9vc2UgYSBtb2RlcmF0ZSBzbW9vdGhpbmcgc3RyZW5ndGggKHlvdSBjYW4gYWRqdXN0IGFmdGVyIHZpc3VhbCBpbnNwZWN0aW9uKVxubGFtYmRhX2Nob2ljZSA8LSAxMFxuXG5xcnNzXzEwIDwtIHJxc3MoXG4gIGFjdHVhbF9kZWxpdmVyeV90aW1lIH5cbiAgICBxc3ModG90YWxfb25zaGlmdF9kYXNoZXJzLCBsYW1iZGEgPSBsYW1iZGFfY2hvaWNlKSArXG4gICAgcXNzKHRvdGFsX2J1c3lfZGFzaGVycywgbGFtYmRhID0gbGFtYmRhX2Nob2ljZSkgKyBzdG9yZV9wcmltYXJ5X2NhdGVnb3J5LFxuICB0YXUgPSAwLjEwLFxuICBkYXRhID0gdHJhaW5pbmdfZG9vcmRhc2hfMlxuKVxuXG5xcnNzXzkwIDwtIHJxc3MoXG4gIGFjdHVhbF9kZWxpdmVyeV90aW1lIH5cbiAgICBxc3ModG90YWxfb25zaGlmdF9kYXNoZXJzLCBsYW1iZGEgPSBsYW1iZGFfY2hvaWNlKSArXG4gICAgcXNzKHRvdGFsX2J1c3lfZGFzaGVycywgbGFtYmRhID0gbGFtYmRhX2Nob2ljZSkgKyBzdG9yZV9wcmltYXJ5X2NhdGVnb3J5LFxuICB0YXUgPSAwLjkwLFxuICBkYXRhID0gdHJhaW5pbmdfZG9vcmRhc2hfMlxuKSIsImF0dHIiOnsid2FybmluZyI6ZmFsc2UsImV2YWwiOnRydWUsImVkaXQiOnRydWUsImF1dG9ydW4iOnRydWUsIm1lc3NhZ2UiOmZhbHNlfX0=
+</script>
+</div>
+</div>
+<p>Then, we will visualize the non-parametric quantile fits of <code>actual_delivery_time</code> versus <code>total_onshift_dashers</code> and <code>total_busy_dashers</code> (<em>we vary one regressor and hold others fixed</em>).</p>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-17" class="exercise-cell">
+
+</div>
+<script type="webr-17-contents">
+eyJjb2RlIjoiIyBIb2xkIHRoZXNlIHJlZ3Jlc3NvcnMgYXQgdHlwaWNhbCB2YWx1ZXMgZm9yIHBsb3R0aW5nXG5maXhlZF9idXN5IDwtIG1lZGlhbih0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX2J1c3lfZGFzaGVycylcbmZpeGVkX29uc2hpZnQgPC0gbWVkaWFuKHRyYWluaW5nX2Rvb3JkYXNoXzIkdG90YWxfb25zaGlmdF9kYXNoZXJzKVxuXG4jIE9uLXNoaWZ0IGRhc2hlcnMgcGxvdCBncmlkXG4jIExldCB1cyBwdXQgbWV4aWNhbiBpbiBzdG9yZV9wcmltYXJ5X2NhdGVnb3J5IHNpbmNlIHRoYXQgaXNcbiMgdGhlIEVUQSBwcmVkaWN0aXZlIGJhbmQgd2UgYXJlIGFpbWluZyBmb3IgKHRoZSBDaGlwb3RsZSBzY3JlZW5zaG90ISlcbmdyaWRfb25zaGlmdF9ucCA8LSB0aWJibGUoXG4gIHRvdGFsX29uc2hpZnRfZGFzaGVycyA9IHNlcShcbiAgICBtaW4odHJhaW5pbmdfZG9vcmRhc2hfMiR0b3RhbF9vbnNoaWZ0X2Rhc2hlcnMpLFxuICAgIG1heCh0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX29uc2hpZnRfZGFzaGVycyksXG4gICAgbGVuZ3RoLm91dCA9IDIwMFxuICApLFxuICB0b3RhbF9idXN5X2Rhc2hlcnMgPSBmaXhlZF9idXN5LFxuICBzdG9yZV9wcmltYXJ5X2NhdGVnb3J5ID0gXCJtZXhpY2FuXCJcbikgfD5cbiAgbXV0YXRlKFxuICAgIHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnkgPSBmYWN0b3Ioc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSxcbiAgICAgIGxldmVscyA9IGxldmVscyh0cmFpbmluZ19kb29yZGFzaF8yJHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnkpXG4gICAgKSxcbiAgICBwcmVkX3ExMCA9IHByZWRpY3QocXJzc18xMCwgbmV3ZGF0YSA9IGN1cl9kYXRhKCkpLFxuICAgIHByZWRfcTkwID0gcHJlZGljdChxcnNzXzkwLCBuZXdkYXRhID0gY3VyX2RhdGEoKSlcbiAgKVxuXG4jIEFjdHVhbCBkZWxpdmVyeSB2ZXJzdXMgb24tc2hpZnQgZGFzaGVycyBcbiMgd2hpbGUga2VlcGluZyBjdWlzaW5lIGF0IE1leGljYW4gYW5kIGJ1c3kgZGFzaGVycyBhdCBpdHMgbWVkaWFuXG50aGlyZF9wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfb25zaGlmdCA8LSBnZ3Bsb3QoXG4gIHRyYWluaW5nX2Rvb3JkYXNoXzIsXG4gIGFlcyh4ID0gdG90YWxfb25zaGlmdF9kYXNoZXJzLCB5ID0gYWN0dWFsX2RlbGl2ZXJ5X3RpbWUpXG4pICtcbiAgZ2VvbV9wb2ludChhbHBoYSA9IDAuMTIpICtcbiAgZ2VvbV9saW5lKFxuICAgIGRhdGEgPSBncmlkX29uc2hpZnRfbnAsXG4gICAgYWVzKHkgPSBwcmVkX3ExMCwgY29sb3VyID0gXCIwLjFcIiksXG4gICAgbGluZXdpZHRoID0gMC42XG4gICkgK1xuICBnZW9tX2xpbmUoXG4gICAgZGF0YSA9IGdyaWRfb25zaGlmdF9ucCxcbiAgICBhZXMoeSA9IHByZWRfcTkwLCBjb2xvdXIgPSBcIjAuOVwiKSxcbiAgICBsaW5ld2lkdGggPSAwLjZcbiAgKSArXG4gIHNjYWxlX2NvbG91cl9tYW51YWwoXG4gICAgbmFtZSA9IFwiUXVhbnRpbGVcIixcbiAgICB2YWx1ZXMgPSBjKFwiMC4xXCIgPSBcInJlZFwiLCBcIjAuOVwiID0gXCJibHVlXCIpLFxuICAgIGJyZWFrcyA9IGMoXCIwLjlcIiwgXCIwLjFcIilcbiAgKSArXG4gIGxhYnMoXG4gICAgeCA9IFwiVG90YWwgT24tc2hpZnQgRGFzaGVyc1wiLFxuICAgIHkgPSBcIkFjdHVhbCBEZWxpdmVyeSB0aW1lIChtaW4pXCIsXG4gICAgdGl0bGUgPSBcIk5vbi1wYXJhbWV0cmljIHF1YW50aWxlIGN1cnZlcyAoMC4xIGFuZCAwLjktcXVhbnRpbGVzKVwiLFxuICAgIHN1YnRpdGxlID0gXCJUb3RhbCBidXN5IGRhc2hlcnMgYW5kIGN1aXNpbmUgdHlwZSBoZWxkIGNvbnN0YW50IChtZWRpYW4gYW5kIE1leGljYW4sXG4gICAgcmVzcGVjdGl2ZWx5KVwiXG4gICkgK1xuICB0aGVtZShcbiAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMywgZmFjZSA9IFwiYm9sZFwiKSxcbiAgICBwbG90LnN1YnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMCksXG4gICAgYXhpcy50ZXh0ID0gZWxlbWVudF90ZXh0KHNpemUgPSAxNyksXG4gICAgYXhpcy50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjIpLFxuICAgIGxlZ2VuZC5wb3NpdGlvbiA9IFwicmlnaHRcIixcbiAgICBsZWdlbmQudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIG1hcmdpbiA9IG1hcmdpbihyID0gMSwgdW5pdCA9IFwiY21cIikpLFxuICAgIGxlZ2VuZC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIGZhY2UgPSBcImJvbGRcIilcbiAgKVxuXG4jIEJ1c3kgZGFzaGVycyBwbG90IGdyaWRcbiMgTGV0IHVzIHB1dCBtZXhpY2FuIGluIHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnkgc2luY2UgdGhhdCBpc1xuIyB0aGUgRVRBIHByZWRpY3RpdmUgYmFuZCB3ZSBhcmUgYWltaW5nIGZvciAodGhlIENoaXBvdGxlIHNjcmVlbnNob3QhKVxuZ3JpZF9idXN5X25wIDwtIHRpYmJsZShcbiAgdG90YWxfYnVzeV9kYXNoZXJzID0gc2VxKFxuICAgIG1pbih0cmFpbmluZ19kb29yZGFzaF8yJHRvdGFsX2J1c3lfZGFzaGVycyksXG4gICAgbWF4KHRyYWluaW5nX2Rvb3JkYXNoXzIkdG90YWxfYnVzeV9kYXNoZXJzKSxcbiAgICBsZW5ndGgub3V0ID0gMjAwXG4gICksXG4gIHRvdGFsX29uc2hpZnRfZGFzaGVycyA9IGZpeGVkX29uc2hpZnQsXG4gIHN0b3JlX3ByaW1hcnlfY2F0ZWdvcnkgPSBcIm1leGljYW5cIlxuKSB8PlxuICBtdXRhdGUoXG4gICAgc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSA9IGZhY3RvcihzdG9yZV9wcmltYXJ5X2NhdGVnb3J5LFxuICAgICAgbGV2ZWxzID0gbGV2ZWxzKHRyYWluaW5nX2Rvb3JkYXNoXzIkc3RvcmVfcHJpbWFyeV9jYXRlZ29yeSlcbiAgICApLFxuICAgIHByZWRfcTEwID0gcHJlZGljdChxcnNzXzEwLCBuZXdkYXRhID0gY3VyX2RhdGEoKSksXG4gICAgcHJlZF9xOTAgPSBwcmVkaWN0KHFyc3NfOTAsIG5ld2RhdGEgPSBjdXJfZGF0YSgpKVxuICApXG5cbiMgQWN0dWFsIGRlbGl2ZXJ5IHZlcnN1cyBidXN5IGRhc2hlcnMgXG4jIHdoaWxlIGtlZXBpbmcgY3Vpc2luZSBhdCBNZXhpY2FuIGFuZCBvbi1zaGlmdCBkYXNoZXJzIGF0IGl0cyBtZWRpYW5cbnRoaXJkX3Bsb3RfZGVsaXZlcnlfdGltZV92c19idXN5IDwtIGdncGxvdChcbiAgdHJhaW5pbmdfZG9vcmRhc2hfMixcbiAgYWVzKHggPSB0b3RhbF9idXN5X2Rhc2hlcnMsIHkgPSBhY3R1YWxfZGVsaXZlcnlfdGltZSlcbikgK1xuICBnZW9tX3BvaW50KGFscGhhID0gMC4xMikgK1xuICBnZW9tX2xpbmUoXG4gICAgZGF0YSA9IGdyaWRfYnVzeV9ucCxcbiAgICBhZXMoeSA9IHByZWRfcTEwLCBjb2xvdXIgPSBcIjAuMVwiKSxcbiAgICBsaW5ld2lkdGggPSAwLjZcbiAgKSArXG4gIGdlb21fbGluZShcbiAgICBkYXRhID0gZ3JpZF9idXN5X25wLFxuICAgIGFlcyh5ID0gcHJlZF9xOTAsIGNvbG91ciA9IFwiMC45XCIpLFxuICAgIGxpbmV3aWR0aCA9IDAuNlxuICApICtcbiAgc2NhbGVfY29sb3VyX21hbnVhbChcbiAgICBuYW1lID0gXCJRdWFudGlsZVwiLFxuICAgIHZhbHVlcyA9IGMoXCIwLjFcIiA9IFwicmVkXCIsIFwiMC45XCIgPSBcImJsdWVcIiksXG4gICAgYnJlYWtzID0gYyhcIjAuOVwiLCBcIjAuMVwiKVxuICApICtcbiAgbGFicyhcbiAgICB4ID0gXCJUb3RhbCBCdXN5IERhc2hlcnNcIixcbiAgICB5ID0gXCJBY3R1YWwgRGVsaXZlcnkgdGltZSAobWluKVwiLFxuICAgIHRpdGxlID0gXCJOb24tcGFyYW1ldHJpYyBxdWFudGlsZSBjdXJ2ZXMgKDAuMSBhbmQgMC45LXF1YW50aWxlcylcIixcbiAgICBzdWJ0aXRsZSA9IFwiVG90YWwgb24tc2hpZnQgZGFzaGVycyBhbmQgY3Vpc2luZSB0eXBlIGhlbGQgY29uc3RhbnQgKG1lZGlhbiBhbmQgTWV4aWNhbiwgXG4gICAgcmVzcGVjdGl2ZWx5KVwiXG4gICkgK1xuICB0aGVtZShcbiAgICBwbG90LnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMywgZmFjZSA9IFwiYm9sZFwiKSxcbiAgICBwbG90LnN1YnRpdGxlID0gZWxlbWVudF90ZXh0KHNpemUgPSAyMCksXG4gICAgYXhpcy50ZXh0ID0gZWxlbWVudF90ZXh0KHNpemUgPSAxNyksXG4gICAgYXhpcy50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjIpLFxuICAgIGxlZ2VuZC5wb3NpdGlvbiA9IFwicmlnaHRcIixcbiAgICBsZWdlbmQudGV4dCA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIG1hcmdpbiA9IG1hcmdpbihyID0gMSwgdW5pdCA9IFwiY21cIikpLFxuICAgIGxlZ2VuZC50aXRsZSA9IGVsZW1lbnRfdGV4dChzaXplID0gMjEsIGZhY2UgPSBcImJvbGRcIilcbiAgKVxuXG50aGlyZF9wbG90X2RlbGl2ZXJ5X3RpbWVfdnNfb25zaGlmdFxudGhpcmRfcGxvdF9kZWxpdmVyeV90aW1lX3ZzX2J1c3kiLCJhdHRyIjp7Indhcm5pbmciOmZhbHNlLCJlZGl0Ijp0cnVlLCJmaWctaGVpZ2h0Ijo5LCJldmFsIjp0cnVlLCJmaWctd2lkdGgiOjEwLCJhdXRvcnVuIjp0cnVlLCJtZXNzYWdlIjpmYWxzZX19
+</script>
+</div>
+</div>
+<p>Check the above <code>third_plot_delivery_time_vs_onshift</code> and <code>third_plot_delivery_time_vs_busy</code>. If your <span class="math inline">\(\tau = 0.1\)</span> and <span class="math inline">\(\tau = 0.9\)</span> non-parametric curves look extremely wiggly, what should you change? If they look almost perfectly straight, what should you change?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+</section><section id="q1.13.-prediction-build-an-eta-interval-for-a-specific-order-with-probabilistic-meaning" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="q1.13.-prediction-build-an-eta-interval-for-a-specific-order-with-probabilistic-meaning">Q1.13. Prediction: Build an ETA interval for a specific order (with probabilistic meaning)</h2>
+<p>Let us create a “<em>Chipotle-like</em>” example order — <em>again: not real Mexican food, but we move</em>. Let us recall what the numeric regressors are:</p>
+<ul>
+<li>
+<code>total_onshift_dashers</code>: Number of available dashers who are within 10 miles of the store at the time of order creation.</li>
+<li>
+<code>total_busy_dashers</code>: Subset of the above <code>total_onshift_dashers</code> who are currently working on an order.</li>
+</ul>
+<p>Suppose it is dinner time, and there are 25 on-shift dashers within 10 miles of the UBC campus. Nevertheless, 15 of those dashers are already busy. Alexi just ordered his dinner from the Chipotle branch on campus. Compute the probabilistic prediction interval (i.e., the band) for the ETA using the already fitted non-parametric <span class="math inline">\(0.1\)</span> and <span class="math inline">\(0.9\)</span>-quantile regression models.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-18" class="exercise-cell">
+
+</div>
+<script type="webr-18-contents">
+eyJjb2RlIjoiIyBZT1VSIENPREUgR09FUyBIRVJFIiwiYXR0ciI6eyJ3YXJuaW5nIjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiYXV0b3J1biI6dHJ1ZSwibWVzc2FnZSI6ZmFsc2V9fQ==
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Write the final ETA interval and interpret it probabilistically.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Available for MDS students.</p>
+</div>
+</div>
+</div>
+
+
+<script type="webr-data">
+eyJyZW5kZXJfZGYiOiJkZWZhdWx0IiwicGFja2FnZXMiOnsicGtncyI6WyJldmFsdWF0ZSIsImtuaXRyIiwiaHRtbHRvb2xzIiwidGlkeXZlcnNlIiwibHVicmlkYXRlIiwibW9kZWxyIiwicXVhbnRyZWciLCJicm9vbSJdLCJyZXBvcyI6W119LCJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjQvIn19
+</script><script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTgiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTggPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE4LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE4ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xOCwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTE4IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xNztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTciLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTcgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE3LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE3ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNywge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTE3IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xNjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTYiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE2LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE2ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNiwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTE2IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTUiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTUgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE1LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE1ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNSwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTE1IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xNDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTQiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTQgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xNC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTE0LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzE0ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xNCwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTE0IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTMiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMy1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEzLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEzID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMywge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTEzIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTIiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTIgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEyLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEyID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMiwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTEyIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTEiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTExLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzExID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMSwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTExIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xMDtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMTAiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMTAgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xMC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTEwLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEwID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xMCwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTEwIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV85ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl85LCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItOSIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl84ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTgtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTgiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTciLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici03LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzcgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzcsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici03IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV82ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl82LCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItNiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTUtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici00IiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In0seyJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItMyIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQifSx7InNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCJ9LHsic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTItY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuIiwiaW5saW5lIjpmYWxzZSwiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0In0seyJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4iLCJpbmxpbmUiOmZhbHNlLCJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEiLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQifSx7InNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzEsIHt9KTtcbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici0xIiwibWV0aG9kTmFtZSI6ImludGVycHJldCJ9LHsic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIFVzZSBQb3N0TWVzc2FnZSBjaGFubmVsIGZvciBhc3luYyBjb21tdW5pY2F0aW9uXG4gIC8vIFdlIGRvIG5vdCBleHBlY3QgdG8gdGFrZSBuZXN0ZWQgcHJvbXB0IGlucHV0IGluIFF1YXJ0byBMaXZlIGNlbGxzXG4gIGRhdGEub3B0aW9ucy5jaGFubmVsVHlwZSA9IENoYW5uZWxUeXBlLlBvc3RNZXNzYWdlO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiIsImlubGluZSI6ZmFsc2UsImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0In1dfQ==
+</script><div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhc2V0cy9kb29yZGFzaC5jc3YiXQ==
+</script></section></main><!-- /main --><script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script><script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../notes";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_562_regr-2");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../notes/warmup-lab3.html" class="pagination-link" aria-label="Lab 3: Cox Proportional Hazards Model">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lab 3: Cox Proportional Hazards Model</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notes/appendix-binary-log-regression.html" class="pagination-link" aria-label="Binary Logistic Regression">
+        <span class="nav-page-text">Binary Logistic Regression</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

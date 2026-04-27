@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Regression Cheat Sheet – DSCI 562: Regression II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notes/appendix-reg-mindmap.html" rel="next">
+<link href="../notes/appendix-greek-alphabet.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": true,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DSCI 562: Regression II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_562_regr-2"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-reg-cheatsheet.html">Regression Cheat Sheet</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../notes/img/UBC_MDS_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lectures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../learning-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Learning Goals by Lecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture1-glm-link-functions-and-count-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Link Functions and Count Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture2_glm_model_selection_multinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Model Selection and Multinomial Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture3_glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture4_linear_mixed_effects_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Linear Mixed-effects Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture5_survival_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Survival Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture6_local_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6: Local Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture7_quantile_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7: Quantile Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture8_missing_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8: Missing Data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Warmup Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Cox Proportional Hazards Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4: Quantile Regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-log-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-multivariate-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentals of the Multivariate Normal Distribution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Greek Alphabet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-cheatsheet.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Regression Cheat Sheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-mindmap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Mind Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-faq.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Frequently Asked Questions (FAQs)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../LICENSE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">License</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#about-this-regression-cheat-sheet" id="toc-about-this-regression-cheat-sheet" class="nav-link active" data-scroll-target="#about-this-regression-cheat-sheet"><span class="header-section-number">1</span> About this Regression Cheat Sheet</a></li>
+  <li><a href="#binary-logistic-regression" id="toc-binary-logistic-regression" class="nav-link" data-scroll-target="#binary-logistic-regression"><span class="header-section-number">2</span> Binary Logistic Regression</a>
+  <ul>
+  <li><a href="#data-modelling-framework" id="toc-data-modelling-framework" class="nav-link" data-scroll-target="#data-modelling-framework"><span class="header-section-number">2.1</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">2.2</span> Estimation</a></li>
+  <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference"><span class="header-section-number">2.3</span> Inference</a></li>
+  <li><a href="#sec-bin-log-model-selection" id="toc-sec-bin-log-model-selection" class="nav-link" data-scroll-target="#sec-bin-log-model-selection"><span class="header-section-number">2.4</span> Model Selection</a>
+  <ul class="collapse">
+  <li><a href="#analysis-of-deviance" id="toc-analysis-of-deviance" class="nav-link" data-scroll-target="#analysis-of-deviance"><span class="header-section-number">2.4.1</span> Analysis of Deviance</a></li>
+  <li><a href="#akaike-information-criterion" id="toc-akaike-information-criterion" class="nav-link" data-scroll-target="#akaike-information-criterion"><span class="header-section-number">2.4.2</span> Akaike Information Criterion</a></li>
+  <li><a href="#bayesian-information-criterion" id="toc-bayesian-information-criterion" class="nav-link" data-scroll-target="#bayesian-information-criterion"><span class="header-section-number">2.4.3</span> Bayesian Information Criterion</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#cox-proportional-hazards-model" id="toc-cox-proportional-hazards-model" class="nav-link" data-scroll-target="#cox-proportional-hazards-model"><span class="header-section-number">3</span> Cox Proportional Hazards Model</a>
+  <ul>
+  <li><a href="#data-modelling-framework-1" id="toc-data-modelling-framework-1" class="nav-link" data-scroll-target="#data-modelling-framework-1"><span class="header-section-number">3.1</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation-1" id="toc-estimation-1" class="nav-link" data-scroll-target="#estimation-1"><span class="header-section-number">3.2</span> Estimation</a></li>
+  <li><a href="#inference-1" id="toc-inference-1" class="nav-link" data-scroll-target="#inference-1"><span class="header-section-number">3.3</span> Inference</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">3.4</span> Prediction</a></li>
+  </ul></li>
+  <li><a href="#cumulative-hazard-function" id="toc-cumulative-hazard-function" class="nav-link" data-scroll-target="#cumulative-hazard-function"><span class="header-section-number">4</span> Cumulative Hazard Function</a></li>
+  <li><a href="#hazard-function" id="toc-hazard-function" class="nav-link" data-scroll-target="#hazard-function"><span class="header-section-number">5</span> Hazard Function</a></li>
+  <li><a href="#link-functions-in-glms" id="toc-link-functions-in-glms" class="nav-link" data-scroll-target="#link-functions-in-glms"><span class="header-section-number">6</span> Link Functions in GLMs</a></li>
+  <li><a href="#multinomial-logistic-regression" id="toc-multinomial-logistic-regression" class="nav-link" data-scroll-target="#multinomial-logistic-regression"><span class="header-section-number">7</span> Multinomial Logistic Regression</a>
+  <ul>
+  <li><a href="#data-modelling-framework-2" id="toc-data-modelling-framework-2" class="nav-link" data-scroll-target="#data-modelling-framework-2"><span class="header-section-number">7.1</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation-2" id="toc-estimation-2" class="nav-link" data-scroll-target="#estimation-2"><span class="header-section-number">7.2</span> Estimation</a></li>
+  <li><a href="#inference-2" id="toc-inference-2" class="nav-link" data-scroll-target="#inference-2"><span class="header-section-number">7.3</span> Inference</a></li>
+  <li><a href="#model-selection" id="toc-model-selection" class="nav-link" data-scroll-target="#model-selection"><span class="header-section-number">7.4</span> Model Selection</a></li>
+  </ul></li>
+  <li><a href="#negative-binomial-regression" id="toc-negative-binomial-regression" class="nav-link" data-scroll-target="#negative-binomial-regression"><span class="header-section-number">8</span> Negative Binomial Regression</a>
+  <ul>
+  <li><a href="#reparametrization" id="toc-reparametrization" class="nav-link" data-scroll-target="#reparametrization"><span class="header-section-number">8.1</span> Reparametrization</a></li>
+  <li><a href="#data-modelling-framework-3" id="toc-data-modelling-framework-3" class="nav-link" data-scroll-target="#data-modelling-framework-3"><span class="header-section-number">8.2</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation-3" id="toc-estimation-3" class="nav-link" data-scroll-target="#estimation-3"><span class="header-section-number">8.3</span> Estimation</a></li>
+  <li><a href="#inference-coefficient-interpretation-prediction-goodness-of-fit-and-model-selection" id="toc-inference-coefficient-interpretation-prediction-goodness-of-fit-and-model-selection" class="nav-link" data-scroll-target="#inference-coefficient-interpretation-prediction-goodness-of-fit-and-model-selection"><span class="header-section-number">8.4</span> Inference, Coefficient Interpretation, Prediction, Goodness of Fit, and Model Selection</a></li>
+  </ul></li>
+  <li><a href="#ordinal-logistic-regression" id="toc-ordinal-logistic-regression" class="nav-link" data-scroll-target="#ordinal-logistic-regression"><span class="header-section-number">9</span> Ordinal Logistic Regression</a>
+  <ul>
+  <li><a href="#data-modelling-framework-4" id="toc-data-modelling-framework-4" class="nav-link" data-scroll-target="#data-modelling-framework-4"><span class="header-section-number">9.1</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation-4" id="toc-estimation-4" class="nav-link" data-scroll-target="#estimation-4"><span class="header-section-number">9.2</span> Estimation</a></li>
+  <li><a href="#inference-3" id="toc-inference-3" class="nav-link" data-scroll-target="#inference-3"><span class="header-section-number">9.3</span> Inference</a></li>
+  <li><a href="#model-selection-1" id="toc-model-selection-1" class="nav-link" data-scroll-target="#model-selection-1"><span class="header-section-number">9.4</span> Model Selection</a></li>
+  <li><a href="#non-proportional-odds-model" id="toc-non-proportional-odds-model" class="nav-link" data-scroll-target="#non-proportional-odds-model"><span class="header-section-number">9.5</span> Non-proportional Odds Model</a>
+  <ul class="collapse">
+  <li><a href="#the-brant-wald-test" id="toc-the-brant-wald-test" class="nav-link" data-scroll-target="#the-brant-wald-test"><span class="header-section-number">9.5.1</span> The Brant-Wald Test</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#ordinary-least-squares-regression" id="toc-ordinary-least-squares-regression" class="nav-link" data-scroll-target="#ordinary-least-squares-regression"><span class="header-section-number">10</span> Ordinary Least-squares Regression</a>
+  <ul>
+  <li><a href="#data-modelling-framework-5" id="toc-data-modelling-framework-5" class="nav-link" data-scroll-target="#data-modelling-framework-5"><span class="header-section-number">10.1</span> Data Modelling Framework</a></li>
+  <li><a href="#modelling-assumptions" id="toc-modelling-assumptions" class="nav-link" data-scroll-target="#modelling-assumptions"><span class="header-section-number">10.2</span> Modelling Assumptions</a></li>
+  <li><a href="#definition-of-linearity" id="toc-definition-of-linearity" class="nav-link" data-scroll-target="#definition-of-linearity"><span class="header-section-number">10.3</span> Definition of Linearity</a></li>
+  <li><a href="#inference-4" id="toc-inference-4" class="nav-link" data-scroll-target="#inference-4"><span class="header-section-number">10.4</span> Inference</a></li>
+  </ul></li>
+  <li><a href="#poisson-regression" id="toc-poisson-regression" class="nav-link" data-scroll-target="#poisson-regression"><span class="header-section-number">11</span> Poisson Regression</a>
+  <ul>
+  <li><a href="#data-modelling-framework-6" id="toc-data-modelling-framework-6" class="nav-link" data-scroll-target="#data-modelling-framework-6"><span class="header-section-number">11.1</span> Data Modelling Framework</a></li>
+  <li><a href="#estimation-5" id="toc-estimation-5" class="nav-link" data-scroll-target="#estimation-5"><span class="header-section-number">11.2</span> Estimation</a></li>
+  <li><a href="#inference-5" id="toc-inference-5" class="nav-link" data-scroll-target="#inference-5"><span class="header-section-number">11.3</span> Inference</a></li>
+  <li><a href="#model-selection-2" id="toc-model-selection-2" class="nav-link" data-scroll-target="#model-selection-2"><span class="header-section-number">11.4</span> Model Selection</a>
+  <ul class="collapse">
+  <li><a href="#goodness-of-fit-test" id="toc-goodness-of-fit-test" class="nav-link" data-scroll-target="#goodness-of-fit-test"><span class="header-section-number">11.4.1</span> Goodness of Fit Test</a></li>
+  <li><a href="#analysis-of-deviance-for-nested-models" id="toc-analysis-of-deviance-for-nested-models" class="nav-link" data-scroll-target="#analysis-of-deviance-for-nested-models"><span class="header-section-number">11.4.2</span> Analysis of Deviance for Nested Models</a></li>
+  <li><a href="#akaike-information-criterion-1" id="toc-akaike-information-criterion-1" class="nav-link" data-scroll-target="#akaike-information-criterion-1"><span class="header-section-number">11.4.3</span> Akaike Information Criterion</a></li>
+  <li><a href="#bayesian-information-criterion-1" id="toc-bayesian-information-criterion-1" class="nav-link" data-scroll-target="#bayesian-information-criterion-1"><span class="header-section-number">11.4.4</span> Bayesian Information Criterion</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#survival-function" id="toc-survival-function" class="nav-link" data-scroll-target="#survival-function"><span class="header-section-number">12</span> Survival Function</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-reg-cheatsheet.html">Regression Cheat Sheet</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Regression Cheat Sheet</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="about-this-regression-cheat-sheet" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="about-this-regression-cheat-sheet"><span class="header-section-number">1</span> About this Regression Cheat Sheet</h2>
+<p>This cheat sheet is intentionally <strong>conceptual</strong>. It outlines the <strong>statistical rationale</strong> (the “<em>why</em>” and “<em>what</em>”) for <strong>each regression model</strong> (either Ordinary Least-squares i.e.&nbsp;OLS, generalized linear models i.e.&nbsp;GLMs, or semiparametric survival regression) in this course using the <strong>course’s data science workflow</strong> as the organizing structure. Its purpose is to help you build a <strong>baseline mental map</strong> for each model: what the response distribution is, what the link function does, what the linear regressors are, what we estimate, and what the main inferential/predictive outputs mean.</p>
+<p>A few important clarifications:</p>
+<ul>
+<li><strong>No coding practice is included here.</strong> This document does <strong>not</strong> cover <code>R</code> syntax, function calls, package usage, or implementation details (e.g., <code>glm()</code>, <code>survreg()</code>, <code>coxph()</code>, <code>lme4</code>, etc.). You are still responsible for outlining the <strong>proper coding syntax</strong> and workflow used in the labs and lectures in your own quiz cheat sheets.</li>
+<li>This cheat sheet is meant to be a <strong>starting point</strong>, not a complete study guide. Its role is to help you create your <strong>own individual cheat sheets for each quiz</strong>, tailored to what you personally need to recall during quiz time.</li>
+<li>You do <strong>not</strong> need to outline <strong>plotting syntax</strong> in your cheat sheets for this course. If figures are useful for your understanding, feel free to keep conceptual sketches or interpretation notes, but you do not need to memorize plotting code.</li>
+<li>Local regression, Quantile regression, and missing data imputation techniques <strong>are not included here</strong>. Hence, <strong>please check the corresponding notes directly when building your cheat sheet</strong>.</li>
+</ul>
+<p>Use this document to get oriented, then expand it into your own quiz-ready cheatsheets with the additional concepts and coding details that support each model.</p>
+</section>
+<section id="binary-logistic-regression" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="binary-logistic-regression"><span class="header-section-number">2</span> Binary Logistic Regression</h2>
+<section id="data-modelling-framework" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="data-modelling-framework"><span class="header-section-number">2.1</span> Data Modelling Framework</h3>
+<p>The Binary Logistic regression model has a response variable in the form:</p>
+<p><span class="math display">\[
+Y_i =
+\begin{cases}
+1 \; \; \; \; \mbox{if the $i$th observation is a success},\\
+0 \; \; \; \; \mbox{otherwise.}
+\end{cases}
+\]</span></p>
+<p>As the response variable can only take the values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>, the key parameter becomes the probability that <span class="math inline">\(Y_i\)</span> takes on the value of <span class="math inline">\(1\)</span>, i.e.&nbsp;the probability of success, denoted as <span class="math inline">\(p_i\)</span>. Hence:</p>
+<p><span class="math display">\[
+Y_i \sim \text{Bernoulli}(p_i).
+\]</span></p>
+<p>The Binary Logistic regression approach models the probability of success, <span class="math inline">\(p_i\)</span>, of the binary response <span class="math inline">\(Y_i\)</span>. To re-express <span class="math inline">\(p_i\)</span> <strong>on an unrestricted scale</strong>, the modelling is done in terms of the logit function (the link function in this model).</p>
+<p>Specifically, for a training set of size <span class="math inline">\(n\)</span>, <span class="math inline">\(p_i\)</span> (<span class="math inline">\(i = 1, 2, \dots, n\)</span>) will depend on the values of the <span class="math inline">\(k\)</span> regressors <span class="math inline">\(X_{i, 1}, X_{i, 2}, \dots, X_{i, k}\)</span> in the form:</p>
+<p><span class="math display">\[
+h(p_i) = \mbox{logit}(p_i) = \log \left( \frac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 X_{i, 1} + \beta_1 X_{i, 2} + \ldots + \beta_k X_{i, k},
+\]</span></p>
+<p>or equivalently</p>
+<p><span class="math display">\[
+p_i = \frac{\exp \left[ \mbox{logit} (p_i) \right]}{1 + \exp \left[ \mbox{logit}(p_i) \right]}.
+\]</span></p>
+<p>Note that the <span class="math inline">\(\log(\cdot)\)</span> notation in the model above refers to the <strong>natural logarithm</strong>, i.e., <strong>logarithm base <span class="math inline">\(e\)</span></strong>. The equation above for <span class="math inline">\(p_i\)</span> shows that this Binary Logistic regression model will result in values of the probability of success <span class="math inline">\(p_i\)</span> that are always between 0 and 1. Furthermore, the response in this GLM is called the log-odds, the logarithm of the odds</p>
+<p><span class="math display">\[\frac{p_i}{1 - p_i},\]</span></p>
+<p>the ratio of the probability of the event to the probability of the non-event.</p>
+</section>
+<section id="estimation" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="estimation"><span class="header-section-number">2.2</span> Estimation</h3>
+<p>Under a general framework with <span class="math inline">\(k\)</span> regressors, the <strong>regression parameters</strong> <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> in this model are also unknown. In order to fit the model, we can use the function <code>glm()</code> and its argument <code>family = binomial</code> (required to specify the binary nature of the response), which obtains the estimates <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots \hat{\beta}_k\)</span> (note the hat notation).</p>
+<p>The estimates are obtained through <strong>maximum likelihood</strong> where we assume a <strong>joint probability mass function of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span></strong>.</p>
+</section>
+<section id="inference" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="inference"><span class="header-section-number">2.3</span> Inference</h3>
+<p>We can determine <strong>whether a regressor is statistically associated with the logarithm of the response’s odds</strong> through <strong>hypothesis testing</strong> for the parameters <span class="math inline">\(\beta_j\)</span>. We will need information about the estimated regression coefficient <span class="math inline">\(\hat{\beta}_j\)</span> and its corresponding variability which is reflected in the <strong>standard error</strong> of the estimate, <span class="math inline">\(\mbox{se} \left( \hat{\beta}_j \right)\)</span>.</p>
+<p>To determine the <strong>statistical significance</strong> of <span class="math inline">\(\hat{\beta}_j\)</span>, you can use the <strong>Wald statistic</strong> <span class="math inline">\(z_j\)</span></p>
+<p><span class="math display">\[
+z_j = \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}
+\]</span></p>
+<p>to test the hypotheses</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \beta_j = 0 \\
+H_a: \beta_j \neq 0.
+\end{gather*}
+\]</span></p>
+<p><strong>A statistic like <span class="math inline">\(z_j\)</span> is analogous to the <span class="math inline">\(t\)</span>-value in Ordinary Least-squares (OLS) regression.</strong> However, in Binary Logistic regression, provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j\)</span> has an <strong>approximately Standard Normal distribution</strong> under <span class="math inline">\(H_0\)</span> rather than a <span class="math inline">\(t\)</span>-distribution.</p>
+<p><code>R</code> provides the corresponding <strong><span class="math inline">\(p\)</span>-value</strong> for each <span class="math inline">\(\beta_j\)</span>. The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span>. Hence, a small enough <span class="math inline">\(p\)</span>-value (less than the significance level <span class="math inline">\(\alpha\)</span>) indicates that the data provides evidence in favour of <strong>association</strong> (<strong>or causation in the case of an experimental study!</strong>) between the log-dds and the <span class="math inline">\(j\)</span>th regressor. Furthermore, given a specified level of confidence, we can construct approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> <strong>confidence intervals</strong> (CIs) for the corresponding true value of <span class="math inline">\(\beta_j\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}_j \pm z_{\alpha/2}\mbox{se}(\hat{\beta}_j),
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <strong>Standard Normal distribution</strong>.</p>
+</section>
+<section id="sec-bin-log-model-selection" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="sec-bin-log-model-selection"><span class="header-section-number">2.4</span> Model Selection</h3>
+<section id="analysis-of-deviance" class="level4" data-number="2.4.1">
+<h4 data-number="2.4.1" class="anchored" data-anchor-id="analysis-of-deviance"><span class="header-section-number">2.4.1</span> Analysis of Deviance</h4>
+<p>The <strong>deviance</strong> (<span class="math inline">\(D_k\)</span>) criterion can be used to compare a given model with <span class="math inline">\(k\)</span> regressors with that of a <strong>baseline model</strong>. The usual baseline model is the <strong>saturated</strong> or <strong>full model</strong>, which perfectly fits the data because it allows a distinct probability of success <span class="math inline">\(p_i\)</span> for the <span class="math inline">\(i\)</span>th observation in the training dataset (<span class="math inline">\(i = 1, \dots, n\)</span>), <strong>unrelated to the <span class="math inline">\(k\)</span> regressors</strong>.</p>
+<p>Given the definition of the saturated or full model under this context, we can view it as an <strong>overfitted model</strong>. Thus, we aim to avoid this type of model.</p>
+<p>The <strong>maximized likelihood</strong> of this full model is denoted as <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>. Now, let <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> be the value of the maximized likelihood computed from our dataset of <span class="math inline">\(n\)</span> observation with <span class="math inline">\(k\)</span> regressors.</p>
+<p>We can compare the fits provided by these two models by the deviance <span class="math inline">\(D_k\)</span> given by</p>
+<p><span class="math display">\[
+D_k = -2 \log \Bigg(\frac{\hat{\mathscr{l}}_k}{\hat{\mathscr{l}}_f} \Bigg) =  -2 \left[ \log \left( \hat{\mathscr{l}}_k \right) - \log \left( \hat{\mathscr{l}}_f \right) \right].
+\]</span></p>
+<p>Note that <span class="math inline">\(D_k\)</span> expresses <strong>how much our given model deviates from the full model on log-likelihood scale</strong>. This metric is interpreted as follows:</p>
+<ul>
+<li><strong>Large values</strong> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is small relative to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <strong>our given model fits the data poorly compared to the baseline model</strong>.</li>
+<li><strong>Small values</strong> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is similar to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <strong>our given model provides a good fit to the data compared to the baseline model</strong>.</li>
+</ul>
+<p><strong>For the specific case of the Binary Logistic regression</strong>, it can be shown that <span class="math inline">\(D_k\)</span> is represented by the following equation:</p>
+<p><span id="eq-deviance-bin-log-app"><span class="math display">\[
+\begin{equation}
+D_k = -2 \sum_{i = 1}^n \left[\hat{p}_i \text{logit}(\hat{p}_i) + \log (1 - \hat{p}_i) \right],
+\end{equation}
+\tag{1}\]</span></span></p>
+<p>where <span class="math inline">\(\hat{p}_i\)</span> is the estimated probability of success for the <span class="math inline">\(i\)</span>th observation for <span class="math inline">\(i = 1, \dots, n\)</span> in our training set <strong>with our fitted model of <span class="math inline">\(k\)</span> regressors</strong>. <a href="#eq-deviance-bin-log-app" class="quarto-xref">Equation&nbsp;1</a> comes from <strong>maximum likelihood estimation (MLE)</strong>.</p>
+<p><strong>For the specific case of Binary Logistic regression</strong>, deviance <span class="math inline">\(D_k\)</span> from <a href="#eq-deviance-bin-log-app" class="quarto-xref">Equation&nbsp;1</a> cannot be used as a standalone metric of <strong>goodness of fit</strong> because of <strong>data sparsity</strong>; i.e., each <span class="math inline">\(i\)</span>th observation has a different set of observed values for the <span class="math inline">\(k\)</span> regressors if at least one of them is of <strong>continuous-type</strong>.</p>
+<p>This data sparsity puts <span class="math inline">\(D_k\)</span> just in function of the fitted probabilities <span class="math inline">\(\hat{p}_i\)</span> and not on the observed values <span class="math inline">\(y_i\)</span> (which tells us nothing about the agreement of our model with <span class="math inline">\(k\)</span> regressors to the observed data!).</p>
+<p>Still, for the case of Binary Logistic regression, we can use the analysis of deviance to perform model selection <strong>between two models where one is nested in the other</strong>.</p>
+<p>Suppose <strong>Model 1</strong> is nested in <strong>Model 2</strong>. Hence, this specific model selection will involve a hypothesis testing. The hypotheses are:</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \textbf{Model 1} \text{ fits the data better than } \textbf{Model 2} \\
+H_a: \textbf{Model 2} \text{ fits the data better than } \textbf{Model 1}.
+\end{gather*}
+\]</span></p>
+<p>Let <span class="math inline">\(D_2\)</span> be the deviance for <strong>Model 2</strong> and <span class="math inline">\(D_1\)</span> the deviance for <strong>Model 1</strong>. The test statistic <span class="math inline">\(\Delta_D\)</span> for the analysis of deviance is given by:</p>
+<p><span class="math display">\[
+\Delta_D = D_1 - D_2 \sim \chi^2_{d},
+\]</span></p>
+<p>which <strong>assymptotically</strong> (i.e., <span class="math inline">\(n \rightarrow \infty\)</span>) is <a href="https://www.math.wm.edu/~leemis/chart/UDR/PDFs/Chisquare.pdf"><strong>Chi-squared distributed</strong></a> with <span class="math inline">\(d\)</span> degrees of freedom under <span class="math inline">\(H_0\)</span>. The <span class="math inline">\(d\)</span> degrees of freedom are the <strong>regression parameters of difference between both models</strong>.</p>
+<p>Formally, this nested hypothesis testing is called the <strong>likelihood-ratio test</strong>.</p>
+</section>
+<section id="akaike-information-criterion" class="level4" data-number="2.4.2">
+<h4 data-number="2.4.2" class="anchored" data-anchor-id="akaike-information-criterion"><span class="header-section-number">2.4.2</span> Akaike Information Criterion</h4>
+<p><strong>One of the drawbacks of the analysis of deviance</strong> is that it only allows to test <strong>nested</strong> regression models when we have sparse data (i.e., each response is associated with a different set of values in the regressors).</p>
+<p>Fortunately, we have alternatives for model selection. <strong>The Akaike Information Criterion (AIC) makes it possible to compare models that are either nested or not.</strong> For a model with <span class="math inline">\(k\)</span> regressors and a deviance <span class="math inline">\(D_k\)</span> is defined as:</p>
+<p><span class="math display">\[
+\begin{equation}
+\mbox{AIC}_k = D_k + 2k.
+\end{equation}
+\]</span></p>
+<p>Models with <strong>smaller</strong> values of <span class="math inline">\(\mbox{AIC}_k\)</span> are preferred. That said, <span class="math inline">\(\mbox{AIC}_k\)</span> favours models with small values of <span class="math inline">\(D_k\)</span>.</p>
+<p>However, <span class="math inline">\(\mbox{AIC}_k\)</span> penalizes for including more regressors in the model. Hence, it discourages overfitting, which is key in model selection. This is why we select that model with the smallest <span class="math inline">\(\mbox{AIC}_k\)</span>.</p>
+</section>
+<section id="bayesian-information-criterion" class="level4" data-number="2.4.3">
+<h4 data-number="2.4.3" class="anchored" data-anchor-id="bayesian-information-criterion"><span class="header-section-number">2.4.3</span> Bayesian Information Criterion</h4>
+<p>An alternative to AIC is the Bayesian Information Criterion (BIC). <strong>The BIC also makes it possible to compare models that are either nested or not.</strong> For a model with <span class="math inline">\(k\)</span> regressors, <span class="math inline">\(n\)</span> observations used for training, and a deviance <span class="math inline">\(D_k\)</span>; it is defined as:</p>
+<p><span class="math display">\[
+\mbox{BIC}_k = D_k + k \log (n).
+\]</span></p>
+<p>Models with <strong>smaller</strong> values of <span class="math inline">\(\mbox{BIC}_k\)</span> are preferred. That said, <span class="math inline">\(\mbox{BIC}_k\)</span> also favours models with small values of <span class="math inline">\(D_k\)</span>.</p>
+<p>The differences between AIC and BIC will be more pronounced in datasets with large sample sizes <span class="math inline">\(n\)</span>. As the BIC penalty of <span class="math inline">\(k \log (n)\)</span> will always be larger than the AIC penalty of <span class="math inline">\(2k\)</span> when <span class="math inline">\(n &gt; 7\)</span>, <strong>BIC tends to select models with fewer regressors than AIC</strong>.</p>
+</section>
+</section>
+</section>
+<section id="cox-proportional-hazards-model" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="cox-proportional-hazards-model"><span class="header-section-number">3</span> Cox Proportional Hazards Model</h2>
+<p>It is a widely popular <strong>semiparametric</strong> regression model (namely, <strong>Cox regression</strong>). <strong>In Statistics</strong>, we call a regression model semiparametric when we only define the systematic component (i.e., regressors and regression estimates). Yet, we <strong>do not assume any specific distribution</strong> for our response of interest.</p>
+<section id="data-modelling-framework-1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="data-modelling-framework-1"><span class="header-section-number">3.1</span> Data Modelling Framework</h3>
+<p>The Cox Proportional Hazards model is a commonly used survival model that allows us to interpret how regressors influence a censored response.</p>
+<p>Using a training set of size <span class="math inline">\(n\)</span>, the idea is to model the <strong>hazard function</strong> <span class="math inline">\(\lambda_i(t)\)</span> directly for the <span class="math inline">\(i\)</span>th observation (<span class="math inline">\(i = 1, \dots, n\)</span>) subject to <span class="math inline">\(k\)</span> regressors <span class="math inline">\(X_{i,j}\)</span> (<span class="math inline">\(j = 1, \dots, k\)</span>):</p>
+<p><span class="math display">\[\lambda_i \left( t | X_{i,1}, \dots, X_{i,k} \right) = \lambda_0(t) \exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right).\]</span></p>
+<p>This model has certain particularities, which will be highlighted below:</p>
+<ul>
+<li>We model the <span class="math inline">\(i\)</span>th individual hazard function <span class="math inline">\(\lambda_i \left( t | X_{i,1}, \dots, X_{i,k} \right)\)</span> along with a baseline hazard <span class="math inline">\(\lambda_0(t)\)</span>, which is equal for all the <span class="math inline">\(n\)</span> observations, multiplied by <span class="math inline">\(\exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right)\)</span>.</li>
+<li>The model does not have an intercept <span class="math inline">\(\beta_0\)</span>. Nevertheless, the baseline hazard <span class="math inline">\(\lambda_0(t)\)</span> acts as the intercept in this survival framework.</li>
+<li>The baseline hazard <span class="math inline">\(\lambda_0(t)\)</span> is the reference <strong>for all subjects</strong> when all covariates are equal to zero. Note this baseline hazard depends on time <span class="math inline">\(t\)</span> <strong>unlike the regressors <span class="math inline">\(X_{i,j}\)</span></strong>. Cox regression does not assume any distribution on this baseline hazard, which is the non-parametric part of the model.</li>
+<li>The parametric part of the model is reflected in <span class="math inline">\(\exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right)\)</span>.</li>
+<li>Therefore, given the combinations of both situations, Cox regression is overall defined as semiparametric.</li>
+</ul>
+<p>To exemplify the <strong>proportional hazards</strong> assumption, let us consider a simple Cox regression model with a continuous regressor <span class="math inline">\(X_{i, 1}\)</span>. Moreover, assume these two subjects <span class="math inline">\(i = 1, 2\)</span> have the following regressor values:</p>
+<p><span class="math display">\[X_{2, 1} = X_{1, 1} + 1 \qquad \text{Subject 2's regressor value is one unit larger}.\]</span></p>
+<p>Their responses can be modelled as:</p>
+<p><span class="math display">\[
+\begin{align*}
+\lambda_1 \left( t | X_{1,1} \right) = \lambda_0(t)\exp\left( \beta_1 X_{1,1} \right) \qquad \text{Subject 1}
+\end{align*}
+\]</span></p>
+<p><span class="math display">\[
+\begin{align*}
+\lambda_2 \left( t | X_{2,1} \right) &amp;= \lambda_0(t)\exp\left( \beta_1 X_{2,1} \right) \\
+&amp;= \lambda_0(t)\exp\left[ \beta_1 (X_{1,1} + 1) \right] \\
+&amp;= \lambda_0(t)\exp\left( \beta_1 X_{1,1} \right) \exp \left( \beta_1 \right) \qquad \text{Subject 2}
+\end{align*}
+\]</span></p>
+<p>Then, the hazard ratio comes into play as:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\lambda_2 \left( t | X_{2,1} \right)}{\lambda_1 \left( t | X_{1,1} \right)} &amp;= \frac{\lambda_0(t)\exp\left( \beta_1 X_{1,1} \right) \exp \left( \beta_1 \right)}{\lambda_0(t)\exp\left( \beta_1 X_{1,1} \right)} \\
+&amp;= \exp\left( \beta_1 \right) \quad \Rightarrow \quad \lambda_2(t) = \lambda_1(t)\exp\left( \beta_1 \right)
+\end{align*}
+\]</span></p>
+<p><strong>In plain words and generally</strong>, the proportional hazards assumption assumes that the hazard for any subject is proportional to the hazard of any other subject <strong>via the exponentiated regression coefficients</strong>.</p>
+</section>
+<section id="estimation-1" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="estimation-1"><span class="header-section-number">3.2</span> Estimation</h3>
+<p>Parameter estimation in Cox regression is done through another special maximum likelihood technique using a <strong>partial likelihood</strong>. A partial likelihood is a specific class of <strong>quasi-likelihood</strong>, which does not require assuming any specific probability density function (PDF) for the continuous survival times <span class="math inline">\(Y_i\)</span> (thus, the baseline hazard is not required to take any distributional form).</p>
+<p>However, we use the parametric part</p>
+<p><span class="math display">\[\exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right)\]</span></p>
+<p>to perform our corresponding estimation.</p>
+</section>
+<section id="inference-1" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="inference-1"><span class="header-section-number">3.3</span> Inference</h3>
+<p>We can determine <strong>whether a regressor is statistically associated with the response’s hazard function</strong> through <strong>hypothesis testing</strong> for <span class="math inline">\(\beta_j\)</span>. We will need the estimated regression coefficient <span class="math inline">\(\hat{\beta}_j\)</span> and its <strong>standard error</strong>, <span class="math inline">\(\mbox{se}(\hat{\beta}_j)\)</span>.</p>
+<p>You can test the below hypotheses via the <strong>Wald statistic</strong> <span class="math inline">\(z _j= \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}\)</span>:</p>
+<p><span class="math display">\[
+\begin{align*}
+H_0: \beta_j &amp;= 0 \\
+H_a: \beta_j &amp;\neq 0.        
+\end{align*}
+\]</span></p>
+<p>Given a large enough training size <span class="math inline">\(n\)</span>, <span class="math inline">\(z_j\)</span> has an <strong>approximately Standard Normal distribution</strong> under <span class="math inline">\(H_0\)</span>.</p>
+<p><code>R</code> provides the corresponding <strong><span class="math inline">\(p\)</span>-value</strong> for each <span class="math inline">\(\beta_j\)</span>. The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span>. Hence, a small enough <span class="math inline">\(p\)</span>-value (less than the significance level <span class="math inline">\(\alpha\)</span>) indicates that the data provides evidence in favour of <strong>association</strong> (<strong>or causation in the case of an experimental study!</strong>) between the hazard function and the <span class="math inline">\(j\)</span>th regressor. Furthermore, given a specified level of confidence, we can construct approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> CIs for the corresponding true value of <span class="math inline">\(\beta_j\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}_j \pm z_{\alpha/2}\mbox{se}(\hat{\beta}_j),
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <strong>Standard Normal distribution</strong>.</p>
+</section>
+<section id="prediction" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="prediction"><span class="header-section-number">3.4</span> Prediction</h3>
+<p>Even though Cox regression models the hazard function <span class="math inline">\(\lambda_i(t)\)</span>, it is possible to obtain <strong>a given estimated survival function</strong> via the following equation:</p>
+<p><span class="math display">\[S\left( t | X_1, \dots X_k \right) = S_0(t)^{\exp\left(\sum_{j = 1}^k \beta_j X_{i,j}\right)},\]</span></p>
+<p>where</p>
+<p><span class="math display">\[S_0(t) = \exp \left[ - \Lambda_0(t) \right]\]</span></p>
+<p>is the <strong>baseline survival function</strong>.</p>
+<p>Note that <span class="math inline">\(\Lambda_0(t)\)</span> is the cumulative baseline hazard function:</p>
+<p><span class="math display">\[\Lambda_0(t) = \int_0^{t} \lambda_0(u)du.\]</span></p>
+<p>We use the baseline cumulative hazard <span class="math inline">\(\Lambda_0(t)\)</span> to obtain <span class="math inline">\(S_0(t)\)</span>.</p>
+</section>
+</section>
+<section id="cumulative-hazard-function" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="cumulative-hazard-function"><span class="header-section-number">4</span> Cumulative Hazard Function</h2>
+<p>Let us consider a <strong>continuous</strong> random variable</p>
+<p><span class="math display">\[Y = \text{Time until an event occurs.}\]</span></p>
+<p>The cumulative hazard function <span class="math inline">\(\Lambda(t)\)</span> depict the accumulated amount of hazard up to time <span class="math inline">\(t\)</span> as follows:</p>
+<p><span class="math display">\[
+\Lambda(t) = \int_0^{t} \lambda(u)du.
+\]</span></p>
+<p>Furthermore, the cumulative hazard function <span class="math inline">\(\Lambda(t)\)</span> and survival function <span class="math inline">\(S_Y(t)\)</span> are mathematically related as follows:</p>
+<p><span class="math display">\[\Lambda(t) = -\log S_Y(t).\]</span></p>
+</section>
+<section id="hazard-function" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="hazard-function"><span class="header-section-number">5</span> Hazard Function</h2>
+<p>Let us consider a <strong>continuous</strong> random variable</p>
+<p><span class="math display">\[Y = \text{Time until an event occurs.}\]</span></p>
+<p>Their survival and PDF functions are <span class="math inline">\(S_Y(t)\)</span> and <span class="math inline">\(f_Y(t)\)</span>. That said, the hazard function <span class="math inline">\(\lambda(t)\)</span>, the <strong>instantaneous rate of event occurrence per unit of time</strong>, is given by</p>
+<p><span class="math display">\[
+\lambda(t) = \lim_{\Delta t\rightarrow 0} \frac{P(t\leq Y &lt; t+\Delta t | Y\geq t)}{\Delta t} = \frac{f_Y(t)}{S_Y(t)}.
+\]</span></p>
+<p>One can interpret <span class="math inline">\(\lambda(t)\Delta t\)</span> as the approximate probability of the event occurring immediately, given that the event has not occurred up until time <span class="math inline">\(t\)</span>.</p>
+</section>
+<section id="link-functions-in-glms" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="link-functions-in-glms"><span class="header-section-number">6</span> Link Functions in GLMs</h2>
+<p>A GLM has the components of the conceptual regression model in a training set of <span class="math inline">\(n\)</span> elements as:</p>
+<ul>
+<li><strong>Random component.</strong> Each <em>response</em> <span class="math inline">\(Y_1,\ldots,Y_n\)</span> is a random variable with its respective mean <span class="math inline">\(\mu_i\)</span>.</li>
+<li><strong>Systematic component.</strong> How the <span class="math inline">\(k\)</span> regressors come into the model denoted as a <strong>linear combination</strong>:</li>
+</ul>
+<p><span class="math display">\[
+\eta_i = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2} + \ldots + \beta_k X_{i,k} \; \; \; \; \text{for} \; i = 1, \ldots, n.
+\]</span></p>
+<ul>
+<li><strong>Link function.</strong> The element that connects the <strong>random component</strong> with the <strong>systematic component</strong> <span class="math inline">\(\eta_i\)</span>. The connection is made through <span class="math inline">\(h(\mu_i)\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+h(\mu_i) = \eta_i.
+\]</span></p>
+<p>Note the following:</p>
+<ul>
+<li>The link function needs to be monotonic so we can allow putting the systematic component <span class="math inline">\(\eta_i\)</span> in terms of the corresponding mean <span class="math inline">\(\mu_i\)</span>, i.e.:</li>
+</ul>
+<p><span class="math display">\[\mu_i = h^{-1}(\eta_i).\]</span></p>
+<ul>
+<li>Furthermore, it needs to be differentiable <strong>since we rely on maximum likelihood estimation</strong> to obtain <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k\)</span>.</li>
+</ul>
+</section>
+<section id="multinomial-logistic-regression" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="multinomial-logistic-regression"><span class="header-section-number">7</span> Multinomial Logistic Regression</h2>
+<section id="data-modelling-framework-2" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="data-modelling-framework-2"><span class="header-section-number">7.1</span> Data Modelling Framework</h3>
+<p>Let us suppose that a given <strong>discrete nominal response <span class="math inline">\(Y_i\)</span> has categories <span class="math inline">\(1, 2, \dots, m\)</span></strong>. Categories <span class="math inline">\(1, 2, \dots, m\)</span> <strong>are merely labels here</strong>. Thus, they <strong>do not</strong> implicate an ordinal scale.</p>
+<p>This regression approach assumes a <a href="https://stats.libretexts.org/Bookshelves/Probability_Theory/Probability_Mathematical_Statistics_and_Stochastic_Processes_(Siegrist)/11%3A_Bernoulli_Trials/11.05%3A_The_Multinomial_Distribution"><strong>Multinomial distribution</strong></a> where <span class="math inline">\(p_{i,1}, p_{i,2}, \dots, p_{i,m}\)</span> are the probabilities that <span class="math inline">\(Y_i\)</span> will belong to categories <span class="math inline">\(1, 2, \dots, m\)</span> respectively; i.e.,</p>
+<p><span class="math display">\[
+P(Y_i = 1) = p_{i,1} \;\;\;\; P(Y_i = 2) = p_{i,2} \;\; \dots \;\; P(Y_i = m) = p_{i,m},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\sum_{j = 1}^m p_{i,j} = p_{i,1} + p_{i,2} + \dots + p_{i,m} = 1.
+\]</span></p>
+<p>The Multinomial Logistic regression <strong>also models the logarithm of the odds</strong>. However, only one logarithm of the odds (or <strong>logit</strong>) will not be enough anymore. Recall we can capture the odds between two categories with a single logit function. <strong>What about adding some other ones?</strong></p>
+<p>Here is what we can do:</p>
+<ol type="1">
+<li>Pick one of the categories to be the <strong>baseline</strong>. For example, the category “<span class="math inline">\(1\)</span>”.</li>
+<li>For each of the <strong>other</strong> categories, we model the logarithm of the odds to the baseline category.</li>
+</ol>
+<p><strong>What is the math for the general case with <span class="math inline">\(m\)</span> response categories and <span class="math inline">\(k\)</span> regressors?</strong> For the <span class="math inline">\(i\)</span>th observation, we end up with a system of <span class="math inline">\(m - 1\)</span> link functions in the Multinomial Logistic regression model as follows:</p>
+<p><span id="eq-multinomial-model-app"><span class="math display">\[
+\begin{align*}
+\eta_i^{(2,1)} &amp;= \log\left[\frac{P(Y_i = 2\mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] \\
+&amp;= \beta_0^{(2,1)} + \beta_1^{(2,1)} X_{i, 1} + \beta_2^{(2,1)} X_{i, 2} + \ldots + \beta_k^{(2,1)} X_{i, k} \\
+\eta_i^{(3,1)} &amp;= \log\left[\frac{P(Y_i = 3\mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] \\
+&amp;= \beta_0^{(3,1)} + \beta_1^{(3,1)} X_{i, 1} + \beta_2^{(3,1)} X_{i, 2} + \ldots + \beta_k^{(3,1)} X_{i, k} \\
+&amp; \qquad \qquad \qquad \qquad \vdots \\
+\eta_i^{(m,1)} &amp;= \log\left[\frac{P(Y_i = m\mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] \\
+&amp;= \beta_0^{(m,1)} + \beta_1^{(m,1)} X_{i, 1} + \beta_2^{(m,1)} X_{i, 2} + \ldots + \beta_k^{(m,1)} X_{i, k}.
+\end{align*}
+\tag{2}\]</span></span></p>
+<p>Note that the superscript <span class="math inline">\((j, 1)\)</span> in model <a href="#eq-multinomial-model-app" class="quarto-xref">2</a> indicates that the equation is on level <span class="math inline">\(j\)</span> (for <span class="math inline">\(j = 2, \dots, m\)</span>) with respect to level <span class="math inline">\(1\)</span>. Furthermore, <strong>the regression intercept and coefficients are different for each link function</strong>.</p>
+<p>With some algebraic manipulation, we can show that the probabilities <span class="math inline">\(p_{i,1}, p_{i,2}, \dots, p_{i,m}\)</span> of <span class="math inline">\(Y_i\)</span> belonging to categories <span class="math inline">\(1, 2, \dots, m\)</span> are:</p>
+<p><span id="eq-prob-multinomial-app"><span class="math display">\[
+\begin{gather*}
+p_{i,1} = P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k}) = \frac{1}{1 + \sum_{j = 2}^m \exp \big( \eta_i^{(j,1)} \big)} \\
+p_{i,2} = P(Y_i = 2 \mid X_{i,1}, \ldots, X_{i,k}) = \frac{\exp \big( \eta_i^{(2,1)} \big)}{1 + \sum_{j = 2}^m \exp \big( \eta_i^{(j,1)} \big)} \\
+\vdots \\
+p_{i,m} = P(Y_i = m \mid X_{i,1}, \ldots, X_{i,k}) = \frac{\exp \big( \eta_i^{(m,1)} \big)}{1 + \sum_{j = 2}^m \exp \big( \eta_i^{(j,1)} \big)}.
+\end{gather*}
+\tag{3}\]</span></span></p>
+<p>If we sum all <span class="math inline">\(m\)</span> probabilities in model <a href="#eq-prob-multinomial-app" class="quarto-xref">3</a>, the sum will be equal to <span class="math inline">\(1\)</span> for the <span class="math inline">\(i\)</span>th observation. <strong>This is particularly important when we want to use this model for making predictions in classification matters</strong>.</p>
+</section>
+<section id="estimation-2" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="estimation-2"><span class="header-section-number">7.2</span> Estimation</h3>
+<p><strong>All parameters</strong> in the Multinomial Logistic regression model are also unknown. To fit the model with the package <code>{nnet}</code>, we use the function <code>multinom()</code>, which obtains the corresponding estimates. The estimates are obtained through <strong>maximum likelihood</strong>, where we assume a <strong>Multinomial joint probability mass function</strong> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span>. You can find more information on this matter <a href="https://czep.net/stat/mlelr.pdf"><strong>here</strong></a>.</p>
+</section>
+<section id="inference-2" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="inference-2"><span class="header-section-number">7.3</span> Inference</h3>
+<p><strong>We can determine whether a regressor is statistically associated with the logarithm of the odds</strong> through hypothesis testing for the parameters <span class="math inline">\(\beta_j^{(u, v)}\)</span> <strong>by link function</strong>. We also use the <strong>Wald statistic</strong> <span class="math inline">\(z_j^{(u, v)}\)</span>:</p>
+<p><span class="math display">\[
+\begin{equation*}
+z_j^{(u, v)} = \frac{\hat{\beta}_j^{(u, v)}}{\mbox{se}\left(\hat{\beta}_j^{(u, v)}\right)}
+\end{equation*}
+\]</span></p>
+<p>to test the hypotheses</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \beta_j^{(u, v)} = 0\\
+H_a: \beta_j^{(u, v)} \neq 0.
+\end{gather*}
+\]</span></p>
+<p>Provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j^{(u, v)}\)</span> has an <strong>approximately Standard Normal distribution</strong> under <span class="math inline">\(H_0\)</span>.</p>
+<p><code>R</code> provides the corresponding <strong><span class="math inline">\(p\)</span>-values</strong> for each <span class="math inline">\(\beta_j^{(u, v)}\)</span>. The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span>. As in the other regression models, we would set a predetermined significance level <span class="math inline">\(\alpha\)</span> (usually taken to be 0.05) to infer if the <span class="math inline">\(p\)</span>-value is small enough. If the <span class="math inline">\(p\)</span>-value is smaller than the predetermined level <span class="math inline">\(\alpha\)</span>, then you could claim that there is evidence to reject the null hypothesis. Hence, <span class="math inline">\(p\)</span>-values that are small enough indicate that the data provides evidence in favour of <strong>association</strong> (<strong>or causation in the case of an experimental study!</strong>) between the response variable and the <span class="math inline">\(j\)</span>th regressor.</p>
+<p>Furthermore, given a specified level of confidence where <span class="math inline">\(\alpha\)</span> is the significance level, we can construct approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> <strong>confidence intervals</strong> for the corresponding true value of <span class="math inline">\(\beta_j^{(u, v)}\)</span>:</p>
+<p><span class="math display">\[
+\begin{equation*}
+\hat{\beta}_j^{(u, v)} \pm z_{\alpha/2}\mbox{se} \left( \hat{\beta}_j^{(u, v)} \right),
+\end{equation*}
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <strong>Standard Normal distribution</strong>.</p>
+</section>
+<section id="model-selection" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="model-selection"><span class="header-section-number">7.4</span> Model Selection</h3>
+<p><strong>To perform model selection</strong>, we can use the same techniques from the Binary Logistic regression model (check <a href="#sec-bin-log-model-selection" class="quarto-xref">Section&nbsp;2.4</a>).</p>
+</section>
+</section>
+<section id="negative-binomial-regression" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="negative-binomial-regression"><span class="header-section-number">8</span> Negative Binomial Regression</h2>
+<p>Let</p>
+<p><span class="math display">\[Y_i \sim \text{Negative Binomial} (m, p_i) \quad \text{for} \quad i = 1, \dots, n.\]</span></p>
+<p>From <strong>DSCI 551</strong>, recall that a Negative Binomial distribution has the following probability mass function (PMF):</p>
+<p><span id="eq-nb-pdf-app"><span class="math display">\[
+\begin{equation}
+P(Y_i = y_i \mid m, p_i) = {m - 1 + y_i \choose y_i} p_i^{m} (1 - p_i)^{y_i} \quad \text{for} \quad y_i = 0, 1, \dots
+\end{equation}
+\tag{4}\]</span></span></p>
+<p>A Negative Binomial random variable depicts <strong>the number of <span class="math inline">\(y_i\)</span> failed independent Bernoulli trials before experiencing <span class="math inline">\(m\)</span> successes</strong> with a probability of success <span class="math inline">\(p_i\)</span>.</p>
+<p>This distribution has the following mean and variance:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\mathbb{E}(Y_i) = \frac{m(1 - p_i)}{p_i} \\
+\text{Var}(Y_i) = \frac{m(1 - p_i)}{p_i^2}.
+\end{gather*}
+\]</span></p>
+<section id="reparametrization" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="reparametrization"><span class="header-section-number">8.1</span> Reparametrization</h3>
+<p>Under the following parametrization:</p>
+<p><span id="eq-nb-param-app"><span class="math display">\[
+\begin{equation}
+\lambda_i = \frac{m (1 - p_i)}{p_i} \qquad \Rightarrow \qquad p_i = \frac{m}{m + \lambda_i},
+\end{equation}
+\tag{5}\]</span></span></p>
+<p>the mean and variance of a Negative Binomial random variable can be reexpressed as</p>
+<p><span id="eq-nb-mean-variance-app"><span class="math display">\[
+\begin{gather}
+\mathbb{E}(Y_i) = \lambda_i \\
+\text{Var}(Y_i) = \lambda_i \left( 1 + \frac{\lambda_i}{m} \right).
+\end{gather}
+\tag{6}\]</span></span></p>
+<p>This reparametrized variance indicates that a Negative Binomial random variable allows for overdispersion through factor <span class="math inline">\(\left( 1 + \frac{\lambda_i}{m} \right)\)</span>.</p>
+<p>Finally, by applying parametrization <a href="#eq-nb-param-app" class="quarto-xref">Equation&nbsp;5</a> in PMF <a href="#eq-nb-pdf-app" class="quarto-xref">Equation&nbsp;4</a>, we have the following:</p>
+<p><span id="eq-nb-alt-pdf-app"><span class="math display">\[
+\begin{align}
+P(Y_i = y_i \mid m, p_i) &amp;= {m - 1 + y_i \choose y_i} p_i^{m} (1 - p_i)^{y_i} \\
+&amp;= \frac{(m + y_i - 1)!}{y_i! (m - 1 )!} \left( \frac{m}{m + \lambda} \right)^{m} \left( 1 - \frac{m}{m + \lambda} \right)^{y_i} \\
+&amp;= \frac{\Gamma(y_i + m)}{\Gamma(y_i + 1) \Gamma(m)} \left( \frac{m}{m + \lambda} \right)^{m} \left( 1 - \frac{m}{m + \lambda} \right)^{y_i},
+\end{align}
+\tag{7}\]</span></span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> is the <a href="https://www.statlect.com/mathematical-tools/gamma-function"><strong>Gamma function</strong></a>. We actually use the property</p>
+<p><span class="math display">\[\Gamma(a) = (a - 1)!,\]</span></p>
+<p>where <span class="math inline">\(a \geq 1\)</span> is an integer.</p>
+</section>
+<section id="data-modelling-framework-3" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="data-modelling-framework-3"><span class="header-section-number">8.2</span> Data Modelling Framework</h3>
+<p>As in the case of Poisson regression with <span class="math inline">\(k\)</span> regressors, the Negative Binomial case is a GLM with the following link function:</p>
+<p><span id="eq-nb-model-app"><span class="math display">\[
+\begin{equation}
+h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{i,1} + \dots + \beta_k X_{i,k}.
+\end{equation}
+\tag{8}\]</span></span></p>
+<p>Lastly, note the following:</p>
+<ul>
+<li>From <a href="#eq-nb-mean-variance-app" class="quarto-xref">Equation&nbsp;6</a>, let <span class="math inline">\(\theta = \frac{1}{m}\)</span>. Then, Negative Binomial regression will assume the following variance:</li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+\text{Var}(Y_i) &amp;= \lambda_i \left( 1 + \frac{\lambda_i}{m} \right) \\
+&amp;= \lambda_i + \frac{\lambda_i^2}{m} \\
+&amp;= \lambda_i + \theta \lambda_i^2.
+\end{align*}
+\]</span></p>
+<p>Therefore, the model has even more flexibility to deal with overdispersion compared to Poisson regression.</p>
+</section>
+<section id="estimation-3" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="estimation-3"><span class="header-section-number">8.3</span> Estimation</h3>
+<p>Via a training set of size <span class="math inline">\(n\)</span> whose responses are <strong>independent counts</strong> <span class="math inline">\(Y_i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>), we use the reparametrized PMF <a href="#eq-nb-alt-pdf-app" class="quarto-xref">Equation&nbsp;7</a> along with the link function <a href="#eq-nb-model-app" class="quarto-xref">Equation&nbsp;8</a> via <strong>MLE</strong> to obtain <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k, \hat{\theta}\)</span>.</p>
+<p>To fit a Negative Binomial regression via <code>R</code>, we can use the function <code>glm.nb()</code> from package <code>{MASS}</code>.</p>
+</section>
+<section id="inference-coefficient-interpretation-prediction-goodness-of-fit-and-model-selection" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="inference-coefficient-interpretation-prediction-goodness-of-fit-and-model-selection"><span class="header-section-number">8.4</span> Inference, Coefficient Interpretation, Prediction, Goodness of Fit, and Model Selection</h3>
+<p>Since the link function in Negative Binomial regression is the same as in Poisson regression; <strong>inference, coefficient interpretation, and prediction are performed similarly</strong> (even with the same <code>{broom}</code> functions!). Regarding <strong>model selection</strong>, since we use a regular maximum likelihood approach to estimate the regression parameters, we can use analysis of deviance, AIC, and BIC to perform model selection and/or goodness of fit testing.</p>
+</section>
+</section>
+<section id="ordinal-logistic-regression" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="ordinal-logistic-regression"><span class="header-section-number">9</span> Ordinal Logistic Regression</h2>
+<section id="data-modelling-framework-4" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="data-modelling-framework-4"><span class="header-section-number">9.1</span> Data Modelling Framework</h3>
+<p>Let us suppose that a given <strong>discrete ordinal response</strong> <span class="math inline">\(Y_i\)</span> (for <span class="math inline">\(i = 1, \dots, n\)</span>) has categories <span class="math inline">\(1, 2, \dots, m\)</span> in a training set of size <span class="math inline">\(n\)</span>.</p>
+<p>Categories <span class="math inline">\(1, 2, \dots, m\)</span> <strong>implicate an ordinal scale here</strong>, i.e., <span class="math inline">\(1 &lt; 2 &lt; \dots &lt; m\)</span>.</p>
+<p>Also, note there is more than one class of Ordinal Logistic regression. We will review the <strong>proportional odds</strong> model (a <strong>cumulative logit model</strong>).</p>
+<p>We have to point out that Ordinal Logistic regression will indicate how each one of the <span class="math inline">\(k\)</span> regressors <span class="math inline">\(X_{i,1}, \dots, X_{i,k}\)</span> affects the <strong>cumulative logarithm of the odds</strong> in the ordinal response for the following <span class="math inline">\(m - 1\)</span> situations:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\text{Level } m - 1 \text{ or any lesser degree versus level } m\\
+\text{Level } m - 2 \text{ or any lesser degree versus level } m - 1 \text{ or any higher degree}\\
+\vdots \\
+\text{Level } 2 \text{ or any lesser degree versus level } 3 \text{ or any higher degree}\\
+\text{Level } 1 \text{ versus level } 2 \text{ or any higher degree}\\
+\end{gather*}
+\]</span></p>
+<p>These <span class="math inline">\(m - 1\)</span> situations are translated into cumulative probabilities using the logarithms of the odds on the left-hand side (<span class="math inline">\(m - 1\)</span> link functions) subject to the linear combination of the <span class="math inline">\(k\)</span> regressors <span class="math inline">\(X_{i,j}\)</span> (for <span class="math inline">\(j = 1, \dots, k\)</span>):</p>
+<p><span class="math display">\[
+\begin{gather*}
+\eta_i^{(m - 1)} = \log\left[\frac{P(Y_i \leq m - 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = m \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(m - 2)} = \log\left[\frac{P(Y_i \leq m - 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; m - 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\vdots \\
+\eta_i^{(2)} = \log\left[\frac{P(Y_i \leq 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(1)} = \log\left[\frac{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}.
+\end{gather*}
+\]</span></p>
+<p>Note that the system above has <span class="math inline">\(m - 1\)</span> intercepts but <strong>only <span class="math inline">\(k\)</span> regression coefficients</strong>. In general, the previous <span class="math inline">\(m - 1\)</span> equations can be generalized for levels <span class="math inline">\(j = m - 1, \dots, 1\)</span> as follows:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\eta_i^{(j)} = \log\left[\frac{P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i &gt; j \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(j)} - \beta_1 X_{i, 1} - \beta_2 X_{i, 2} - \ldots - \beta_k X_{i, k} \\
+\; \; \; \; \; \; \; \; \Rightarrow \; P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) = \frac{\exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \beta_2 X_{i, 2} - \ldots - \beta_k X_{i, k}\right)}{1 + \exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \beta_2 X_{i, 2} - \ldots - \beta_k X_{i, k}\right)}.
+\end{gather*}
+\]</span></p>
+<p>The probability that <span class="math inline">\(Y_i\)</span> will fall in the category <span class="math inline">\(j\)</span> can be computed as follows:</p>
+<p><span class="math display">\[
+\begin{align*}
+p_{i,j} &amp;= P(Y_i = j \mid X_{i,1}, \ldots, X_{i,k}) \\
+&amp;= P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) - P(Y_i \leq j - 1 \mid X_{i,1}, \ldots, X_{i,k}),
+\end{align*}
+\]</span></p>
+<p>which leads to</p>
+<p><span class="math display">\[
+P(Y_i = 1) = p_{i,1} \;\;\;\; P(Y_i = 2) = p_{i,2} \;\; \dots \;\; P(Y_i = m) = p_{i,m}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\sum_{j = 1}^m p_{i,j} = p_{i,1} + p_{i,2} + \dots + p_{i,m} = 1.
+\]</span></p>
+</section>
+<section id="estimation-4" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="estimation-4"><span class="header-section-number">9.2</span> Estimation</h3>
+<p><strong>All parameters</strong> in the Ordinal Logistic regression model are also unknown. Therefore, model estimates are obtained through <strong>maximum likelihood</strong>, where we also assume a <strong>Multinomial joint probability mass function</strong> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span>. Moreover, this Multinomial assumption plays around with cumulative probabilities in the joint likelihood function <strong>as discussed in <a href="https://ebookcentral.proquest.com/lib/ubc/detail.action?docID=1168529">Agresti (2013)</a> in Chapter 8 (Section 8.2.2)</strong>.</p>
+<p>To fit the model with the package <code>MASS</code>, we use the function <code>polr()</code>, which obtains the corresponding estimates. The argument <code>Hess = TRUE</code> is required to compute the <a href="https://mathworld.wolfram.com/Hessian.html">Hessian matrix</a> of the <strong>log-likelihood function</strong>, which is used to obtain the standard errors of the estimates.</p>
+</section>
+<section id="inference-3" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="inference-3"><span class="header-section-number">9.3</span> Inference</h3>
+<p><strong>We can determine whether a regressor is statistically associated with the logarithm of the cumulative odds</strong> through hypothesis testing for the parameters <span class="math inline">\(\beta_j\)</span>. We also use the <strong>Wald statistic</strong> <span class="math inline">\(z_j\)</span>:</p>
+<p><span class="math display">\[
+z_j = \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}
+\]</span></p>
+<p>to test the hypotheses</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \beta_j = 0\\
+H_a: \beta_j \neq 0.
+\end{gather*}
+\]</span></p>
+<p>The <strong>null hypothesis</strong> <span class="math inline">\(H_0\)</span> indicates that the <span class="math inline">\(j\)</span>th regressor associated to <span class="math inline">\(\beta_j\)</span> does not affect the response variable in the model, and the <strong>alternative hypothesis</strong> <span class="math inline">\(H_a\)</span> otherwise. Moreover, provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j\)</span> has an <strong>approximately Standard Normal distribution</strong> under <span class="math inline">\(H_0\)</span>.</p>
+<p><code>R</code> provides the corresponding <strong><span class="math inline">\(p\)</span>-values</strong> for each <span class="math inline">\(\beta_j\)</span>. The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span>. As in the previous regression models, we would set a predetermined significance level <span class="math inline">\(\alpha\)</span> (usually taken to be 0.05) to infer if the <span class="math inline">\(p\)</span>-value is small enough. If the <span class="math inline">\(p\)</span>-value is smaller than the predetermined level <span class="math inline">\(\alpha\)</span>, then you could claim that there is evidence to reject the null hypothesis. Hence, <span class="math inline">\(p\)</span>-values that are small enough indicate that the data provides evidence in favour of <strong>association</strong> (<strong>or causation in the case of an experimental study!</strong>) between the response variable and the <span class="math inline">\(j\)</span>th regressor.</p>
+<p>Furthermore, given a specified level of confidence where <span class="math inline">\(\alpha\)</span> is the significance level, we can construct approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> <strong>confidence intervals</strong> for the corresponding true value of <span class="math inline">\(\beta_j\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}_j \pm z_{\alpha/2}\mbox{se}(\hat{\beta}_j),
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <strong>Standard Normal distribution</strong>.</p>
+</section>
+<section id="model-selection-1" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="model-selection-1"><span class="header-section-number">9.4</span> Model Selection</h3>
+<p><strong>To perform model selection</strong>, we can use the same techniques from the Binary Logistic regression model (check <a href="#sec-bin-log-model-selection" class="quarto-xref">Section&nbsp;2.4</a>).</p>
+</section>
+<section id="non-proportional-odds-model" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="non-proportional-odds-model"><span class="header-section-number">9.5</span> Non-proportional Odds Model</h3>
+<p>We might wonder:</p>
+<blockquote class="blockquote">
+<p>What happens if we do not fulfil the proportional odds assumption in our Ordinal Logistic regression model?</p>
+</blockquote>
+<section id="the-brant-wald-test" class="level4" data-number="9.5.1">
+<h4 data-number="9.5.1" class="anchored" data-anchor-id="the-brant-wald-test"><span class="header-section-number">9.5.1</span> The Brant-Wald Test</h4>
+<p>It is essential to remember that the Ordinal Logistic model under the proportional odds assumption is <strong>the first step</strong> when performing Regression Analysis on an ordinal response.</p>
+<p>Once this model has been fitted, <strong>it is possible to assess whether it fulfils this strong assumption statistically</strong>.</p>
+<p>We can do it via the Brant-Wald test:</p>
+<ul>
+<li>This tool statistically assesses whether our model globally fulfils this assumption. It has the following hypotheses:</li>
+</ul>
+<p><span class="math display">\[
+\begin{gather*}
+H_0:\ \text{Our Ordinal Logistic regression model globally fulfils} \\
+\text{the proportional odds assumption.} \\
+H_a:\ \text{Otherwise.}
+\end{gather*}
+\]</span></p>
+<ul>
+<li>Moreover, it also performs further hypothesis testing on each regressor. With <span class="math inline">\(k\)</span> regressors for <span class="math inline">\(j = 1, \dots, k\)</span>; we have the following hypotheses:</li>
+</ul>
+<p><span class="math display">\[
+\begin{gather*}
+H_0:\ \text{The } j \text{th regressor in our Ordinal Logistic regression model fulfils} \\
+\text{the proportional odds assumption.} \\
+H_a:\ \text{Otherwise.}
+\end{gather*}
+\]</span></p>
+<p>Function <code>brant()</code> from package <code>{brant}</code> implements this tool, which can be used in our <code>polr()</code> object.</p>
+<p>The Brant Wald test essentially compares this basic Ordinal Logistic regression model of <span class="math inline">\(k-1\)</span> cumulative logit functions versus a combination of <span class="math inline">\(k − 1\)</span> correlated Binary Logistic regressions.</p>
+</section>
+</section>
+</section>
+<section id="ordinary-least-squares-regression" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="ordinary-least-squares-regression"><span class="header-section-number">10</span> Ordinary Least-squares Regression</h2>
+<section id="data-modelling-framework-5" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="data-modelling-framework-5"><span class="header-section-number">10.1</span> Data Modelling Framework</h3>
+<p>Conceptually, the OLS regression model can be expressed as:</p>
+<p><span id="eq-conceptual_model-app"><span class="math display">\[
+\mbox{Response} = \mbox{Systematic Component} + \mbox{Random Component}.
+\tag{9}\]</span></span></p>
+<p>For the <span class="math inline">\(i\)</span>th observation in our <strong>random sample</strong> or <strong>training data</strong> (<span class="math inline">\(i = 1, \dots, n\)</span>), the conceptual model <a href="#eq-conceptual_model-app" class="quarto-xref">9</a> is mathematically represented as:</p>
+<p><span id="eq-OLS_model-app"><span class="math display">\[
+\underbrace{Y_i}_\text{Response}  = \underbrace{\beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_k g_k(X_{i,k})}_\text{Systematic Component} + \underbrace{\varepsilon_i.}_\text{Random Component}
+\tag{10}\]</span></span></p>
+<p>Note the following:</p>
+<ul>
+<li>The response <span class="math inline">\(Y_i\)</span> is equal to the sum of <span class="math inline">\(k + 2\)</span> terms on the right-hand side.</li>
+<li>The systematic component is the sum of:
+<ul>
+<li>An <strong>unknown intercept</strong> <span class="math inline">\(\beta_0\)</span> and</li>
+<li><span class="math inline">\(k\)</span> <strong>regressor functions</strong> <span class="math inline">\(g_j(X_{i,j})\)</span> multiplied by their respective <strong>unknown regression coefficient</strong> <span class="math inline">\(\beta_j\)</span> (<span class="math inline">\(j = 1, \dots, k\)</span>).</li>
+</ul></li>
+<li><span class="math inline">\(\varepsilon_i\)</span> is the <strong>random noise</strong>.</li>
+</ul>
+</section>
+<section id="modelling-assumptions" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="modelling-assumptions"><span class="header-section-number">10.2</span> Modelling Assumptions</h3>
+<p>For the <strong>random component</strong> in <a href="#eq-OLS_model-app" class="quarto-xref">Equation&nbsp;10</a>, we assume the following:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\mathbb{E}(\varepsilon_i) = 0 \\
+\text{Var}(\varepsilon_i) = \sigma^2 \\
+\varepsilon_i \sim \mathcal{N}(0, \sigma^2) \\
+\varepsilon_i \perp \!\!\! \perp \varepsilon_k \; \; \; \; \text{for} \; i \neq k  \; \; \; \; \text{(independence)}.
+\end{gather*}
+\]</span></p>
+<p>Hence, <strong>each <span class="math inline">\(Y_i\)</span> is also assumed to be independent and normally distributed</strong>:</p>
+<p><span class="math display">\[
+Y_i \mid X_{i, j} \sim \mathcal{N} \big( \beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_k g_k(X_{i,k}), \sigma^2 \big).
+\]</span></p>
+</section>
+<section id="definition-of-linearity" class="level3" data-number="10.3">
+<h3 data-number="10.3" class="anchored" data-anchor-id="definition-of-linearity"><span class="header-section-number">10.3</span> Definition of Linearity</h3>
+<p>The classical OLS model, from <strong>DSCI 561</strong>, implicates the identity function <span class="math inline">\(g_j(X_{i, j}) = X_{i, j}\)</span> in <a href="#eq-OLS_model-app" class="quarto-xref">Equation&nbsp;10</a>. This leads to:</p>
+<p><span class="math display">\[
+\begin{align*}
+Y_i &amp;= \beta_0 + \beta_1 g_1(X_{i, 1}) + \ldots + \beta_k g_k(X_{i,k}) + \varepsilon_i \\
+&amp;= \beta_0 + \beta_1 X_{i,1} + \ldots + \beta_k X_{i,k} + \varepsilon_i.
+\end{align*}
+\]</span></p>
+<p>Note the model is “<em>linear</em>” on the parameters (i.e., regression terms), not the regressors.</p>
+</section>
+<section id="inference-4" class="level3" data-number="10.4">
+<h3 data-number="10.4" class="anchored" data-anchor-id="inference-4"><span class="header-section-number">10.4</span> Inference</h3>
+<p>In terms of inference, we use the fitted model to identify the relationship between the response and regressors. We will need the <span class="math inline">\(j\)</span>th estimated regression coefficient <span class="math inline">\(\hat{\beta}_j\)</span> and its corresponding variability which is reflected in the <strong>standard error</strong> of the estimate, <span class="math inline">\(\mbox{se} \left( \hat{\beta}_j \right)\)</span>. To determine the statistical significance of <span class="math inline">\(\hat{\beta}_j\)</span>, we use the <strong>test statistic</strong></p>
+<p><span class="math display">\[t_j = \frac{\hat{\beta}_j}{\mbox{se} \left( \hat{\beta}_j \right)}\]</span></p>
+<p>to test the hypotheses</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \beta_j = 0 \\
+H_a: \beta_j \neq 0.
+\end{gather*}
+\]</span></p>
+<p>A statistic like <span class="math inline">\(t_j\)</span> is referred to as a <span class="math inline">\(t\)</span>-value. It has a <span class="math inline">\(t\)</span>-distribution <strong>under the null hypothesis</strong> <span class="math inline">\(H_0\)</span> with <span class="math inline">\(n - k - 1\)</span> degrees of freedom.</p>
+<p>We can obtain the corresponding <span class="math inline">\(p\)</span>-values for each <span class="math inline">\(\beta_j\)</span> associated to the <span class="math inline">\(t\)</span>-values under the null hypothesis <span class="math inline">\(H_0\)</span>. <strong>The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span> in our sample</strong>. Hence, small <span class="math inline">\(p\)</span>-values (less than the significance level <span class="math inline">\(\alpha\)</span>) indicate that the data provides evidence in favour of association (or <strong>causation</strong> if that is the case) between the response variable and the <span class="math inline">\(j\)</span>th regressor.</p>
+<p>Similarly, given a specified <span class="math inline">\((1-\alpha) \times 100\%\)</span> level of confidence, we can construct <strong>confidence intervals</strong> for the corresponding true value of <span class="math inline">\(\beta_j\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}_j \pm t_{\alpha/2, n - k - 1}\mbox{se} \left( \hat{\beta}_j \right),
+\]</span></p>
+<p>where <span class="math inline">\(t_{\alpha/2, n - k - 1}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n - k - 1\)</span> degrees of freedom.</p>
+</section>
+</section>
+<section id="poisson-regression" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="poisson-regression"><span class="header-section-number">11</span> Poisson Regression</h2>
+<section id="data-modelling-framework-6" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="data-modelling-framework-6"><span class="header-section-number">11.1</span> Data Modelling Framework</h3>
+<p>Besides OLS and Binary Logistic regressions, another alternative is count data modelling, as in <strong>Poisson regression</strong>. Unlike Binary Logistic regression, <strong>we use counts as a response variable</strong>. Hence, we have to modify the modelling framework to consider this fact. Poisson regression would be the primary resource when it comes to modelling counts. Note this model also fits into the GLM class.</p>
+<blockquote class="blockquote">
+<p>What is the distributional key difference between the Poisson and the OLS regression models in terms of the response?</p>
+</blockquote>
+<p>First of all, we have to specify what a Poisson random variable is. Recall <strong>DSCI 551</strong>, a Poisson random variable refers to discrete data with non-negative integer values that count something. <strong>These counts could happen during a given timeframe or even a space such as a geographic unit!</strong></p>
+<p>The Poisson regression model assumes a random sample of <span class="math inline">\(n\)</span> count observations <span class="math inline">\(Y_i\)</span>s, hence <strong>independent</strong> (<strong>but not identically distributed!</strong>), which have the following distribution:</p>
+<p><span class="math display">\[Y_i \sim \text{Poisson}(\lambda_i).\]</span></p>
+<p>Each <span class="math inline">\(i\)</span>th observation has its own <span class="math inline">\(\mathbb{E}(Y_i) = \lambda_i &gt; 0\)</span>, which also implicates <span class="math inline">\(\text{Var}(Y_i) = \lambda_i &gt; 0\)</span>.</p>
+<p>The equality of the expected value and variance in a random variable is called <strong>equidispersion</strong>. Parameter <span class="math inline">\(\lambda_i\)</span> is the risk of an event occurrence, coming from the definition of the Poisson random variable, <strong>in a given timeframe or even a space</strong>. Furthermore, we have to highlight another particularity in the Poisson distribution: <strong><span class="math inline">\(\lambda_i\)</span> is a continuous distributional parameter!</strong></p>
+<p>Let us generalize the Poisson regression model with <span class="math inline">\(k\)</span> regressors as:</p>
+<p><span id="eq-poisson-model-app"><span class="math display">\[
+\begin{equation*}
+h(\lambda_i) = \log(\lambda_i) = \beta_0 + \beta_1 X_{i,1} + \dots + \beta_k X_{i,k}.
+\end{equation*}
+\tag{11}\]</span></span></p>
+<p>In <a href="#eq-poisson-model-app" class="quarto-xref">Equation&nbsp;11</a>, each one of the <span class="math inline">\(k\)</span> regression coefficients <span class="math inline">\(\beta_{1}, \dots, \beta_{k}\)</span> represents <strong>the expected change in the natural logarithm of the mean <span class="math inline">\(\lambda_i\)</span> per unit change in their respective regressors <span class="math inline">\(X_{i,1}, \dots, X_{i,k}\)</span></strong>. Nonetheless, we could make more sense in the interpretation by exponentiating <a href="#eq-poisson-model-app" class="quarto-xref">Equation&nbsp;11</a>:</p>
+<p><span class="math display">\[
+\lambda_i = \exp{(\beta_0 + \beta_1 X_{i,1} + \dots + \beta_k X_{i,k})},
+\]</span></p>
+<p>where an increase in one unit in any of the <span class="math inline">\(k\)</span> regressors (<strong>while keeping the rest of them constant</strong>) <strong>multiplies the mean <span class="math inline">\(\lambda_i\)</span> by a factor <span class="math inline">\(\exp{(\beta_j)}\)</span>, for all <span class="math inline">\(j = 1, \dots, k\)</span></strong>.</p>
+<p>As a side note, we have to clarify that the <strong>systematic component</strong> in the Poisson regression model is explicitly depicted by the regressors and their coefficients as in multiple linear regression. The <strong>random component</strong> is implicitly contained in each random variable</p>
+<p><span class="math display">\[Y_i \sim \text{Poisson}(\lambda_i).\]</span></p>
+</section>
+<section id="estimation-5" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="estimation-5"><span class="header-section-number">11.2</span> Estimation</h3>
+<p>Under a general framework with <span class="math inline">\(k\)</span> regressors, the <strong>regression parameters</strong> <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> in the model are also unknown. In order to estimate them, we will use function <code>glm()</code> and its argument <code>family = poisson</code> (required to specify the Poisson nature of the response), which obtains the estimates <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots \hat{\beta}_k\)</span>.</p>
+<p>The estimates are obtained through <strong>maximum likelihood</strong> where we assume a <strong>Poisson joint probability mass function</strong> of the <span class="math inline">\(n\)</span> responses <span class="math inline">\(Y_i\)</span>.</p>
+<p>For the sake of coding clarity, you could also use <code>family = poisson(link = "log")</code>. Nevertheless, <code>link = "log"</code> is a default in <code>glm()</code> for Poisson regression. Thus, <code>family = poisson</code> suffices when using the logarithmic link function.</p>
+</section>
+<section id="inference-5" class="level3" data-number="11.3">
+<h3 data-number="11.3" class="anchored" data-anchor-id="inference-5"><span class="header-section-number">11.3</span> Inference</h3>
+<p><strong>The fitted regression model will be used to identify the relationship between the logarithm of the response’s mean and regressors.</strong> To determine the <strong>statistical significance</strong> of <span class="math inline">\(\beta_j\)</span> in this model, we also use the <strong>Wald statistic</strong>:</p>
+<p><span class="math display">\[
+z_j = \frac{\hat{\beta}_j}{\mbox{se} \left( \hat{\beta}_j \right)}
+\]</span></p>
+<p>to test the hypotheses</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \beta_j = 0 \\
+H_a: \beta_j \neq 0;
+\end{gather*}
+\]</span></p>
+<p>where the <strong>null hypothesis</strong> <span class="math inline">\(H_0\)</span> indicates that the <span class="math inline">\(j\)</span>th regressor corresponding to <span class="math inline">\(\beta_j\)</span> does not have any association on the response variable in the model, and the <strong>alternative hypothesis</strong> <span class="math inline">\(H_a\)</span> otherwise. Provided the sample size <span class="math inline">\(n\)</span> is large enough, <span class="math inline">\(z_j\)</span> has an <strong>approximately Standard Normal distribution</strong> under <span class="math inline">\(H_0\)</span>.</p>
+<p><code>R</code> provides the corresponding <strong><span class="math inline">\(p\)</span>-values</strong> for each <span class="math inline">\(\beta_j\)</span>. The smaller the <span class="math inline">\(p\)</span>-value, the stronger the evidence against the null hypothesis <span class="math inline">\(H_0\)</span>. As in the previous regression models, we would set a predetermined significance level <span class="math inline">\(\alpha\)</span> to infer if the <span class="math inline">\(p\)</span>-value is small enough. If the <span class="math inline">\(p\)</span>-value is smaller than the predetermined level <span class="math inline">\(\alpha\)</span>, then we could claim that there is evidence to reject the null hypothesis. Hence, <span class="math inline">\(p\)</span>-values that are small enough indicate that the data provides evidence in favour of <strong>association</strong> (<strong>or causation in the case of an experimental study!</strong>) between the response variable and the <span class="math inline">\(j\)</span>th regressor.</p>
+<p>Furthermore, given a specified level of confidence where <span class="math inline">\(\alpha\)</span> is the significance level, we can construct approximate <span class="math inline">\((1 - \alpha) \times 100\%\)</span> <strong>confidence intervals</strong> for the corresponding true value of <span class="math inline">\(\beta_j\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}_j \pm z_{\alpha/2}\mbox{se} \left( \hat{\beta}_j \right),
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is the upper <span class="math inline">\(\alpha/2\)</span> quantile of the <strong>Standard Normal distribution</strong>.</p>
+</section>
+<section id="model-selection-2" class="level3" data-number="11.4">
+<h3 data-number="11.4" class="anchored" data-anchor-id="model-selection-2"><span class="header-section-number">11.4</span> Model Selection</h3>
+<section id="goodness-of-fit-test" class="level4" data-number="11.4.1">
+<h4 data-number="11.4.1" class="anchored" data-anchor-id="goodness-of-fit-test"><span class="header-section-number">11.4.1</span> Goodness of Fit Test</h4>
+<p>The <strong>deviance</strong> (<span class="math inline">\(D_k\)</span>) criterion can be used to compare a given model with <span class="math inline">\(k\)</span> regressors with that of a <strong>baseline model</strong>. The usual baseline model is the <strong>saturated</strong> or <strong>full model</strong>, which perfectly fits the data because it allows a distinct Poisson mean <span class="math inline">\(\lambda_i\)</span> for the <span class="math inline">\(i\)</span>th observation in the training dataset (<span class="math inline">\(i = 1, \dots, n\)</span>), <strong>unrelated to the <span class="math inline">\(k\)</span> regressors</strong>.</p>
+<p>The <strong>maximized likelihood</strong> of this full model is denoted as <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>. Now, let <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> be the value of the maximized likelihood computed from our dataset of <span class="math inline">\(n\)</span> observation with <span class="math inline">\(k\)</span> regressors.</p>
+<p>We can compare the fits provided by these two models by the deviance <span class="math inline">\(D_k\)</span> given by</p>
+<p><span id="eq-deviance-general-app-2"><span class="math display">\[
+D_k = -2 \log \left( \frac{\hat{\mathscr{l}}_k}{\hat{\mathscr{l}}_f} \right) =  -2 \left[ \log \left( \hat{\mathscr{l}}_k \right) - \log \left( \hat{\mathscr{l}}_f \right) \right].
+\tag{12}\]</span></span></p>
+<p>Note that <span class="math inline">\(D_k\)</span> expresses <strong>how much our given model deviates from the full model on log-likelihood scale</strong>. This metric is interpreted as follows:</p>
+<ul>
+<li><strong>Large values</strong> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is small relative to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <strong>our given model fits the data poorly compared to the baseline model</strong>.</li>
+<li><strong>Small values</strong> of <span class="math inline">\(D_k\)</span> arise when <span class="math inline">\(\hat{\mathscr{l}}_k\)</span> is similar to <span class="math inline">\(\hat{\mathscr{l}}_f\)</span>, indicating that <strong>our given model provides a good fit to the data compared to the baseline model</strong>.</li>
+</ul>
+<p><strong>Specifically for Poisson regression with <span class="math inline">\(k\)</span> regressors</strong>, it can be shown that <span class="math inline">\(D_k\)</span> in <a href="#eq-deviance-general-app-2" class="quarto-xref">Equation&nbsp;12</a> is defined as follows:</p>
+<p><span id="eq-deviance-poisson-app"><span class="math display">\[
+\begin{gather}
+\hat{\lambda}_i = \exp{\left( \hat{\beta_0} + \hat{\beta}_1 x_{i,1} + \dots + \hat{\beta}_k x_{i,k} \right)} \\
+D_k = 2 \sum_{i = 1}^n \left[ y_i \log \left( \frac{y_i}{\hat{\lambda}_i} \right) - \left( y_i - \hat{\lambda}_i \right) \right]
+\end{gather}
+\tag{13}\]</span></span></p>
+<p>where <span class="math inline">\(y_i\)</span> is the <span class="math inline">\(i\)</span>th observed response in the training set of size <span class="math inline">\(n\)</span>. Note that when <span class="math inline">\(y_i = 0\)</span> counts, then <span class="math inline">\(\log \left( \frac{y_i}{\hat{\lambda}_i} \right)\)</span> is assumed as <span class="math inline">\(0\)</span>.</p>
+<p><a href="#eq-deviance-poisson-app" class="quarto-xref">Equation&nbsp;13</a> depicts the agreement of our model with <span class="math inline">\(k\)</span> regressors to the observed data. Hence, we can use <a href="#eq-deviance-poisson-app" class="quarto-xref">Equation&nbsp;13</a> to test the goodness of fit; i.e., <strong>whether our fitted model fits the data better than the saturated model, which makes it correctly specified (with a level of significance <span class="math inline">\(\alpha\)</span>!)</strong>.</p>
+<p>The hypothesis are the following:</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \text{Our}\textbf{ Model with $k$ regressors} \text{ fits the data better than the } \textbf{Saturated Model} \\
+H_a: \text{otherwise.}
+\end{gather*}
+\]</span></p>
+<p>We use the <strong>residual deviance</strong> <span class="math inline">\(\Delta_k\)</span> as a <strong>test statistic</strong>. <strong>Asymptotically</strong>, we have the following <strong>null distribution</strong>:</p>
+<p><span class="math display">\[
+\Delta_k \sim \chi^2_{n - (k + 1)}.
+\]</span></p>
+</section>
+<section id="analysis-of-deviance-for-nested-models" class="level4" data-number="11.4.2">
+<h4 data-number="11.4.2" class="anchored" data-anchor-id="analysis-of-deviance-for-nested-models"><span class="header-section-number">11.4.2</span> Analysis of Deviance for Nested Models</h4>
+<p>Suppose <strong>Model 1</strong> is nested in <strong>Model 2</strong>. Hence, this specific model selection will involve a hypothesis testing. The hypotheses are:</p>
+<p><span class="math display">\[
+\begin{gather*}
+H_0: \textbf{Model 1} \text{ fits the data better than } \textbf{Model 2} \\
+H_a: \textbf{Model 2} \text{ fits the data better than } \textbf{Model 1}.
+\end{gather*}
+\]</span></p>
+<p>Let <span class="math inline">\(D_2\)</span> be the deviance for <strong>Model 2</strong> and <span class="math inline">\(D_1\)</span> the deviance for <strong>Model 1</strong>. The test statistic <span class="math inline">\(\Delta_D\)</span> for the analysis of deviance is given by:</p>
+<p><span class="math display">\[
+\Delta_D = D_1 - D_2 \sim \chi^2_{d},
+\]</span></p>
+<p>which <strong>assymptotically</strong> (i.e., <span class="math inline">\(n \rightarrow \infty\)</span>) is <a href="https://www.math.wm.edu/~leemis/chart/UDR/PDFs/Chisquare.pdf"><strong>Chi-squared distributed</strong></a> with <span class="math inline">\(d\)</span> degrees of freedom under <span class="math inline">\(H_0\)</span>. The <span class="math inline">\(d\)</span> degrees of freedom are the <strong>regression parameters of difference between both models</strong>.</p>
+<p>Formally, this nested hypothesis testing is called the <strong>likelihood-ratio test</strong>.</p>
+</section>
+<section id="akaike-information-criterion-1" class="level4" data-number="11.4.3">
+<h4 data-number="11.4.3" class="anchored" data-anchor-id="akaike-information-criterion-1"><span class="header-section-number">11.4.3</span> Akaike Information Criterion</h4>
+<p><strong>One of the drawbacks of the analysis of deviance</strong> is that it only allows to test <strong>nested</strong> regression models when we have sparse data (i.e., each response is associated with a different set of values in the regressors).</p>
+<p>Fortunately, we have alternatives for model selection. <strong>The Akaike Information Criterion (AIC) makes it possible to compare models that are either nested or not.</strong> For a model with <span class="math inline">\(k\)</span> regressors and a deviance <span class="math inline">\(D_k\)</span> is defined as:</p>
+<p><span class="math display">\[
+\begin{equation}
+\mbox{AIC}_k = D_k + 2k.
+\end{equation}
+\]</span></p>
+<p>Models with <strong>smaller</strong> values of <span class="math inline">\(\mbox{AIC}_k\)</span> are preferred. That said, <span class="math inline">\(\mbox{AIC}_k\)</span> favours models with small values of <span class="math inline">\(D_k\)</span>.</p>
+<p>However, <span class="math inline">\(\mbox{AIC}_k\)</span> penalizes for including more regressors in the model. Hence, it discourages overfitting, which is key in model selection. This is why we select that model with the smallest <span class="math inline">\(\mbox{AIC}_k\)</span>.</p>
+</section>
+<section id="bayesian-information-criterion-1" class="level4" data-number="11.4.4">
+<h4 data-number="11.4.4" class="anchored" data-anchor-id="bayesian-information-criterion-1"><span class="header-section-number">11.4.4</span> Bayesian Information Criterion</h4>
+<p>An alternative to AIC is the Bayesian Information Criterion (BIC). <strong>The BIC also makes it possible to compare models that are either nested or not.</strong> For a model with <span class="math inline">\(k\)</span> regressors, <span class="math inline">\(n\)</span> observations used for training, and a deviance <span class="math inline">\(D_k\)</span>; it is defined as:</p>
+<p><span class="math display">\[
+\mbox{BIC}_k = D_k + k \log (n).
+\]</span></p>
+<p>Models with <strong>smaller</strong> values of <span class="math inline">\(\mbox{BIC}_k\)</span> are preferred. That said, <span class="math inline">\(\mbox{BIC}_k\)</span> also favours models with small values of <span class="math inline">\(D_k\)</span>.</p>
+<p>The differences between AIC and BIC will be more pronounced in datasets with large sample sizes <span class="math inline">\(n\)</span>. As the BIC penalty of <span class="math inline">\(k \log (n)\)</span> will always be larger than the AIC penalty of <span class="math inline">\(2k\)</span> when <span class="math inline">\(n &gt; 7\)</span>, <strong>BIC tends to select models with fewer regressors than AIC</strong>.</p>
+</section>
+</section>
+</section>
+<section id="survival-function" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="survival-function"><span class="header-section-number">12</span> Survival Function</h2>
+<p>For this function, let us consider a <strong>continuous</strong> random variable</p>
+<p><span class="math display">\[Y = \text{Time until an event occurs.}\]</span></p>
+<p>We know that the cumulative distribution function (CDF) of <span class="math inline">\(Y\)</span> tells us the probability that the event of interest occurs <strong>before a certain point in time <span class="math inline">\(t\)</span></strong>:</p>
+<p><span class="math display">\[
+F_Y(t) = P(Y \leq t).
+\]</span></p>
+<p>However, as the name suggests, in Survival Analysis, we are more interested in the probability that the event <strong>WILL NOT</strong> occur before a certain point in time <span class="math inline">\(t\)</span> (i.e., <strong>the subject survives at least at point <span class="math inline">\(t\)</span></strong>):</p>
+<p><span class="math display">\[
+S_Y(t) = P(Y &gt; t) = 1 - F_Y(t).
+\]</span></p>
+<p><span class="math inline">\(S_Y(t)\)</span> is called the <strong>survival function</strong>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_562_regr-2");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../notes/appendix-greek-alphabet.html" class="pagination-link" aria-label="Greek Alphabet">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Greek Alphabet</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notes/appendix-reg-mindmap.html" class="pagination-link" aria-label="Regression Mind Map">
+        <span class="nav-page-text">Regression Mind Map</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

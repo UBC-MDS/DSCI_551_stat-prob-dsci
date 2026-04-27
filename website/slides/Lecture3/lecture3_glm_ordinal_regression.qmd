@@ -1,0 +1,782 @@
+---
+title: "Lecture 3"
+subtitle: "GLMs: Ordinal Logistic Regression"
+author: "(Please, sign in on iClicker)"
+format:
+  live-revealjs: 
+    webr:
+      packages:
+        - VGAM
+        - cowplot
+        - tidyverse
+        - broom
+        - scales
+        - foreign
+        - MASS
+        - brant
+    resources: data
+    transition: none
+    slide-number: true
+    chalkboard: 
+      buttons: false
+    preview-links: auto
+    logo: images/UBC_MDS_logo.png
+    css: styles.css
+    footer: DSCI 562 - Regression II
+    slide-level: 4
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{r echo=FALSE}
+# Load required packages
+library(VGAM)
+library(cowplot)
+library(tidyverse)
+library(broom)
+library(scales)
+library(foreign)
+library(MASS)
+library(brant)
+```
+
+## Today's Learning Goals
+
+::: {.small-text}
+By the end of this lecture, you should be able to:
+
+- Outline the modelling framework of the <span style="color: purple;">Ordinal Logistic regression</span>.
+- Explain the concept of <span style="color: purple;">proportional odds</span>.
+- Fit and interpret Ordinal Logistic regression.
+- Use the Ordinal Logistic regression for prediction.
+- Assess the assumption of proportional odds via the <span style="color: purple;">Brant-Wald test</span>.
+- Contrast the Ordinal Logistic regression models under <span style="color: purple;">proportional and non-proportional odds assumptions</span>.
+:::
+
+## Outline
+
+::: {.small-text}
+1. The Need for an Ordinal Model
+2. College Juniors Dataset
+3. Exploratory Data Analysis
+4. Data Modelling Framework
+5. Estimation
+6. Inference
+7. Coefficient Interpretation
+8. Predictions
+9. Model Selection
+10. Non-proportional Odds
+:::
+
+## 1. The Need for an Ordinal Model
+
+- We will continue with Regression Analysis on <span style="color: purple;">categorical responses</span>. 
+
+<center>        
+<img src="images/panda.png" width="400" height="400"/>
+</center>
+</br>
+
+### 1.1. Reminder
+
+- Recall that a <span style="color: purple;">discrete response</span> is considered as categorical if it is of factor-type with more than two categories:
+
+. . .
+
+1. <span style="color: purple;">Nominal.</span> We have categories that do not follow any specific order—for example, the **type of dwelling** according to the Canadian census: *single-detached house*, *semi-detached house*, *row house*, *apartment*, and *mobile home*.
+
+. . .
+
+2. <span style="color: purple;">Ordinal.</span> The categories, in this case, follow a specific order—for example, a **Likert scale** of survey items: *strongly disagree*, *disagree*, *neutral*, *agree*, and *strongly agree*.
+
+### 1.2. A question to start with ...
+
+- Why not just using Mutinomial Logistic regression in the case of an ordinal response?
+
+. . .
+
+- The previous Multinomial Logistic model is <span style="color: purple;">suboptimal</span> for ordinal responses. 
+
+. . .
+
+- Suppose one does not consider the order in the response levels when necessary. In that case, <span style="color: purple;">we might risk losing valuable information when making inference or predictions</span>.
+- This valuable information is in the ordinal scale, which could be set up via <span style="color: purple;">cumulative probabilities</span>.
+
+
+### 1.3. What to do then?
+
+- An alternative logistic regression that suits <span style="color: purple;">ordinal</span> responses. 
+- Hence, the existence of the <span style="color: purple;">Ordinal Logistic regression model</span>.
+
+. . .
+
+- We will expand the regression mindmap to include this new model. 
+- Note there is a key characteristic called <span style="color: purple;">proportional odds</span> which is reflected on the <span style="color: purple;">data modelling framework</span>.
+
+## 2. College Juniors Dataset
+
+- To illustrate the use of this <span style="color: purple;">generalized linear model (GLM)</span>, let us introduce an adequate dataset.
+- The data frame `college_data` was obtained from the webpage of the [UCLA Statistical Consulting Group](https://stats.idre.ucla.edu/r/dae/ordinal-logistic-regression/). 
+
+. . .
+
+- It contains the results of a <span style="color: purple;">survey</span> applied to $n = 400$ college juniors regarding the factors that influence their **decision to apply to graduate school**.
+
+### 2.1. Read data in `R`
+
+```{webr}
+#| autorun: true
+college_data <- suppressMessages(read_csv("data/college_data.csv"))
+college_data
+```
+
+### 2.2. A quick look at data!
+
+- The dataset contains the following variables:
+  - `decision`: how likely the student will apply to graduate school, <span style="color: purple;">a discrete and ordinal response with three increasing categories</span> (`unlikely`, `somewhat likely`, and `very likely`).
+  - `parent_ed`: whether at least one parent has a graduate degree, <span style="color: purple;">a discrete and binary explanatory variable</span> (`Yes` and `No`).
+  - `GPA`: the student's current GPA, <span style="color: purple;">a continuous explanatory variable</span>.
+
+### 2.3. A quick data wrangling!
+
+- Variable `decision` will be our response of interest. 
+- Before proceeding with our regression analysis, let us set it up as an <span style="color: purple;">ordered factor</span> via function `as.ordered()`.
+
+```{webr}
+#| autorun: true
+college_data$decision <- as.ordered(college_data$decision)
+college_data$decision <- fct_relevel(college_data$decision,
+  c("unlikely", "somewhat likely", "very likely")
+)
+levels(college_data$decision)
+```
+
+### 2.4. Main Statistical Inquiries
+
+- Let us suppose we want to assess the following:
+  - Is `decision` statistically related to `parent_ed` and `GPA`?
+  - How can we interpret these statistical relationships (<span style="color: purple;">if there are any!</span>)?
+
+## 3. Exploratory Data Analysis (EDA)
+
+- Since `decision` is a <span style="color: purple;">discrete ordinal response</span>, we have to be careful about the plots to be used in the EDA.
+- To explore the relationship between `decision` and `GPA` , we will use these side-by-side plots: <span style="color: purple;">boxplots</span> and/or <span style="color: purple;">violin plots</span>.
+
+. . .
+
+- `GPA` is on the $y$-axis, and all categories of `decision` are on the $x$-axis. 
+- The side-by-side violin plots show the mean of `GPA` by `decision` category in red points.
+
+### Plots!
+
+```{r}
+#| echo: false
+college_data <- suppressMessages(read_csv("data/college_data.csv"))
+
+college_data_side_boxplots <- college_data |>
+  ggplot(aes(decision, GPA)) +
+  geom_boxplot(aes(fill = decision)) +
+  labs(y = "GPA", x = "Decision to Apply to Graduate School") +
+  ggtitle("Side-by-Side Boxplots") +
+  theme(
+    plot.title = element_text(size = 65, face = "bold"),
+    axis.text = element_text(size = 55),
+    axis.title = element_text(size = 55),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette="BuPu")
+
+college_data_side_violin <- college_data |>
+  ggplot(aes(decision, GPA)) +
+  geom_violin(aes(fill = decision)) +
+  labs(y = "GPA", x = "Decision to Apply to Graduate School") +
+  ggtitle("Side-by-Side Violin Plots") +
+  stat_summary(
+    fun = mean, colour = "red", geom = "point",
+    shape = 18, size = 11
+  ) +
+  theme(
+    plot.title = element_text(size = 65, face = "bold"),
+    axis.text = element_text(size = 55),
+    axis.title = element_text(size = 55),
+    legend.position = "none"
+  ) +
+  scale_fill_brewer(palette="BuPu")
+```
+
+```{r}
+#| fig.width: 45
+#| fig.height: 25
+plot_grid(college_data_side_boxplots,
+  college_data_side_violin,
+  nrow = 1
+)
+```
+
+### How can we visually explore the relationship between `decision` and `parent_ed`?
+
+- In the case of two categorical explanatory variables, <span style="color: purple;">we can use stacked bar charts.</span>
+- Each bar will show the percentages (depicted on the $y$-axis) of college students falling on each ordered category of `decision` with the categories found in `parent_ed` on the $x$-axis. 
+
+### Plots!
+
+```{r}
+#| echo: false
+college_data_prop_summary <- as.data.frame(xtabs(
+  ~ parent_ed +
+    decision,
+  college_data
+) / rowSums(xtabs(
+  ~ parent_ed + decision, college_data
+)), responseName = "prop")
+
+college_data_stacked_bars <- ggplot(college_data_prop_summary, aes(x = parent_ed, prop, fill = decision)) +
+  geom_bar(stat = "identity", width = 0.7, colour = "black") +
+  geom_text(aes(label = ifelse(prop >= 0.05, paste0(sprintf("%.0f", prop*100),"%"),"")),
+            position = position_stack(vjust = 0.5), colour = "firebrick3", fontface = "bold", size = 15) +
+  scale_y_continuous(labels = percent_format()) +
+  labs(y = "Percent", x = "Parent Education Status", fill = "") +
+  ggtitle("Stacked Bar Charts")  +
+  theme(plot.title = element_text(size = 65, face = "bold"),
+        axis.text.x = element_text(size = 55, angle = 0),
+        axis.text.y = element_text(size = 55, angle = 0),
+        axis.title = element_text(size = 55),
+        legend.text = element_text(size = 45, margin = margin(r = 1, unit = "cm")), 
+        legend.title = element_text(size = 45, face = "bold")) +
+  guides(fill = guide_legend(title = "Decision")) + scale_fill_brewer(palette = "Blues")
+```
+
+```{r}
+#| fig.width: 45
+#| fig.height: 25
+plot_grid(college_data_side_boxplots,
+  college_data_side_violin,
+  college_data_stacked_bars,
+  nrow = 1
+)
+```
+
+### In-class Question
+
+- What can we see <span style="color: purple;">descriptively</span> from the previous plots?
+
+<center>        
+<img src="images/panda.png" width="400" height="400"/>
+</center>
+
+## 4. Data Modelling Framework
+
+- Let us suppose that a given <span style="color: purple;">discrete ordinal response</span> $Y_i$ (for $i = 1, \dots, n$) has categories $1, 2, \dots, m$ in a training set of size $n$.
+
+> **Heads-up:** Categories $1, 2, \dots, m$ <span style="color: purple;">implicate an ordinal scale here</span>, i.e., $1 < 2 < \dots < m$.
+
+. . .
+
+- Also, note there is more than one class of Ordinal Logistic regression. 
+- We will review the <span style="color: purple;">proportional odds</span> model (a <span style="color: purple;">cumulative logit model</span>).
+
+### When $m = 3$
+
+- We will set up an Ordinal Logistical regression model for this specific dataset <span style="color: purple;">with $m = 3$ for the levels of $Y_i$</span>, i.e.,
+
+\begin{gather*}
+1 = \texttt{unlikely} \\
+2 = \texttt{somewhat likely} \\
+3 = \texttt{very likely}
+\end{gather*}
+
+### The Regressors
+
+<br>
+
+- For the $i$th observation, we have the continuous $X_{i, \texttt{GPA}}$ and the dummy variable 
+
+::: {.small-text}
+$$
+X_{i, \texttt{parent_ed}} =
+\begin{cases}
+1 \; \; \; \; \mbox{at least one parent has a graduate degree},\\
+0 \; \; \; \; 	\mbox{neither of the parents has a graduate degree.}
+\end{cases}
+$$
+:::
+
+### Then...
+
+<br>
+
+- The model will indicate how each one of the regressors affects the <span style="color: purple;">cumulative logarithm of the odds</span> in `decision` for the following $2$ situations:
+
+::: {.small-text}
+\begin{gather*}
+\text{Level } \texttt{somewhat likely}  \text{ or any lesser degree versus level } \texttt{very likely} \\
+\text{Level } \texttt{unlikely} \text{ versus level } \texttt{somewhat likely} \text{ or any higher degree}
+\end{gather*}
+:::
+
+### These are our cumulative log-odds!
+
+- We have the following system of $2$ equations:
+
+::: {.small-text}
+\begin{align*}
+\eta_i^{(\texttt{somewhat likely})} &= \log\left[\frac{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}}, X_{i, \texttt{parent_ed}})}\right] \\ &= \beta_0^{(\texttt{somewhat likely})} - \beta_1 X_{i, \texttt{GPA}} - \beta_2 X_{i, \texttt{parent_ed}}
+\end{align*}
+\begin{align*}
+\eta_i^{(\texttt{unlikely})} &= \log\left[\frac{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}\right] \\ &= \beta_0^{(\texttt{unlikely})} - \beta_1 X_{i, \texttt{GPA}} - \beta_2 X_{i, \texttt{parent_ed}}.
+\end{align*}
+:::
+
+### Note the following...
+
+- The system has $2$ intercepts but <span style="color: purple;">only $2$ regression coefficients</span>. 
+- Check the signs of the <span style="color: purple;">common</span> $\beta_1$ and $\beta_2$, which are minuses. This is a fundamental parameterization of the <span style="color: purple;">proportional odds</span> model.
+
+### Some algebraic manipulation...
+
+- To make coefficient intepretation easier, we could re-expresss the equations of $\eta_i^{(\texttt{somewhat likely})}$  and $\eta_i^{(\texttt{unlikely})}$ as follows:
+
+. . .
+
+::: {.small-text}
+\begin{gather*}
+\frac{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\
+\exp\big(-\beta_0^{(\texttt{somewhat likely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big)
+\end{gather*}
+\begin{gather*}
+\frac{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\
+\exp\big(-\beta_0^{(\texttt{unlikely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).
+\end{gather*}
+:::
+
+#### Further Insights
+
+- Both regression coefficients ($\beta_1$ and $\beta_2$) have a multiplicative effect on the odds that we have on the left-hand side. 
+- Moreover, <span style="color: purple;">given the proportional odds assumptions</span>, the regressor effects are the same for both cumulative odds.
+
+<center>        
+<img src="images/panda.png" width="250" height="250"/>
+</center>
+</br>
+
+### What is the math for the general case with $m$ response categories and $k$ regressors?
+
+::: {.small-text}
+
+- This model will indicate how each one of the $k$ regressors $X_{i,1}, \dots, X_{i,k}$ affects the <span style="color: purple;">cumulative logarithm of the odds</span> in the ordinal response (with $m$ levels) for the following $m - 1$ situations:
+
+\begin{gather*}
+\text{Level } m - 1 \text{ or any lesser degree versus level } m\\
+\text{Level } m - 2 \text{ or any lesser degree versus level } m - 1 \text{ or any higher degree}\\
+\vdots \\
+\text{Level } 2 \text{ or any lesser degree versus level } 3 \text{ or any higher degree}\\
+\text{Level } 1 \text{ versus level } 2 \text{ or any higher degree}\\
+\end{gather*}
+
+:::
+
+### Link Functions
+
+<br>
+
+::: {.small-text-v2}
+\begin{gather*}
+\eta_i^{(m - 1)} = \log\left[\frac{P(Y_i \leq m - 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i = m \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(m - 2)} = \log\left[\frac{P(Y_i \leq m - 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i > m - 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(m - 2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\vdots \\
+\eta_i^{(2)} = \log\left[\frac{P(Y_i \leq 2 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i > 2 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(2)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\eta_i^{(1)} = \log\left[\frac{P(Y_i = 1 \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i > 1 \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(1)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}.
+\end{gather*}
+:::
+
+### Cumulative Probabilities
+
+- Note that the previous system has $m - 1$ intercepts but <span style="color: purple;">only $k$ regression coefficients</span>. 
+- In general, the previous $m - 1$ equations can be generalized for levels $j = m - 1, \dots, 1$ as follows:
+
+. . .
+
+::: {.small-text}
+\begin{gather*}
+\eta_i^{(j)} = \log\left[\frac{P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k})}{P(Y_i > j \mid X_{i,1}, \ldots, X_{i,k})}\right] = \beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k} \\
+\; \; \; \; \; \; \; \; \Rightarrow \; P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) = \frac{\exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}\right)}{1 + \exp\left(\beta_0^{(j)} - \beta_1 X_{i, 1} - \ldots - \beta_k X_{i, k}\right)}.
+\end{gather*}
+:::
+
+### Standalone Probabilities
+
+::: {.small-text}
+- The <span style="color: purple;">standalone probability</span> that $Y_i$ will fall in the category $j$ is computed as follows:
+$$
+p_{i,j} = P(Y_i = j \mid X_{i,1}, \ldots, X_{i,k}) \\
+= P(Y_i \leq j \mid X_{i,1}, \ldots, X_{i,k}) - P(Y_i \leq j - 1 \mid X_{i,1}, \ldots, X_{i,k}),
+$$
+
+- Hence:
+$$
+P(Y_i = 1) = p_{i,1} \;\;\;\; P(Y_i = 2) = p_{i,2} \;\; \dots \;\; P(Y_i = m) = p_{i,m},
+$$
+
+- Where:
+$$
+\sum_{j = 1}^m p_{i,j} = p_{i,1} + p_{i,2} + \dots + p_{i,m} = 1.
+$$
+:::
+
+### iClicker Question
+
+::: {.small-text}
+- Suppose we have a case with an ordered response of **five levels** and **four continuous regressors**.
+- How many link functions, intercepts, and coefficients will our Ordinal Logistic regression model have under a **proportional odds assumption**?
+
+**A.** Four link functions, four intercepts, and sixteen regression coefficients. 
+
+**B.** Five link functions, five intercepts, and five regression coefficients. 
+
+**C.** Five link functions, five intercepts, and twenty regression coefficients. 
+
+**D.** Four link functions, four intercepts, and four regression coefficients. 
+:::
+
+<center>        
+<img src="images/panda.png" width="160" height="160"/>
+</center>
+</br>
+
+### A Graphical Intuition of the Proportional Odds Assumption
+
+- There is an <span style="color: purple;">optional section</span> in the notes that shows mathematically what the proportional odds assumption stands for in the Ordinal Logistic regression model with $k$ regressors and a training set size of $n$, using a response of $m$ levels in general. 
+
+. . .
+
+- That said, let us check the graphical intuition with an example of an ordinal response of $5$ levels and a single continuous regressor $X_{i , 1}$ (<span style="color: purple;">which is unbounded!</span>).
+
+### System of Cumulative Logit Equations
+
+\begin{gather*}
+\eta_i^{(4)} = \log\left[\frac{P(Y_i \leq 4 \mid X_{i,1})}{P(Y_i = 5 \mid X_{i,1})}\right] = \beta_0^{(4)} - \beta_1 X_{i, 1} \\
+\eta_i^{(3)} = \log\left[\frac{P(Y_i \leq 3 \mid X_{i,1})}{P(Y_i > 3 \mid X_{i,1})}\right] = \beta_0^{(3)} - \beta_1 X_{i, 1} \\
+\eta_i^{(2)} = \log\left[\frac{P(Y_i \leq 2 \mid X_{i,1})}{P(Y_i > 2 \mid X_{i,1})}\right] = \beta_0^{(2)} - \beta_1 X_{i, 1} \\
+\eta_i^{(1)} = \log\left[\frac{P(Y_i = 1 \mid X_{i,1})}{P(Y_i > 1 \mid X_{i,1})}\right] = \beta_0^{(1)} - \beta_1 X_{i, 1}.
+\end{gather*}
+
+### Some algebraic manipulation...
+
+::: {.small-text}
+\begin{gather*}
+P(Y_i \leq 4 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(4)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(4)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 3 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(3)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(3)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 2 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(2)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(2)} - \beta_1 X_{i, 1}\right)} \\
+P(Y_i \leq 1 \mid X_{i,1}) = \frac{\exp\left(\beta_0^{(1)} - \beta_1 X_{i, 1} \right)}{1 + \exp\left(\beta_0^{(1)} - \beta_1 X_{i, 1}\right)}. \\
+\end{gather*}
+:::
+
+### Note following...
+
+- There are four intercepts $\left( \beta_0^{(1)}, \beta_0^{(2)}, \beta_0^{(3)}, \beta_0^{(4)} \right)$  and a single coefficient $\beta_1$. 
+- Let us assume we estimate these five parameters to be the following:
+\begin{gather*}
+\hat{\beta_0}^{(1)} = 4 \quad \quad \hat{\beta_0}^{(2)} = 5.5 \\ 
+\hat{\beta_0}^{(3)} = 6.3 \quad \quad \hat{\beta_0}^{(4)} = 10 \\
+\hat{\beta_1} = 12.
+\end{gather*}
+
+### The sigmoid functions! 
+
+```{r}
+#| echo: false 
+#| message: false
+#| warning: false
+#| fig.height: 8
+#| fig.width: 12.5
+library(tidyverse)
+
+x_grid <- seq(-0.5, 1.6, length.out = 1200)
+a_vals <- c("k = 4" = 10, "k = 3" = 6.3, "k = 2" = 5.5, "k = 1" = 4)
+
+df <- map_dfr(names(a_vals), \(nm) {
+  a <- a_vals[[nm]]
+  tibble(
+    x = x_grid,
+    y = plogis(a - 12 * x),
+    curve = nm
+  )
+}) |>
+  mutate(curve = factor(curve, levels = names(a_vals)))
+
+eq_df <- tibble(
+  curve = factor(names(a_vals), levels = names(a_vals)),
+  x = 1.58,
+  y = c(0.95, 0.8, 0.65, 0.5),
+  lab = c(
+    "P(Y[i] <= 4 ~ '|' ~ X[i,1])==frac(e^{10-12*x},1+e^{10-12*x})",
+    "P(Y[i] <= 3 ~ '|' ~ X[i,1])==frac(e^{6.3-12*x},1+e^{6.3-12*x})",
+    "P(Y[i] <= 2 ~ '|' ~ X[i,1])==frac(e^{5.5-12*x},1+e^{5.5-12*x})",
+    "P(Y[i] <= 1 ~ '|' ~ X[i,1])==frac(e^{4-12*x},1+e^{4-12*x})"
+  )
+)
+
+cb_pal <- c(
+  "k = 4" = "#0072B2",
+  "k = 3" = "#D55E00",
+  "k = 2" = "#009E73",
+  "k = 1" = "#CC79A7"
+)
+
+ggplot(df, aes(x, y, color = curve)) +
+  geom_line(linewidth = 1.1) +
+  geom_text(
+    data = eq_df,
+    aes(x = x, y = y, label = lab, color = curve),
+    hjust = 1, vjust = 0.5, parse = TRUE,
+    size = 7.5,         
+    show.legend = FALSE
+  ) +
+  scale_color_manual(values = cb_pal) +
+  coord_cartesian(xlim = c(-0.5, 1.6), ylim = c(0, 1.05)) +
+  labs(x = "x", y = "Cumulative Probability") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 17),
+    axis.title = element_text(size = 21)
+  )
+```
+
+
+
+## 5. Estimation
+
+::: {.small-text}
+- Estimates are obtained through <span style="color: purple;">maximum likelihood</span>, where we also assume a <span style="color: purple;">Multinomial joint probability mass function</span> of the $n$ responses $Y_i$ via cumulative probabilities in the joint likelihood function.
+:::
+. . .
+
+::: {.small-text}
+- To fit the model with the package `MASS`, we use `polr()`. 
+The argument `Hess = TRUE` is required to compute the [Hessian matrix](https://mathworld.wolfram.com/Hessian.html) of the <span style="color: purple;">log-likelihood function</span>, which is used to obtain the standard errors of the estimates.
+:::
+
+
+```{webr}
+#| autorun: true
+ordinal_model <- polr(formula = decision ~ parent_ed + GPA,
+  data = college_data, Hess = TRUE
+)
+```
+
+## 6. Inference
+
+- We also use the <span style="color: purple;">Wald statistic</span> $z_j = \frac{\hat{\beta}_j}{\mbox{se}(\hat{\beta}_j)}$ to test the hypotheses:
+\begin{gather*}
+H_0: \beta_j = 0\\
+H_a: \beta_j \neq 0.
+\end{gather*}
+
+- Provided the sample size $n$ is large enough, $z_j$ has an <span style="color: purple;">approximately Standard Normal distribution</span> under $H_0$.
+
+### Code in `R`!
+
+::: {.small-text}
+- Terms `unlikely|somewhat likely` and `somewhat likely|very likely` refer to $\hat{\beta_0}^{(\texttt{unlikely})}$ and $\hat{\beta_0}^{(\texttt{somewhat likely})}$, respectively.
+:::
+
+```{webr}
+#| autorun: true
+summary_ordinal_model <- cbind(tidy(ordinal_model), p.value = pnorm(abs(tidy(ordinal_model)$statistic), lower.tail = FALSE) * 2
+) |>
+  mutate_if(is.numeric, round, 2)
+summary_ordinal_model
+```
+
+### Using $\alpha = 0.05$
+
+- We see that those coefficients associated with `GPA` and `parent_ed` are statistically significant with $\alpha = 0.05$.
+- Function `confint()` can provide the 95% confidence intervals for the estimates contained in `ordinal_model`.
+
+```{webr}
+#| autorun: true
+round(confint(ordinal_model), 2)
+```
+
+## 7. Coefficient Interpretation
+
+- The interpretation of the Ordinal Logistic regression coefficients will change since we are modelling cumulative probabilities. 
+- Let us interpret the association of `decision` with `GPA` and `parent_ed`.
+
+```{webr}
+#| autorun: true
+tibble(summary_ordinal_model[1:2, 1:2], exp.estimate = round(exp(summary_ordinal_model[1:2, 2]), 2))
+```
+
+### Interpretations
+
+- By using the column `exp.estimate`, <span style="color: purple;">along with the model equations on the original scale of the cumulative odds</span>, we interpret the two regression coefficients above <span style="color: purple;">by each odds</span> as follows:
+- For the odds:
+
+$$\frac{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\ \exp\big(-\beta_0^{(\texttt{somewhat likely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).$$
+
+### We have ...
+
+::: {.small-text}
+> $\beta_1$: "for each one-unit increase in the `GPA`, the odds that the student is `very likely`  versus `somewhat likely` or `unlikely` to apply to graduate school increase by $\exp \left( \hat{\beta}_1 \right) = 1.82$ times (while holding `parent_ed` constant)."
+:::
+
+. . .
+
+::: {.small-text}
+> $\beta_2$: "for those respondents whose parents attended to graduate school, the odds that the student is `very likely` versus `somewhat likely` or `unlikely` to apply to graduate school increase by $\exp \left( \hat{\beta}_2 \right) = 2.86$ times (when compared to those respondents whose parents did not attend to graduate school and holding `GPA` constant)."
+:::
+
+### And...
+
+- For the odds: 
+
+$$\frac{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})} = \\ \exp\big(-\beta_0^{(\texttt{unlikely})}\big) \exp\big(\beta_1 X_{i, \texttt{GPA}}\big) \exp\big(\beta_2 X_{i, \texttt{parent_ed}}\big).$$
+
+### We have ...
+
+::: {.small-text}
+> $\beta_1$: "for each one-unit increase in the `GPA`, the odds that the student is `very likely` or `somewhat likely` versus `unlikely` to apply to graduate school increase by $\exp \left( \hat{\beta}_1 \right) = 1.82$ times (while holding `parent_ed` constant)."
+:::
+
+. . .
+
+::: {.small-text}
+> $\beta_2$: "for those respondents whose parents attended to graduate school, the odds that the student is `very likely`  or `somewhat likely` versus `unlikely` to apply to graduate school increase by $\exp \left( \hat{\beta}_2 \right) = 2.86$ times (when compared to those respondents whose parents did not attend to graduate school and holding `GPA` constant)."
+:::
+
+## 8. Predictions
+
+- <span style="color: purple;">Aside from our main statistical inquiries</span>, using the function `predict()` with the object `ordinal_model`, we can obtain the estimated probabilities to apply to graduate school (associated to `unlikely`, `somewhat likely`, and `very likely`) for a student with a `GPA` of 3.5 whose parents attended to graduate school.
+
+. . .
+
+```{webr}
+#| autorun: true
+round(predict(ordinal_model, tibble(GPA = 3.5, parent_ed = "Yes"), type = "probs"), 2)
+```
+
+### Thus...
+
+- We can see that it is `somewhat likely` to apply to graduate school with a probability of 0.48. 
+- <span style="color: purple;">Thus, we could classify the student in this ordinal category.</span>
+
+## 9. Model Selection
+
+- <span style="color: purple;">To perform model selection</span>, we can use the same techniques from `lecture2`. That said, some `R` coding functions might not be entirely available for the `polr()` models. 
+- Still, these statistical techniques and metrics can be manually coded.
+
+## 10. Non-proportional Odds
+
+- Now, we might wonder:
+
+> *What happens if we do not fulfil the proportional odds assumption in our Ordinal Logistic regression model?*
+
+<center>        
+<img src="images/panda.png" width="300" height="300"/>
+</center>
+</br>
+
+### 10.1. The Brant-Wald Test
+
+::: {.small-text}
+- The Ordinal Logistic model under the proportional odds assumption is <span style="color: purple;">the first step</span> when performing Regression Analysis on an ordinal response. 
+- Once this model has been fitted, <span style="color: purple;">it is possible to assess whether it fulfils this strong assumption statistically</span>.
+:::
+
+. . .
+
+::: {.small-text}
+- We can do it via the **Brant-Wald test**.
+- This tool performs statistically assesses whether our model globally fulfils this assumption:
+\begin{gather*}
+H_0: \text{Our Ordinal Logistic regression model globally} \\ \text{fulfils the proportional odds assumption.} \\
+H_a: \text{Otherwise}.
+\end{gather*}
+:::
+
+#### Regressor-specifc Tests
+
+<br>
+
+- It also performs further hypothesis testing on each regressor. 
+- With $k$ regressors for $j = 1, \dots, k$; we have the following hypotheses:
+\begin{gather*}
+H_0: \text{The } j \text{th regressor in our Ordinal Logistic regression} \\ \text{model fulfils the proportional odds assumption.} \\
+H_a: \text{Otherwise}.
+\end{gather*}
+
+### 10.2. Code in `R`!
+
+- Function `brant()` from package `brant` implements this tool, which can be used in our `polr()` object `ordinal_model`:
+
+```{webr}
+#| autorun: true
+brant(ordinal_model)
+```
+
+
+#### Notes on Output
+
+- The row `Omnibus` represents the global model, while the other two rows correspond to our two regressors: `parent_ed` and `GPA`. 
+- With $\alpha = 0.05$, **we are completely fulfilling the proportional odds assumption** (the column `probability` delivers the corresponding $p$-values).
+
+. . .
+
+> **Heads-up:** The Brant Wald test essentially compares this basic Ordinal Logistic regression model of $m - 1$ cumulative logit functions (i.e., the ordinal response has $m$ categories) versus a set of $m − 1$ correlated Binary Logistic regressions.
+
+### 10.3. A Non-proportional Odds Model
+
+::: {.small-text}
+- Suppose that our example case <span style="color: purple;">does not fulfil</span> the proportional odds assumption according to the Brant Wald test. 
+- It is possible to have a model under a <span style="color: purple;">non-proportional odds assumption</span>:
+:::
+
+. . .
+
+::: {.small-text}
+\begin{align*}
+\eta_i^{(\texttt{somewhat likely})} &= \log\left[\frac{P(Y_i \leq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i = \texttt{very likely} \mid X_{i, \texttt{GPA}}, X_{i, \texttt{parent_ed}})}\right] \\ &= \beta_0^{(\texttt{somewhat likely})} - \beta_1^{(\texttt{somewhat likely})} X_{i, \texttt{GPA}} - \\ & \qquad \beta_2^{(\texttt{somewhat likely})} X_{i, \texttt{parent_ed}}
+\end{align*}
+\begin{align*}
+\eta_i^{(\texttt{unlikely})} &= \log\left[\frac{P(Y_i = \texttt{unlikely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}{P(Y_i \geq \texttt{somewhat likely} \mid X_{i, \texttt{GPA}},X_{i, \texttt{parent_ed}})}\right] \\ &= \beta_0^{(\texttt{unlikely})} - \beta_1^{(\texttt{unlikely})} X_{i, \texttt{GPA}} - \beta_2^{(\texttt{unlikely})} X_{i, \texttt{parent_ed}}.
+\end{align*}
+:::
+
+#### Generalized Ordinal Logistic Regression Model
+
+<br>
+
+- This class of models can be fit via [**the function `cumulative()`**](https://search.r-project.org/CRAN/refmans/VGAM/html/cumulative.html) from package `VGAM`. 
+- Note that estimation, inference, coefficient interpretation, and predictions are conducted in a similar way <span style="color: purple;">compared to the proportional odds model</span>. 
+
+### In-class Question
+
+- Why would we have to be cautious when fitting a non-proportional odds model in the context of a response with a considerable number of ordinal levels and regressors?
+
+<center>        
+<img src="images/panda.png" width="350" height="350"/>
+</center>
+</br>
+
+## 11. Wrapping Up on Categorical Regression Models
+
+::: {.small-text-v2}
+- Multinomial and Ordinal Logistic regression models address cases where our response is <span style="color: purple;">discrete and categorical</span>. 
+- These models are <span style="color: purple;">another class GLMs</span>.
+:::
+
+. . .
+
+::: {.small-text-v2}
+- <span style="color: purple;">Multinomial Logistic regression</span> approaches <span style="color: purple;">nominal responses</span>. It heavily relies on a baseline response level and the odds' natural logarithm.
+- <span style="color: purple;">Ordinal Logistic regression</span> approaches <span style="color: purple;">ordinal responses</span>. It relies on cumulative odds on an ordinal scale.
+:::
+
+. . .
+
+::: {.small-text-v2}
+- We have to be careful with <span style="color: purple;">coefficient interpretations</span> in these models, especially with the cumulative odds. This will imply an <span style="color: purple;">effective communication</span> of these estimated models for inferential matters.
+:::

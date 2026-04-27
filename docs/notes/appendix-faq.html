@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Frequently Asked Questions (FAQs) – DSCI 562: Regression II</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../LICENSE.html" rel="next">
+<link href="../notes/appendix-reg-mindmap.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": true,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><style>html{ scroll-behavior: smooth; }</style>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script><link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DSCI 562: Regression II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/UBC-MDS/DSCI_562_regr-2"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-faq.html">Frequently Asked Questions (FAQs)</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../notes/img/UBC_MDS_logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none"></a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lectures</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../learning-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Learning Goals by Lecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture1-glm-link-functions-and-count-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1: Link Functions and Count Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture2_glm_model_selection_multinomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2: Model Selection and Multinomial Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture3_glm_ordinal_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture4_linear_mixed_effects_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4: Linear Mixed-effects Models</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture5_survival_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5: Survival Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture6_local_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6: Local Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture7_quantile_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7: Quantile Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/lecture8_missing_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8: Missing Data</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Warmup Lab Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Ordinal Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Cox Proportional Hazards Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/warmup-lab4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4: Quantile Regression</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-log-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Binary Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-binary-multivariate-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fundamentals of the Multivariate Normal Distribution</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-greek-alphabet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Greek Alphabet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-cheatsheet.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Cheat Sheet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-reg-mindmap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Mind Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/appendix-faq.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Frequently Asked Questions (FAQs)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../LICENSE.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">License</span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li>
+<a href="#the-data-science-workflow" id="toc-the-data-science-workflow" class="nav-link active" data-scroll-target="#the-data-science-workflow">The Data Science Workflow</a>
+  <ul>
+<li><a href="#question-1" id="toc-question-1" class="nav-link" data-scroll-target="#question-1">Question 1</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#count-regression" id="toc-count-regression" class="nav-link" data-scroll-target="#count-regression">Count Regression</a>
+  <ul>
+<li><a href="#question-2-not-to-be-evaluated-in-the-quiz" id="toc-question-2-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-2-not-to-be-evaluated-in-the-quiz">Question 2 (Not to be evaluated in the quiz)</a></li>
+  <li><a href="#question-3" id="toc-question-3" class="nav-link" data-scroll-target="#question-3">Question 3</a></li>
+  <li><a href="#question-4" id="toc-question-4" class="nav-link" data-scroll-target="#question-4">Question 4</a></li>
+  <li><a href="#question-5-not-to-be-evaluated-in-the-quiz" id="toc-question-5-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-5-not-to-be-evaluated-in-the-quiz">Question 5 (Not to be evaluated in the quiz)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#quantile-regression" id="toc-quantile-regression" class="nav-link" data-scroll-target="#quantile-regression">Quantile Regression</a>
+  <ul>
+<li><a href="#question-6-not-to-be-evaluated-in-the-quiz" id="toc-question-6-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-6-not-to-be-evaluated-in-the-quiz">Question 6 (Not to be evaluated in the quiz)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#missing-data-imputation" id="toc-missing-data-imputation" class="nav-link" data-scroll-target="#missing-data-imputation">Missing Data Imputation</a>
+  <ul>
+<li><a href="#question-7" id="toc-question-7" class="nav-link" data-scroll-target="#question-7">Question 7</a></li>
+  <li><a href="#question-8" id="toc-question-8" class="nav-link" data-scroll-target="#question-8">Question 8</a></li>
+  <li><a href="#question-9" id="toc-question-9" class="nav-link" data-scroll-target="#question-9">Question 9</a></li>
+  <li><a href="#question-10-not-to-be-evaluated-in-the-quiz" id="toc-question-10-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-10-not-to-be-evaluated-in-the-quiz">Question 10 (Not to be evaluated in the quiz)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#mixed-effects-modelling" id="toc-mixed-effects-modelling" class="nav-link" data-scroll-target="#mixed-effects-modelling">Mixed-effects Modelling</a>
+  <ul>
+<li><a href="#question-11-not-to-be-evaluated-in-the-quiz" id="toc-question-11-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-11-not-to-be-evaluated-in-the-quiz">Question 11 (Not to be evaluated in the quiz)</a></li>
+  <li><a href="#question-12-not-to-be-evaluated-in-the-quiz" id="toc-question-12-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-12-not-to-be-evaluated-in-the-quiz">Question 12 (Not to be evaluated in the quiz)</a></li>
+  <li><a href="#question-13-not-to-be-evaluated-in-the-quiz" id="toc-question-13-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-13-not-to-be-evaluated-in-the-quiz">Question 13 (Not to be evaluated in the quiz)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#survival-analysis" id="toc-survival-analysis" class="nav-link" data-scroll-target="#survival-analysis">Survival Analysis</a>
+  <ul>
+<li><a href="#question-14-not-to-be-evaluated-in-the-quiz" id="toc-question-14-not-to-be-evaluated-in-the-quiz" class="nav-link" data-scroll-target="#question-14-not-to-be-evaluated-in-the-quiz">Question 14 (Not to be evaluated in the quiz)</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notes/appendix-binary-log-regression.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notes/appendix-faq.html">Frequently Asked Questions (FAQs)</a></li></ol></nav><div class="quarto-title">
+<h1 class="title">Frequently Asked Questions (FAQs)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header><p>This appendix provides answers to common questions students ask about the course content, assignments, and tools. Each entry includes a clear explanation intended to help you clarify concepts quickly and resolve recurring points of confusion. The goal is to make it easy to find reliable explanations in one place.</p>
+<p>Importantly, several of these items highlight <strong>key ideas you are expected to know and that may be assessed on quizzes</strong> (and, when relevant, in labs). If you would like to discuss any of these questions in more detail, feel free to reach out to the course instructors.</p>
+<section id="the-data-science-workflow" class="level1 unnumbered"><h1 class="unnumbered">The Data Science Workflow</h1>
+<section id="question-1" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-1">Question 1</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Take a look at the paper <a href="https://link.springer.com/article/10.1007/s43545-021-00146-1">here</a> and in particular the <em>Model specification</em> section. Do you spot any problem?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> The authors appear to indicate a fitting via an Ordinary Least-squares (OLS) regression model to a binary response in <em>Model specification</em>. Specifically, their <span class="math inline">\(Y_i\)</span> indicates whether a first marriage ended in divorce or separation (a Bernoulli outcome encoded as <code>1</code> for “<em>success</em>” and <code>0</code> for “<em>failure</em>,” where “<em>success</em>” is defined as the marriage ending in divorce). This setup is both conceptually atypical and statistically problematic: OLS treats the response as continuous, can yield fitted values outside <span class="math inline">\([0,1]\)</span>, and relies on assumptions (e.g., constant variance and normally distributed errors) that are violated for Bernoulli data. In short, this raises the same concerns that arise when OLS is used to model probabilities directly (see the discussion <a href="../notes/appendix-binary-log-regression.html#sec-wrong-OLS">in this linked note</a>).</p>
+<p>Later, in the <em>Estimation and hypothesis testing</em> section, the authors refer to “<em>logit regression</em>” (i.e., Binary Logistic regression), which would be the appropriate modelling choice for a Bernoulli outcome. However, the earlier reference to OLS creates ambiguity about what was actually estimated, and the paper would benefit from explicit clarification (e.g., the precise likelihood/model, link function, and correct estimation method).</p>
+<p>Finally, the reporting of results is also unclear. The coefficient tables are labeled “<em>Coefficient</em>,” but it is not explicit whether these values are on the log-odds scale (as in standard Binary Logistic regression output) or exponentiated for the odds scale. That distinction matters for interpretation, and the authors should state clearly whether coefficients have been exponentiated and, ideally, report standard errors and confidence intervals on the same scale.</p>
+</div>
+</section></section><section id="count-regression" class="level1 unnumbered"><h1 class="unnumbered">Count Regression</h1>
+<section id="question-2-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-2-not-to-be-evaluated-in-the-quiz">Question 2 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Why do we use the Wald test statistic when testing the significance of an estimated parameter in a Poisson regression model? Is this related to the link function or the GLM setup used for Poisson regression?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> The use of the <strong>Wald test</strong> is <strong>not specific to Poisson regression</strong>, nor is it directly related to the <strong>log link function</strong>.</p>
+<p>In Poisson regression, model parameters <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> (with <span class="math inline">\(k\)</span> regressors) are estimated using <strong>maximum likelihood estimation (MLE)</strong>. Under standard regularity conditions, MLE-based estimators are <strong>asymptotically normally distributed</strong> as the sample size becomes large enough (i.e., the sample size <span class="math inline">\(n \rightarrow \infty\)</span>).</p>
+<p>For example, an estimated coefficient <span class="math inline">\(\hat{\beta}_j\)</span> (<span class="math inline">\(j = 1, \dots, k\)</span>) is approximately normally distributed around the true (unknown) population parameter <span class="math inline">\(\beta_j\)</span>, with an estimated standard error. This approximate normality allows us to construct the <strong>Wald test statistic</strong> to test hypotheses such as</p>
+<p><span class="math display">\[
+H_0: \beta_j = 0 \quad \text{versus} \quad H_a: \beta_j \neq 0
+\]</span></p>
+<p>Because this reasoning relies on <strong>MLE and asymptotic normality (i.e., as the sample size <span class="math inline">\(n \rightarrow \infty\)</span>))</strong>, the Wald test can be used in many models beyond Poisson regression, including Binary Logistic regression, Negative Binomial regression, and other generalized linear models (GLMs). The detailed theoretical justification is beyond the scope of this course. You are welcome to discuss these ideas further during office hours with the instructors.</p>
+<blockquote class="blockquote">
+<p><strong>Takeaway:</strong> The Wald test is justified by <strong>MLE and asymptotic normality</strong> not by the <strong>log link function</strong> or <strong>Poisson regression specifically</strong>.</p>
+</blockquote>
+</div>
+</section><section id="question-3" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-3">Question 3</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Why do we need to check the Poisson’s assumption on <strong>equidispersion</strong> (i.e., the response’s mean is equal to its variance) after fitting a Poisson regression? What happens if we do not?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> Checking this assumption on equidispersion is important because violating it can lead to misleading results:</p>
+<ul>
+<li><p><strong>Incorrect standard errors:</strong> If the variance is larger than the mean in our observed data, you will encounter <strong>overdispersion</strong>. Hence, the estimated standard errors for regression parameters (coming from the Poisson regression fitting) may be underestimated. This can make <span class="math inline">\(p\)</span>-values and confidence intervals unreliable.</p></li>
+<li><p><strong>Invalid inference:</strong> Underestimated standard errors can lead to <strong>false positives</strong> when testing hypotheses about regressors.</p></li>
+</ul>
+</div>
+</section><section id="question-4" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-4">Question 4</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Why do not we use a Negative Binomial model from the very beginning instead of Poisson regression when modelling count-type responses?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> Although Negative Binomial regression can accommodate overdispersion (i.e., variance greater than the mean), there are good reasons to begin with a Poisson regression model:</p>
+<ul>
+<li>
+<strong>Simplicity:</strong> Poisson regression is a simpler starting point. If the Poisson assumptions are reasonable, it can provide adequate inference without introducing an additional dispersion parameter (i.e., <span class="math inline">\(\theta\)</span> in the Negative Binomial model).<br>
+</li>
+<li>
+<strong>Fewer parameters:</strong> Poisson regression estimates only an intercept and <span class="math inline">\(k\)</span> regression coefficients, whereas Negative Binomial regression estimates those <strong>plus</strong> a dispersion parameter <span class="math inline">\(\theta\)</span>. All else equal, estimating fewer parameters is preferable as long as the model provides an acceptable fit (i.e., it has adequate <em>goodness of fit</em>).<br>
+</li>
+<li>
+<strong>Model checking:</strong> Starting with Poisson regression naturally supports a workflow of <strong>diagnose, then adapt</strong>. You can fit the Poisson model, assess evidence of overdispersion, and move to a Negative Binomial model only if the equidispersion assumption appears violated. Jumping directly to Negative Binomial may be unnecessary when equidispersion holds.</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Takeaway:</strong> Fit Poisson regression first, check for overdispersion, and switch to Negative Binomial regression only when the data warrant it.</p>
+</blockquote>
+</div>
+</section><section id="question-5-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-5-not-to-be-evaluated-in-the-quiz">Question 5 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> How does a Negative Binomial distribution converges to a Poisson distribution?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> Let the random variable</p>
+<p><span class="math display">\[
+Y_r \sim \text{Negative Binomial}(r,p),
+\]</span></p>
+<p>where <span class="math inline">\(r &gt; 0\)</span> and <span class="math inline">\(0 &lt; p &lt; 1\)</span>. We use the convention that <span class="math inline">\(Y_r\)</span> counts the number of failures before the <span class="math inline">\(r\)</span>-th success. Recall that the probability mass function (PMF) is</p>
+<p><span class="math display">\[
+P(Y_r = y \mid r, p) = \binom{y-1+r}{y} p^r (1-p)^y \quad \text{for} \quad y = 0,1,2,\dots
+\]</span></p>
+<p>Equivalently, we can write this PMF using Gamma functions as follows:</p>
+<p><span class="math display">\[
+P(Y_r = y \mid r, p) = \frac{\Gamma(y+r)}{\Gamma(r)\,y!} \, p^r (1-p)^y.
+\]</span></p>
+<p>The mean and variance of the distribution are:</p>
+<p><span class="math display">\[
+\mathbb{E}[Y_r] = \frac{r(1-p)}{p}, \qquad \mathrm{Var}(Y_r) = \frac{r(1-p)}{p^2}.
+\]</span></p>
+<p>To obtain a Poisson limit, let</p>
+<p><span class="math display">\[
+p = \frac{r}{r+\lambda}, \qquad \lambda &gt; 0 \quad \text{and fixed}.
+\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[
+\frac{r(1-p)}{p} = \lambda,
+\]</span></p>
+<p>so the mean of the Negative Binomial remains constant as <span class="math inline">\(r \to \infty\)</span>. Under this parametrization</p>
+<p><span class="math display">\[
+1 - p = \frac{\lambda}{r+\lambda},
+\]</span></p>
+<p>substituting into the PMF gives</p>
+<p><span class="math display">\[
+P(Y_r = y \mid r, \lambda) = \frac{\Gamma(y+r)}{\Gamma(r)\,y!} \left(\frac{r}{r+\lambda}\right)^r \left(\frac{\lambda}{r+\lambda}\right)^y.
+\]</span></p>
+<p>We rewrite the PMF as</p>
+<p><span class="math display">\[
+P(Y_r = y \mid r, \lambda) = \frac{1}{y!} \left[ \frac{\Gamma(y+r)}{\Gamma(r)\,r^y} \right] \left(\frac{r}{r+\lambda}\right)^r \left(\frac{r\lambda}{r+\lambda}\right)^y.
+\]</span></p>
+<p>This form separates all terms involving <span class="math inline">\(r\)</span>. Now, we take Limits term by term.</p>
+<p><strong>Gamma Ratio Term</strong></p>
+<p><span class="math display">\[
+\frac{\Gamma(y+r)}{\Gamma(r)\,r^y} = \prod_{k=0}^{y-1} \frac{r+k}{r} = \prod_{k=0}^{y-1} \left(1+\frac{k}{r}\right).
+\]</span></p>
+<p>Since <span class="math inline">\(y\)</span> is fixed,</p>
+<p><span class="math display">\[
+\prod_{k=0}^{y-1} \left(1+\frac{k}{r}\right) \;\longrightarrow\; 1 \quad \text{as } r \to \infty.
+\]</span></p>
+<p><strong>Exponential-Type Term</strong></p>
+<p><span class="math display">\[
+\left(\frac{r}{r+\lambda}\right)^r = \left(1+\frac{\lambda}{r}\right)^{-r} \;\longrightarrow\; e^{-\lambda}.
+\]</span></p>
+<p><strong>Power Term</strong></p>
+<p><span class="math display">\[
+\left(\frac{r\lambda}{r+\lambda}\right)^y = \lambda^y \left(\frac{r}{r+\lambda}\right)^y \;\longrightarrow\; \lambda^y,
+\]</span> since <span class="math inline">\(\frac{r}{r+\lambda} \to 1\)</span>.</p>
+<p>Finally, combining the limits of all components:</p>
+<p><span class="math display">\[
+P(Y_r = y \mid r, \lambda)\;\longrightarrow\; \frac{1}{y!} \cdot 1 \cdot e^{-\lambda} \cdot \lambda^y = \frac{e^{-\lambda}\lambda^y}{y!}.
+\]</span></p>
+<p>This is exactly the PMF of a <span class="math inline">\(\text{Poisson}(\lambda)\)</span> random variable!</p>
+<blockquote class="blockquote">
+<p><strong>Takeaway:</strong></p>
+<p><span class="math display">\[
+\text{Negative Binomial}\!\left(r,\frac{r}{r+\lambda}\right)\;\xrightarrow[r\to\infty]{d}\;\text{Poisson}(\lambda)
+\]</span></p>
+<p>where <span class="math inline">\(\xrightarrow[r\to\infty]{d}\)</span> means: as <span class="math inline">\(r\to\infty\)</span>, then the Negative Binomial distribution converges in <strong>distribution</strong> (hence, <span class="math inline">\(d\)</span>) to a Poisson distribution.</p>
+</blockquote>
+</div>
+</section></section><section id="quantile-regression" class="level1 unnumbered"><h1 class="unnumbered">Quantile Regression</h1>
+<section id="question-6-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-6-not-to-be-evaluated-in-the-quiz">Question 6 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> In quantile regression, why does the fitted line have to pass through some data points, and why is this different from OLS?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> This is due to the different loss functions and constraints between the two methods. In quantile regression, we must satisfy the condition that a proportion <span class="math inline">\(\tau\)</span> of observations fall below the fitted line and <span class="math inline">\(1-\tau\)</span> fall above it. With two parameters to estimate <strong>(intercept and slope)</strong>, the optimization requires anchoring the line to two data points. This uses two degrees of freedom and allows the remaining observations to split in the correct proportions above and below the line while optimizing the quantile loss function.</p>
+<p>In contrast, <strong>OLS minimizes the sum of squared residuals</strong> without any constraint on the proportion of points above or below the line. OLS has a direct analytical solution which in the general case can be written as <span class="math inline">\(\hat \beta = (X^{T}X)^{-1}X^{T}y\)</span>, in the form of matrices and vector. Finding this solution does not require the line to pass through specific points. The quantile regression loss function is based on absolute values of error terms and has <strong>no closed-form</strong> solution, requiring numerical optimization methods that, combined with the proportion constraint result in the line passing through two points for this simple case.</p>
+<p><strong>Note:</strong> In this formula <span class="math inline">\(\hat \beta = (X^{T}X)^{-1}X^{T}y\)</span>, we have <span class="math inline">\(X\)</span> as the design matrix with <span class="math inline">\(n\)</span> rows and <span class="math inline">\(p\)</span> columns (number of parameters) and <span class="math inline">\(y\)</span> as the response vector. <span class="math inline">\(X^{T}\)</span> denotes the transpose of matrix <span class="math inline">\(X\)</span> and <span class="math inline">\((\cdot)^{-1}\)</span> indicated the inverse of a matrix.</p>
+</div>
+</section></section><section id="missing-data-imputation" class="level1 unnumbered"><h1 class="unnumbered">Missing Data Imputation</h1>
+<section id="question-7" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-7">Question 7</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> What is the logic/pattern for how missing values are imputed? Is it finding similar profile houses (like <span class="math inline">\(k\)</span>-NN regression), or is it using random predictions by default?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> When you run <code>mice ()</code> to perform <strong>multiple imputation</strong>, the algorithm does not simply guess randomly, and it is not purely a <span class="math inline">\(k\)</span>-NN algorithm either. Instead, it uses a method called chained equations (to which the method predictive mean matching, PMM, belongs).</p>
+<p>The idea of <strong>multiple imputation</strong> is to impute one variable at a time, using the other variables in the dataset as regressors (or predictors) For example, if house price is missing, the algorithm builds a regression model that predicts price from the other observed features (size, number of rooms, location indicators, etc.), using only the rows where price is observed. Then it fills in the missing values for price. After that, it moves to the next variable with missingness and repeats the process. This cycle continues multiple times so that the imputations stabilize.</p>
+<p>For numeric variables, the method in <code>mice()</code> is PMM (other variable types use a suitable regression model, such as Binary Logistic regression, while still relying on chained equations). PMM is model-based, but it does not directly plug in the predicted value. Instead, it:</p>
+<ol type="1">
+<li>Uses a regression model (i.e., OLS) to compute predicted values,</li>
+<li>Finds a small group of observed cases with similar predicted values,</li>
+<li>Randomly selects one of those similar observed values,</li>
+<li>Copies that observed value into the missing cell.</li>
+</ol>
+<p>Thus, it is not raw <span class="math inline">\(k\)</span>-NN regression in the feature space, but it does use “<em>similarity</em>” (but this similarity is defined by the regression model. It also is not “<em>random prediction</em>” in the sense of blind noise. The randomness is structured and purposeful. Randomness enters in three ways:</p>
+<ul>
+<li>The regression coefficients are slightly varied to reflect parameter uncertainty,</li>
+<li>The residual variance is drawn rather than fixed,</li>
+<li>A donor is randomly selected from a small set of similar cases.</li>
+</ul>
+<p>This produces plausible but slightly different imputed values across datasets. <strong>For a short toy example in a single imputation stage (i.e., suppose <code>m = 1</code>), you can check the below Question 10.</strong></p>
+<p>So, when you set <code>m = 15</code> in <code>mice()</code>, the entire imputation process is repeated 15 times, each time using new random draws. The result is 15 completed datasets, each representing one plausible version of reality given the observed data.</p>
+</div>
+</section><section id="question-8" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-8">Question 8</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> When we use <code>pool()</code> on the 15 imputed datasets (i.e., suppose we use <code>m = 15</code> when using <code>mice()</code> beforehand), does it average each <code>NA</code> cell (i.e., missing data) across the 15 imputations? Or is it the coefficients that are pulled? How does this work?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> It is important to note that <code>pool()</code> <strong>does not</strong> average the imputed data cells. Actually, <code>pool()</code> does not look at each missing value and compute the average of its 15 imputed versions. That would collapse the uncertainty and defeat the purpose of multiple imputation.</p>
+<p>Instead, here is what actually happens:</p>
+<ol type="1">
+<li>You fit your analysis model (for example, a linear regression such as OLS) separately on each of the 15 completed datasets.</li>
+<li>This gives you 15 sets of results:
+<ul>
+<li>15 sets of coefficient estimates,</li>
+<li>15 set of standard errors for these coefficient estimated.</li>
+</ul>
+</li>
+<li>
+<code>pool()</code> then combines those model results, not the raw data.</li>
+</ol>
+<p>Pooling accounts for two sources of uncertainty:</p>
+<ul>
+<li>
+<strong>Within-imputation uncertainty:</strong> The usual regression uncertainty you already know, even complete data would give you standard errors (since this is an observed random sample).</li>
+<li>
+<strong>Between-imputation uncertainty:</strong> The variation in coefficient estimates across the 15 datasets. This reflects uncertainty due to missing data.</li>
+</ul>
+<p>If the 15 regression slopes are nearly identical, missingness did not affect inference much. If they vary noticeably, that variability increases the final standard errors.</p>
+<blockquote class="blockquote">
+<p><strong>Takeaway:</strong> So what gets averaged are the coefficients and their associated uncertainty, not the missing cells.</p>
+</blockquote>
+</div>
+</section><section id="question-9" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-9">Question 9</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Why is multiple imputation valuable even though it injects randomness?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> It may feel “<em>weird</em>” that multiple imputation introduces randomness. But that randomness is not “<em>noise</em>” in a careless sense, it represents real uncertainty. Single imputation methods <strong>(like the simple mean or regression imputations we saw in class before multiple imputation)</strong> behave as if the imputed values were known with certainty. This typically makes the data look cleaner than it truly is and leads to underestimated standard errors. Multiple imputation instead says:</p>
+<blockquote class="blockquote">
+<p>“We do not know these missing values. Let us generate several plausible versions and see how much our conclusions change.”</p>
+</blockquote>
+<p>If conclusions barely change across imputations, then missing data were not influential. If conclusions vary substantially, that variation should appear in the final uncertainty. In other words, the additional variability induced by multiple imputation is not a flaw, it is a correction. It prevents us from being overly confident in results that depend on partially unobserved data.</p>
+</div>
+</section><section id="question-10-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-10-not-to-be-evaluated-in-the-quiz">Question 10 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> How does <code>mice()</code> work under the hood using multiple imputation via PMM?</p>
+</div>
+<div class="callout-answer">
+<p>Let us illustrate PMM assuming a toy dataset with two columns (<strong>numerical variables</strong>, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> ) with missing data (i.e., <code>NA</code>s).</p>
+<section id="simple-case-where-only-one-column-has-missing-data-y-missing-x-fully-observed-i.e-single-imputation-y-x" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="simple-case-where-only-one-column-has-missing-data-y-missing-x-fully-observed-i.e-single-imputation-y-x">Simple case where only one column has missing data (<span class="math inline">\(Y\)</span> missing, <span class="math inline">\(X\)</span> fully observed; i.e, single imputation <span class="math inline">\(Y | X\)</span>)</h3>
+<section id="data" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="data">Data</h4>
+<p>We observe <span class="math inline">\(X\)</span> for all rows, but two rows have missing <span class="math inline">\(Y\)</span>:</p>
+<p><span id="eq-dataset"><span class="math display">\[
+\begin{array}{c|c|c}
+\text{Row} &amp; X &amp; Y\\
+\hline
+1 &amp; 1 &amp; 3\\
+2 &amp; 2 &amp; 5\\
+3 &amp; 3 &amp; 7\\
+4 &amp; 4 &amp; 9\\
+5 &amp; 5 &amp; 10\\
+6 &amp; 6 &amp; 13\\
+7 &amp; 7 &amp; 14\\
+8 &amp; 8 &amp; 16\\
+9 &amp; 6 &amp; \texttt{NA}\\
+10 &amp; 4 &amp; \texttt{NA}\\
+\end{array}
+\tag{1}\]</span></span></p>
+<p>We will impute <span class="math inline">\(Y_9\)</span> and <span class="math inline">\(Y_{10}\)</span> using PMM with <span class="math inline">\(5\)</span> donors (i.e., using 5 complete rows in this donor pool).</p>
+<section id="step-1-working-model" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-1-working-model">Step 1: Working model</h5>
+<p>Use the following OLS model <strong>for those complete rows (i.e, <span class="math inline">\(1\)</span> to <span class="math inline">\(8\)</span>)</strong>:</p>
+<p><span class="math display">\[
+Y = \beta_0 + \beta_1 X + \varepsilon \qquad \text{with} \qquad \varepsilon\sim \mathcal{N}(0,\sigma^2).
+\]</span></p>
+<p>Use the standard Multiple Imputation by Chained Equations (MICE) non-informative prior distribution <strong>on the above OLS parameters</strong>:</p>
+<p><span class="math display">\[
+p(\beta_0,\beta_1,\sigma^2)\propto \frac{1}{\sigma^2}.
+\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Definition of a non-informative prior distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In <strong>frequentist statistics</strong>, we already believe in:</p>
+<ul>
+<li>Estimators.</li>
+<li>Sampling distributions.</li>
+<li>Asymptotics.</li>
+<li>Likelihood (i.e., the data we observed).</li>
+</ul>
+<p>In <strong>Bayesian statistics</strong>, a non-informative prior is basically a way of saying:</p>
+<blockquote class="blockquote">
+<p>“<em>Let the likelihood dominate. I don’t want to inject real prior information for my parameters of interest.</em>”</p>
+</blockquote>
+</div>
+</div>
+</section><section id="step-2.-fit-ols-on-observed-y-rows" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-2.-fit-ols-on-observed-y-rows">Step 2. Fit OLS on observed <span class="math inline">\(Y\)</span> rows</h5>
+<p>Observed <span class="math inline">\(Y\)</span> rows are <span class="math inline">\(1, \dots,8\)</span>. Thus:</p>
+<ul>
+<li>
+<span class="math inline">\(n_{\text{obs}} = 8\)</span>,</li>
+<li>
+<span class="math inline">\(k = 2\)</span> (intercept + slope),</li>
+<li>Residual degrees of freedom <span class="math inline">\(\nu = n_{\text{obs}} - k = 6\)</span>.</li>
+</ul>
+<p>Compute means:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\bar{X}=\frac{1+2+\cdots+8}{8}=\frac{36}{8}=4.5 \\
+\bar{Y}=\frac{3+5+7+9+10+13+14+16}{8}=\frac{77}{8}=9.625.
+\end{gather*}
+\]</span></p>
+<p>Compute:</p>
+<p><span class="math display">\[
+\begin{gather*}
+S_{xx}=\sum_{i=1}^8 (x_i-\bar{x})^2 = 42 \\
+S_{xy}=\sum_{i=1}^8 (x_i-\bar{x})(y_i-\bar{y}) = 84.5.
+\end{gather*}
+\]</span></p>
+<p>So, the OLS slope and intercept are:</p>
+<p><span class="math display">\[
+\begin{gather*}
+\hat{\beta}_1=\frac{S_{xy}}{S_{xx}}=\frac{84.5}{42}=2.0119 \\
+\hat{\beta}_0=\bar{y}-\hat{\beta}_1\bar{x}=9.625-(2.0119)(4.5)=0.5714.
+\end{gather*}
+\]</span></p>
+<p>Thus, the fitted conditional mean is:</p>
+<p><span class="math display">\[
+\widehat{Y}=0.5714 + 2.0119X.
+\]</span></p>
+</section><section id="step-3-compute-sum-of-squared-errors-sse" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-3-compute-sum-of-squared-errors-sse">Step 3: Compute sum of squared errors (SSE)</h5>
+<p>Compute residuals <span class="math inline">\(e_i=y_i-\hat{y}_i\)</span> for rows <span class="math inline">\(1,\dots,8\)</span>, and SSE:</p>
+<p><span class="math display">\[
+\text{SSE}=\sum_{i=1}^8 e_i^2 = 1.6131.
+\]</span></p>
+</section><section id="step-4-inverse-gamma-posterior-for-sigma2-and-its-hyperparameters-alpha-and-eta" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-4-inverse-gamma-posterior-for-sigma2-and-its-hyperparameters-alpha-and-eta">Step 4: Inverse-gamma posterior for <span class="math inline">\(\sigma^2\)</span> and its hyperparameters (<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\eta\)</span>)</h5>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Definition of a posterior distribution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In <strong>Bayesian statistics</strong>, the posterior distribution of a parameter (e.g., <span class="math inline">\(\sigma^2\)</span>) is your updated belief about a parameter after you have seen the data (i.e., the likelihood which are <strong>complete rows <span class="math inline">\(1\)</span> to <span class="math inline">\(8\)</span></strong> in this case).</p>
+<p>Before seeing data (i.e., the likelihood), you might have some belief on the parameter (which is a prior distribution, either informative or uninformative). After seeing data (i.e., the likelihood), you update that belief on the parameter. The result of that update is called the <strong>posterior distribution</strong> of the parameter of interest.</p>
+</div>
+</div>
+<p>Under the prior distribution <span class="math inline">\(p(\beta_0, \beta_1,\sigma^2)\propto 1/\sigma^2\)</span>, the posterior distribution of <span class="math inline">\(\sigma^2\)</span> is:</p>
+<p><span class="math display">\[
+\sigma^2 \mid \text{observed complete data} \sim \text{Inverse Gamma}(\alpha,\eta),
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+\alpha=\frac{n_{\text{obs}}-k}{2}=\frac{8-2}{2}=3,
+\qquad
+\eta=\frac{\text{SSE}}{2}=\frac{1.6131}{2}=0.80655.
+\]</span></p>
+<p><strong>Note the Inverse Gamma distribution is another case of a continuous nonnegative distribution. Think about it as one “cousin” of the Gamma distribution.</strong></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Is the variance <span class="math inline">\(\sigma^2\)</span> fixed or random in Bayesian imputation?</strong></p>
+<p>In frequentist regression, <span class="math inline">\(\sigma^2\)</span> is treated as a fixed but unknown constant, and uncertainty is reflected through the sampling distribution of its estimator.</p>
+<p>In Bayesian multiple imputation (such as in MICE), <span class="math inline">\(\sigma^2\)</span> is treated as a random variable with its own probability distribution. We draw a plausible value of the variance at each imputation step, just like we draw regression coefficients.</p>
+<p><strong>This allows imputed values to properly reflect uncertainty about model fit, which prevents underestimating variability in the final analysis.</strong></p>
+</div>
+</div>
+<p>So:</p>
+<p><span class="math display">\[
+\sigma^2 \mid \text{observed complete data} \sim \text{Inverse Gamma}(3,\,0.80655).
+\]</span></p>
+</section><section id="step-5-draw-sigma2" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-5-draw-sigma2">Step 5: Draw <span class="math inline">\(\sigma^{2^*}\)</span>
+</h5>
+<p>Draw one variance <span class="math inline">\(\sigma^{2^*}\)</span> from this posterior distribution:</p>
+<p><span class="math display">\[
+\sigma^2 \mid \text{observed complete data} \sim \text{Inverse Gamma}(3,0.80655).
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>What does it mean to “<em>draw</em>” a variance <span class="math inline">\(\sigma^{2^*}\)</span> from an Inverse Gamma distribution?</strong></p>
+<p>When we write:</p>
+<p><span class="math display">\[
+\sigma^2 \mid \text{observed complete data} \sim \text{Inverse Gamma}(3,,0.80655),
+\]</span></p>
+<p>we mean that we generate one random value <span class="math inline">\(\sigma^{2^*}\)</span> of the variance from that probability distribution.</p>
+<p>In <code>R</code>, there is no built-in <code>rinvgamma()</code> function in base <code>R</code>, but we can generate an Inverse Gamma draw using the Gamma distribution:</p>
+<ul>
+<li>If <span class="math inline">\(Z \sim \text{Gamma}(\alpha, \text{rate}=\eta)\)</span>,</li>
+<li>then <span class="math inline">\(1/Z \sim \text{Inverse Gamma}(\alpha, \eta)\)</span>.</li>
+</ul>
+<p>So in <code>R</code> we would generate the draw using:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sigma2_star</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">rgamma</a></span><span class="op">(</span><span class="fl">1</span>, shape <span class="op">=</span> <span class="fl">3</span>, rate <span class="op">=</span> <span class="fl">0.80655</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This produces one random value <span class="math inline">\(\sigma^{2^*}\)</span>, which we then use in the regression draw step of the imputation algorithm. Each imputation cycle generates a new random draw, allowing parameter uncertainty to propagate properly.</p>
+</div>
+</div>
+<p>For this numerical walkthrough, take a concrete draw (assume we already executed the above <code>R</code> code):</p>
+<p><span class="math display">\[
+\sigma^{2^*}=0.40.
+\]</span></p>
+</section><section id="step-6-draw-beta_0-beta_1-mid-sigma2-textobserved-complete-data" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-6-draw-beta_0-beta_1-mid-sigma2-textobserved-complete-data">Step 6: Draw <span class="math inline">\(\beta_{0}^*, \beta_{1}^* \mid \sigma^{2^*}, \text{observed complete data}\)</span>
+</h5>
+<p>Conditional on <span class="math inline">\(\sigma^{2^*}\)</span> and the observed complete data, we have this other posterior distribution:</p>
+<p><span class="math display">\[
+\beta_{0}^*, \beta_{1}^* \mid \sigma^{2^*}, \text{observed complete data}
+\sim
+\mathcal{N}\!\left((\hat{\beta}_0, \hat{\beta}_1)^\top,\ \sigma^{2*}(X^\top X)^{-1}\right).
+\]</span></p>
+<p><strong>Before doing the corresponding random draws of <span class="math inline">\(\beta_{0}^*\)</span> and <span class="math inline">\(\beta_{1}^*\)</span>, we need to compute the parameters of the above multivariate Normal distribution.</strong> Hence, for those <strong>complete rows</strong> <span class="math inline">\(1,\dots,8\)</span> in the dataset:</p>
+<p><span class="math display">\[
+\sum_{i = 1}^8 1 = 8,\qquad \sum_{i = 1}^8 X_i = 36,\qquad \sum_{i = 1}^8 X_i^2 = 204,
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+X^\top X=
+\begin{pmatrix}
+8 &amp; 36\\
+36 &amp; 204
+\end{pmatrix} \quad \text{with}
+\qquad
+\det(X^\top X)=8\cdot 204-36^2=336,
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+(X^\top X)^{-1}
+=
+\frac{1}{336}
+\begin{pmatrix}
+204 &amp; -36\\
+-36 &amp; 8
+\end{pmatrix}.
+\]</span></p>
+<p>Multiply by <span class="math inline">\(\sigma^{2^*}=0.40\)</span>:</p>
+<p><span class="math display">\[
+\text{Var}\left[(\beta_0^*, \beta_1^*)^\top \right]=
+0.40\cdot (X^\top X)^{-1}
+=
+\begin{pmatrix}
+0.2429 &amp; -0.0429\\
+-0.0429 &amp; 0.00952
+\end{pmatrix}.
+\]</span></p>
+<p>Therefore, take concrete <strong>random draws from the above posterior multivariate Normal distribution via its plugged in corresponding parameters</strong> (assume we already used the corresponding <code>R</code> random number generator for a multivariate Normal distribution):</p>
+<p><span class="math display">\[
+\beta_0^* = 0.7714,
+\qquad
+\beta_1^* = 1.9619.
+\]</span></p>
+<p>Therefore, the draw-based predicted mean used for matching is:</p>
+<p><span class="math display">\[
+\hat{y_i}^*(x_i)=0.7714 + 1.9619x_i.
+\]</span></p>
+</section><section id="step-7-pmm-matching-with-5-donors" class="level5 unnumbered"><h5 class="unnumbered anchored" data-anchor-id="step-7-pmm-matching-with-5-donors">Step 7: PMM matching with <span class="math inline">\(5\)</span> donors</h5>
+<p>Donors are rows with observed <span class="math inline">\(Y\)</span>, i.e., rows <span class="math inline">\(1,\dots,8\)</span>. Compute donor predicted means:</p>
+<p><span class="math display">\[
+\hat{y}_i^* = 0.7714 + 1.9619x_i.
+\]</span></p>
+<p><span class="math display">\[
+\begin{array}{c|c|c|c}
+\text{Row} &amp; X &amp; Y\ (\text{observed}) &amp; \hat{y}_i^*\\
+\hline
+1 &amp; 1 &amp; 3  &amp; 2.7333\\
+2 &amp; 2 &amp; 5  &amp; 4.6952\\
+3 &amp; 3 &amp; 7  &amp; 6.6571\\
+4 &amp; 4 &amp; 9  &amp; 8.6190\\
+5 &amp; 5 &amp; 10 &amp; 10.5809\\
+6 &amp; 6 &amp; 13 &amp; 12.5428\\
+7 &amp; 7 &amp; 14 &amp; 14.5047\\
+8 &amp; 8 &amp; 16 &amp; 16.4666\\
+\end{array}
+\]</span></p>
+<p>We impute row <span class="math inline">\(9\)</span> (<span class="math inline">\(X_9=6\)</span>) in the <a href="#eq-dataset">original dataset</a>. The predicted mean for row <span class="math inline">\(9\)</span> is:</p>
+<p><span class="math display">\[
+\hat{y}_9^* = 0.7714 + 1.9619(6)=12.5428.
+\]</span></p>
+<p>The distances are the following for <span class="math inline">\(i = 1, \dots, 8\)</span>:</p>
+<p><span class="math display">\[
+d_i = \left|\hat{y}_i^*-\hat{y}_9^*\right|.
+\]</span></p>
+<p>Hence, the <span class="math inline">\(5\)</span> smallest distances correspond to donor rows:</p>
+<p><span class="math display">\[
+\{6,5,7,4,8\}.
+\]</span></p>
+<p>PMM randomly selects one of these 5 donor rows; suppose it selects row <span class="math inline">\(8\)</span>. <strong>Then we impute <span class="math inline">\(Y_9\)</span> with the non-missing value <span class="math inline">\(Y_8\)</span>:</strong></p>
+<p><span class="math display">\[Y_9 \leftarrow Y_8 = 16.\]</span></p>
+<p>Now, we impute row <span class="math inline">\(10\)</span> (<span class="math inline">\(X_{10}=4\)</span>) in the <a href="#eq-dataset">original dataset</a>. The predicted mean for row <span class="math inline">\(10\)</span> is:</p>
+<p><span class="math display">\[
+\hat{y}_{10}^* = 0.7714 + 1.9619(4)=8.6190.
+\]</span></p>
+<p>The distances are the following for <span class="math inline">\(i = 1, \dots, 8\)</span>:</p>
+<p><span class="math display">\[
+d_i = \left|\hat{y}_i^*-\hat{y}_{10}^*\right|.
+\]</span></p>
+<p>Thus, the <span class="math inline">\(5\)</span> nearest donor rows are:</p>
+<p><span class="math display">\[
+\{4,3,5,2,6\}.
+\]</span></p>
+<p>Suppose PMM randomly selects row <span class="math inline">\(6\)</span>. <strong>Then we impute <span class="math inline">\(Y_{10}\)</span> with the non-missing value <span class="math inline">\(Y_6\)</span>:</strong>:</p>
+<p><span class="math display">\[
+Y_{10} \leftarrow Y_6 = 13.
+\]</span></p>
+<p>The imputation results after the simple PMM step are the following (imputed values are shown in bold numbers in rows <span class="math inline">\(9\)</span> and <span class="math inline">\(10\)</span>):</p>
+<p><span class="math display">\[
+\begin{array}{c|c|c}
+\text{Row} &amp; X &amp; Y\\
+\hline
+1 &amp; 1 &amp; 3\\
+2 &amp; 2 &amp; 5\\
+3 &amp; 3 &amp; 7\\
+4 &amp; 4 &amp; 9\\
+5 &amp; 5 &amp; 10\\
+6 &amp; 6 &amp; 13\\
+7 &amp; 7 &amp; 14\\
+8 &amp; 8 &amp; 16\\
+9 &amp; 6 &amp; \textbf{16}\\
+10 &amp; 4 &amp; \textbf{13}\\
+\end{array}
+\]</span></p>
+</section></section></section>
+</div>
+</section></section><section id="mixed-effects-modelling" class="level1 unnumbered"><h1 class="unnumbered">Mixed-effects Modelling</h1>
+<section id="question-11-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-11-not-to-be-evaluated-in-the-quiz">Question 11 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<blockquote class="blockquote">
+<p><strong>Note:</strong> Assume we have the fixed effect parameters of the Grunfeld’s case from <code>lecture4</code>.</p>
+</blockquote>
+<p><strong>Question:</strong> In a linear mixed-effects model, how are the <strong>fixed effects</strong> (e.g., <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span>) and the <strong>variance/correlation parameters</strong> (e.g., <span class="math inline">\(\sigma^2, \sigma_0^2, \sigma_1^2, \sigma_2^2, \rho_{uv}\)</span>) actually estimated? What is <strong>restricted maximum likelihood (REML)</strong> and why do we use it?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> Mixed-effects models are still fit using <strong>maximum likelihood ideas</strong>, but the likelihood is <em>not</em> a simple product over observations (such as classical maximum likelihood estimation, MLE), because data points within the same group are correlated.</p>
+<section id="start-from-the-classical-mle-picture" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="start-from-the-classical-mle-picture">1) Start from the classical MLE picture</h3>
+<p>In the simplest “<em>introductory MLE</em>” setting for a standalone population parameter <span class="math inline">\(\theta\)</span>, we assume observations <span class="math inline">\(y_1, \dots, y_n\)</span> are independent so the likelihood looks like</p>
+<p><span class="math display">\[
+L(\theta | y_1, \dots, y_n) = \prod_{i=1}^{n} f_{Y_i}(y_i\mid \theta),
+\]</span></p>
+<p>and we choose the MLE <span class="math inline">\(\hat\theta\)</span> that maximizes <span class="math inline">\(L(\theta)\)</span> (or the log-likelihood).</p>
+</section><section id="what-changes-in-a-mixed-effects-model-correlation-within-groups" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="what-changes-in-a-mixed-effects-model-correlation-within-groups">2) What changes in a Mixed-effects model: correlation within groups</h3>
+<p>In <code>lecture4</code>, we indexed years within a firm by <span class="math inline">\(i\)</span> and firms by <span class="math inline">\(j\)</span>. A random-intercept model is</p>
+<p><span class="math display">\[
+\texttt{investment}_{i,j}
+= \beta_0
++ \beta_1\,\texttt{marketValue}_{i,j}
++ \beta_2\,\texttt{capital}_{i,j}
++ b_{0,j}
++ \varepsilon_{i,j},
+\qquad i = 1,\ldots,n_j,
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+b_{0,j} \sim \mathcal{N}(0,\sigma_0^2),
+\qquad
+\varepsilon_{i,j} \sim \mathcal{N}(0,\sigma^2),
+\qquad
+b_{0,j} \perp\!\!\!\perp \varepsilon_{i,j} \quad \text{(i.e., they are independent)}.
+\]</span></p>
+<p>Because the <strong>same <span class="math inline">\(b_{0,j}\)</span></strong> is shared by all observations in the <span class="math inline">\(j\)</span>th firm, responses inside a firm are correlated. In particular, for the same firm <span class="math inline">\(j\)</span> and two different years <span class="math inline">\(i\neq i'\)</span>,</p>
+<p><span class="math display">\[
+\mathrm{Cov}(\texttt{investment}_{i,j},\texttt{investment}_{i',j}) = \sigma_0^2,
+\]</span></p>
+<p>and the marginal variance of each observation is</p>
+<p><span class="math display">\[
+\mathrm{Var}(\texttt{investment}_{i,j}) = \sigma_0^2 + \sigma^2.
+\]</span></p>
+<p>So the likelihood is no longer a plain product over all <span class="math inline">\((i,j)\)</span> observations. Instead, for each firm <span class="math inline">\(j\)</span>, the <span class="math inline">\(n_j\)</span> outcomes are treated as a <strong>jointly Normal set of correlated observations</strong> (with the covariance pattern above), and the full likelihood multiplies those firm-level joint densities across firms.</p>
+</section><section id="what-is-actually-estimated-by-maximum-likelihood-in-mixed-effects-modelling" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="what-is-actually-estimated-by-maximum-likelihood-in-mixed-effects-modelling">3) What is actually estimated by maximum likelihood in Mixed-effects modelling?</h3>
+<p>There are two kinds of unknowns in a Mixed-effects model:</p>
+<ol type="1">
+<li>
+<strong>Fixed effects:</strong> <span class="math inline">\(\beta_0,\beta_1,\beta_2\)</span> (population-level average relationship).<br>
+</li>
+<li>
+<strong>Variance/correlation parameters:</strong> things like <span class="math inline">\(\sigma^2\)</span> (residual variance) and the random-effect variances/correlations (e.g., <span class="math inline">\(\sigma_0^2\)</span>; and in random-slope models <span class="math inline">\(\sigma_1^2, \sigma_2^2, \rho_{uv}\)</span>).</li>
+</ol>
+<p>A <strong>full maximum likelihood (ML)</strong> fit chooses values of <em>all</em> these unknowns to make the observed grouped data most likely under the model. In practice, <code>lmer()</code> evaluates the log-likelihood implied by the correlated-Normal structure and maximizes it numerically.</p>
+</section><section id="why-reml-exists-and-what-it-does-in-plain-mle-language" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="why-reml-exists-and-what-it-does-in-plain-mle-language">4) Why REML exists (and what it does, in plain MLE language)</h3>
+<p><strong>REML</strong> stands for <strong>restricted</strong> (or <strong>residual</strong>) maximum likelihood. The motivation is that ML tends to <strong>underestimate variance components</strong> in finite samples because it behaves a bit like it “<em>forgets</em>” that we used information to estimate the fixed effects. REML addresses this by constructing a likelihood that depends <strong>only</strong> on the variance/correlation parameters (like <span class="math inline">\(\sigma^2,\sigma_0^2,\sigma_1^2,\sigma_2^2,\rho_{uv}\)</span>), using the part of the data that remains after accounting for the fixed-effects trend. Then:</p>
+<ol type="a">
+<li>REML chooses the variance/correlation parameters that maximize this restricted likelihood, and<br>
+</li>
+<li>given those variance estimates, the fixed effects <span class="math inline">\(\beta_0,\beta_1,\beta_2\)</span> are estimated afterward in a way that properly accounts for within-firm correlation.</li>
+</ol>
+<p>This is why output often says “<em>fit by REML</em>”: REML is mainly about variance components, and then the fixed effects are computed using those variance estimates.</p>
+</section>
+</div>
+</section><section id="question-12-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-12-not-to-be-evaluated-in-the-quiz">Question 12 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> What are the likelihood and log-likelihood functions in REML?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> The big picture is that</p>
+<ul>
+<li>
+<strong>ML</strong> chooses parameters by maximizing the (marginal) likelihood of the observed data.</li>
+<li>
+<strong>REML</strong> chooses the <strong>variance/covariance parameters</strong> by maximizing a <em>restricted</em> likelihood that corrects for the fact that we also had to learn the fixed effects from the same data.</li>
+</ul>
+<section id="the-simplest-mixed-effects-model-random-intercept-intercept-only-fixed-effect" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="the-simplest-mixed-effects-model-random-intercept-intercept-only-fixed-effect">1) The simplest Mixed-effects model (random intercept; intercept-only fixed effect)</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the below simple intercept-only model, the <strong>regressors part</strong> is intentionally removed so we can write a closed-form REML likelihood in scalar notation; once regressors like <span class="math inline">\(\texttt{marketValue}_{i,j}\)</span> and <span class="math inline">\(\texttt{capital}_{i,j}\)</span> are included, REML is the same idea but the restricted likelihood is optimized numerically rather than shown in a simple group-mean formula.</p>
+</div>
+</div>
+<p>We have with a random-intercept model where group <span class="math inline">\(j\)</span> (i.e., a <code>firm</code>) has its own intercept shift:</p>
+<p><span class="math display">\[
+\texttt{investment}_{i,j} = \beta_0 + b_{0,j} + \varepsilon_{i,j},
+\qquad i = 1,\ldots,n_j,\quad j=1,\ldots,J.
+\]</span></p>
+<p>The assumptions are the following:</p>
+<p><span class="math display">\[
+b_{0,j} \sim \mathcal{N}(0,\sigma_0^2),
+\qquad
+\varepsilon_{i,j} \sim \mathcal{N}(0,\sigma^2),
+\qquad
+b_{0,j} \ \perp\!\!\!\perp\ \varepsilon_{i,j}.
+\]</span></p>
+<p>We define the usual within-group mean:</p>
+<p><span class="math display">\[
+\overline{\texttt{investment}}_{\cdot,j}
+= \frac{1}{n_j}\sum_{i=1}^{n_j}\texttt{investment}_{i,j}.
+\]</span></p>
+<p>and the within-group sum of squares:</p>
+<p><span class="math display">\[
+\text{SSW} = \sum_{j=1}^J \sum_{i=1}^{n_j}
+\Big(\texttt{investment}_{i,j} - \overline{\texttt{investment}}_{\cdot,j}\Big)^2.
+\]</span></p>
+<p>Also define the marginal variance of the group mean:</p>
+<p><span class="math display">\[
+\tau_j^2 = \mathrm{Var}\!\left(\overline{\texttt{investment}}_{\cdot,j}\right)
+= \sigma_0^2 + \frac{\sigma^2}{n_j},
+\qquad
+w_j = \frac{1}{\tau_j^2}.
+\]</span></p>
+</section><section id="the-reml-restricted-likelihood-in-scalar-form" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="the-reml-restricted-likelihood-in-scalar-form">2) The REML (restricted) likelihood, in scalar form</h3>
+<p>REML is easiest to see by splitting the information in the data into two parts:</p>
+<ol type="1">
+<li><p><strong>Within-group deviations</strong> <span class="math inline">\(\texttt{investment}_{i,j}-\overline{\texttt{investment}}_{\cdot,j}\)</span>: These tell you about <strong><span class="math inline">\(\sigma^2\)</span></strong> (because the random intercept cancels when you subtract the group mean).</p></li>
+<li><p><strong>Between-group variation in the group means</strong> <span class="math inline">\(\overline{\texttt{investment}}_{\cdot,j}\)</span>: These tell you about <strong><span class="math inline">\(\sigma_0^2\)</span></strong> (because group means move when firms have different random intercepts).</p></li>
+</ol>
+<p>But REML also removes the fixed intercept <span class="math inline">\(\beta_0\)</span> from this second part. The REML “<em>best</em>” estimate of <span class="math inline">\(\beta_0\)</span> <em>given</em> <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\sigma_0^2\)</span> is the <strong>weighted mean</strong> of group means:</p>
+<p><span class="math display">\[
+\widehat{\beta}_0(\sigma^2,\sigma_0^2)
+= \frac{\sum_{j=1}^{11} w_j\,\overline{\texttt{investment}}_{\cdot,j}}
+{\sum_{j=1}^{11} w_j}.
+\]</span></p>
+<p>Then the <strong>restricted likelihood</strong> for <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\sigma_0^2)\)</span> can be written as</p>
+<p><span class="math display">\[
+\begin{align*}
+L_R(\sigma^2,\sigma_0^2) &amp;=
+(2\pi)^{-\frac{n-1}{2}}
+\;
+(\sigma^2)^{-\frac{n-11}{2}}
+\;
+\left(\prod_{j=1}^{11} (\tau_j^2)^{-\frac{1}{2}}\right)
+\;
+\left(\sum_{j=1}^{11} w_j\right)^{-\frac{1}{2}} \\
+&amp; \qquad
+\exp\!\left[
+-\frac{\text{SSW}}{2\sigma^2}
+-\frac{1}{2}\sum_{j=1}^{11}
+w_j\Big(\overline{\texttt{investment}}_{\cdot,j} - \widehat{\beta}_0\Big)^2
+\right],
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(n = \sum_{j=1}^{11} n_j\)</span> is the total sample size (recall we have <span class="math inline">\(11\)</span> firms in our dataset), and <span class="math inline">\(\widehat{\beta}_0\)</span> is shorthand for <span class="math inline">\(\widehat{\beta}_0(\sigma^2,\sigma_0^2)\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>REML uses <span class="math inline">\(n-1\)</span> effective pieces of information here (because we used the data to learn one fixed effect, <span class="math inline">\(\beta_0\)</span>), which is why you see <span class="math inline">\((2\pi)^{-(n-1)/2}\)</span> rather than <span class="math inline">\((2\pi)^{-n/2}\)</span>.</p>
+</div>
+</div>
+</section><section id="the-reml-log-likelihood" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="the-reml-log-likelihood">3) The REML log-likelihood</h3>
+<p>Taking logs, the <strong>restricted log-likelihood</strong> is</p>
+<p><span class="math display">\[
+\begin{align*}
+\log \left[ L (\sigma^2,\sigma_0^2) \right]
+&amp;=
+-\frac{n-1}{2}\log(2\pi)
+-\frac{n-11}{2}\log(\sigma^2)
+-\frac{1}{2}\sum_{j=1}^{11} \log(\tau_j^2) - \\
+&amp; \qquad
+\frac{1}{2}\log\!\left(\sum_{j=1}^{11} w_j\right)
+-\frac{\text{SSW}}{2\sigma^2} - \\
+&amp; \qquad \quad
+\frac{1}{2}\sum_{j=1}^{11}
+w_j\Big(\overline{\texttt{investment}}_{\cdot,j} - \widehat{\beta}_0\Big)^2.
+\end{align*}
+\]</span></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>REML fitting means: choose <span class="math inline">\(\hat\sigma^2\)</span> and <span class="math inline">\(\hat\sigma_0^2\)</span> that maximize <span class="math inline">\(\log \left[ L (\sigma^2,\sigma_0^2) \right]\)</span>.</p>
+</div>
+</div>
+</section><section id="quick-rationale-for-the-full-mixed-model-from-class-with-regressors-and-random-slopes" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="quick-rationale-for-the-full-mixed-model-from-class-with-regressors-and-random-slopes">4) Quick rationale for the full mixed model from class (with regressors and random slopes)</h3>
+<p>In the Grunfeld-style model from class, we have the full mixed model:</p>
+<p><span class="math display">\[
+\begin{align*}
+\texttt{investment}_{i,j}
+&amp;= \overbrace{\beta_{0,j}}^{\text{Mixed Effect}} + \overbrace{\beta_{1,j}}^{\text{Mixed Effect}} \times \texttt{marketValue}_{i,j} + \\
+&amp; \qquad \overbrace{\beta_{2,j}}^{\text{Mixed Effect}} \times \texttt{capital}_{i,j} + \varepsilon_{i,j} \\
+&amp;=  (\beta_0 + b_{0,j}) + (\beta_1 + b_{1,j}) \times \texttt{marketValue}_{i,j} + \\
+&amp; \qquad (\beta_2 + b_{2,j}) \times \texttt{capital}_{i,j} + \varepsilon_{i,j} \\
+&amp; \qquad \qquad \qquad \text{for} \; i = 1, \ldots, n_j \; \; \text{and} \; \; j = 1, \ldots, 11;
+\end{align*}
+\]</span></p>
+<p>with <span class="math inline">\((b_{0,j},b_{1,j},b_{2,j})^{T}\)</span> jointly Normal and correlated (via <span class="math inline">\(\sigma_0^2,\sigma_1^2,\sigma_2^2\)</span> and <span class="math inline">\(\rho_{uv}\)</span>). What changes conceptually?</p>
+<ul>
+<li>The <strong>same two goals</strong> remain: estimate fixed effects and estimate variance/correlation parameters.</li>
+<li>But the <strong>within versus between</strong> split is no longer just <em>subtract group means</em>, because the fixed-effects part is now a <strong>regression line</strong>, not a single mean.</li>
+<li>REML still works by using the part of the data that is <strong>left over after accounting for the fixed-effects regression</strong>; that is, it adjusts the likelihood to reflect that we learned <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span> from the data first.</li>
+<li>In practice, the full REML objective becomes more complicated (because the correlation structure within groups depends on <span class="math inline">\(\sigma^2\)</span> and on all random-effect variances/correlations), so <code>lmer()</code> maximizes the restricted log-likelihood <strong>numerically</strong>.</li>
+</ul></section>
+</div>
+</section><section id="question-13-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-13-not-to-be-evaluated-in-the-quiz">Question 13 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> In a Mixed-effects regression model, why are not the <em>realized</em> random effects estimated in the same way as fixed effects? If we do not “<em>estimate</em>” them directly, how do we obtain the random-effects values that <code>lmer()</code> reports?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> In our lecture notes, a Mixed-effects model lets the regression line <strong>shift (and possibly tilt)</strong> from one group to another. For the Grunfeld example, group <span class="math inline">\(j\)</span> is a <code>firm</code>, and observation <span class="math inline">\(i\)</span> is one year <strong>within that firm</strong>. We will use this example to illustrate all the points below.</p>
+<section id="what-the-random-effects-are" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="what-the-random-effects-are">1) What the random effects are</h3>
+<p>A <strong>mixed-intercept</strong> model (random intercept only) is written as</p>
+<p><span class="math display">\[
+\texttt{investment}_{i,j}
+= (\beta_0 + b_{0,j}) + \beta_1\,\texttt{marketValue}_{i,j} + \beta_2\,\texttt{capital}_{i,j} + \varepsilon_{i,j},
+\qquad i = 1,\ldots,n_j.
+\]</span></p>
+<ul>
+<li>The fixed effects <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span> are <strong>unknown constants</strong> that describe the population-level mean relationship.</li>
+<li>The random effect <span class="math inline">\(b_{0,j}\)</span> is the <strong>firm-specific deviation</strong> from the population intercept, so the firm’s mixed intercept is <span class="math inline">\(\beta_{0,j} = \beta_0 + b_{0,j}\)</span>.</li>
+<li>We assume <span class="math display">\[
+b_{0,j} \sim \mathcal{N}(0,\sigma_0^2),
+\qquad \varepsilon_{i,j} \sim \mathcal{N}(0,\sigma^2),
+\]</span> and <span class="math inline">\(b_{0,j}\)</span> is independent of <span class="math inline">\(\varepsilon_{i,j}\)</span>.</li>
+</ul>
+<p>A <strong>mixed-intercept-and-slopes</strong> model (random intercept and random slopes) is written as:</p>
+<p><span class="math display">\[
+\texttt{investment}_{i,j}
+= (\beta_0 + b_{0,j})
++ (\beta_1 + b_{1,j})\,\texttt{marketValue}_{i,j}
++ (\beta_2 + b_{2,j})\,\texttt{capital}_{i,j}
++ \varepsilon_{i,j}.
+\]</span></p>
+<p>Now <span class="math inline">\(b_{0,j}, b_{1,j}, b_{2,j}\)</span> are <strong>realizations of correlated random variables</strong>. In scalar terms, that means we assume <strong>(recall the multivariate Normal distribution discussed in class)</strong>:</p>
+<p><span class="math display">\[
+\mathbb{E}[b_{0,j}] = \mathbb{E}[b_{1,j}] = \mathbb{E}[b_{2,j}] = 0,
+\]</span></p>
+<p>with</p>
+<p><span class="math display">\[
+\mathrm{Var}(b_{0,j}) = \sigma_0^2, \quad \mathrm{Var}(b_{1,j}) = \sigma_1^2, \quad \mathrm{Var}(b_{2,j}) = \sigma_2^2,
+\]</span></p>
+<p>and correlations (equivalently, covariances)</p>
+<p><span class="math display">\[
+\mathrm{Corr}(b_{u,j}, b_{v,j}) = \rho_{uv},
+\qquad
+\mathrm{Cov}(b_{u,j}, b_{v,j}) = \sigma_{u,v} = \rho_{uv}\,\sigma_u\,\sigma_v,
+\qquad u\neq v.
+\]</span></p>
+<p>This is exactly what it means to say “<em>the random effects are correlated</em>”: <strong>within the same firm</strong>, a high (or low) intercept deviation tends to co-occur with slope deviations according to the fitted <span class="math inline">\(\rho_{uv}\)</span> values.</p>
+</section><section id="why-realized-random-effects-are-not-estimated-like-fixed-effects" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="why-realized-random-effects-are-not-estimated-like-fixed-effects">2) Why realized random effects are not estimated like fixed effects</h3>
+<p>Fixed effects are treated like ordinary regression parameters (similar to the usual OLS estimates): we estimate <span class="math inline">\(\hat\beta_0, \hat\beta_1, \hat\beta_2\)</span> because those are the population-level quantities we want to learn. Random effects are different: <span class="math inline">\(b_{0,j}, b_{1,j}, b_{2,j}\)</span> are <strong>not “extra terms to estimate such as in OLS”</strong>. They are <strong>latent realizations</strong> whose <strong>distribution</strong> is part of the model (again, recall the multivariate Normal distribution we saw in class for the random effects). In other words, we do not primarily try to learn each firm’s exact effects <span class="math inline">\(b\)</span>’s as if they were fixed unknown numbers; instead we learn:</p>
+<ol type="1">
+<li>the fixed effects <span class="math inline">\(\hat\beta_0, \hat\beta_1, \hat\beta_2\)</span> (the population effects), and</li>
+<li>the variance components and correlations (e.g., <span class="math inline">\(\hat\sigma_0^2\)</span>, <span class="math inline">\(\hat\sigma_1^2\)</span>, <span class="math inline">\(\hat\sigma_2^2\)</span>, and <span class="math inline">\(\hat\rho_{uv}\)</span>) that describe <strong>how much</strong> and <strong>in what correlated way</strong> firms deviate from that population line.</li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Only <em>after</em> estimating <span class="math inline">\(\hat\beta_0, \hat\beta_1, \hat\beta_2\)</span>, and all variance components, we do compute firm-specific random effects.</p>
+</div>
+</div>
+</section><section id="what-lmer-reports-for-random-effects-blups" class="level3 unnumbered"><h3 class="unnumbered anchored" data-anchor-id="what-lmer-reports-for-random-effects-blups">3) What <code>lmer()</code> reports for random effects: BLUPs</h3>
+<p>The numbers reported as “<em>random effects</em>” (i.e., <span class="math inline">\(\hat b_{0,j}\)</span>, <span class="math inline">\(\hat b_{1,j}\)</span>, and <span class="math inline">\(\hat b_{2,j}\)</span>) are usually <strong>BLUPs</strong>: <em>Best Linear Unbiased Predictors</em>. Why do the have this name?</p>
+<ul>
+<li>
+<strong>Predictor:</strong> We are predicting the unobserved realization <span class="math inline">\(b_{0,j}\)</span> (or <span class="math inline">\(b_{1,j}, b_{2,j}\)</span>) from the observed data.</li>
+<li>
+<strong>Linear:</strong> The predictor can be written as a linear combination of the observed responses.</li>
+<li>
+<strong>Unbiased:</strong> It is constructed so it is centered correctly under the model’s specification.</li>
+<li>
+<strong>Best:</strong> among linear unbiased predictors, it has the smallest mean-squared prediction error.</li>
+</ul>
+<p>In linear Mixed-effects models with normality assumptions (as in our lecture), the BLUP is also the <strong>conditional mean</strong> of the random effect given the observed data, using the <strong>fitted variance components</strong>. When we plug in estimated variance components (which is what software does), people often call this an <strong>empirical BLUP</strong>.</p>
+<section id="blup-for-a-random-intercept-in-a-random-intercept-only-model" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="blup-for-a-random-intercept-in-a-random-intercept-only-model">BLUP for a random intercept (in a random-intercept-only model)</h4>
+<p>This case gives a clean scalar formula that shows the main idea.</p>
+<p><strong>Step A: remove the fixed part.</strong> Define the fixed-effects-only fitted value</p>
+<p><span class="math display">\[
+\widehat{\texttt{investment}}^{\,(\text{fixed})}_{i,j}
+= \hat\beta_0 + \hat\beta_1\,\texttt{marketValue}_{i,j} + \hat\beta_2\,\texttt{capital}_{i,j},
+\]</span></p>
+<p>and the corresponding residuals</p>
+<p><span class="math display">\[
+e_{i,j} = \texttt{investment}_{i,j} - \widehat{\texttt{investment}}^{\,(\text{fixed})}_{i,j}.
+\]</span></p>
+<p>In a random-intercept-only model, these satisfy (conceptually)</p>
+<p><span class="math display">\[
+e_{i,j} = b_{0,j} + \varepsilon_{i,j}.
+\]</span></p>
+<p><strong>Step B: average within the group.</strong> Let</p>
+<p><span class="math display">\[
+\overline{e}_{\cdot,j} = \frac{1}{n_j}\sum_{i=1}^{n_j} e_{i,j}.
+\]</span></p>
+<p>Because <span class="math inline">\(\varepsilon_{i,j}\)</span> averages out, we have that:</p>
+<p><span class="math display">\[
+\overline{e}_{\cdot,j} \mid b_{0,j} \sim \mathcal{N}\!\left(b_{0,j},\,\frac{\sigma^2}{n_j}\right).
+\]</span></p>
+<p>So <span class="math inline">\(\overline{e}_{\cdot,j}\)</span> is a noisy “<em>measurement</em>” of <span class="math inline">\(b_{0,j}\)</span>.</p>
+<p><strong>Step C: combine model belief plus data evidence.</strong> Marginally, the model says <strong>(note this is a property of the Multivariate normal distribution)</strong>:</p>
+<p><span class="math display">\[
+b_{0,j} \sim \mathcal{N}(0,\sigma_0^2),
+\]</span></p>
+<p>so values far from <span class="math inline">\(0\)</span> are possible but less likely when <span class="math inline">\(\sigma_0^2\)</span> is small.</p>
+<p>Under these two Normal pieces, the conditional distribution of <span class="math inline">\(b_{0,j}\)</span> given the data in firm <span class="math inline">\(j\)</span> is also Normal, and its mean is</p>
+<p><span class="math display">\[
+\mathbb{E}[b_{0,j} \mid \text{data in firm } j]
+= \lambda_j\,\overline{e}_{\cdot,j},
+\qquad
+\lambda_j = \frac{\sigma_0^2}{\sigma_0^2 + \sigma^2/n_j}.
+\]</span></p>
+<p>This conditional mean is the BLUP. In practice, <code>lmer()</code> plugs in variance estimates, so you see</p>
+<p><span class="math display">\[
+\hat b_{0,j} = \hat\lambda_j\,\overline{e}_{\cdot,j},
+\qquad
+\hat\lambda_j = \frac{\hat\sigma_0^2}{\hat\sigma_0^2 + \hat\sigma^2/n_j}.
+\]</span></p>
+<p>You can also read off the <strong>uncertainty</strong> in this prediction from the conditional variance:</p>
+<p><span class="math display">\[
+\mathrm{Var}(b_{0,j} \mid \text{data in firm } j)
+= \left(\frac{1}{\sigma_0^2} + \frac{n_j}{\sigma^2}\right)^{-1}
+= \frac{\sigma_0^2\,\sigma^2/n_j}{\sigma_0^2 + \sigma^2/n_j}.
+\]</span></p>
+<p><strong>Note a shrinkage happens since <span class="math inline">\(0 &lt; \lambda_j &lt; 1\)</span>:</strong></p>
+<ul>
+<li>If <span class="math inline">\(n_j\)</span> is large (many observations in firm <span class="math inline">\(j\)</span>), then <span class="math inline">\(\sigma^2/n_j\)</span> is small, <span class="math inline">\(\lambda_j \approx 1\)</span>, and <span class="math inline">\(\hat b_{0,j}\)</span> is close to the raw firm-average residual <span class="math inline">\(\overline{e}_{\cdot,j}\)</span>.</li>
+<li>If <span class="math inline">\(n_j\)</span> is small (little information in firm <span class="math inline">\(j\)</span>), then <span class="math inline">\(\sigma^2/n_j\)</span> is large, <span class="math inline">\(\lambda_j\)</span> is smaller, and <span class="math inline">\(\hat b_{0,j}\)</span> is pulled toward <span class="math inline">\(0\)</span>.</li>
+<li>If <span class="math inline">\(\sigma_0^2\)</span> is small (firms do not differ much), then <span class="math inline">\(\lambda_j\)</span> is small and everyone’s <span class="math inline">\(\hat b_{0,j}\)</span> is strongly shrunk toward <span class="math inline">\(0\)</span>.</li>
+</ul>
+<p>Finally, the firm-specific intercept used for prediction is exactly what the lecture notes describe for the <span class="math inline">\(j\)</span>th firm:</p>
+<p><span class="math display">\[
+\hat\beta_{0,j} = \hat\beta_0 + \hat b_{0,j}.
+\]</span></p>
+</section><section id="what-changes-when-we-also-have-random-slopes" class="level4 unnumbered"><h4 class="unnumbered anchored" data-anchor-id="what-changes-when-we-also-have-random-slopes">What changes when we also have random slopes?</h4>
+<p>When <span class="math inline">\((b_{0,j}, b_{1,j}, b_{2,j})^{T}\)</span> are included, the same idea applies, but now we are predicting <strong>three</strong> realized random effects at once from firm <span class="math inline">\(j\)</span>’s data. A helpful scalar way to think about this is that for each firm <span class="math inline">\(j\)</span>, the predicted deviations <span class="math inline">\(\hat b_{0,j}, \hat b_{1,j}, \hat b_{2,j}\)</span> are the values that balance two forces:</p>
+<ol type="1">
+<li>
+<strong>Fit the <span class="math inline">\(j\)</span>th firm well:</strong> They reduce the within-firm residual sum of squares</li>
+</ol>
+<p><span class="math display">\[
+\sum_{i=1}^{n_j}
+\Big[
+\texttt{investment}_{i,j}
+- (\hat\beta_0 + b_{0,j})
+- (\hat\beta_1 + b_{1,j})\,\texttt{marketValue}_{i,j}
+- (\hat\beta_2 + b_{2,j})\,\texttt{capital}_{i,j}
+\Big]^2.
+\]</span></p>
+<ol start="2" type="1">
+<li>
+<strong>Stay plausible under the random-effects distribution:</strong> Very large deviations are penalized according to the fitted variances and correlations.
+<ul>
+<li>If the random effects were independent (i.e, all <span class="math inline">\(\rho_{uv}=0\)</span>), the penalty would look like a familiar “<em>ridge</em>” term: <span class="math display">\[
+\frac{b_{0,j}^2}{\hat\sigma_0^2} + \frac{b_{1,j}^2}{\hat\sigma_1^2} + \frac{b_{2,j}^2}{\hat\sigma_2^2}.
+\]</span>
+</li>
+<li>When the random effects are <strong>correlated</strong> (<span class="math inline">\(\rho_{uv} \neq 0\)</span>), the penalty also contains <strong>cross-terms</strong> that couple the deviations, schematically of the form <span class="math display">\[
+C_{01}\,b_{0,j}b_{1,j} + C_{02}\,b_{0,j}b_{2,j} + C_{12}\,b_{1,j}b_{2,j},
+\]</span>
+</li>
+</ul>
+</li>
+</ol>
+<p>Note these constants <span class="math inline">\(C_{uv}\)</span> are determined by <span class="math inline">\(\hat\sigma_0^2, \hat\sigma_1^2,\ \hat\sigma_2^2\)</span> and the fitted correlations <span class="math inline">\(\hat\rho_{uv}\)</span>. This is precisely how <strong>correlated random variables</strong> shows up in the computation: evidence about one deviation (say, an intercept shift) informs the predicted slope deviations because the model has learned that they move together.</p>
+<blockquote class="blockquote">
+<p><strong>Takeaway:</strong> Fixed effects <span class="math inline">\(\beta_0,\beta_1,\beta_2\)</span> are <strong>estimated parameters</strong> about the population mean relationship. Random effects <span class="math inline">\(b_{0,j},b_{1,j},b_{2,j}\)</span> are <strong>group-specific realizations of correlated random variables</strong>. We estimate the <em>variance/correlation structure</em> (e.g., <span class="math inline">\(\sigma_0^2,\sigma_1^2,\sigma_2^2\)</span> and <span class="math inline">\(\rho_{uv}\)</span>), and then obtain reported random-effects values as <strong>BLUP-style conditional predictions</strong> that automatically shrink toward <span class="math inline">\(0\)</span> when a group has limited or noisy data.</p>
+</blockquote>
+</section></section>
+</div>
+</section></section><section id="survival-analysis" class="level1 unnumbered"><h1 class="unnumbered">Survival Analysis</h1>
+<section id="question-14-not-to-be-evaluated-in-the-quiz" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="question-14-not-to-be-evaluated-in-the-quiz">Question 14 (Not to be evaluated in the quiz)</h2>
+<div class="callout-question">
+<p><strong>Question:</strong> Can we obtain an <strong>unrestricted mean survival time</strong> with Cox regression?</p>
+</div>
+<div class="callout-answer">
+<p><strong>Answer:</strong> Not reliably, unless you are willing to add <strong>extra assumptions about the tail</strong> of the survival distribution beyond the observed follow-up window (i.e, <strong>beyond your training data</strong>). Suppose we have a single regressor <span class="math inline">\(x\)</span>, we know that the unrestricted mean survival time is the total area under <strong>the whole survival curve</strong>:</p>
+<p><span class="math display">\[
+\mathbb{E}[T \mid x] \;=\; \int_{0}^{\infty} S(t \mid x)\,dt .
+\]</span></p>
+<p>A Cox model estimates <span class="math inline">\(S(t\mid x)\)</span> well <strong>over the time range supported by the training data</strong>, but it leaves the baseline hazard (and therefore the long-run tail behavior of <span class="math inline">\(S(t\mid x)\)</span>) <strong>unspecified</strong>. With right censoring, it is common that the estimated survival curve does <strong>not</strong> reach <span class="math inline">\(0\)</span> by the end of follow-up, which means the above integral to <span class="math inline">\(\infty\)</span> is not identified from the data without extrapolation. This is the same core issue that already appears with Kaplan–Meier: the estimated and unrestricted mean survival time is <strong>undefined if the last observation is censored</strong>, and any “<em>mean</em>” requires a convention or extrapolation.</p>
+</div>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/ubc-mds\.github\.io\/DSCI_562_regr-2");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          if (link.getAttribute("rel") === null) {
+            link.setAttribute("rel", "noopener");
+          }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../notes/appendix-reg-mindmap.html" class="pagination-link" aria-label="Regression Mind Map">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Regression Mind Map</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../LICENSE.html" class="pagination-link" aria-label="License">
+        <span class="nav-page-text">License</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/UBC-MDS/DSCI_562_regr-2/issues" class="toc-action"><i class="bi bi-chat-right"></i>Report an issue</a></li></ul></div></div></div></footer><script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
